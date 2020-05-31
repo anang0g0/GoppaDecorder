@@ -7,24 +7,23 @@
 #define O 8192
 
 /* generate Galois Field over GF(2^?) */
-static const int normal[14]={
-  0b11001, /* GF(16) */
-  //"10011",
-  0b110111,
-  0b1100001,
-  0b11000001,
-  0b100011101,
-  //"110101001",
-  0b100011011,
-  0b1100110001,
-  0b11000010011,
-  0b110000001101,
-  0b1100101000001, /* 4096 */
-  //0b11011000000001, /* 8192 */
-  0b10000000011011,
-  0b110000100010001,
-  0b1100000000000001,
-  0b11010000000010001};
+static const char *normal[14]={
+  "1011",
+  //"11001", /* GF(16) */
+  "10011",
+  "110111",
+  "1100001",
+  "11000001",
+  "110101001",
+//"100011011",
+  "1100110001",
+  "11000010011",
+  "110000001101",
+  "1100101000001", /* 4096 */
+  "11011000000001", /* 8192 */
+  "110000100010001",
+  "1100000000000001",
+  "11010000000010001"};
 
 unsigned int gf[O],fg[O];
 
@@ -38,12 +37,7 @@ for(i=0;i<n;i++){
       fg[j]=i;
   }
 }
- printf("unsigned short fg[%d]={",O);
- for(i=0;i<O;i++)
-   printf("%d,",fg[i]);
- printf("};");
 
- 
 return;
 }
 
@@ -55,64 +49,69 @@ void mkgf(int n)
 
 
   for(i=0;i<13;i++)
-    pol=normal[i];
-    //pol=strtoul(normal[i],(char **)NULL,2);
+    pol=strtoul(normal[i],(char **)NULL,2);
 
 
   /* define pol */
   switch(n){
-  case 16:
-    pol=normal[0];
-    printf("unsigned short gf[%d]={\n",n);
-    break;
 
-  case 32:
-    pol=normal[1];
+  case 8:
+    pol=strtoul(normal[0],(char **)NULL,2);
     printf("%d\n",n);
     break;
 
+  case 16:
+    pol=strtoul(normal[1],(char **)NULL,2);
+    printf("%d\n",n);
+    break;
+
+  case 32:
+    pol=strtoul(normal[2],(char **)NULL,2);
+printf("%d\n",n);
+    break;
+
   case 64:
-    pol=normal[2];
+    pol=strtoul(normal[3],(char **)NULL,2);
     printf("%d\n",n);
     break;
 
   case 128:
-    pol=normal[3];
+   pol=strtoul(normal[4],(char **)NULL,2);
     printf("%d\n",n);
     break;
 
   case 256:
-    pol=normal[4];
+    pol=strtoul(normal[5],(char **)NULL,2);
     printf("%d\n",n);
     break;
 
   case 512:
-pol=normal[5];
+    pol=strtoul(normal[6],(char **)NULL,2);
     printf("%d\n",n);
     break;
 
   case 1024:
-pol=normal[6];
+    pol=strtoul(normal[7],(char **)NULL,2);
     printf("%d\n",n);
     break;
 
   case 2048:
-pol=normal[7];
+    pol=strtoul(normal[8],(char **)NULL,2);
     printf("%d\n",n);
     break;
 
   case 4096:
-pol=normal[8];
+    pol=strtoul(normal[9],(char **)NULL,2);
     printf("%d\n",n);
     break;
 
   case 8192:
-    pol=normal[9];
+   pol=strtoul(normal[10],(char **)NULL,2);
     printf("%d\n",n);
     break;
 
   default : /* 16384 */
-    pol=normal[10];
+    pol=strtoul(normal[11],(char **)NULL,2);
     printf("%d\n",n);
     break;
   }
@@ -138,19 +137,25 @@ pol=normal[8];
     gf[i]=bit;
     bit=(bit<<1);
   }
-  for(i=0;i<L;i++){
+  printf("unsigned short gf[%d]={",O);
+  for(i=0;i<L;i++)
     printf("%u,",gf[i]);
-    if(i % 10==0 && i>0)
-      printf("\n");
-  }
+  
   printf("};\n");
 
 }
 
 
 int main(){
-  int n;
+  int i,j,k;
+
   mkgf(O);
   makefg(O);
-}
+  printf("fg[%d]={",O);
+  for(i=0;i<O;i++)
+  printf("%d,",fg[i]);
+printf("};\n");
 
+
+return 0;
+}
