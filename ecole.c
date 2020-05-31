@@ -38,7 +38,12 @@ for(i=0;i<n;i++){
       fg[j]=i;
   }
 }
+  printf("unsigned short fg[%d]={",O);
+  for(i=0;i<O;i++)
+  printf("%d,",fg[i]);
+printf("};\n");
 
+ 
 return;
 }
 
@@ -152,10 +157,6 @@ int main(){
 
   mkgf(O);
   makefg(O);
-  printf("unsigned short fg[%d]={",O);
-  for(i=0;i<O;i++)
-  printf("%d,",fg[i]);
-printf("};\n");
 
 
 return 0;
