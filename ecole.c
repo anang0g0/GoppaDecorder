@@ -152,7 +152,7 @@ int main(){
 
   mkgf(O);
   makefg(O);
-  printf("fg[%d]={",O);
+  printf("unsigned short fg[%d]={",O);
   for(i=0;i<O;i++)
   printf("%d,",fg[i]);
 printf("};\n");
