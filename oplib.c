@@ -1415,7 +1415,7 @@ vec chen (OP f){
 
   n = deg (o2v (f));
 //exit(1);
-//#pragma omp parallel for 
+//#pragma omp parallel for private(i)
   for (x = 0; x < N; x++)
     {
       z = 0;
@@ -1857,7 +1857,6 @@ void det (unsigned short g[]){
   /*
   unsigned short tr[N];
   unsigned short ta[N];
-
   for(i=0;i<N;i++){
     ta[i] = trace (w, i);
     if(ta[i]==0){
@@ -2631,7 +2630,6 @@ int main (void){
   //連続したメモリ空間にデータを配置
   mat[i]=base+i*K;
   memset(mat[i],0,K);
-
   }
 */
   
@@ -2679,10 +2677,10 @@ label:
   memset(mat,0,sizeof(mat));
 
 
-  keygen(g);
+  //keygen(g);
   //鍵をファイルに書き込むためにはkey2を有効にしてください。
   //どうしても早くしたい人はdeta()にすること。defaultはdet()
-  //det(g);
+  det(g);
   //exit(1);
 
   //gccの場合、並列化すると鍵生成が不完全になる。その場合、デバッグデータを出力して終了。
@@ -3001,4 +2999,5 @@ label:
     
     return 0;
 }
+
 
