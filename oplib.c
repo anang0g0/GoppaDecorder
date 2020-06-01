@@ -746,7 +746,7 @@ OP omod (OP f, OP g){
       printf ("\nff1=====================\n");
       if (deg(o2v(f)) == 0 || deg(o2v(g)) == 0)
 	{
-	  printf ("baka500\n");
+	  printf ("blake1\n");
 	  break;
 	}
 
@@ -840,7 +840,7 @@ OP odiv (OP f, OP g){
       //printf("\nff=====================\n");
       if (deg(o2v(f)) == 0 || deg(o2v(g))==0)
 	{
-	  printf ("baka500\n");
+	  printf ("blake2\n");
 	  break;
 	}
 
