@@ -2831,9 +2831,10 @@ label:
        exit(1);
     }
   }
+  o1=0;
   //  #pragma omp parallel for
     for(i=0;i<N;i++){
-      if(zz[i]>0 || (zz[0]>0))
+      if(zz[i]>0)
       o1++;
   }
   printf("err=%dっ！！\n",o1);
@@ -2971,6 +2972,7 @@ label:
 	{
 	  if(i==0 && v.x[i]>0){
 	    printf ("%d う\n",v.x[i]);
+	    count++;
 	  }
 	  if (v.x[i] > 0 && i>0){
 	    ++count;
