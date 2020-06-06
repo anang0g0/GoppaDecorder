@@ -197,7 +197,7 @@ int terms (OP f){
 
 
 //多項式の次数(degのOP型)
-int odeg (OP f){
+int odeg( OP f){
   int i, j = 0, k;
 
 
@@ -331,7 +331,7 @@ void oprintpol (OP f){
   n = distance (f);
   printf ("n=%d\n", n);
   printf ("terms=%d\n", terms (f));
-  printf ("deg=%d\n", odeg (f));
+  printf ("deg=%d\n", odeg(f));
 
 //exit(1);
 
@@ -538,7 +538,7 @@ OP add (OP f, OP g){
      }
      }
    */
-  if (odeg (h) > 0)
+  if (odeg( h) > 0)
     oprintpol (h);
   printf (" addh==============\n");
   //   exit(1);
@@ -572,13 +572,13 @@ OP omul (OP f, OP g){
   oterm t = { 0 };
   OP h = { 0 }, e = { 0 }, r = { 0 };
 
-  if (deg (o2v (f)) > deg (o2v (g)))
+  if (odeg( (f)) > odeg( (g)))
     {
-      k = deg (o2v (f));
+      k = odeg( (f));
     }
   else
     {
-      k = deg (o2v (g));
+      k = odeg( (g));
     }
 
   for (i = 0; i < k + 1; i++)
@@ -602,7 +602,7 @@ oterm LT (OP f){
   oterm t = { 0 };
 
 
-  k = deg (o2v (f));
+  k = odeg( (f));
   for (i = 0; i < k + 1; i++)
     {
       //printf("a=%d %d\n",f.t[i].a,f.t[i].n);
@@ -718,7 +718,7 @@ OP omod (OP f, OP g){
       exit (1);
     }
 
-  printf ("\nin omod g=============%d\n", deg (o2v (g)));
+  printf ("\nin omod g=============%d\n", odeg( (g)));
   while (LT(f).n > 0 && LT(g).n > 0)
     {
       printf ("in!\n");
@@ -741,7 +741,7 @@ OP omod (OP f, OP g){
       //     exit(1);
 
       f = oadd (f, h);
-      if (deg (o2v (f)) > 0)
+      if (odeg( (f)) > 0)
 	printpol (o2v (f));
       printf ("\nff1=====================\n");
       if (odeg((f)) == 0 || odeg((g)) == 0)
@@ -786,7 +786,7 @@ OP odiv (OP f, OP g){
   //printpol(o2v(g));
 
   //exit(1);
-  k = deg (o2v(g));
+  k = odeg(g);
   b = LT (g);
   printpol (o2v (g));
   printf ("in odiv1 g===========%d %d\n", b.a, b.n);
@@ -797,7 +797,7 @@ OP odiv (OP f, OP g){
       printf ("baka in odiv\n");
       exit (1);
     }
-  if (deg (o2v (f)) < deg (o2v (g)))
+  if (odeg( (f)) < odeg( (g)))
     {
       return f;
       //  a=LT(f);
@@ -809,7 +809,7 @@ OP odiv (OP f, OP g){
   //printpol(o2v(e));
   //printf("\ng^2================\n");
 
-  printf ("\nin odiv2 g=============%d\n", deg (o2v (g)));
+  printf ("\nin odiv2 g=============%d\n", odeg( (g)));
 
   i = 0;
   while (LT(f).n > 0 && LT(g).n > 0){
@@ -919,7 +919,7 @@ OP inv (OP a, OP n){
   vec vv = { 0 } , xx = { 0 };
 
 
-  if (deg (o2v (a)) > deg (o2v (n)))
+  if (odeg( (a)) > odeg( (n)))
     {
       printf ("baka_i\n");
       exit (1);
@@ -958,7 +958,7 @@ OP inv (OP a, OP n){
       a = r;
       t = oadd (x, omul (q, s));
       //printpol (o2v (a));
-      printf ("\nin roop a==================%d\n", deg (o2v (a)));
+      printf ("\nin roop a==================%d\n", odeg( (a)));
       printf ("\n");
 
       x = s;
@@ -969,7 +969,7 @@ OP inv (OP a, OP n){
   d = a;
   a = r;
   //printpol (o2v (a));
-  printf ("\nin roop a|==================%d\n", deg (o2v (a)));
+  printf ("\nin roop a|==================%d\n", odeg( (a)));
   printf ("\n");
 
   x = s;
@@ -1393,7 +1393,7 @@ OP bibun (vec a){
 	
       //printpol(o2v(t));
 
-      if (deg (o2v (t)) == 0)
+      if (odeg( (t)) == 0)
 	{
 	  printf ("baka9\n");
 	  // exit(1);
@@ -1413,7 +1413,7 @@ vec chen (OP f){
   unsigned short z;
 
 
-  n = deg (o2v (f));
+  n = odeg( (f));
 //exit(1);
 //#pragma omp parallel for private(i)
   for (x = 0; x < N; x++)
@@ -1455,7 +1455,7 @@ OP decode (OP f, OP s){
   r = vx (f, s);
   //h=ogcd(f,s);
 
-  if (deg (o2v (r)) == 0)
+  if (odeg( (r)) == 0)
     {
       printf ("baka12\n");
       exit (1);
@@ -1489,7 +1489,7 @@ OP decode (OP f, OP s){
   printf ("あっ、でる！\n");
   //  exit(1);
 
-  if (deg (o2v (r)) < T)
+  if (odeg( (r)) < T)
     {
       printpol (o2v (r));
       printf ("baka5 deg(r)<T\n");
@@ -1515,7 +1515,7 @@ OP decode (OP f, OP s){
   t2.a = t1.a;
   t2.n = 0;
 
-  if (deg (o2v (w)) == 0)
+  if (odeg( (w)) == 0)
     {
       printpol (o2v (w));
     }
@@ -2322,7 +2322,7 @@ vec pattarson (OP w, OP f){
   ff = omod (omul (hh.v, g1), w);
  printpol (o2v (ff));
   printf (" beta!=========\n");
-  if (deg (o2v (ff)) != K / 2)
+  if (odeg( (ff)) != K / 2)
     {
       flg=1;
       printpol(o2v(w));
@@ -2344,7 +2344,7 @@ vec pattarson (OP w, OP f){
     printf("locate degree is !=K/2 %d\n",odeg((ff)));
     exit(1);
   }
-  if (deg (o2v (ll)) == 0)
+  if (odeg( (ll)) == 0)
     {
       printf (" locater degree is 0\n");
       exit (1);
@@ -2955,7 +2955,7 @@ label:
       ff = omod (omul (hh.v, g1), w);
       printpol (o2v (ff));
       printf (" beta!=========\n");
-      if (deg (o2v (ff)) != K / 2)
+      if (odeg( (ff)) != K / 2)
 	{
 	  printf("deg(l)!=K/2=%d %d %d\n",odeg((ff)),K,k);
 	  //exit(1);
