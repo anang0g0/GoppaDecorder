@@ -201,8 +201,8 @@ int odeg (OP f){
   int i, j = 0, k;
 
 
-  k=terms(f);
-  for (i = 0; i < k + 1; i++)
+  //k=terms(f);
+  for (i = 0; i < 512; i++)
     {
       if (j < f.t[i].n && f.t[i].a > 0)
 	j = f.t[i].n;
@@ -666,7 +666,7 @@ OP coeff (OP f, unsigned short d){
   vec a, b;
 
 
-  k=deg(o2v(f))+1;
+  k=odeg((f))+1;
   for (i = 0; i < k; i++)
     f.t[i].a = gf[mlt (fg[f.t[i].a], oinv (d))];
 
@@ -744,7 +744,7 @@ OP omod (OP f, OP g){
       if (deg (o2v (f)) > 0)
 	printpol (o2v (f));
       printf ("\nff1=====================\n");
-      if (deg(o2v(f)) == 0 || deg(o2v(g)) == 0)
+      if (odeg((f)) == 0 || odeg((g)) == 0)
 	{
 	  printf ("blake1\n");
 	  break;
@@ -838,7 +838,7 @@ OP odiv (OP f, OP g){
 
       //printpol(o2v(f));
       //printf("\nff=====================\n");
-      if (deg(o2v(f)) == 0 || deg(o2v(g))==0)
+      if (odeg((f)) == 0 || odeg((g))==0)
 	{
 	  printf ("blake2\n");
 	  break;
@@ -890,7 +890,7 @@ unsigned short trace (OP f, unsigned short x){
   unsigned short u = 0;
 
 
-  d = deg(o2v(f));
+  d = odeg((f));
 
   for (i = 0; i < d + 1; i++)
     {
@@ -945,9 +945,9 @@ OP inv (OP a, OP n){
   x.t[0].n = 0;
   s.t[0].a = 1;
   s.t[0].n = 0;
-  while (deg(o2v(a)) > 0)
+  while (odeg((a)) > 0)
     {
-      if(deg(o2v(a))>0)
+      if(odeg((a))>0)
       r = omod (d, a);
       if(LT(a).a==0)
 	break;
@@ -1006,7 +1006,7 @@ OP inv (OP a, OP n){
   printf ("\n");
   printf ("ss==============\n");
   //       exit(1);
-  // if(deg(o2v(w))>0)
+  // if(odeg((w))>0)
   if (LT (v).n > 0 && LT(w).n>0)
     {
       u = omod (v, w);
@@ -1064,9 +1064,9 @@ OP vx(OP f,OP g){
   i=0;
 
   while(1){
-    if(deg(o2v(g))==0)
+    if(odeg((g))==0)
       break;
-    // if(deg(o2v(g))>0)
+    // if(odeg((g))>0)
     h=omod(f,g);
     printpol(o2v(h));
     printf(" modh vx==============\n");
@@ -1087,7 +1087,7 @@ OP vx(OP f,OP g){
     printpol(o2v(vv));
     printf(" ll========\n");
 
-    if(deg(o2v(vv))==T)
+    if(odeg((vv))==T)
       break;
     i++;
   }
@@ -1148,10 +1148,10 @@ OP ogcd (OP f, OP g){
 
   for(i=0;i<T;i++)
     {
-      if(deg(o2v(g))==0)
+      if(odeg((g))==0)
 	break;
       h = omod (f, g);
-      if(deg(o2v(h))==T-1){
+      if(odeg((h))==T-1){
 	printpol(o2v(h));
 	printf(" in ogcd=============\n");
 	//wait();
@@ -1206,12 +1206,12 @@ EX xgcd (OP f, OP g){
   i=0;
   while(1){
      if (LT (g).n == 0){
-       printf("v[%d]=%d skipped\n",i,deg(o2v(v[i])));
+       printf("v[%d]=%d skipped\n",i,odeg((v[i])));
        //exit(1);
        break;
      }
     
-     if(deg(o2v(g))>0)
+     if(odeg((g))>0)
       h = omod (f, g);
     
      if(LT(g).a>0)
@@ -1219,12 +1219,12 @@ EX xgcd (OP f, OP g){
 
       v[i+2] = oadd (v[i], omul (ww, v[i+1]));
       u[i+2] = oadd (u[i], omul (ww, u[i+1]));
-      printf ("i+1=%d %d %d g=%d\n", i + 1,deg(o2v(v[i])),T-1,deg(o2v(g)));
+      printf ("i+1=%d %d %d g=%d\n", i + 1,odeg((v[i])),T-1,odeg((g)));
       f = g;
       g = h;
 
       //if(
-	 if(deg(o2v(f))==T-1 || deg(o2v(v[i]))==T-1){
+	 if(odeg((f))==T-1 || odeg((v[i]))==T-1){
 	break;
       }
       i++;
@@ -1290,11 +1290,11 @@ EX gcd (OP f, OP g){
 
   k = 0;
   //i=1;
-  while(deg(o2v(g))>0)
+  while(odeg((g))>0)
     {
       if (LT (g).a == 0)
 	break;
-      if(deg(o2v(g))>0)
+      if(odeg((g))>0)
       h = omod (f, g);
       if(LT(g).a==0)
 	break;
@@ -2147,7 +2147,7 @@ OP osqrt(OP f,OP w){
   // exit(1);
 
 
-  k=deg(o2v(w));
+  k=odeg((w));
   printf("%d\n",k);
   //exit(1);
   j=0;
@@ -2178,7 +2178,7 @@ OP osqrt(OP f,OP w){
   }
 
   tmp=omod(omul(s,r),w);
-  if(deg(o2v(tmp))>0){
+  if(odeg((tmp))>0){
     printpol(o2v(tmp));
     printf(" r is not inv==========\n");
     wait();
@@ -2279,7 +2279,7 @@ vec pattarson (OP w, OP f){
   ff = inv (f, w);
 //  printpol (o2v (ff));
   b2=omod(omul(ff,f),w);
-  if(deg(o2v(b2))>0){
+  if(odeg((b2))>0){
     printf("逆元が計算できません。error\n");
     wait();
     exit(1);
@@ -2336,12 +2336,12 @@ vec pattarson (OP w, OP f){
   //printpol (o2v (hh.v));
   printf (" alpha!=========\n");
   //exit(1);
-  if(deg(o2v(ff))==K/2){
+  if(odeg((ff))==K/2){
     ll = oadd (omul (ff, ff), omul (tt, omul (hh.v, hh.v)));
-  }else if(deg(o2v(ff))==1){
+  }else if(odeg((ff))==1){
     ll=oadd (omul (ff, ff), omul (tt, omul (hh.v, hh.v)));
   }else{
-    printf("locate degree is !=K/2 %d\n",deg(o2v(ff)));
+    printf("locate degree is !=K/2 %d\n",odeg((ff)));
     exit(1);
   }
   if (deg (o2v (ll)) == 0)
@@ -2888,7 +2888,7 @@ label:
   //バグトラップのためのコード（冗長）
   
 	  hh=gcd(w,f);
-	  if(deg(o2v(hh.d))>0){
+	  if(odeg((hh.d))>0){
 	  printf(" s,wは互いに素じゃありません。\n");
 	  wait();
 	  goto label;
@@ -2901,7 +2901,7 @@ label:
 
       ff = inv (f, w);
       tmp=omod(omul(ff,f),w);
-      if(deg(o2v(tmp))>0){
+      if(odeg((tmp))>0){
 	printpol(o2v(tmp));
 	printf(" inv(h+x)============\n");
 	printpol(o2v(w));
@@ -2926,7 +2926,7 @@ label:
       printpol(o2v(r2));
       printf(" r2===========same?\n");
       //scanf("%d",&n);
-      if(deg(o2v(r1))!=deg(o2v(r2)) && deg(o2v(g1))>0){
+      if(odeg((r1))!=odeg((r2)) && odeg((g1))>0){
 	printpol(o2v(w));
 	printf(" w===========\n");
 	printpol(o2v(r2));
@@ -2937,7 +2937,7 @@ label:
 	goto label;
 	//exit(1);
       }
-      if (deg(o2v(g1)) == 0)
+      if (odeg((g1)) == 0)
 	{
 	  printpol(o2v(g1));
 	  printf(" sqrt(h+x)==============\n");
@@ -2957,7 +2957,7 @@ label:
       printf (" beta!=========\n");
       if (deg (o2v (ff)) != K / 2)
 	{
-	  printf("deg(l)!=K/2=%d %d %d\n",deg(o2v(ff)),K,k);
+	  printf("deg(l)!=K/2=%d %d %d\n",odeg((ff)),K,k);
 	  //exit(1);
 	  goto label;
 	}
