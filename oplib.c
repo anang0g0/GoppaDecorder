@@ -374,6 +374,15 @@ void printpol (vec a){
   return;
 }
 
+OP vadd(vec f,vec g){
+  int i,j;
+
+  for(i=0;i<512;i++)
+    f.x[i]^=g.x[i];
+
+  return v2o(f);
+}
+
 
 //多項式の足し算
 OP oadd (OP f, OP g){
