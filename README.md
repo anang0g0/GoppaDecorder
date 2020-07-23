@@ -1,5 +1,9 @@
 # GoppaDecorder(Goppie)
 
+20200724
+
+このリポジトリは「GitHub Arctic Code Vault」に選ばれました。
+
 
 202007123
 
