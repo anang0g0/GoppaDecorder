@@ -1,5 +1,11 @@
 # GoppaDecorder(Goppie)
 
+20200729
+
+ニーダーライターの兄弟である（実質的に同じ）McElieceがNISTの次世代暗号候補の最終選考に残ったようです。
+
+https://csrc.nist.gov/projects/post-quantum-cryptography/round-3-submissions
+
 20200726
 
 もしPQCにこれが選ばれなかったら、いや寧ろその可能性が高いけど、これを秘密鍵にして使おうかと思う。
