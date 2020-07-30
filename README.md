@@ -19,7 +19,7 @@ make amd
 
 次世代暗号の世界標準が決定する第4ラウンドが始まりました。
 効率性ではほかの候補より劣るものの、絶大な安全性を持つのがニーダーライター暗号です。
-今後2年間をかけて、合計20候補の中から世界標準が決められる予定だそうです。
+今後2年間をかけて、合計20候補の中から公開鍵暗号、電子照明、鍵交換などそれぞれの世界標準が決められる予定だそうです。
 
 https://www.nist.gov/news-events/news/2020/07/nists-post-quantum-cryptography-program-enters-selection-round
 
