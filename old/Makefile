@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -g -O2
+CFLAGS = -g -O3 -mtune=znver2 -march=znver2 -funroll-loops 
 
 TARGET = oplib
 OBJS = oplib.o
