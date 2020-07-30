@@ -46,9 +46,9 @@ void g2(){
   }
 
   int l;
-#pragma omp parallel for num_threads(8) private(j,k)
+#pragma omp parallel for private(j,k)
   for(i=0;i<F;i++){
-    //    #pragma omp parallel num_threads(8)
+#pragma omp parallel num_threads(8)
     {
     for(j=0;j<F;j++){
       l=0;
@@ -176,8 +176,8 @@ for(i=0;i<F;i++){
 
 #pragma omp parallel for private(j,k)
  for(i=0;i<F;i++){
-   //#pragma omp parallel num_threads(8)
-   //  {
+#pragma omp parallel num_threads(8) //private(j,k)
+     {
      for(j=0;j<F;j++){
        l=0;
        //#pragma omp parallel for reduction(^:l)
@@ -187,7 +187,7 @@ for(i=0;i<F;i++){
        }
        //b[i][j]=l;
      }
-     //}
+     }
  }
  
 

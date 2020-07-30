@@ -5,10 +5,10 @@
 #include "8192.h"
 #include "global.h"
 #include "struct.h"
-//#include "oplib.h"
+#include "oplib.h"
 
-#include "oplib.c"
-
+//#include "oplib.c"
+extern unsigned short g[K+1];
 
 //static unsigned short g[K+1]={0};
 

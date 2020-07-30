@@ -64,7 +64,7 @@ unsigned long xor128(void)
     unsigned long t;
 
     a=rand();
-    t=x^(a^(a<<11));a=y;y=z;z=w; return( w=(w^(w>>19))^(t^(t>>8)) );
+    t=x^(a<<11);a=y;y=z;z=w; return( w=(w^(w>>19))^(t^(t>>8)) );
 }
 
 
