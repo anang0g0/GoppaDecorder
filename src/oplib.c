@@ -32,8 +32,6 @@
 #include "global.h"
 #include "struct.h"
 
-
-
 #include "chash.c"
 #include "lu.c"
 #include "sha3.c"
