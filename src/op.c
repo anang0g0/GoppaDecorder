@@ -3168,14 +3168,17 @@ label:
 
   printf ("\nすげ、オレもうイキそ・・・\n");
   //keygen(g);
-  //鍵をファイルに書き込むためにはkey2を有効にしてください。
-  //どうしても早くしたい人はdeta()にすること。defaultはdet()
+
+
+
+  //パリティチェックを生成する。gccにしたい人はdet()にすること。 default は deta()
   deta (g);
 
 
 lab:
+  
+  //鍵をファイルに書き込むためにはkey2を有効にしてください。
   //key2 (g);
-
 
   //固定した鍵を使いたい場合はファイルから読み込むようにしてください。  
   /*  
@@ -3190,6 +3193,8 @@ lab:
      fclose (fq);
    */
 
+  
+  //列に0がないかチェック
   for (j = 0; j < N; j++)
     {
       flg = 0;
@@ -3207,10 +3212,7 @@ lab:
 
 
 
-
-
-
-//decode bigin
+//decode開始
   k = 0;
   while (1)
     {
@@ -3259,8 +3261,6 @@ lab:
 	    {
 	      printf ("e=%d %d %d %s\n", zz[i],r.t[i].a, r.t[i].n, "お");
 	    }
-	  
-	  
 	  else if (r.t[i].a != r.t[i].n)
 	    {
 	      for (l = 0; l < N; l++)
@@ -3273,10 +3273,9 @@ lab:
 		  printf ("error pattarn too few\n");
 		  exit (1);
 		}
-	    }
-	  
-	
-    }
+	    }	  
+	}
+      
       o1 = 0;
       //  #pragma omp parallel for
       for (i = 0; i < N; i++)
@@ -3290,8 +3289,8 @@ lab:
     
 
 
-      printf
-	("パターソンアルゴリズムを実行します。何か数字を入れてください。\n");
+      //printf("パターソンアルゴリズムを実行します。何か数字を入れてください。\n");
+      //wait();
 
       memset (zz, 0, sizeof (zz));
 
