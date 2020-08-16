@@ -1,9 +1,9 @@
 
 all:
-	gcc -Wall -O3 -g  -mtune=native -march=native -ffast-math -funroll-loops -fopenmp oplib.c
+	gcc -Wall -O3 -g -pg -mtune=native -march=native -ffast-math -funroll-loops -fopenmp op.c
 
 amd:
-	clang-10 -Wall -g -O3 -mtune=znver2 -march=znver2 -ffast-math -funroll-loops  -fopenmp oplib.c
+	clang-10 -Wall -g -pg -O3 -mtune=znver2 -march=znver2 -ffast-math -funroll-loops  -fopenmp op.c
 
 clean:
 	rm -f a.out
