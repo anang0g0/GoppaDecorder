@@ -456,7 +456,7 @@ OP norm(OP f){
   return h;
 }
 
-
+//20200816:正規化したいところだがうまく行かない
 //多項式の足し算
 OP
 oadd (OP f, OP g)
