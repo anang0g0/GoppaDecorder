@@ -8,6 +8,11 @@ https://openmp.llvm.org/
 
 これらを読んで実行環境を作ってください。
 
+あるいは、./llvm.sh
+
+を実行してclang-10をインストールするようにしてください。
+clangのバージョンに応じてMakefileを書き換えてください。
+
 cd src/
 
 make
