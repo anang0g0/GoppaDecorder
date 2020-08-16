@@ -1,6 +1,6 @@
 # GoppaDecorder(Goppie)
 
-１．プログラム実行に当たって(oplib.c)　20200304
+１．プログラム実行に当たって(op.c)　20200304,20200817
 
 https://clang.llvm.org/get_started.html
 
@@ -21,7 +21,7 @@ make
 
 llvmのclangを使って並列処理をします。（環境を整えるのが難しいですが）
 
-oplib.c内のmain関数の中のdetをdetaに書き換えました。
+op.c内のmain関数の中のdetをdetaに書き換えました。
 
 gccを使いたい場合は、make gccとすること。
 
@@ -32,7 +32,7 @@ gccを使いたい場合は、make gccとすること。
 
 20200817
 
-alpha バージョン公開。
+テストバージョン公開。(op.c)
 defaultでclang-10を使用。
 
 20200816
