@@ -3226,8 +3226,12 @@ lab:
 	    }
 	}
 
-
-
+      for(i=0;i<N;i++){
+	if(zz[i]>0)
+	  printf("l=%d %d\n",i,zz[i]);
+      }
+      //exit(1);
+      
       f = synd (zz);
       printf ("\n");
       count = 0;
@@ -3245,11 +3249,11 @@ lab:
 	{
 	  if (i == 0)
 	    {
-	      printf ("e=%d %d %d %s\n", zz[i],r.t[i].a, r.t[i].n, "う");
+	      printf ("\ne=%d %d %s\n",r.t[i].a, r.t[i].n, "う");
 	    }
 	  else if (r.t[i].a >0)// == r.t[i].n)
 	    {
-	      printf ("e=%d %d %d %s\n", zz[i],r.t[i].a, r.t[i].n, "お");
+	      printf ("e=%d %d %s\n", r.t[i].a, r.t[i].n, "お");
 	    }
 	  else if (r.t[i].a != r.t[i].n)
 	    {
