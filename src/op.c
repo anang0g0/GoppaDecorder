@@ -2992,6 +2992,92 @@ test (OP w, unsigned short zz[])
 
 }
 
+/*
+void trap(OP w,OP f){
+  OP hh={0},d,tt,ff,tmp,r2;
+
+  
+  hh = gcd (w, f);
+      if (odeg ((hh.d)) > 0)
+	{
+	  printf (" s,wは互いに素じゃありません。\n");
+	  wait ();
+	  goto label;
+	}
+
+
+      tt.t[0].n = 1;
+      tt.t[0].a = 1;
+
+
+      ff = inv (f, w);
+      tmp = omod (omul (ff, f), w);
+      if (odeg ((tmp)) > 0)
+	{
+	  //printpol (o2v (tmp));
+	  printf (" inv(h+x)============\n");
+	  //printpol (o2v (w));
+	  printf (" w============\n");
+	  printf ("この多項式では逆元計算ができません。");
+	  printf ("count=%d\n", k);
+	  wait ();
+	  //  goto label;
+	}
+
+
+      r2 = oadd (ff, tt);
+      //printpol (o2v (r2));
+      printf (" h+x==============\n");
+      //  exit(1);
+      g1 = osqrt (r2, w);
+      //printpol (o2v (g1));
+      printf (" g1!=========\n");
+      r1 = omod (omul (g1, g1), w);
+      //printpol (o2v (r1));
+      printf (" g1^2 mod w===========\n");
+      //printpol (o2v (r2));
+      printf (" r2===========same?\n");
+      //scanf("%d",&n);
+      if (odeg ((r1)) != odeg ((r2)) && odeg ((g1)) > 0)
+	{
+	  //printpol (o2v (w));
+	  printf (" w===========\n");
+	  //printpol (o2v (r2));
+	  printf (" r2===========\n");
+	  printf ("平方根の計算に失敗しました。\n");
+	  printf ("count=%d\n", k);
+	  wait ();
+	  goto label;
+	  //exit(1);
+	}
+      if (odeg ((g1)) == 0)
+	{
+	  //printpol (o2v (g1));
+	  printf (" sqrt(h+x)==============\n");
+	  //printpol (o2v (w));
+	  printf (" badkey=========\n");
+	  printf ("平方根が０になりました。\n");
+	  printf ("count=%d\n", k);
+	  wait ();
+	  //exit(1);
+	  goto label;
+	}
+
+
+      hh = xgcd (w, g1);
+      ff = omod (omul (hh.v, g1), w);
+      //printpol (o2v (ff));
+      printf (" beta!=========\n");
+      if (odeg ((ff)) != K / 2)
+	{
+	  printf ("deg(l)!=K/2=%d %d %d\n", odeg ((ff)), K, k);
+	  //exit(1);
+	  goto label;
+	}
+}
+*/
+
+
 
 //言わずもがな
 int
@@ -3061,7 +3147,7 @@ label:
   oprintpol (w);
   //exit(1);
 
-
+  //多項式の値が0でないことを確認
   for (i = 0; i < N; i++)
     {
       ta[i] = trace (w, i);
@@ -3084,21 +3170,10 @@ label:
   //keygen(g);
   //鍵をファイルに書き込むためにはkey2を有効にしてください。
   //どうしても早くしたい人はdeta()にすること。defaultはdet()
-  det (g);
-  //exit(1);
+  deta (g);
 
-  //gccの場合、並列化すると鍵生成が不完全になる。その場合、デバッグデータを出力して終了。
-  //再現性がないので余り役に立たない。その場合detを使うこと。
-  /*
-     i=0;
-     do{
-     memset(mat,0,sizeof(mat));
-     i=deta(g);
-     }while(i==-1);
-   */
 
 lab:
-  //exit(1);
   //key2 (g);
 
 
@@ -3115,16 +3190,13 @@ lab:
      fclose (fq);
    */
 
-  //#pragma omp parallel for 
   for (j = 0; j < N; j++)
     {
       flg = 0;
       for (i = 0; i < K; i++)
 	{
-	  //printf("%d,",mat[i][j]);
 	  if (mat[j][i] > 0)
 	    flg = 1;
-	  //      printf("\n");
 	}
       if (flg == 0)
 	{
@@ -3139,25 +3211,6 @@ lab:
 
 
 //decode bigin
-//#pragma omp parallel for
-  for (j = 0; j < N; j++)
-    {
-      flg = 0;
-      for (i = 0; i < K; i++)
-	{
-	  //printf("%d,",mat[i][j]);
-	  if (mat[j][i] > 0)
-	    flg = 1;
-	  //      printf("\n");
-	}
-      if (flg == 0)
-	{
-	  printf ("0 is %d\n", j);
-	  exit (1);
-	}
-    }
-  //exit(1);
-
   k = 0;
   while (1)
     {
@@ -3166,10 +3219,6 @@ lab:
 
       count = 0;
 
-      //  exit(1);
-
-
-      //  for(i=0;i<N;i++)
       memset (zz, 0, sizeof (zz));
 
 
@@ -3188,10 +3237,7 @@ lab:
 
 
       f = synd (zz);
-      //printpol (o2v (f));
       printf ("\n");
-      //wait();
-      //  exit(1);
       count = 0;
       for (i = 0; i < N; i++)
 	{
@@ -3199,36 +3245,27 @@ lab:
 	    count++;
 	}
       printf ("%d\n", count);
-      //exit(1);
 
 
       r = decode (w, f);
-      //  exit(1);
 
       for (i = 0; i < T; i++)
 	{
 	  if (i == 0)
 	    {
-	      printf ("e=%d %d %s\n", r.t[i].a, r.t[i].n, "う");
+	      printf ("e=%d %d %d %s\n", zz[i],r.t[i].a, r.t[i].n, "う");
 	    }
-	  else if (r.t[i].a == r.t[i].n)
+	  else if (r.t[i].a >0)// == r.t[i].n)
 	    {
-	      printf ("e=%d %d %s\n", r.t[i].a, r.t[i].n, "お");
+	      printf ("e=%d %d %d %s\n", zz[i],r.t[i].a, r.t[i].n, "お");
 	    }
+	  
+	  
 	  else if (r.t[i].a != r.t[i].n)
 	    {
-	      //printpol (o2v (w));
-	      printf (" goppa polynomial==============\n");
-	      for (j = 0; j < N; j++)
-		printf ("%d,", zz[j]);
-	      printf ("\n");
-	      for (j = 0; j < T; j++)
-		printf ("e=%d %d %s\n", r.t[j].a, r.t[j].n, "お");
-	      exit (1);
 	      for (l = 0; l < N; l++)
 		{
-		  // printf("%d,",zz[l]);
-		  if (zz[l] > 0 && zz[l] == l)
+		  if (zz[l] > 0)
 		    count++;
 		}
 	      if (count < T)
@@ -3236,22 +3273,10 @@ lab:
 		  printf ("error pattarn too few\n");
 		  exit (1);
 		}
-
 	    }
-	  if (r.t[i].a == 0)
-	    {
-	      printf ("------------------\n");
-	      printf ("err=%d i=%d\n", o1, i);
-	      //printpol (o2v (w));
-	      printf (" w==============\n");
-	      //printpol (o2v (f));
-	      printf (" w==============\n");
-	      for (l = 0; l < N; l++)
-		printf ("%d,", zz[l]);
-	      printf ("\n");
-	      exit (1);
-	    }
-	}
+	  
+	
+    }
       o1 = 0;
       //  #pragma omp parallel for
       for (i = 0; i < N; i++)
@@ -3262,22 +3287,13 @@ lab:
       printf ("err=%dっ！！\n", o1);
 
       //goto label;
-
+    
 
 
       printf
 	("パターソンアルゴリズムを実行します。何か数字を入れてください。\n");
-      //exit(1);
-      //wait();
 
-
-      //flg=0;
-      //  while(1){
-
-
-      //for (i = 0; i < N; i++)
       memset (zz, 0, sizeof (zz));
-      //    zz[i] = 0;
 
 
       j = 0;
@@ -3292,10 +3308,8 @@ lab:
 	    }
 	}
 
+      //encryotion
       test (w, zz);
-      //wait();
-
-      //exit(1);
 
       for (i = 0; i < N; i++)
 	printf ("%d,", zz[i]);
@@ -3304,91 +3318,8 @@ lab:
       f = synd (zz);
 
 
-      //printpol (o2v (f));
-      printf (" syn=============\n");
-      //exit(1);
-
-
-      //バグトラップのためのコード（冗長）
-
-      hh = gcd (w, f);
-      if (odeg ((hh.d)) > 0)
-	{
-	  printf (" s,wは互いに素じゃありません。\n");
-	  wait ();
-	  goto label;
-	}
-
-
-      tt.t[0].n = 1;
-      tt.t[0].a = 1;
-
-
-      ff = inv (f, w);
-      tmp = omod (omul (ff, f), w);
-      if (odeg ((tmp)) > 0)
-	{
-	  //printpol (o2v (tmp));
-	  printf (" inv(h+x)============\n");
-	  //printpol (o2v (w));
-	  printf (" w============\n");
-	  printf ("この多項式では逆元計算ができません。");
-	  printf ("count=%d\n", k);
-	  wait ();
-	  goto label;
-	}
-
-
-      r2 = oadd (ff, tt);
-      //printpol (o2v (r2));
-      printf (" h+x==============\n");
-      //  exit(1);
-      g1 = osqrt (r2, w);
-      //printpol (o2v (g1));
-      printf (" g1!=========\n");
-      r1 = omod (omul (g1, g1), w);
-      //printpol (o2v (r1));
-      printf (" g1^2 mod w===========\n");
-      //printpol (o2v (r2));
-      printf (" r2===========same?\n");
-      //scanf("%d",&n);
-      if (odeg ((r1)) != odeg ((r2)) && odeg ((g1)) > 0)
-	{
-	  //printpol (o2v (w));
-	  printf (" w===========\n");
-	  //printpol (o2v (r2));
-	  printf (" r2===========\n");
-	  printf ("平方根の計算に失敗しました。\n");
-	  printf ("count=%d\n", k);
-	  wait ();
-	  goto label;
-	  //exit(1);
-	}
-      if (odeg ((g1)) == 0)
-	{
-	  //printpol (o2v (g1));
-	  printf (" sqrt(h+x)==============\n");
-	  //printpol (o2v (w));
-	  printf (" badkey=========\n");
-	  printf ("平方根が０になりました。\n");
-	  printf ("count=%d\n", k);
-	  wait ();
-	  //exit(1);
-	  goto label;
-	}
-
-
-      hh = xgcd (w, g1);
-      ff = omod (omul (hh.v, g1), w);
-      //printpol (o2v (ff));
-      printf (" beta!=========\n");
-      if (odeg ((ff)) != K / 2)
-	{
-	  printf ("deg(l)!=K/2=%d %d %d\n", odeg ((ff)), K, k);
-	  //exit(1);
-	  goto label;
-	}
-
+      //バグトラップのためのコード（省略）
+      //trap(w,f);
       //バグトラップ（ここまで）
 
       count = 0;
@@ -3410,24 +3341,15 @@ lab:
 	}
       printf ("err=%dっ!! \n", count);
       if (count < 255)
-	{
-	  //printpol (o2v (w));
-	  for (i = 0; i < N; i++)
-	    {
-	      if (zz[i] > 0)
-		printf ("%d,", zz[i]);
-	    }
-	  printf ("\n");
-	}
-
+	printf ("error is too few\n");
+      
+      
       //goto lab;
       //wait();
 
       break;
     }
 
-  //free(base);
-  //free(mat);
 
 
   return 0;
