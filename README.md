@@ -2,6 +2,12 @@
 
 １．プログラム実行に当たって(oplib.c)　20200304
 
+https://clang.llvm.org/get_started.html
+
+https://openmp.llvm.org/
+
+これらを読んで実行環境を作ってください。
+
 cd src/
 
 make
