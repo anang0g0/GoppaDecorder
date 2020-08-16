@@ -26,7 +26,8 @@
 #include <stdlib.h>
 #include <sys/mman.h>
 
-#include <omp.h>
+//#include "omp.h" //clang-12
+#include <omp.h> //clang-10
 
 #include "8192.h"
 #include "global.h"
@@ -3033,7 +3034,7 @@ label:
   //keygen(g);
   //鍵をファイルに書き込むためにはkey2を有効にしてください。
   //どうしても早くしたい人はdeta()にすること。defaultはdet()
-  det (g);
+  deta (g);
   //exit(1);
 
   //gccの場合、並列化すると鍵生成が不完全になる。その場合、デバッグデータを出力して終了。
