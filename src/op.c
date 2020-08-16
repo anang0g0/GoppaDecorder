@@ -843,7 +843,7 @@ omod (OP f, OP g)
       return f;
     }
 
-  printf ("in omod\n");
+  //printf ("in omod\n");
   //exit(1);
 
   k = LT (g).n;
@@ -851,7 +851,7 @@ omod (OP f, OP g)
 
 
 
-  printf ("b=========%dx^%d\n", b.a, b.n);
+  //printf ("b=========%dx^%d\n", b.a, b.n);
   //printpol (o2v (g));
   if (b.a == 0 && b.n == 0)
     {
@@ -859,7 +859,7 @@ omod (OP f, OP g)
       exit (1);
     }
 
-  printf ("\nin omod g=============%d\n", odeg ((g)));
+  //  printf ("\nin omod g=============%d\n", odeg ((g)));
   while (LT (f).n > 0 && LT (g).n > 0)
     {
       // printf ("in!\n");
@@ -1115,13 +1115,6 @@ inv (OP a, OP n)
 
 
   tt = n;
-  printf ("n=============\n");
-  ////printpol (o2v (n));
-  printf ("\n");
-  printf ("a=============\n");
-  ////printpol (o2v (a));
-  printf ("\n");
-  //  exit(1);
 
   d = n;
   x.t[0].a = 0;
@@ -1141,8 +1134,8 @@ inv (OP a, OP n)
       a = r;
       t = oadd (x, omul (q, s));
       ////printpol (o2v (a));
-      printf ("\nin roop a==================%d\n", odeg ((a)));
-      printf ("\n");
+      //printf ("\nin roop a==================%d\n", odeg ((a)));
+      //printf ("\n");
 
       x = s;
       s = t;
@@ -1152,42 +1145,44 @@ inv (OP a, OP n)
   d = a;
   a = r;
   ////printpol (o2v (a));
-  printf ("\nin roop a|==================%d\n", odeg ((a)));
-  printf ("\n");
+  //printf ("\nin roop a|==================%d\n", odeg ((a)));
+  //printf ("\n");
 
   x = s;
   s = t;
 
   ////printpol (o2v (d));
-  printf ("\nout1================\n");
+  //printf ("\nout1================\n");
   gcd = d;			// $\gcd(a, n)$
   ////printpol (o2v (gcd));
-  printf ("\n");
+  //printf ("\n");
   ////printpol (o2v (n));
-  printf ("\n");
-  printf ("out2===============\n");
+  //printf ("\n");
+  //printf ("out2===============\n");
 
   printf ("before odiv\n");
   //w=tt;
 
   b = LT (w);
   ////printpol (o2v (w));
-  printf ("\nw=======%d %d\n", b.a, b.n);
+  //printf ("\nw=======%d %d\n", b.a, b.n);
   //w=tt;
   v = oadd (x, n);
   ////printpol (o2v (v));
-  printf ("\n");
+  //printf ("\n");
+  /*
   if (LT (v).a == 0)
     {
       printf ("v=============0\n");
     }
 
   printf ("d==============\n");
+  */
   //  } //end of a>0
   w = tt;
   ////printpol (o2v (v));
-  printf ("\n");
-  printf ("ss==============\n");
+  //printf ("\n");
+  //printf ("ss==============\n");
   //       exit(1);
   // if(odeg((w))>0)
   if (LT (v).n > 0 && LT (w).n > 0)
@@ -1218,7 +1213,7 @@ inv (OP a, OP n)
     }
   //u=coeff(u,d.t[0].a);
   ////printpol (o2v (u));
-  printf ("\nu==================\n");
+  //printf ("\nu==================\n");
   if (LT (u).a == 0)
     {
       printf ("no return at u==0\n");
@@ -1261,30 +1256,30 @@ vx (OP f, OP g)
       // if(odeg((g))>0)
       h = omod (f, g);
       //printpol (o2v (h));
-      printf (" modh vx==============\n");
+      //printf (" modh vx==============\n");
       if (LT (g).a == 0)
 	break;
       //if(LT(g).a>0)
       ww = odiv (f, g);
-      printf ("ww======= ");
+      //printf ("ww======= ");
       //printpol (o2v (ww));
-      printf ("\n");
+      //printf ("\n");
       v[i + 2] = oadd (v[i], omul (ww, v[i + 1]));
-      printf ("-------");
+      //printf ("-------");
       f = g;
       g = h;
 
       vv = v[i + 2];
-      printf ("vv==");
+      //printf ("vv==");
       //printpol (o2v (vv));
-      printf (" ll========\n");
+      //printf (" ll========\n");
 
       if (odeg ((vv)) == T)
 	break;
       i++;
     }
   //printpol (o2v (vv));
-  printf (" vv============\n");
+  //printf (" vv============\n");
   //exit(1);
 
   return vv;
@@ -1426,7 +1421,7 @@ xgcd (OP f, OP g)
 
       v[i + 2] = oadd (v[i], omul (ww, v[i + 1]));
       u[i + 2] = oadd (u[i], omul (ww, u[i + 1]));
-      printf ("i+1=%d %d %d g=%d\n", i + 1, odeg ((v[i])), T - 1, odeg ((g)));
+      //printf ("i+1=%d %d %d g=%d\n", i + 1, odeg ((v[i])), T - 1, odeg ((g)));
       f = g;
       g = h;
 
@@ -2318,9 +2313,9 @@ Pgen ()
   fwrite (P, 2, N, fp);
   fclose (fp);
 
-  for (i = 0; i < N; i++)
-    printf ("%d,", inv_P[i]);
-  printf ("\n");
+  //for (i = 0; i < N; i++)
+  //printf ("%d,", inv_P[i]);
+  //printf ("\n");
 
 
   fp = fopen ("inv_P.key", "wb");
@@ -2460,24 +2455,19 @@ osqrt (OP f, OP w)
 	{
 	  even.t[j].n = f.t[i].n / 2;
 	  even.t[j++].a = gf[isqrt (f.t[i].a)];
-	  printf ("a=%d %d\n", f.t[i].a, i);
+	  //printf ("a=%d %d\n", f.t[i].a, i);
 	}
       if (f.t[i].n % 2 == 1)
 	{
 	  odd.t[jj].n = (f.t[i].n - 1) / 2;
 	  odd.t[jj++].a = gf[isqrt (f.t[i].a)];
-	  printf (" odd %d\n", i);
+	  //printf (" odd %d\n", i);
 	}
     }
-  //printpol (o2v (even));
-  printf (" T0============\n");
-  //printpol (o2v (odd));
-  printf (" T1============\n");
-  // exit(1);
 
 
   k = odeg ((w));
-  printf ("%d\n", k);
+  //printf ("%d\n", k);
   //exit(1);
   j = 0;
   jj = 0;
@@ -2487,7 +2477,7 @@ osqrt (OP f, OP w)
 	{
 	  h.t[j].a = gf[isqrt (w.t[i].a)];
 	  h.t[j++].n = w.t[i].n / 2;
-	  printf ("wi==%d %d\n", (w.t[i].n / 2), i);
+	  //printf ("wi==%d %d\n", (w.t[i].n / 2), i);
 	}
       if (w.t[i].n % 2 == 1)
 	{
@@ -2497,7 +2487,7 @@ osqrt (OP f, OP w)
 	}
     }
   //  //printpol(o2v(r));
-  printf (" sqrt(g1)=======\n");
+  //printf (" sqrt(g1)=======\n");
 
   //  exit(1);
   if (LT (r).n > 0)
@@ -2714,9 +2704,9 @@ aa:
   printf ("あっ、でる・・・！\n");
   count = 0;
   //printpol (o2v (ll));
-  printf (" ll=================\n");
+  //printf (" ll=================\n");
   //printpol (o2v (f));
-  printf (" syn=================\n");
+  //printf (" syn=================\n");
   v = chen (ll);
   /*
   if (count < 2 * T - 1)
@@ -2845,7 +2835,7 @@ decrypt (OP w)
       snprintf (buf1, 10, "%d", err[i]);
       strcat (buf0, buf1);
     }
-  puts (buf0);
+  //puts (buf0);
   printf ("vector=%d\n", strlen (buf0));
   //exit(1);
   printf ("cipher sk2=");
@@ -2899,9 +2889,9 @@ synd (unsigned short zz[])
 	  syn[i] ^= gf[mlt (fg[zz[j]], fg[mat[j][i]])];
 	}
       sy[i] = syn[i];		//=s;
-      printf ("syn%d,", syn[i]);
+      //printf ("syn%d,", syn[i]);
     }
-  printf ("\n");
+  //printf ("\n");
 
   for (int j = 0; j < K / 2; j++)
     {
@@ -2913,7 +2903,7 @@ synd (unsigned short zz[])
 
   f = setpol (syn, K);
   //printpol (o2v (f));
-  printf (" syn=============\n");
+  //printf (" syn=============\n");
   //  exit(1);
 
   return f;
@@ -2960,7 +2950,7 @@ test (OP w, unsigned short zz[])
       snprintf (buf1, 10, "%d", zz[i]);
       strcat (buf, buf1);
     }
-  puts (buf);
+  //puts (buf);
   printf ("vector=%u\n", strlen (buf));
   //exit(1);
 
@@ -3299,7 +3289,7 @@ lab:
       while (j < T * 2)
 	{
 	  l = xor128 () % N;
-	  printf ("l=%d\n", l);
+	  //printf ("l=%d\n", l);
 	  if (0 == zz[l])
 	    {
 	      zz[l] = 1;
