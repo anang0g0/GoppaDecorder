@@ -25,6 +25,8 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include <sys/mman.h>
+#include <assert.h>
+
 
 //#include "omp.h" //clang-12
 #include <omp.h> //clang-10
@@ -388,11 +390,10 @@ printpol (vec a)
   int i, n;
 
   n = deg (a);
-  if (n < 0)
-    {
-      printf ("baka\n");
-      exit (1);
-    }
+
+  //printf ("baka\n");
+  assert(("baka\n",n>=0));
+
 
 
   for (i = n; i > -1; i--)
@@ -825,18 +826,26 @@ omod (OP f, OP g)
 
 
   n = LT (g).n;
+
+  assert(("baka^\n",LT(f).n!=0));
+
+  /*
   if (LT (f).n == 0)
     {
       printf ("baka^\n");
       //return f;
       exit (1);
     }
+  */
+  assert(("baka(A)\n",LT(g).n != 0));
+  /*
   if (LT (g).n == 0)
     {
       printf ("baka('A`)\n");
       //return g;
       exit (1);
     }
+  */
   if (LT (f).n < LT (g).n)
     {
       //    exit(1);
@@ -853,12 +862,14 @@ omod (OP f, OP g)
 
   //printf ("b=========%dx^%d\n", b.a, b.n);
   //printpol (o2v (g));
+  assert(("double baka\n",b.a!=0 && b.n != 0));
+  /*
   if (b.a == 0 && b.n == 0)
     {
       printf ("double baka\n");
       exit (1);
     }
-
+  */
   //  printf ("\nin omod g=============%d\n", odeg ((g)));
   while (LT (f).n > 0 && LT (g).n > 0)
     {
@@ -905,16 +916,8 @@ OP
 odiv (OP f, OP g)
 {
   int i = 0, j, n, k;
-  OP h = { 0 }, e =
-  {
-  0}, tt =
-  {
-  0}, o =
-  {
-  0};
-  oterm a, b = { 0 }, c =
-  {
-  0};
+  OP h = { 0 }, e ={  0}, tt ={  0}, o =  {  0};
+  oterm a, b = { 0 }, c =  {  0};
 
 
   o = f;
@@ -3068,6 +3071,33 @@ void trap(OP w,OP f){
 */
 
 
+void readkey(){
+
+
+  //鍵をファイルに書き込むためにはkey2を有効にしてください。
+  //key2 (g);
+
+    /*
+     fp=fopen("sk.key","rb");
+     fread(g,2,K+1,fp);
+     fclose(fp);
+   */
+
+  //固定した鍵を使いたい場合はファイルから読み込むようにしてください。  
+  /*  
+     fq = fopen ("H.key", "rb");
+     fread (dd, 2, K * N, fq);
+     //#pragma omp parallel for
+     for (i = 0; i < N; i++)
+     {
+     for (j = 0; j < K; j++)
+     mat[i][j] = dd[K * i + j];
+     }
+     fclose (fq);
+   */
+
+}
+
 
 //言わずもがな
 int
@@ -3114,24 +3144,16 @@ main (void)
 */
 
   srand (clock () + time (&t));
-  printf ("@");
-  //getkey();
-  //  exit(1);
 
 label:
 
   //makeS();
   //exit(1);
 
-  for (i = 0; i < K + 1; i++)
-    g[i] = 0;
+  memset(g,0,sizeof(g));
+
   ginit ();
 
-  /*
-     fp=fopen("sk.key","rb");
-     fread(g,2,K+1,fp);
-     fclose(fp);
-   */
 
   w = setpol (g, K + 1);
   oprintpol (w);
@@ -3152,7 +3174,7 @@ label:
 #pragma omp parallel for
   for (i = 0; i < N; i++)
     tr[i] = oinv (ta[i]);
-  printf ("@");
+
 
   memset (mat, 0, sizeof (mat));
 
@@ -3162,26 +3184,12 @@ label:
 
 
   //パリティチェックを生成する。gccにしたい人はdet()にすること。 default は deta()
-  deta (g);
+  if(deta (g)<0)
+    goto label;
 
 
 lab:
   
-  //鍵をファイルに書き込むためにはkey2を有効にしてください。
-  //key2 (g);
-
-  //固定した鍵を使いたい場合はファイルから読み込むようにしてください。  
-  /*  
-     fq = fopen ("H.key", "rb");
-     fread (dd, 2, K * N, fq);
-     //#pragma omp parallel for
-     for (i = 0; i < N; i++)
-     {
-     for (j = 0; j < K; j++)
-     mat[i][j] = dd[K * i + j];
-     }
-     fclose (fq);
-   */
 
   
   //列に0がないかチェック
@@ -3193,11 +3201,7 @@ lab:
 	  if (mat[j][i] > 0)
 	    flg = 1;
 	}
-      if (flg == 0)
-	{
-	  printf ("0 is %d\n", j);
-	  exit (1);
-	}
+      assert(flg != 0);
     }
 
 
@@ -3233,7 +3237,8 @@ lab:
       //exit(1);
       
       f = synd (zz);
-      printf ("\n");
+      
+      /*
       count = 0;
       for (i = 0; i < N; i++)
 	{
@@ -3241,7 +3246,7 @@ lab:
 	    count++;
 	}
       printf ("%d\n", count);
-
+      */
 
       r = decode (w, f);
 
