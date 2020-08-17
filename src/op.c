@@ -1850,9 +1850,6 @@ det2 (int i, unsigned short g[])
 
   f[id] = setpol (cc, K + 1);
 
-  //a = trace (w, i);
-  // cc[K] = k;
-
   cc[K] = k ^ ta[i];
   //tr[i];
   f[id] = setpol (cc, K + 1);
@@ -1867,12 +1864,6 @@ det2 (int i, unsigned short g[])
   u[id] = oterml (ww[id], t[id]);
   e[id] = o2v (u[id]);
 
-  //#pragma omp critical
-  //for (j = 0; j < K; j++){
-  //mat[i][j]= e[id].x[j];
-  //}
-
-  //#pragma omp critical(mat)
   memcpy (mat[i], e[id].x, sizeof (mat[i]));
 
 
