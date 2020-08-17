@@ -35,6 +35,8 @@ gccの場合、パリティチェック生成の並列化に失敗すること�
 
 20200817
 
+https://tmo.jpl.nasa.gov/progress_report/42-153/153F.pdf
+
 テストバージョン公開。(op.c)
 defaultでclang-10を使用。
 パリティチェック行列の生成を並列化するために、detをdetaに変更。
