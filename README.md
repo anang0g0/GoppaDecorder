@@ -36,16 +36,6 @@ https://arxiv.org/pdf/1907.12754.pdf
 
 # ハイライト(開発日記)
 
-20200826
-
-https://pdfs.semanticscholar.org/c0f4/d4af167b995b5500de0aacbfedd465eafa46.pdf
-
-https://www.researchgate.net/publication/326514386_Cryptanalysis_of_a_Proposal_Based_on_the_Discrete_Logarithm_Problem_Inside_Sn
-
-https://scrapbox.io/kuboon/%E7%BD%AE%E6%8F%9B%E3%81%AE%E5%AF%BE%E6%95%B0%E3%82%92%E5%8F%96%E3%82%8B
-
-大久保氏との共同研究で成果が出ています。
-２０１８年の５月なので、スペインの研究とほぼ同時期です。
 
 20200823
 
