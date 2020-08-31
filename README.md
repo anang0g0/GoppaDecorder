@@ -10,6 +10,9 @@ https://openmp.llvm.org/
 
 あるいは、./llvm.sh
 
+https://qiita.com/kojiohta/items/fb6c307365d1db388acc
+（正しくはこう）
+
 を実行してclang-10をインストールするようにしてください。
 clangのバージョンに応じてMakefileを書き換えてください。
 
