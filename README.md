@@ -34,6 +34,8 @@ gccの場合、パリティチェック生成の並列化に失敗すること�
 https://arxiv.org/pdf/1907.12754.pdf
 ホワイトペーパー
 
+https://www.hyperelliptic.org/tanja/students/m_marcus/whitepaper.pdf
+
 出力の第一段目はエラーの位置と値をユークリッドアルゴリズムで計算したもの、(decode関数)
 第二は復号法であるパターソンアルゴリズムでバイナリエラーの位置を出力したものになります。(pattarson関数)
 
