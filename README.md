@@ -36,6 +36,8 @@ https://arxiv.org/pdf/1907.12754.pdf
 
 https://www.hyperelliptic.org/tanja/students/m_marcus/whitepaper.pdf
 
+https://surface.syr.edu/cgi/viewcontent.cgi?article=1846&context=honors_capstone
+
 出力の第一段目はエラーの位置と値をユークリッドアルゴリズムで計算したもの、(decode関数)
 第二は復号法であるパターソンアルゴリズムでバイナリエラーの位置を出力したものになります。(pattarson関数)
 
