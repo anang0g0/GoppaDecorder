@@ -1,5 +1,9 @@
 # GoppaDecorder(Goppie)
 
+git clone --depth 1 https://github.com/anang0g0/GoppaDecorder/
+
+でクローンしてください。
+
 １．プログラム実行に当たって(op.c)　20200304,20200817
 
 https://clang.llvm.org/get_started.html
