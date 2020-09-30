@@ -1,3 +1,5 @@
+#define DEG 512
+
 
 //monomial
 typedef struct{
@@ -7,7 +9,7 @@ typedef struct{
 
 //polynomial
 typedef struct{
-  oterm t[512]; //単項式の配列として多項式を表現する
+  oterm t[DEG]; //単項式の配列として多項式を表現する
 } OP;
 
 typedef union {
