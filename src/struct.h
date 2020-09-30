@@ -1,4 +1,5 @@
 #define DEG 512
+/* -*- mode: C; coding:utf-8 -*- */
 
 
 //monomial
@@ -34,4 +35,5 @@ typedef union{ //test(SIMN)
   unsigned long long int u[4];
   unsigned short s[16];
 } SU;
+
 
