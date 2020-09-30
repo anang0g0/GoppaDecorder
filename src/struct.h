@@ -1,4 +1,5 @@
 #define DEG 512
+#define N 8192
 /* -*- mode: C; coding:utf-8 -*- */
 
 
