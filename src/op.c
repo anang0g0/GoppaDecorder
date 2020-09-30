@@ -3339,7 +3339,7 @@ lab:
 	    }
 	}
       printf ("err=%dっ!! \n", count);
-      if (count < 255)
+      if (count < T)
 	printf ("error is too few\n");
       
       
