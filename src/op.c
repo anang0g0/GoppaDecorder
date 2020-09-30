@@ -697,13 +697,13 @@ omul (OP f, OP g)
   0};
   vec c={0};
 
-  if (deg (o2v(f)) > deg (o2v(g)))
+  if (odeg ((f)) > odeg ((g)))
     {
-      k = deg (o2v(f));
+      k = odeg ((f));
     }
   else
     {
-      k = deg (o2v(g));
+      k = odeg ((g));
     }
 
   for (i = 0; i < k + 1; i++)
@@ -729,7 +729,7 @@ LT (OP f)
   oterm t = { 0 };
 
 
-  k = deg (o2v(f));
+  k = odeg ((f));
   for (i = 0; i < k + 1; i++)
     {
       //printf("a=%d %d\n",f.t[i].a,f.t[i].n);
