@@ -7,7 +7,7 @@ typedef struct{
 
 //polynomial
 typedef struct{
-  oterm t[DEG]; //単項式の配列として多項式を表現する
+  oterm t[512]; //単項式の配列として多項式を表現する
 } OP;
 
 typedef union {
