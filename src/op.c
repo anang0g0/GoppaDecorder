@@ -485,14 +485,14 @@ oadd (OP f, OP g)
   
   //  oprintpol((g));
   //  exit(1);
-  if (odeg (f) >= odeg (g))
+  if (deg (o2v(f)) >= deg (o2v(g)))
     {
-      k = odeg (f) + 1;
+      k = deg (o2v(f)) + 1;
     }
   else
     {
 
-      k = odeg (g) + 1;
+      k = deg (o2v(g)) + 1;
 
     }
   //for(i=0;i<k;i++)
@@ -697,13 +697,13 @@ omul (OP f, OP g)
   0};
   vec c={0};
 
-  if (odeg ((f)) > odeg ((g)))
+  if (deg (o2v(f)) > deg (o2v(g)))
     {
-      k = odeg ((f));
+      k = deg (o2v(f));
     }
   else
     {
-      k = odeg ((g));
+      k = deg (o2v(g));
     }
 
   for (i = 0; i < k + 1; i++)
@@ -729,7 +729,7 @@ LT (OP f)
   oterm t = { 0 };
 
 
-  k = odeg ((f));
+  k = deg (o2v(f));
   for (i = 0; i < k + 1; i++)
     {
       //printf("a=%d %d\n",f.t[i].a,f.t[i].n);
@@ -1051,7 +1051,7 @@ trace (OP f, unsigned short x)
   unsigned short u = 0;
 
 
-  d = odeg ((f));
+  d = deg (o2v(f));
 
   for (i = 0; i < d + 1; i++)
     {
@@ -2192,6 +2192,13 @@ det (unsigned short g[])
 	}
     }
   //exit(1);
+
+}
+
+
+void detc(unsigned short g[]){
+
+
 
 }
 
