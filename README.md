@@ -42,6 +42,16 @@ https://surface.syr.edu/cgi/viewcontent.cgi?article=1846&context=honors_capstone
 第二は復号法であるパターソンアルゴリズムでバイナリエラーの位置を出力したものになります。(pattarson関数)
 
 
+20201009
+
+実装が悪いので遅いですが、本来はRSAより復号速度が速いです。 高速化と最適化が今後の課題ですが、ここにあるのは適当に書いたものなので、そのうち書き直します。
+
+https://hal.inria.fr/file/index/docid/607772/filename/69.pdf
+
+実装が終わったと言えばそれまでなんですが、上の論文が面白そうなのでまたやってみたくなりました。
+
+とりあえずグローバル変数は使わないようにしたいと思います。
+
 20200903
 
 https://anang0g0.github.io/GoppaDecorder/
