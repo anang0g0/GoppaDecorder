@@ -31,7 +31,7 @@
 //#include "omp.h" //clang-12
 #include <omp.h> //clang-10
 
-//#include "8192.h"
+#include "8192.h"
 #include "global.h"
 #include "struct.h"
 
