@@ -3277,7 +3277,7 @@ lab:
 	  if (zz[i] > 0)
 	    o1++;
 	}
-      printf ("err=%dっ！！\n", o1);
+      printf ("err=%dっ！！\n", count);
       //exit(1);
       //goto label;
     
