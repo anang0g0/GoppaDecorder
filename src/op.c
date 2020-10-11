@@ -31,7 +31,7 @@
 //#include "omp.h" //clang-12
 #include <omp.h> //clang-10
 
-#include "8192.h"
+//#include "8192.h"
 #include "global.h"
 #include "struct.h"
 
@@ -157,7 +157,7 @@ oinv (unsigned short a)
   int i;
 
 
-  for (i = 0; i < M; i++)
+  for (i = 0; i < N; i++)
     {
       if (gf[mlt (fg[a], i)] == 1)
 	return (unsigned short) i;
@@ -175,7 +175,7 @@ equ (unsigned short a, unsigned short b)
   int i;
 
 
-  for (i = 0; i < M; i++)
+  for (i = 0; i < N; i++)
     {
       if (gf[mlt (fg[a], fg[i])] == b)
 	break;
@@ -2413,7 +2413,7 @@ isqrt (unsigned short u)
   int i, j, k;
 
 
-  for (i = 0; i < M; i++)
+  for (i = 0; i < N; i++)
     {
       if (gf[mlt (i, i)] == u)
 	return i;
@@ -3071,18 +3071,18 @@ void trap(OP w,OP f){
 
 void readkey(){
 
-
+  /*
   //鍵をファイルに書き込むためにはkey2を有効にしてください。
-  //key2 (g);
+  key2 (g);
 
-    /*
+    
      fp=fopen("sk.key","rb");
      fread(g,2,K+1,fp);
      fclose(fp);
-   */
+   
 
   //固定した鍵を使いたい場合はファイルから読み込むようにしてください。  
-  /*  
+    
      fq = fopen ("H.key", "rb");
      fread (dd, 2, K * N, fq);
      //#pragma omp parallel for
@@ -3092,7 +3092,7 @@ void readkey(){
      mat[i][j] = dd[K * i + j];
      }
      fclose (fq);
-   */
+  */   
 
 }
 
@@ -3125,7 +3125,7 @@ main (void)
   OP g1 = { 0 }, tmp =
   {
   0};
-
+  int fail=0;
 
 
 //公開鍵matはグローバル変数でスタック領域に取る。
@@ -3143,31 +3143,29 @@ main (void)
 
   srand (clock () + time (&t));
 
-label:
+ label:
 
   //makeS();
   //exit(1);
+  do {
+    fail=0;
+    memset(g,0,sizeof(g));
+    memset(ta,0,sizeof(ta));
+    ginit ();
 
-  memset(g,0,sizeof(g));
+    w = setpol (g, K + 1);
+    oprintpol (w);
 
-  ginit ();
-
-
-  w = setpol (g, K + 1);
-  oprintpol (w);
-  //exit(1);
-
-  //多項式の値が0でないことを確認
-  for (i = 0; i < N; i++)
-    {
+    //多項式の値が0でないことを確認
+    for (i = 0; i < N; i++){
       ta[i] = trace (w, i);
-      if (ta[i] == 0)
-	{
-	  printf ("trace 0 @ %d\n", i);
-	  goto label;
-	  //exit(1);
-	}
+      if (ta[i] == 0) {
+	printf ("trace 0 @ %d\n", i);
+	fail = 1;
+	break;
+      }
     }
+  }while(fail);
 
 #pragma omp parallel for
   for (i = 0; i < N; i++)
@@ -3183,9 +3181,9 @@ label:
 
   //パリティチェックを生成する。
   //パリティチェックに0の列があったら、なくなるまでやり直す。
-  do{
+    do{
     i=deta(g);
-  } while(i<0);
+    } while(i<0);
   
 
 
@@ -3238,7 +3236,8 @@ lab:
       //exit(1);
       
       f = synd (zz);
-      
+
+      count=0;
       /*
       count = 0;
       for (i = 0; i < N; i++)
@@ -3253,27 +3252,22 @@ lab:
 
       for (i = 0; i < T; i++)
 	{
-	  if (i == 0)
-	    {
-	      printf ("\ne=%d %d %s\n",r.t[i].a, r.t[i].n, "う");
-	    }
-	  else if (r.t[i].a >0)// == r.t[i].n)
+	  if (r.t[i].a >0 && count>0)// == r.t[i].n)
 	    {
 	      printf ("e=%d %d %s\n", r.t[i].a, r.t[i].n, "お");
+	      count++;
 	    }
-	  else if (r.t[i].a != r.t[i].n)
+	  if (count == 0 && r.t[i].a > 0)
 	    {
-	      for (l = 0; l < N; l++)
-		{
-		  if (zz[l] > 0)
-		    count++;
-		}
-	      if (count < T)
-		{
-		  printf ("error pattarn too few\n");
-		  exit (1);
-		}
-	    }	  
+	      printf ("\ne=%d %d %s\n",r.t[i].a, r.t[i].n, "う");
+	      count++;
+	    }
+	  
+	}
+      if (count != T)
+	{
+	  printf ("error pattarn too few %d\n",count);
+	  exit (1);
 	}
       
       o1 = 0;
@@ -3284,7 +3278,7 @@ lab:
 	    o1++;
 	}
       printf ("err=%dっ！！\n", o1);
-
+      //exit(1);
       //goto label;
     
 
@@ -3296,7 +3290,7 @@ lab:
 
 
       j = 0;
-      while (j < T * 2)
+      while (j < T*2)
 	{
 	  l = xor128 () % N;
 	  //printf ("l=%d\n", l);
@@ -3311,7 +3305,7 @@ lab:
       test (w, zz);
 
       for (i = 0; i < N; i++)
-	printf ("%d,", zz[i]);
+	printf ("%d= %d,\n", i,zz[i]);
       printf ("\n");
 
       f = synd (zz);
@@ -3325,31 +3319,26 @@ lab:
       //復号化の本体
       v = pattarson (w, f);
       //エラー表示
-      for (i = 0; i < T * 2; i++)
+      for (i = 0; i < T*2 ; i++)
 	{
-	  if (i == 0 && v.x[i] > 0)
-	    {
-	      printf ("%d う\n", v.x[i]);
-	      count++;
-	    }
-	  if (v.x[i] > 0 && i > 0)
-	    {
-	      ++count;
-	      printf ("%d お\n", v.x[i]);
-	    }
+	  if(i==0)
+	    printf ("error position= %d う\n",  v.x[i]);
+	  if(i>0)
+	    printf ("error position= %d お\n",  v.x[i]);
+	  count++;
 	}
-      printf ("err=%dっ!! \n", count);
-      if (count < T)
-	printf ("error is too few\n");
-      
-      
-      //goto lab;
-      //wait();
-
-      break;
+    
+  printf ("err=%dっ!! \n", count);
+  if (count != T*2)
+    printf ("error is too few\n");
+  
+  exit(1);
+  //goto lab;
+  //wait();
+  
+  break;
     }
-
-
-
+  
   return 0;
 }
+  
