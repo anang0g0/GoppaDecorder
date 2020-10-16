@@ -137,6 +137,75 @@ P2Mat (unsigned short P[N])
 }
 
 
+//項の数
+int
+terms (OP f)
+{
+  int i, count = 0;
+
+  for (i = 0; i < DEG; i++)
+    if (f.t[i].a > 0)
+      count++;
+
+  return count;
+}
+
+
+//OP型からベクトル型への変換
+vec
+o2v (OP f)
+{
+  vec a = { 0 };
+  int i,j=0;
+
+  j=terms(f);
+#pragma omp parallel for
+  for (i = 0; i < DEG; i++)
+    {
+      if (f.t[i].a > 0 && f.t[i].n < DEG)
+	a.x[f.t[i].n] = f.t[i].a;
+    }
+
+
+  return a;
+}
+
+
+//ベクトル型からOP型への変換
+OP
+v2o (vec a)
+{
+  int i,j=0;
+  OP f = { 0 };
+
+  //#pragma omp parallel for
+  for (i = 0; i < DEG; i++)
+    {
+      if (a.x[i] > 0)
+	{// i->j
+	  f.t[j].n = i;
+	  f.t[j].a = a.x[i];
+	  j++;
+	}
+    }
+
+
+  return f;
+}
+
+
+//OP型を正規化する
+OP conv(OP f){
+  vec v={0};
+  OP g={0};
+  
+  v=o2v(f);
+  g=v2o(v);
+
+  return g;
+}
+
+
 unsigned short
 b2B (unsigned short b[E])
 {
@@ -200,18 +269,6 @@ distance (OP f)
 }
 
 
-//項の数
-int
-terms (OP f)
-{
-  int i, count = 0;
-
-  for (i = 0; i < DEG; i++)
-    if (f.t[i].a > 0)
-      count++;
-
-  return count;
-}
 
 
 //多項式の次数(degのOP型)
@@ -221,7 +278,7 @@ odeg (OP f)
   int i, j = 0, k;
 
 
-  //k=terms(f);
+  f=conv(f);
   for (i = 0; i < 512; i++)
     {
       if (j < f.t[i].n && f.t[i].a > 0)
@@ -250,44 +307,6 @@ deg (vec a)
 }
 
 
-//OP型からベクトル型への変換
-vec
-o2v (OP f)
-{
-  vec a = { 0 };
-  int i;
-
-  for (i = 0; i < DEG; i++)
-    {
-      if (f.t[i].a > 0 && f.t[i].n < DEG)
-	a.x[f.t[i].n] = f.t[i].a;
-    }
-
-
-  return a;
-}
-
-
-//ベクトル型からOP型への変換
-OP
-v2o (vec a)
-{
-  int i;
-  OP f = { 0 };
-
-
-  for (i = 0; i < DEG; i++)
-    {
-      if (a.x[i] > 0)
-	{
-	  f.t[i].n = i;
-	  f.t[i].a = a.x[i];
-	}
-    }
-
-
-  return f;
-}
 
 
 //整数からベクトル型への変換
@@ -365,6 +384,7 @@ oprintpol (OP f)
 {
   int i, n;
 
+  f=conv(f);
   n = distance (f);
   printf ("n=%d\n", n);
   printf ("terms=%d\n", terms (f));
@@ -545,7 +565,7 @@ oLT (OP f)
   int i, k, j;
   oterm s = { 0 };
 
-
+  f=conv(f);
   k = terms (f);
   s = f.t[0];
   for (i = 0; i < k + 1; i++)
@@ -589,6 +609,8 @@ add (OP f, OP g)
   0};
 
 
+  //  f=conv(f);
+  //g=conv(g);
   n1 = terms (f);
   printf ("n1=%d\n", n1);
   n2 = terms (g);
@@ -654,6 +676,7 @@ add (OP f, OP g)
      }
      }
    */
+  //h=conv(h);
   if (odeg (h) > 0)
     oprintpol (h);
   printf (" addh==============\n");
@@ -697,6 +720,8 @@ omul (OP f, OP g)
   0};
   vec c={0};
 
+  //f=conv(f);
+  //g=conv(g);
   if (odeg ((f)) > odeg ((g)))
     {
       k = odeg ((f));
@@ -801,7 +826,8 @@ coeff (OP f, unsigned short d)
   int i, j, k;
   vec a, b;
 
-
+  
+  //f=conv(f);
   k = odeg ((f)) + 1;
   for (i = 0; i < k; i++)
     f.t[i].a = gf[mlt (fg[f.t[i].a], oinv (d))];
@@ -893,9 +919,11 @@ omod (OP f, OP g)
       //     exit(1);
 
       f = oadd (f, h);
+      //f=conv(f);
       if (odeg ((f)) > 0)
 	//printpol (o2v (f));
 	//printf ("\nff1=====================\n");
+	//g=conv(g);
       if (odeg ((f)) == 0 || odeg ((g)) == 0)
 	{
 	  printf ("blake1\n");
@@ -940,6 +968,7 @@ odiv (OP f, OP g)
   ////printpol(o2v(g));
 
   //exit(1);
+  //g=conv(g);
   k = odeg (g);
   b = LT (g);
   //printpol (o2v (g));
@@ -951,6 +980,8 @@ odiv (OP f, OP g)
       printf ("baka in odiv\n");
       exit (1);
     }
+  //f=conv(f);
+  //g=conv(g);
   if (odeg ((f)) < odeg ((g)))
     {
       return f;
@@ -990,7 +1021,8 @@ odiv (OP f, OP g)
       //     exit(1);
 
       f = oadd (f, h);
-
+      //f=conv(f);
+      //g=conv(g);
       ////printpol(o2v(f));
       //printf("\nff=====================\n");
       if (odeg ((f)) == 0 || odeg ((g)) == 0)
@@ -3183,6 +3215,7 @@ main (void)
     }
     if((k>0 && flg==0) || (k>1 && flg==1)){
       w = setpol (g, K + 1);
+      //w=conv(w);
       oprintpol (w);
     }
     
@@ -3237,8 +3270,8 @@ lab:
       assert(flg != 0);
     }
 
-  //matmul();
-  //matinv();
+  //  matmul();
+  //  matinv();
 
 //decode開始
   k = 0;
