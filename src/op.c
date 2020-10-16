@@ -38,7 +38,7 @@
 #include "chash.c"
 #include "lu.c"
 #include "sha3.c"
-
+//#include "inv_mat.c"
 
 extern unsigned long xor128 (void);
 extern int mlt (int x, int y);
@@ -50,7 +50,7 @@ extern void makeS ();
 unsigned short sy[K] = { 0 };
 
 //Goppa多項式
-static unsigned short g[K + 1] = { 0 };
+static unsigned short g[K + 1] = {0};//{1,0,6,0,0,0,0,8,1};
 unsigned short zz[N] = { 0 };
 
 
@@ -729,8 +729,8 @@ LT (OP f)
   oterm t = { 0 };
 
 
-  k = odeg ((f));
-  for (i = 0; i < k + 1; i++)
+  k = deg (o2v(f));
+  for (i = 0; i < DEG; i++)
     {
       //printf("a=%d %d\n",f.t[i].a,f.t[i].n);
       if (f.t[i].a > 0)
@@ -1178,7 +1178,6 @@ inv (OP a, OP n)
     {
       printf ("v=============0\n");
     }
-
   printf ("d==============\n");
   */
   //  } //end of a>0
@@ -1411,12 +1410,15 @@ xgcd (OP f, OP g)
     {
       if (LT (g).n == 0)
 	{
-	  printf ("v[%d]=%d skipped\n", i, odeg ((v[i])));
+	  printf ("v[%d]=%d skipped deg(g)==0!\n", i, odeg ((v[i])));
+	  printpol(o2v(g));
+	  printf(" g========\n");
+	  wait();
 	  //exit(1);
 	  break;
 	}
 
-      if (odeg ((g)) > 0)
+      if (LT(g).n > 0)
 	h = omod (f, g);
 
       if (LT (g).a > 0)
@@ -2062,21 +2064,21 @@ deta (unsigned short g[])
 #pragma omp parallel num_threads(8)
   {
 #pragma omp for schedule(static)
-    for (i = 0; i < N; i++)
+    for (i = 0; i < D; i++)
       {
 	det2 (i, g);
       }
   }
-  for (j = 0; j < N; j++)
+  for (j = 0; j < D; j++)
     {
       flg = 0;
       for (i = 0; i < K; i++)
 	{
-	  //printf("%d,",mat[i][j]);
+	  printf("%d,",mat[i][j]);
 	  if (mat[j][i] > 0)
 	    flg = 1;
-	  //      printf("\n");
 	}
+      printf("\n");
       if (flg == 0)
 	{
 	  printf ("0 is %d\n", j);
@@ -2146,7 +2148,7 @@ det (unsigned short g[])
   //
   f = setpol (cc, K + 1);
 
-  for (i = 0; i < N; i++)
+  for (i = 0; i < D; i++)
     {
 
       a = trace (w, i);
@@ -2175,16 +2177,16 @@ det (unsigned short g[])
     }
 
 
-  for (j = 0; j < N; j++)
+  for (j = 0; j < D; j++)
     {
       flg = 0;
       for (i = 0; i < K; i++)
 	{
-	  //printf("%d,",mat[i][j]);
+	  printf("%d,",mat[i][j]);
 	  if (mat[j][i] > 0)
 	    flg = 1;
-	  //      printf("\n");
 	}
+      printf("\n");
       if (flg == 0)
 	{
 	  printf ("0 is %d\n", j);
@@ -2449,46 +2451,46 @@ osqrt (OP f, OP w)
 
   j = 0;
   jj = 0;
-  k = distance (f);
-  for (i = 0; i < k + 1; i++)
+  k = deg (o2v(f));
+  for (i = 0; i < k+1; i++)
     {
-      if (f.t[i].n % 2 == 0)
+      if (f.t[i].n % 2 == 0 && f.t[i].a>0)
 	{
 	  even.t[j].n = f.t[i].n / 2;
 	  even.t[j++].a = gf[isqrt (f.t[i].a)];
-	  //printf ("a=%d %d\n", f.t[i].a, i);
+	  printf ("a=%d %d\n", f.t[i].a, i);
 	}
-      if (f.t[i].n % 2 == 1)
+      if (f.t[i].n % 2 == 1 && f.t[i].a>0)
 	{
 	  odd.t[jj].n = (f.t[i].n - 1) / 2;
 	  odd.t[jj++].a = gf[isqrt (f.t[i].a)];
-	  //printf (" odd %d\n", i);
+	  printf (" odd %d\n", i);
 	}
     }
 
 
-  k = odeg ((w));
+  k = deg (o2v(w));
   //printf ("%d\n", k);
   //exit(1);
   j = 0;
   jj = 0;
   for (i = 0; i < k + 1; i++)
     {
-      if (w.t[i].n % 2 == 0)
+      if (w.t[i].n % 2 == 0 && w.t[i].a>0)
 	{
 	  h.t[j].a = gf[isqrt (w.t[i].a)];
 	  h.t[j++].n = w.t[i].n / 2;
-	  //printf ("wi==%d %d\n", (w.t[i].n / 2), i);
+	  printf ("h==%d %d\n", (w.t[i].n / 2), i);
 	}
-      if (w.t[i].n % 2 == 1)
+      if (w.t[i].n % 2 == 1 && w.t[i].a>0)
 	{
 	  r.t[jj].a = gf[isqrt (w.t[i].a)];
 	  r.t[jj++].n = (w.t[i].n - 1) / 2;
-
+	  printf("r=====%d %d\n",(w.t[i].n-1)/2,i);
 	}
     }
-  //  //printpol(o2v(r));
-  //printf (" sqrt(g1)=======\n");
+  printpol(o2v(r));
+  printf (" sqrt(g1)=======\n");
 
   //  exit(1);
   if (LT (r).n > 0)
@@ -2497,13 +2499,24 @@ osqrt (OP f, OP w)
     }
   else if (LT (r).n == 0)
     {
-      //printpol (o2v (r));
-      printf (" r======0\n");
-      wait ();
-      exit (1);
+      printpol (o2v (r));
+      printf (" deg(r)======0!\n");
+      printpol (o2v (w));
+      printf (" goppa======0\n");
+      printpol (o2v (f));
+      printf (" syn======0\n");
+      if(LT(r).a>0){
+	s.t[0].a=gf[isqrt(LT(r).a)];
+	s.t[0].n=0;
+	return omod(oadd(even,omul(coeff(h,s.t[0].a),odd)),w);
+      }
+      return even;
+  //s = inv (r, w);
+      //wait ();
+      //exit (1);
     }
-
-  tmp = omod (omul (s, r), w);
+  if(deg(o2v(s))>0)
+    tmp = omod (omul (s, r), w);
   if (odeg ((tmp)) > 0)
     {
       //printpol (o2v (tmp));
@@ -2517,10 +2530,13 @@ osqrt (OP f, OP w)
     }
   if (LT (h).n == 0)
     {
-      printf ("h=========0\n");
+      printpol(o2v(h));
+      printf (" h=========0\n");
+      //ww = omod (omul (h, s), w);
+      //wait();
       exit (1);
     }
-  /*
+  
      if(LT(ww).n==0 && LT(ww).a==0){
      //printpol(o2v(s));
      printf(" s===========\n");
@@ -2534,14 +2550,14 @@ osqrt (OP f, OP w)
      printf (" ww==============\n");
      printf(" wwが０になりました。error\n");
      wait();
-     return ww;;
-     // exit(1);
+     //return ww;;
+     exit(1);
      }
-   */
+     
   tmp = omod (omul (ww, ww), w);
   if (LT (tmp).n == 1)
     {
-      //printpol (o2v (ww));
+      printpol (o2v (ww));
       printf (" ww succsess!===========\n");
     }
   else
@@ -2550,7 +2566,7 @@ osqrt (OP f, OP w)
       printf (" mod w^2==========\n");
       //printpol (o2v (ww));
       printf (" ww^2 failed!========\n");
-      //printpol (o2v (s));
+      printpol (o2v (s));
       printf (" g1^-1==============\n");
       //printpol (o2v (w));
       printf (" w==============\n");
@@ -2560,18 +2576,18 @@ osqrt (OP f, OP w)
       printf (" r===========\n");
       printf ("この鍵では逆元が計算できません。error");
       wait ();
-      return ww;
-      // exit(1);
+      //return ww;
+       exit(1);
     }
 
 
   //    exit(1);
-  //  //printpol(o2v(s));
+  printpol(o2v(s));
   printf (" g1^-1=========\n");
-  // //printpol(o2v(h));
+  printpol(o2v(h));
   printf (" g0=========\n");
   //exit(1);
-  // //printpol(o2v(ww));
+  printpol(o2v(ww));
   printf (" ww==========\n");
   //  exit(1);
   h = ww;
@@ -2634,24 +2650,33 @@ pattarson (OP w, OP f)
   printf ("locater==========\n");
   //exit(1);
   r2 = oadd (ff, tt);
-//  //printpol (o2v (r2));
+  printpol (o2v (r2));
   printf (" h+x==============\n");
+  //wait();
   //  exit(1);
   g1 = osqrt (r2, w);
-  //printpol (o2v (g1));
+  printpol (o2v (g1));
+  printf(" sqrt(h+x)=======\n");
   b2 = omod (omul (g1, g1), w);
+  printpol(o2v(b2));
+  printf(" g1*g1%w===========\n");
+  if(deg(o2v(b2))==0)
+    exit(1);
   if (LT2 (b2).a != LT2 (r2).a)
     {
-      //printpol (o2v (w));
+      printpol (o2v (w));
       printf (" w============\n");
-      //printpol (o2v (r2));
+      printpol (o2v (r2));
       printf (" r2============\n");
-      //printpol (o2v (g1));
+      printpol (o2v (g1));
       printf (" g1============\n");
       printf (" g1は平方ではありません。error");
       wait ();
       exit (1);
     }
+  printpol(o2v(w));
+  printf(" ========goppa\n");
+  printpol(o2v(g1));
   printf (" g1!=========\n");
   if (LT (g1).n == 0 && LT (g1).a == 0)
     {
@@ -2666,14 +2691,19 @@ pattarson (OP w, OP f)
   //exit(1);
   hh = xgcd (w, g1);
   flg = 0;
-aa:
+
+  
   ff = omod (omul (hh.v, g1), w);
-  //printpol (o2v (ff));
+  printpol (o2v (ff));
   printf (" beta!=========\n");
+  printpol(o2v(w));
+  printf(" goppa=========\n");
+  printpol(o2v(f));
+  printf(" syn=========\n");
   if (odeg ((ff)) != K / 2)
     {
       flg = 1;
-      //printpol (o2v (w));
+      printpol (o2v (ff));
       printf (" locater function failed!! error\n");
       printf ("cannot correct(bad key) error============\n");
       wait ();
@@ -2681,7 +2711,7 @@ aa:
     }
 
 
-  ////printpol (o2v (hh.v));
+  printpol (o2v (hh.v));
   printf (" alpha!=========\n");
   //exit(1);
   if (odeg ((ff)) == K / 2)
@@ -2690,7 +2720,8 @@ aa:
     }
   else if (odeg ((ff)) == 1)
     {
-      ll = oadd (omul (ff, ff), omul (tt, omul (hh.v, hh.v)));
+      ll = oadd (omul (ff, ff), omul (tt, omul (hh.v, hh.v)));//ff;
+      wait();
     }
   else
     {
@@ -2986,7 +3017,6 @@ test (OP w, unsigned short zz[])
 /*
 void trap(OP w,OP f){
   OP hh={0},d,tt,ff,tmp,r2;
-
   
   hh = gcd (w, f);
       if (odeg ((hh.d)) > 0)
@@ -2995,12 +3025,8 @@ void trap(OP w,OP f){
 	  wait ();
 	  goto label;
 	}
-
-
       tt.t[0].n = 1;
       tt.t[0].a = 1;
-
-
       ff = inv (f, w);
       tmp = omod (omul (ff, f), w);
       if (odeg ((tmp)) > 0)
@@ -3014,8 +3040,6 @@ void trap(OP w,OP f){
 	  wait ();
 	  //  goto label;
 	}
-
-
       r2 = oadd (ff, tt);
       //printpol (o2v (r2));
       printf (" h+x==============\n");
@@ -3053,8 +3077,6 @@ void trap(OP w,OP f){
 	  //exit(1);
 	  goto label;
 	}
-
-
       hh = xgcd (w, g1);
       ff = omod (omul (hh.v, g1), w);
       //printpol (o2v (ff));
@@ -3074,13 +3096,11 @@ void readkey(){
   /*
   //鍵をファイルに書き込むためにはkey2を有効にしてください。
   key2 (g);
-
     
      fp=fopen("sk.key","rb");
      fread(g,2,K+1,fp);
      fclose(fp);
    
-
   //固定した鍵を使いたい場合はファイルから読み込むようにしてください。  
     
      fq = fopen ("H.key", "rb");
@@ -3104,7 +3124,7 @@ main (void)
   int i, j, k, l;
   int count = 0;
   FILE *fp, *fq;
-  //unsigned short zz[N] = { 0 };
+  unsigned short z1[N] = { 0 };
   int flg, o1 = 0;
   OP f = { 0 }, r =
   {
@@ -3149,15 +3169,28 @@ main (void)
   //exit(1);
   do {
     fail=0;
+    k=0;
+    flg=0;
     memset(g,0,sizeof(g));
     memset(ta,0,sizeof(ta));
     ginit ();
-
-    w = setpol (g, K + 1);
-    oprintpol (w);
-
+    
+    for(i=0;i<K+1;i++){
+      if(g[K-1]>0)
+	flg=1;
+      if(i%2==1 && g[i]>0 && i<K)
+	k++;
+    }
+    if((k>0 && flg==0) || (k>1 && flg==1)){
+      w = setpol (g, K + 1);
+      oprintpol (w);
+    }
+    
+    //w = setpol (g, K + 1);
+    //oprintpol (w);
+    
     //多項式の値が0でないことを確認
-    for (i = 0; i < N; i++){
+    for (i = 0; i < D; i++){
       ta[i] = trace (w, i);
       if (ta[i] == 0) {
 	printf ("trace 0 @ %d\n", i);
@@ -3165,8 +3198,9 @@ main (void)
 	break;
       }
     }
+    
   }while(fail);
-
+  
 #pragma omp parallel for
   for (i = 0; i < N; i++)
     tr[i] = oinv (ta[i]);
@@ -3192,7 +3226,7 @@ lab:
 
   
   //列に0がないかチェック
-  for (j = 0; j < N; j++)
+  for (j = 0; j < D; j++)
     {
       flg = 0;
       for (i = 0; i < K; i++)
@@ -3203,7 +3237,8 @@ lab:
       assert(flg != 0);
     }
 
-
+  //matmul();
+  //matinv();
 
 //decode開始
   k = 0;
@@ -3220,7 +3255,7 @@ lab:
       j = 0;
       while (j < T)
 	{
-	  l = xor128 () % N;
+	  l = xor128 () % D;
 	  //printf("l=%d\n",l);
 	  if (0 == zz[l] && l > 0)
 	    {
@@ -3229,7 +3264,7 @@ lab:
 	    }
 	}
 
-      for(i=0;i<N;i++){
+      for(i=0;i<D;i++){
 	if(zz[i]>0)
 	  printf("l=%d %d\n",i,zz[i]);
       }
@@ -3272,7 +3307,7 @@ lab:
       
       o1 = 0;
       //  #pragma omp parallel for
-      for (i = 0; i < N; i++)
+      for (i = 0; i < D; i++)
 	{
 	  if (zz[i] > 0)
 	    o1++;
@@ -3286,29 +3321,29 @@ lab:
       //printf("パターソンアルゴリズムを実行します。何か数字を入れてください。\n");
       //wait();
 
-      memset (zz, 0, sizeof (zz));
+      memset (z1, 0, sizeof (z1));
 
 
       j = 0;
       while (j < T*2)
 	{
-	  l = xor128 () % N;
+	  l = xor128 () % D;
 	  //printf ("l=%d\n", l);
-	  if (0 == zz[l])
+	  if (0 == z1[l])
 	    {
-	      zz[l] = 1;
+	      z1[l] = 1;
 	      j++;
 	    }
 	}
 
       //encryotion
-      test (w, zz);
+      //test (w, z1);
 
-      for (i = 0; i < N; i++)
-	printf ("%d= %d,\n", i,zz[i]);
+      for (i = 0; i < D; i++)
+	printf ("%d= %d,\n", i,z1[i]);
       printf ("\n");
 
-      f = synd (zz);
+      f = synd (z1);
 
 
       //バグトラップのためのコード（省略）
@@ -3322,9 +3357,14 @@ lab:
       for (i = 0; i < T*2 ; i++)
 	{
 	  if(i==0)
-	    printf ("error position= %d う\n",  v.x[i]);
-	  if(i>0)
-	    printf ("error position= %d お\n",  v.x[i]);
+	    printf ("error position=%d %d う\n",i,  v.x[i]);
+	  if(i>0 && v.x[i]>0)
+	    printf ("error position=%d %d お\n",i,  v.x[i]);
+	  if(i>0 && v.x[i]==0){
+	    printf("baka %d %d\n",i,v.x[i]);
+	    exit(1);
+	  }
+	    
 	  count++;
 	}
     
@@ -3332,7 +3372,7 @@ lab:
   if (count != T*2)
     printf ("error is too few\n");
   
-  exit(1);
+  //exit(1);
   //goto lab;
   //wait();
   
@@ -3341,4 +3381,3 @@ lab:
   
   return 0;
 }
-  
