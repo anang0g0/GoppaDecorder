@@ -3270,7 +3270,7 @@ lab:
       //exit(1);
       //goto label;
     
-
+    patta:
 
       //printf("パターソンアルゴリズムを実行します。何か数字を入れてください。\n");
       //wait();
@@ -3322,7 +3322,7 @@ lab:
     printf ("error is too few\n");
   
   //exit(1);
-  //goto lab;
+  goto patta;
   //wait();
   
   //break;
