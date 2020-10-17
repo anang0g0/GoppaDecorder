@@ -2620,7 +2620,8 @@ pattarson (OP w, OP f)
   tt.t[0].n = 1;
   tt.t[0].a = 1;
 
-
+  printpol(o2v(f));
+  printf(" ==========syndrome\n");
   ff = inv (f, w);
 //  //printpol (o2v (ff));
   b2 = omod (omul (ff, f), w);
@@ -2672,7 +2673,7 @@ aa:
   if (odeg ((ff)) != K / 2)
     {
       flg = 1;
-      //printpol (o2v (w));
+      printpol (o2v (w));
       printf (" locater function failed!! error\n");
       printf ("cannot correct(bad key) error============\n");
       wait ();
@@ -3169,9 +3170,9 @@ main (void)
 
   //パリティチェックを生成する。
   //パリティチェックに0の列があったら、なくなるまでやり直す。
-    do{
-    i=deta(g);
-    } while(i<0);
+  // do{
+    det(g);
+    //} while(i<0);
   
 
 
@@ -3267,7 +3268,7 @@ lab:
 	}
       printf ("err=%dっ！！\n", count);
       //exit(1);
-      goto label;
+      //goto label;
     
 
 
@@ -3290,7 +3291,7 @@ lab:
 	}
 
       //encryotion
-      test (w, zz);
+      //test (w, zz);
 
       for (i = 0; i < N; i++)
 	printf ("%d= %d,\n", i,zz[i]);
@@ -3320,11 +3321,11 @@ lab:
   if (count != T*2)
     printf ("error is too few\n");
   
-  exit(1);
+  //exit(1);
   //goto lab;
   //wait();
   
-  break;
+  //break;
     }
   
   return 0;
