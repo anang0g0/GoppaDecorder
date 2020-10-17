@@ -2622,8 +2622,6 @@ pattarson (OP w, OP f)
 
   printpol(o2v(f));
   printf(" ==========syndrome\n");
-  printpol(o2v(w));
-  printf(" ==========goppa\n");
   ff = inv (f, w);
 //  //printpol (o2v (ff));
   b2 = omod (omul (ff, f), w);
@@ -3138,16 +3136,12 @@ main (void)
 
   //makeS();
   //exit(1);
-
-
-do {
+  do {
     fail=0;
-    k=0;
-    flg=0;
     memset(g,0,sizeof(g));
     memset(ta,0,sizeof(ta));
     ginit ();
-    
+
     for(i=0;i<K+1;i++){
       if(g[K-1]>0)
 	flg=1;
@@ -3159,12 +3153,12 @@ do {
       //w=conv(w);
       oprintpol (w);
     }
-    
-    //w = setpol (g, K + 1);
-    //oprintpol (w);
-    
+
+    w = setpol (g, K + 1);
+    oprintpol (w);
+
     //多項式の値が0でないことを確認
-    for (i = 0; i < D; i++){
+    for (i = 0; i < N; i++){
       ta[i] = trace (w, i);
       if (ta[i] == 0) {
 	printf ("trace 0 @ %d\n", i);
@@ -3172,7 +3166,6 @@ do {
 	break;
       }
     }
-    
   }while(fail);
 
 #pragma omp parallel for
@@ -3287,7 +3280,7 @@ lab:
 	}
       printf ("err=%dっ！！\n", count);
       //exit(1);
-      //goto label;
+      goto label;
     
     patta:
 
@@ -3341,7 +3334,7 @@ lab:
     printf ("error is too few\n");
   
   //exit(1);
-  goto patta;
+  //goto label;
   //wait();
   
   //break;
