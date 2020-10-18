@@ -1437,7 +1437,7 @@ xgcd (OP f, OP g)
 	  printf ("v[%d]=%d skipped deg(g)==0!\n", i, odeg ((v[i])));
 	  printpol(o2v(g));
 	  printf(" g========\n");
-	  wait();
+	  //wait();
 	  //exit(1);
 	  break;
 	}
@@ -2730,7 +2730,7 @@ pattarson (OP w, OP f)
       printpol (o2v (ff));
       printf (" locater function failed!! error\n");
       printf ("cannot correct(bad key) error============\n");
-      wait ();
+      //wait ();
       //return -1;
     }
 
@@ -2744,8 +2744,8 @@ pattarson (OP w, OP f)
     }
   else if (odeg ((ff)) == 1)
     {
-      ll = oadd (omul (ff, ff), omul (tt, omul (hh.v, hh.v)));//ff;
-      wait();
+      ll = ff; //oadd (omul (ff, ff), omul (tt, omul (hh.v, hh.v)));//ff;
+      //wait();
     }
   else
     {
@@ -3329,7 +3329,7 @@ lab:
       //goto label;
     
 
-
+    patta:
       //printf("パターソンアルゴリズムを実行します。何か数字を入れてください。\n");
       //wait();
 
@@ -3385,7 +3385,7 @@ lab:
     printf ("error is too few\n");
   
   //exit(1);
-  //goto lab;
+  goto patta;
   //wait();
   
   break;
