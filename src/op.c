@@ -843,7 +843,13 @@ omod (OP f, OP g)
 
   n = LT (g).n;
 
-  assert(("baka^\n",LT(f).n!=0));
+
+  if(deg(o2v(f))==0){
+  printpol(o2v(f));
+  printf(" f=============0\n");
+    exit(1);
+  }
+  //  assert(("baka^\n",deg(o2v(f))>0));
 
   /*
   if (LT (f).n == 0)
@@ -2499,7 +2505,7 @@ osqrt (OP f, OP w)
   //exit(1);
   j = 0;
   jj = 0;
-  for (i = 0; i < k + 1; i++)
+  for (i = 0; i < DEG; i++)
     {
       if (w.t[i].n % 2 == 0)
 	{
@@ -2518,7 +2524,7 @@ osqrt (OP f, OP w)
   //printf (" sqrt(g1)=======\n");
 
   //  exit(1);
-  if (LT (r).n > 0)
+  if (deg (o2v(r)) > 0)
     {
       s = inv (r, w);
       if(odeg(s)==1){
@@ -2526,9 +2532,9 @@ osqrt (OP f, OP w)
 	return s;
       }
     }
-  else if (LT (r).n == 0)
+  else if (deg (o2v(r)) == 0)
     {
-      //printpol (o2v (r));
+      printpol (o2v (w));
       printf (" r======0\n");
       wait ();
       exit (1);
@@ -2542,13 +2548,14 @@ osqrt (OP f, OP w)
       wait ();
       exit (1);
     }
-  if (LT (h).n > 0)
+  if (deg (o2v(h)) > 0)
     {
       ww = omod (omul (h, s), w);
     }
-  if (LT (h).n == 0)
+  if (deg(o2v(h)) == 0)
     {
-      printf ("h=========0\n");
+      printpol(o2v(h));
+      printf (" h=========0!\n");
       exit (1);
     }
   /*
@@ -2676,7 +2683,7 @@ pattarson (OP w, OP f)
   printf ("locater==========\n");
   //exit(1);
   r2 = oadd (ff, tt);
-//  //printpol (o2v (r2));
+  printpol (o2v (r2));
   printf (" h+x==============\n");
   //  exit(1);
   g1 = osqrt (r2, w);
@@ -2726,8 +2733,12 @@ pattarson (OP w, OP f)
   flg=0;
     {
       ll = oadd (omul (ff, ff), omul (tt, omul (hh.v, hh.v)));
-      printpol(o2v(ll));
+
       printf(" ==========ff=K/2\n");
+      if(odeg(ll)<K){
+	printpol(o2v(ll));
+	exit(1);
+      }
       //wait();
     }
   if (odeg ((ll)) == 0)
@@ -3152,7 +3163,7 @@ main (void)
   memset(mat[i],0,K);
   }
 */
-
+/*
   #ifdef SRAND
   srand (SRAND);
 #else
@@ -3160,7 +3171,7 @@ main (void)
   printf ("srand(%u)\n", seed);
   srand (seed);
 #endif
-
+*/
   //  srand (clock () + time (&t));
 
  label:
@@ -3168,11 +3179,12 @@ main (void)
   //makeS();
   //exit(1);
   do {
+    j=0;
     fail=0;
     memset(g,0,sizeof(g));
     memset(ta,0,sizeof(ta));
     ginit ();
-    /*    
+    k=0;
     for(i=0;i<K+1;i++){
       if(g[K-1]>0)
 	flg=1;
@@ -3183,10 +3195,12 @@ main (void)
       w = setpol (g, K + 1);
       //w=conv(w);
       oprintpol (w);
+      printf(" in j==========\n");
+      j=1;
     }
-    */
-    w = setpol (g, K + 1);
-    oprintpol (w);
+    
+    //w = setpol (g, K + 1);
+    //oprintpol (w);
 
     //多項式の値が0でないことを確認
     for (i = 0; i < N; i++){
@@ -3197,7 +3211,7 @@ main (void)
 	break;
       }
     }
-  }while(fail);
+  }while(fail || j==0);
 
 #pragma omp parallel for
   for (i = 0; i < N; i++)
@@ -3313,8 +3327,8 @@ lab:
       //wait();
 
       memset (zz, 0, sizeof (zz));
-      memset (g, 0, sizeof (g));
-      ginit();
+      //memset (g, 0, sizeof (g));
+      //ginit();
       
       j = 0;
       while (j < T*2)
@@ -3364,7 +3378,7 @@ lab:
   wait();
   }
   //exit(1);
-  goto patta;
+  goto label;
   //wait();
       if(deg(v)==1)
 	exit(1);
