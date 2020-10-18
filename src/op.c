@@ -54,8 +54,7 @@ extern void makeS ();
 unsigned short sy[K] = { 0 };
 
 //Goppa多項式
-static unsigned short g[K + 1] = {0};
-//{1,0,0,5,11,7,0,0,3}; //{ 0 }; //{1,0,6,0,0,0,0,8,1};
+static unsigned short g[K + 1] = {1,0,0,5,11,7,0,0,3}; //{ 0 }; //{1,0,6,0,0,0,0,8,1};
 unsigned short zz[N] = { 0 };
 
 
@@ -3228,9 +3227,9 @@ label:
       j=0;
       k = 0;
       flg = 0;
-      memset (g, 0, sizeof (g));
+      //memset (g, 0, sizeof (g));
       memset (ta, 0, sizeof (ta));
-      ginit ();
+      //ginit ();
 
       for (i = 0; i < K + 1; i++)
         {
@@ -3436,14 +3435,14 @@ lab:
       if (count < T * 2){
         printf ("error is too few\n");
 	A++;
-	wait();
+	//wait();
       }
       if(A==1000){
 	printf("B=%d",B);
-	//wait();
+	wait();
       }
       if(B>1000){
-	printf("A=%d\n",A);
+	printf("false=%d\n",A);
 	exit(1);
       }
       //if(odeg(v)==1)
