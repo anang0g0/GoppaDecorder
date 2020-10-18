@@ -1,9 +1,3 @@
-//#ifndef DEG
-//#include "struct.h"
-//#endif
-
-
-
 //date 20200331:xgcdの終了条件が２つになってしまう。ogcdとxgcdで使い分ける。
 //date : 20200326 鍵生成が det と deta で高い確率で一致する。detaは並列処理。
 //date 20200229 : pattarson algorithm implementation ver 1.0
@@ -48,7 +42,7 @@
 #include "lu.c"
 #include "sha3.c"
 #include "inv_mat.c"
-//#include "op.c"
+
 
 extern unsigned long xor128 (void);
 extern int mlt (int x, int y);
@@ -60,7 +54,8 @@ extern void makeS ();
 unsigned short sy[K] = { 0 };
 
 //Goppa多項式
-static unsigned short g[K + 1] = { 0 }; //{1,0,6,0,0,0,0,8,1};
+static unsigned short g[K + 1] = {0};
+//{1,0,0,5,11,7,0,0,3}; //{ 0 }; //{1,0,6,0,0,0,0,8,1};
 unsigned short zz[N] = { 0 };
 
 
@@ -2732,11 +2727,38 @@ pattarson (OP w, OP f)
   printf (" syn=========\n");
   if (odeg ((ff)) != K / 2)
     {
+      printf("\nbefore h.d\n");
+      ff = omod (omul (hh.d, g1), w);
       flg = 1;
       printpol (o2v (ff));
+      printf(" ==========beta!\n");
+      printpol (o2v (hh.d));
+      printf (" alpha!=========\n");
+      ll=oadd(omul(ff,ff),omul(tt,omul(hh.d,hh.d)));
+      v=chen(ll);
+      for(i=0;i<K;i++)
+	printf("e=%d %d!\n",i,v.x[i]);
+      if(v.x[K-1]>0){
+	wait ();
+	//return v;
+      }
+      ll=oadd(omul(hh.d,hh.d),omul(tt,omul(ff,ff)));
+      v=chen(ll);
+      for(i=0;i<K;i++)
+	printf("e'=%d %d!\n",i,v.x[i]);
+      if(v.x[K-1]>0){
+	wait ();
+	//return v;
+      }
+      printf("\n\n");
+
+      for(i=0;i<K;i++)
+	printf("e=%d %d!\n",i,v.x[i]);
+      //exit(1);
+
       printf (" locater function failed!! error\n");
       printf ("cannot correct(bad key) error============\n");
-      //wait ();
+
       //return -1;
       //break;
     }
@@ -2744,7 +2766,7 @@ pattarson (OP w, OP f)
 
   printpol (o2v (hh.v));
   printf (" alpha!=========\n");
-  //exit(1);
+
   if (odeg ((ff)) == K / 2)
   {
     ll = oadd (omul (ff, ff), omul (tt, omul (hh.v, hh.v)));
@@ -2755,7 +2777,7 @@ pattarson (OP w, OP f)
       ll = ff; //oadd (omul (ff, ff), omul (tt, omul (hh.v, hh.v)));  //ff;
       //wait ();
       }
-  
+  /*  
   else
     {
       printf ("locate degree is !=K/2 %d\n", odeg ((ff)));
@@ -2766,7 +2788,7 @@ pattarson (OP w, OP f)
       printf (" locater degree is 0\n");
       exit (1);
     }
-  
+  */
   printf ("あっ、でる・・・！\n");
   count = 0;
   printpol (o2v (ll));
@@ -3144,10 +3166,13 @@ readkey ()
 int
 main (void)
 {
-  int i, j, k, l;
+  int i, j, k, l,A=0,B=0;
   int count = 0;
   FILE *fp, *fq;
-  unsigned short z1[N] = { 0 };
+  unsigned short z1[N] = {0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0};
+
+  //{1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1};
+//{ 0 };
   int flg, o1 = 0;
   OP f = { 0 }, r = {
     0
@@ -3196,8 +3221,6 @@ label:
 
   //makeS();
   //exit(1);
-
-
   
   do
     {
@@ -3339,16 +3362,10 @@ lab:
           exit (1);
         }
 
-      o1 = 0;
-      //  #pragma omp parallel for
-      for (i = 0; i < D; i++)
-        {
-          if (zz[i] > 0)
-            o1++;
-        }
       printf ("err=%dっ！！\n", count);
       if(count<T)
 	{
+	  
 	  printf("%d baka1\n",count);
 	  exit(1);
 	}
@@ -3362,8 +3379,7 @@ lab:
       //wait();
       count=0;
       memset (z1, 0, sizeof (z1));
-
-
+      
       j = 0;
       while (j < T * 2)
         {
@@ -3375,7 +3391,7 @@ lab:
               j++;
             }
         }
-
+      
       //encryotion
       //test (w, z1);
 
@@ -3407,21 +3423,33 @@ lab:
           if (i > 0 && v.x[i] == 0)
             {
               printf ("baka %d %d\n", i, v.x[i]);
-              exit (1);
+	      printpol(o2v(w));
+	      //wait();
+              //exit (1);
             }
 
-          //count++;
         }
-
+      if(count==T*2){
       printf ("err=%dっ!! \n", count);
+      B++;
+      }
       if (count < T * 2){
         printf ("error is too few\n");
+	A++;
+	wait();
+      }
+      if(A==1000){
+	printf("B=%d",B);
+	//wait();
+      }
+      if(B>1000){
+	printf("A=%d\n",A);
 	exit(1);
       }
       //if(odeg(v)==1)
       //wait();
       //exit(1);
-      goto patta;
+      goto label;
       //wait();
 
       //break;
