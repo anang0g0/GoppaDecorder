@@ -3172,7 +3172,7 @@ main (void)
     memset(g,0,sizeof(g));
     memset(ta,0,sizeof(ta));
     ginit ();
-    
+    /*    
     for(i=0;i<K+1;i++){
       if(g[K-1]>0)
 	flg=1;
@@ -3184,7 +3184,7 @@ main (void)
       //w=conv(w);
       oprintpol (w);
     }
-    
+    */
     w = setpol (g, K + 1);
     oprintpol (w);
 
