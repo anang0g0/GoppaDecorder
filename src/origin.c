@@ -2991,6 +2991,7 @@ pattarson (OP w, OP f)
      
     }
 
+  /*
   if (odeg ((ff)) == K / 2)
   {
     ll = oadd (omul (ff, ff), omul (tt, omul (hh.v, hh.v)));
@@ -3062,7 +3063,7 @@ pattarson (OP w, OP f)
     }
    
   }
-
+*/
 
   
   if (odeg ((ff)) == 1)
