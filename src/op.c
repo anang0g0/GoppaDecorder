@@ -54,9 +54,11 @@ extern void makeS ();
 unsigned short sy[K] = { 0 };
 
 //Goppa多項式
-static unsigned short g[K + 1] = {1,0,0,5,11,7,0,0,3}; //{ 0 }; //{1,0,6,0,0,0,0,8,1};
-unsigned short zz[N] = { 0 };
+static unsigned short g[K + 1] = {1,0,0,0,1,6,0,0,9}; //{1,0,6,0,0,0,0,8,1};
+  //{ 0 };
 
+unsigned short zz[N] = { 0 };
+unsigned int AA=0,B=0;
 
 /*
 static unsigned short g[K+1]={1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,1,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,1,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,1,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,
@@ -140,6 +142,18 @@ v2o (vec a)
 
   return f;
 }
+
+
+//停止コマンド
+void
+wait (void)
+{
+  int n;                        // 読み込む変数はローカルに取るべし
+  printf (" (enter number and hit return) ");   // 何か表示させたほうが良いだろう
+  fflush (stdout);              // just in case
+  scanf ("%d", &n);             // fgets(line, LINESIZE, stdin); という手も
+}
+
 
 //OP型を正規化する
 OP
@@ -1127,7 +1141,7 @@ xgcd (OP f, OP g)
   , *v, *u;
   oterm a, b;
   int i = 0, j, k, flg = 0;
-  EX e = { 0 };
+  EX e = { 0 },ee={0};
 
 
   v = (OP *) malloc (sizeof (OP) * (DEG));
@@ -1159,12 +1173,15 @@ xgcd (OP f, OP g)
   k = 0;
   i = 0;
   while (1)
-    {
-      if (LT (g).n == 0)
+    {      
+      
+      if (deg(o2v(g)) == 0)
         {
+	  flg=1;
           printf ("v[%d]=%d skipped deg(g)==0!\n", i, odeg ((v[i])));
           printf (" g========\n");
           //exit (1);
+	  //return e;
 	  break;
         }
 
@@ -1183,16 +1200,17 @@ xgcd (OP f, OP g)
       //if(
       if (deg (o2v(f)) == T - 1 || deg (o2v(v[i])) == T - 1)
         {
+	  printf("i=%d\n",i);
+	  //wait();
           break;
         }
       i++;
+      /*
+      */
     }
 
-  //v[i]=odiv(v[i],h);
-  //u[i]=odiv(u[i],h);
-  // h.t[0].a=1;
-  //h.t[0].n=0;
-  printf ("i=%d\n", i);
+  //printf ("i=%d\n", i);
+  //wait();
   //oprintpol ((v[i]));
   printf("deg(v)=%d\n",deg (o2v (v[i])));
   printf (" v=============\n");
@@ -1214,6 +1232,123 @@ xgcd (OP f, OP g)
 
   return e;
 }
+
+
+//拡張ユークリッドアルゴリズム(pattarson)
+EX
+xgcd2 (OP f, OP g ,int t)
+{
+  OP h = { 0 }
+  , ww = {
+    0
+  }
+  , *v, *u;
+  oterm a, b;
+  int i = 0, j, k, flg = 0;
+  EX e = { 0 },ee={0};
+
+
+  v = (OP *) malloc (sizeof (OP) * (DEG));
+  u = (OP *) malloc (sizeof (OP) * (DEG));
+  memset (v, 0, sizeof (OP) * DEG);
+  memset (u, 0, sizeof (OP) * DEG);
+
+
+  u[0].t[0].a = 1;
+  u[0].t[0].n = 0;
+  u[1].t[0].a = 0;
+  u[1].t[0].n = 0;
+  u[2].t[0].a = 1;
+  u[2].t[0].n = 0;
+
+  v[0].t[0].a = 0;
+  v[0].t[0].n = 0;
+  v[1].t[0].a = 1;
+  v[1].t[0].n = 0;
+
+
+  //printpol (o2v (f));
+  printf (" f===============\n");
+  //printpol (o2v (g));
+  printf (" s===============\n");
+  // exit(1);
+
+
+  k = 0;
+  i = 0;
+  while (1)
+    {      
+      
+      if (deg(o2v(g)) == 0)
+        {
+	  flg=1;
+          printf ("v[%d]=%d skipped deg(g)==0!\n", i, odeg ((v[i])));
+          printf (" g========\n");
+          //exit (1);
+	  //return e;
+	  break;
+        }
+      //      if(deg(o2v(v[i]))==t){
+      if(i==t){
+	 //
+	e.d = f;
+	e.v = v[i];
+	e.u = u[i];
+	//if(flg==1)
+	//printf("%d\n",deg(o2v(u[i])));
+	//printf("%d\n",deg(o2v(f)));
+	printf("i=%d\n",i);
+	//wait();
+	//break;
+	return e;
+      }
+      
+      if (LT (g).n > 0)
+        h = omod (f, g);
+
+      if (LT (g).a > 0)
+        ww = odiv (f, g);
+
+      v[i + 2] = oadd (v[i], omul (ww, v[i + 1]));
+      u[i + 2] = oadd (u[i], omul (ww, u[i + 1]));
+      //printf ("i+1=%d %d %d g=%d\n", i + 1, odeg ((v[i])), T - 1, odeg ((g)));
+      f = g;
+      g = h;
+
+      if (deg (o2v(f)) == T - 1 || deg (o2v(v[i])) == T - 1)
+        {
+	  printf("i=%d\n",i);
+	  //wait();
+          break;
+        }
+      i++;
+    }
+
+  //printf ("i=%d\n", i);
+  //wait();
+  //oprintpol ((v[i]));
+  printf("deg(v)=%d\n",deg (o2v (v[i])));
+  printf (" v=============\n");
+  printf("deg(u)=%d\n",deg (o2v (u[i])));
+  //printpol (o2v (u[i]));
+  printf (" u=============\n");
+  printf("deg(f)=%d\n",deg (o2v (f)));
+  printf (" f=============\n");
+  //exit(1);
+
+
+  e.d = f;
+  e.v = v[i];
+  e.u = u[i];
+
+  free (v);
+  free (u);
+
+
+  return e;
+}
+
+
 
 
 //拡張ユークリッドアルゴリズム(Tで止まらない)
@@ -1552,15 +1687,6 @@ vadd (vec a, vec b)
 
 
 
-//停止コマンド
-void
-wait (void)
-{
-  int n;                        // 読み込む変数はローカルに取るべし
-  printf (" (enter number and hit return) ");   // 何か表示させたほうが良いだろう
-  fflush (stdout);              // just in case
-  scanf ("%d", &n);             // fgets(line, LINESIZE, stdin); という手も
-}
 
 
 
@@ -2660,7 +2786,7 @@ pattarson (OP w, OP f)
 
   tt.t[0].n = 1;
   tt.t[0].a = 1;
-
+  o1=0;
 
   ff = inv (f, w);
 //  //printpol (o2v (ff));
@@ -2718,65 +2844,161 @@ pattarson (OP w, OP f)
 
 
   ff = omod (omul (hh.v, g1), w);
+  printpol (o2v (hh.v));
+  printf (" alpha!=========\n");
   printpol (o2v (ff));
   printf (" beta!=========\n");
   printpol (o2v (w));
   printf (" goppa=========\n");
   printpol (o2v (f));
   printf (" syn=========\n");
-  if (odeg ((ff)) != K / 2)
-    {
-      printf("\nbefore h.d\n");
-      ff = omod (omul (hh.d, g1), w);
-      flg = 1;
-      printpol (o2v (ff));
-      printf(" ==========beta!\n");
-      printpol (o2v (hh.d));
-      printf (" alpha!=========\n");
-      ll=oadd(omul(ff,ff),omul(tt,omul(hh.d,hh.d)));
-      v=chen(ll);
-      for(i=0;i<K;i++)
-	printf("e=%d %d!\n",i,v.x[i]);
-      if(v.x[K-1]>0){
-	wait ();
-	//return v;
-      }
-      ll=oadd(omul(hh.d,hh.d),omul(tt,omul(ff,ff)));
-      v=chen(ll);
-      for(i=0;i<K;i++)
-	printf("e'=%d %d!\n",i,v.x[i]);
-      if(v.x[K-1]>0){
-	wait ();
-	//return v;
-      }
-      printf("\n\n");
-
-      for(i=0;i<K;i++)
-	printf("e=%d %d!\n",i,v.x[i]);
-      //exit(1);
-
-      printf (" locater function failed!! error\n");
-      printf ("cannot correct(bad key) error============\n");
-
-      //return -1;
-      //break;
-    }
-
 
   printpol (o2v (hh.v));
   printf (" alpha!=========\n");
 
+  hh = xgcd (w, g1);  
+  ff = omod (omul (hh.v, g1), w);  
+  if (odeg ((ff)) != K / 2)
+    {
+      printf("\nbefore h.d\n");
+      ff = omod (omul (hh.v, g1), w);
+      flg = 1;
+      printpol (o2v (ff));
+      printf(" ==========beta!\n");
+      printpol (o2v (hh.v));
+      printf (" alpha!=========\n");
+      ll=oadd(omul(ff,ff),omul(tt,omul(hh.v,hh.v)));
+      v=chen(ll);
+      for(i=0;i<K;i++)
+	printf("e=%d %d!\n",i,v.x[i]);
+      if(v.x[K-1]>0){
+	//wait ();
+	return v;
+      }
+    
+      for(o1=1;o1<T;o1++){
+      hh=xgcd2(w,g1,o1);
+      ff = omod (omul (hh.v, g1), w);
+      printpol(o2v(ff));
+      printf(" ===========beta!\n");
+      printpol(o2v(h));
+      printf(" ===========alpha!\n");
+      ll=oadd(omul(ff,ff),omul(tt,omul(hh.v,hh.v)));
+      v=chen(ll);
+      for(i=0;i<K;i++)
+	printf("e'=%d %d!\n",i,v.x[i]);
+      if(v.x[K-1]>0){
+	//wait ();
+	return v;
+      }
+      
+
+      ff = omod (omul (hh.d, g1), w);
+      printpol(o2v(ff));
+      printf(" ===========beta!\n");
+      printpol(o2v(h));
+      printf(" ===========alpha!\n");
+      ll=oadd(omul(ff,ff),omul(tt,omul(hh.d,hh.d)));
+      v=chen(ll);
+      for(i=0;i<K;i++)
+	printf("e'=%d %d!\n",i,v.x[i]);
+      if(v.x[K-1]>0){
+	//wait ();
+	return v;
+      }
+      }
+    
+
+  //  ff = omod (omul (hh.v, g1), w);
   if (odeg ((ff)) == K / 2)
   {
     ll = oadd (omul (ff, ff), omul (tt, omul (hh.v, hh.v)));
+    printpol(o2v(ll));
+    printf(" ===========rho!\n");
+    //wait();
+    v=chen(ll);
+    for(i=0;i<D;i++)
+      printf("v[%d]=%d\n",i,v.x[i]);
+    if(v.x[K-1]>0){
+      return v;
+    }else{
+      ll = oadd (omul (hh.v, hh.v), omul (tt, omul (ff, ff)));
+      v=chen(ll);
+      if(v.x[K-1]>0){
+	return v;
+      }
+    }
+    ll = oadd (omul (ff, ff), omul (tt, omul (hh.d, hh.d)));
+    printpol(o2v(ll));
+    printf(" ===========rho!\n");
+    //wait();
+    v=chen(ll);
+    if(v.x[K-1]>0){
+      return v;
+    }
+    for(i=0;i<D;i++)
+      printf("v[%d]=%d\n",i,v.x[i]);
+    ll = oadd (omul (hh.d, hh.d), omul (tt, omul (ff, ff)));
+    printpol(o2v(ll));
+    printf(" ===========rho!\n");
+    //wait();
+    v=chen(ll);
+    if(v.x[K-1]>0){
+      return v;
+    }
+    for(i=0;i<D;i++)
+      printf("v[%d]=%d\n",i,v.x[i]);
+
+    for(o1=1;o1<T;o1++){
+    hh=xgcd2(w,g1,o1);
+    ff = omod (omul (hh.v, g1), w);
+    printpol(o2v(ff));
+    printf(" ===========beta!\n");
+    printpol(o2v(h));
+    printf(" ===========alpha!\n");
+    ll=oadd(omul(ff,ff),omul(tt,omul(hh.v,hh.v)));
+    v=chen(ll);
+    for(i=0;i<K;i++)
+      printf("e'=%d %d!\n",i,v.x[i]);
+    if(v.x[K-1]>0){
+      //wait ();
+      return v;
+    }
+    ff = omod (omul (hh.d, g1), w);
+    printpol(o2v(ff));
+    printf(" ===========beta!\n");
+    printpol(o2v(h));
+    printf(" ===========alpha!\n");
+    ll=oadd(omul(ff,ff),omul(tt,omul(hh.d,hh.d)));
+    v=chen(ll);
+    for(i=0;i<K;i++)
+      printf("e'=%d %d!\n",i,v.x[i]);
+    if(v.x[K-1]>0){
+      //wait ();
+      return v;
+    }
+    printf("\n\n");
+    }
+   
   }
   
-  else if (odeg ((ff)) == 1)
+  
+
+      printf("\n\n");
+
+      printf (" locater function failed!! error\n");
+      printf ("cannot correct(bad key) error============\n");
+     
+}
+
+  
+  if (odeg ((ff)) == 1)
     {
-      ll = ff; //oadd (omul (ff, ff), omul (tt, omul (hh.v, hh.v)));  //ff;
-      //wait ();
+      ll = oadd (omul (ff, ff), omul (tt, omul (hh.v, hh.v)));  //ff;
+      printf("deg==1\n");
+      wait ();
       }
-  /*  
+  /*
   else
     {
       printf ("locate degree is !=K/2 %d\n", odeg ((ff)));
@@ -2795,9 +3017,16 @@ pattarson (OP w, OP f)
   printpol (o2v (f));
   printf (" syn=================\n");
   v = chen (ll);
-  
-  
+
+  if(v.x[K-1]>0){
+    return v;
+  }
+
+  memset(v.x,0,sizeof(v.x));
   return v;
+  //wait();
+  //AA++;
+  
 }
 
 
@@ -3165,13 +3394,27 @@ readkey ()
 int
 main (void)
 {
-  int i, j, k, l,A=0,B=0;
+  int i, j, k, l;
   int count = 0;
   FILE *fp, *fq;
-  unsigned short z1[N] = {0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0};
+  unsigned short z1[N] ={0};
+    //{1,1,0,1,0,1,0,0,0,1,0,0,0,1,1,1};
+    //{1,1,1,1,1,1,0,0,0,0,0,0,0,0,1,1};
+    //
+    //{1,1,1,1,0,0,1,0,1,0,0,0,1,1,0,0};
+    //  {0,1,1,0,1,0,1,0,1,0,1,0,0,1,1,0,};
+    //{0,0,1,0,1,1,0,1,1,0,1,1,0,1,0,0};
+  //  {0,0,1,1,1,1,1,1,0,0,0,0,1,1,0,0};
+  // {0,0,1,1,0,0,1,1,1,1,0,0,0,0,1,1};//
 
-  //{1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1};
-//{ 0 };
+      //
+    //{1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1};
+  //{ 1, 1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1};
+  //{1,1,0,1,1,1,1,0,0,0,1,0,0,0,0,1};
+  //{1,0,1,0,0,0,1,1,0,0,1,1,0,1,0,1};
+  //{1,1,0,1,1,1,1,0,0,0,1,0,0,0,0,1};
+
+
   int flg, o1 = 0;
   OP f = { 0 }, r = {
     0
@@ -3220,16 +3463,16 @@ label:
 
   //makeS();
   //exit(1);
-  
+    
   do
     {
       fail = 0;
       j=0;
       k = 0;
       flg = 0;
-      //memset (g, 0, sizeof (g));
+      memset (g, 0, sizeof (g));
       memset (ta, 0, sizeof (ta));
-      //ginit ();
+      ginit ();
 
       for (i = 0; i < K + 1; i++)
         {
@@ -3245,8 +3488,8 @@ label:
 	  j=1;
         }
 
-      //w = setpol (g, K + 1);
-      //oprintpol (w);
+      w = setpol (g, K + 1);
+      oprintpol (w);
 
       //多項式の値が0でないことを確認
       for (i = 0; i < D; i++)
@@ -3262,6 +3505,7 @@ label:
 
     }
   while (fail || j==0);
+  
   
   
 #pragma omp parallel for
@@ -3290,7 +3534,7 @@ lab:
 
   matmul ();
   matinv ();
-
+  //exit(1);
 //decode開始
   k = 0;
   while (1)
@@ -3394,9 +3638,10 @@ lab:
       //encryotion
       //test (w, z1);
 
+      printf("{");
       for (i = 0; i < D; i++)
-        printf ("%d= %d,\n", i, z1[i]);
-      printf ("\n");
+        printf ("%d,", z1[i]);
+      printf ("};\n");
 
       f = synd (z1);
 
@@ -3422,8 +3667,12 @@ lab:
           if (i > 0 && v.x[i] == 0)
             {
               printf ("baka %d %d\n", i, v.x[i]);
+	      printf("v.x[K-1]=%d\n",v.x[K-1]);
 	      printpol(o2v(w));
-	      //wait();
+	      // AA++;
+	      // wait();
+	      break;
+	      //
               //exit (1);
             }
 
@@ -3434,15 +3683,19 @@ lab:
       }
       if (count < T * 2){
         printf ("error is too few\n");
-	A++;
+	AA++;
+	memcpy(zz,z1,sizeof(zz));
 	//wait();
       }
-      if(A==1000){
+      if(AA==1000){
 	printf("B=%d",B);
 	wait();
       }
-      if(B>1000){
-	printf("false=%d\n",A);
+      if(B>10000){
+	printf("false=%d\n",AA);
+	for(i=0;i<16;i++)
+	  printf("%d,",zz[i]);
+	printf("\n");
 	exit(1);
       }
       //if(odeg(v)==1)
