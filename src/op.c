@@ -54,7 +54,8 @@ extern void makeS ();
 unsigned short sy[K] = { 0 };
 
 //Goppa多項式
-static unsigned short g[K + 1] ={ 0 };
+static unsigned short g[K + 1] ={1,0,0,5,0,0,12,10,14};
+//  { 0 };
   //{1,0,0,0,1,6,0,0,9}; //{1,0,6,0,0,0,0,8,1};
   //
 
@@ -3301,7 +3302,8 @@ main (void)
   int i, j, k, l;
   int count = 0;
   FILE *fp, *fq;
-  unsigned short z1[N] ={0};
+  unsigned short z1[N] ={1,0,1,1,1,0,0,0,0,0,1,1,1,0,0,1};
+  //  {0};
 
 
   int flg, o1 = 0;
@@ -3359,9 +3361,9 @@ label:
       j=0;
       k = 0;
       flg = 0;
-      memset (g, 0, sizeof (g));
+      //memset (g, 0, sizeof (g));
       memset (ta, 0, sizeof (ta));
-      ginit ();
+      //ginit ();
 
       for (i = 0; i < K + 1; i++)
         {
@@ -3510,8 +3512,8 @@ lab:
       //printf("パターソンアルゴリズムを実行します。何か数字を入れてください。\n");
       //wait();
       count=0;
-      memset (z1, 0, sizeof (z1));
-      
+      //memset (z1, 0, sizeof (z1));
+      /*
       j = 0;
       while (j < T * 2)
         {
@@ -3523,7 +3525,7 @@ lab:
               j++;
             }
         }
-      
+      */      
       //encryotion
       //test (w, z1);
 
@@ -3558,8 +3560,13 @@ lab:
               printf ("baka %d %d\n", i, v.x[i]);
 	      printf("v.x[K-1]=%d\n",v.x[K-1]);
 	      printpol(o2v(w));
+	      printf(" ============goppa\n");
+	      printf("{");
+	      for(i=0;i<N;i++)
+		printf("%d,",z1[i]);
+	      printf("};\n");
 	      AA++;
-	      // wait();
+	       wait();
 	      break;
 	      //
               //exit (1);
@@ -3580,7 +3587,7 @@ lab:
 	printf("B=%d",B);
 	wait();
       }
-      if(B>1000){
+      if(B>10000){
 	printf("false=%d\n",AA);
 	for(i=0;i<16;i++)
 	  printf("%d,",zz[i]);
