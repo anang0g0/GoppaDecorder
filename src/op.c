@@ -2858,7 +2858,7 @@ pattarson (OP w, OP f)
 
   hh = xgcd (w, g1);  
   ff = omod (omul (hh.v, g1), w);  
-  if (odeg ((ff)) != K / 2)
+  //  if (odeg ((ff)) != K / 2)
     {
       printf("\nbefore h.d\n");
       ff = omod (omul (hh.v, g1), w);
@@ -2891,8 +2891,31 @@ pattarson (OP w, OP f)
 	//wait ();
 	return v;
       }
-      
+      }
 
+      hh = xgcd (w, g1);  
+      ff = omod (omul (hh.d, g1), w);  
+      {
+	printf("\nbefore h.d\n");
+	ff = omod (omul (hh.d, g1), w);
+	flg = 1;
+	printpol (o2v (ff));
+	printf(" ==========beta!\n");
+	printpol (o2v (hh.d));
+	printf (" alpha!=========\n");
+	ll=oadd(omul(ff,ff),omul(tt,omul(hh.d,hh.d)));
+	v=chen(ll);
+	for(i=0;i<K;i++)
+	  printf("e=%d %d!\n",i,v.x[i]);
+	if(v.x[K-1]>0){
+	  //wait ();
+	  return v;
+	}
+      }
+    
+
+    for(o1=1;o1<T;o1++){
+      hh=xgcd2(w,g1,o1);
       ff = omod (omul (hh.d, g1), w);
       printpol(o2v(ff));
       printf(" ===========beta!\n");
@@ -2906,9 +2929,11 @@ pattarson (OP w, OP f)
 	//wait ();
 	return v;
       }
-      }
-    
+    }
+    }  
 
+    
+    /*
   //  ff = omod (omul (hh.v, g1), w);
   if (odeg ((ff)) == K / 2)
   {
@@ -2980,10 +3005,9 @@ pattarson (OP w, OP f)
     printf("\n\n");
     }
    
-  }
+  }    
   
-  
-
+    
       printf("\n\n");
 
       printf (" locater function failed!! error\n");
@@ -2992,24 +3016,91 @@ pattarson (OP w, OP f)
 }
 
   
+     if (odeg ((ff)) == K / 2)
+  {
+    ll = oadd (omul (ff, ff), omul (tt, omul (hh.v, hh.v)));
+    printpol(o2v(ll));
+    printf(" ===========rho!\n");
+    //wait();
+    v=chen(ll);
+    for(i=0;i<K;i++)
+      printf("v[%d]=%d\n",i,v.x[i]);
+    if(v.x[K-1]>0){
+      return v;
+    }
+  }
+    */
+     /*
+       }else{
+      ll = oadd (omul (hh.v, hh.v), omul (tt, omul (ff, ff)));
+      v=chen(ll);
+      if(v.x[K-1]>0){
+	return v;
+      }
+    }
+    ll = oadd (omul (ff, ff), omul (tt, omul (hh.d, hh.d)));
+    printpol(o2v(ll));
+    printf(" ===========rho!\n");
+    //wait();
+    v=chen(ll);
+    if(v.x[K-1]>0){
+      return v;
+    }
+    for(i=0;i<D;i++)
+      printf("v[%d]=%d\n",i,v.x[i]);
+    ll = oadd (omul (hh.d, hh.d), omul (tt, omul (ff, ff)));
+    printpol(o2v(ll));
+    printf(" ===========rho!\n");
+    //wait();
+    v=chen(ll);
+    if(v.x[K-1]>0){
+      return v;
+    }
+    for(i=0;i<D;i++)
+      printf("v[%d]=%d\n",i,v.x[i]);
+
+    for(o1=1;o1<T;o1++){
+    hh=xgcd2(w,g1,o1);
+    ff = omod (omul (hh.v, g1), w);
+    printpol(o2v(ff));
+    printf(" ===========beta!\n");
+    printpol(o2v(h));
+    printf(" ===========alpha!\n");
+    ll=oadd(omul(ff,ff),omul(tt,omul(hh.v,hh.v)));
+    v=chen(ll);
+    for(i=0;i<K;i++)
+      printf("e'=%d %d!\n",i,v.x[i]);
+    if(v.x[K-1]>0){
+      //wait ();
+      return v;
+    }
+    ff = omod (omul (hh.d, g1), w);
+    printpol(o2v(ff));
+    printf(" ===========beta!\n");
+    printpol(o2v(h));
+    printf(" ===========alpha!\n");
+    ll=oadd(omul(ff,ff),omul(tt,omul(hh.d,hh.d)));
+    v=chen(ll);
+    for(i=0;i<K;i++)
+      printf("e'=%d %d!\n",i,v.x[i]);
+    if(v.x[K-1]>0){
+      //wait ();
+      return v;
+    }
+    printf("\n\n");
+    }
+   
+  }
+  */
+  
   if (odeg ((ff)) == 1)
     {
       ll = oadd (omul (ff, ff), omul (tt, omul (hh.v, hh.v)));  //ff;
       printf("deg==1\n");
       wait ();
-      }
-  /*
-  else
-    {
-      printf ("locate degree is !=K/2 %d\n", odeg ((ff)));
-      exit (1);
     }
-  if (odeg ((ll)) == 0)
-    {
-      printf (" locater degree is 0\n");
-      exit (1);
-    }
-  */
+
+
   printf ("あっ、でる・・・！\n");
   count = 0;
   printpol (o2v (ll));
@@ -3022,10 +3113,10 @@ pattarson (OP w, OP f)
     return v;
   }
 
-  memset(v.x,0,sizeof(v.x));
+  //  memset(v.x,0,sizeof(v.x));
   return v;
   //wait();
-  //AA++;
+  AA++;
   
 }
 
@@ -3488,8 +3579,8 @@ label:
 	  j=1;
         }
 
-      w = setpol (g, K + 1);
-      oprintpol (w);
+      //w = setpol (g, K + 1);
+      //oprintpol (w);
 
       //多項式の値が0でないことを確認
       for (i = 0; i < D; i++)
@@ -3701,7 +3792,7 @@ lab:
       //if(odeg(v)==1)
       //wait();
       //exit(1);
-      goto label;
+      goto patta;
       //wait();
 
       //break;
@@ -3709,4 +3800,3 @@ lab:
 
   return 0;
 }
-
