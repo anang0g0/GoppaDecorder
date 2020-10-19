@@ -54,11 +54,12 @@ extern void makeS ();
 unsigned short sy[K] = { 0 };
 
 //Goppa多項式
-static unsigned short g[K + 1] = {1,0,0,0,1,6,0,0,9}; //{1,0,6,0,0,0,0,8,1};
-  //{ 0 };
+static unsigned short g[K + 1] ={ 0 };
+  //{1,0,0,0,1,6,0,0,9}; //{1,0,6,0,0,0,0,8,1};
+  //
 
 unsigned short zz[N] = { 0 };
-unsigned int AA=0,B=0;
+unsigned int AA=0,B=0,C=0;
 
 /*
 static unsigned short g[K+1]={1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,1,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,1,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,1,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,
@@ -2760,6 +2761,13 @@ osqrt (OP f, OP w)
 }
 
 
+vec p2(){
+
+  
+
+
+}
+
 //パターソンアルゴリズムでバイナリGoppa符号を復号する
 vec
 pattarson (OP w, OP f)
@@ -2855,11 +2863,12 @@ pattarson (OP w, OP f)
 
   printpol (o2v (hh.v));
   printf (" alpha!=========\n");
-
+  
   hh = xgcd (w, g1);  
   ff = omod (omul (hh.v, g1), w);  
   //  if (odeg ((ff)) != K / 2)
     {
+      
       printf("\nbefore h.d\n");
       ff = omod (omul (hh.v, g1), w);
       flg = 1;
@@ -2869,14 +2878,16 @@ pattarson (OP w, OP f)
       printf (" alpha!=========\n");
       ll=oadd(omul(ff,ff),omul(tt,omul(hh.v,hh.v)));
       v=chen(ll);
-      for(i=0;i<K;i++)
-	printf("e=%d %d!\n",i,v.x[i]);
       if(v.x[K-1]>0){
 	//wait ();
 	return v;
       }
+    }
+  
     
-      for(o1=1;o1<T;o1++){
+    hh = xgcd (w, g1);  
+    ff = omod (omul (hh.v, g1), w);  
+    for(o1=1;o1<T;o1++){
       hh=xgcd2(w,g1,o1);
       ff = omod (omul (hh.v, g1), w);
       printpol(o2v(ff));
@@ -2885,56 +2896,17 @@ pattarson (OP w, OP f)
       printf(" ===========alpha!\n");
       ll=oadd(omul(ff,ff),omul(tt,omul(hh.v,hh.v)));
       v=chen(ll);
-      for(i=0;i<K;i++)
-	printf("e'=%d %d!\n",i,v.x[i]);
       if(v.x[K-1]>0){
-	//wait ();
-	return v;
-      }
-      }
-
-      hh = xgcd (w, g1);  
-      ff = omod (omul (hh.d, g1), w);  
-      {
-	printf("\nbefore h.d\n");
-	ff = omod (omul (hh.d, g1), w);
-	flg = 1;
-	printpol (o2v (ff));
-	printf(" ==========beta!\n");
-	printpol (o2v (hh.d));
-	printf (" alpha!=========\n");
-	ll=oadd(omul(ff,ff),omul(tt,omul(hh.d,hh.d)));
-	v=chen(ll);
-	for(i=0;i<K;i++)
-	  printf("e=%d %d!\n",i,v.x[i]);
-	if(v.x[K-1]>0){
-	  //wait ();
-	  return v;
-	}
-      }
-    
-
-    for(o1=1;o1<T;o1++){
-      hh=xgcd2(w,g1,o1);
-      ff = omod (omul (hh.d, g1), w);
-      printpol(o2v(ff));
-      printf(" ===========beta!\n");
-      printpol(o2v(h));
-      printf(" ===========alpha!\n");
-      ll=oadd(omul(ff,ff),omul(tt,omul(hh.d,hh.d)));
-      v=chen(ll);
-      for(i=0;i<K;i++)
-	printf("e'=%d %d!\n",i,v.x[i]);
-      if(v.x[K-1]>0){
-	//wait ();
+	C++;
+	
 	return v;
       }
     }
-    }  
+
 
     
-  
-  if (odeg ((ff)) == 1)
+    
+    if (odeg ((ff)) == 1)
     {
       ll = oadd (omul (ff, ff), omul (tt, omul (hh.v, hh.v)));  //ff;
       printf("deg==1\n");
@@ -2957,7 +2929,7 @@ pattarson (OP w, OP f)
   //  memset(v.x,0,sizeof(v.x));
   return v;
   //wait();
-  AA++;
+  //AA++;
   
 }
 
@@ -3330,21 +3302,6 @@ main (void)
   int count = 0;
   FILE *fp, *fq;
   unsigned short z1[N] ={0};
-    //{1,1,0,1,0,1,0,0,0,1,0,0,0,1,1,1};
-    //{1,1,1,1,1,1,0,0,0,0,0,0,0,0,1,1};
-    //
-    //{1,1,1,1,0,0,1,0,1,0,0,0,1,1,0,0};
-    //  {0,1,1,0,1,0,1,0,1,0,1,0,0,1,1,0,};
-    //{0,0,1,0,1,1,0,1,1,0,1,1,0,1,0,0};
-  //  {0,0,1,1,1,1,1,1,0,0,0,0,1,1,0,0};
-  // {0,0,1,1,0,0,1,1,1,1,0,0,0,0,1,1};//
-
-      //
-    //{1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1};
-  //{ 1, 1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1};
-  //{1,1,0,1,1,1,1,0,0,0,1,0,0,0,0,1};
-  //{1,0,1,0,0,0,1,1,0,0,1,1,0,1,0,1};
-  //{1,1,0,1,1,1,1,0,0,0,1,0,0,0,0,1};
 
 
   int flg, o1 = 0;
@@ -3601,7 +3558,7 @@ lab:
               printf ("baka %d %d\n", i, v.x[i]);
 	      printf("v.x[K-1]=%d\n",v.x[K-1]);
 	      printpol(o2v(w));
-	      // AA++;
+	      AA++;
 	      // wait();
 	      break;
 	      //
@@ -3615,7 +3572,7 @@ lab:
       }
       if (count < T * 2){
         printf ("error is too few\n");
-	AA++;
+	//AA++;
 	memcpy(zz,z1,sizeof(zz));
 	//wait();
       }
@@ -3623,17 +3580,17 @@ lab:
 	printf("B=%d",B);
 	wait();
       }
-      if(B>10000){
+      if(B>1000){
 	printf("false=%d\n",AA);
 	for(i=0;i<16;i++)
 	  printf("%d,",zz[i]);
 	printf("\n");
+	printf("C=%d\n",C);
 	exit(1);
       }
-      //if(odeg(v)==1)
-      //wait();
+
       //exit(1);
-      goto patta;
+      goto label;
       //wait();
 
       //break;
