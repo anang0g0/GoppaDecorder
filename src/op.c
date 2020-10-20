@@ -2876,9 +2876,13 @@ pattarson (OP w, OP f)
     //wait ();
     return v;
   }
-  
-      
-    if (odeg ((ff)) != K / 2)
+
+
+    
+
+  hh = xgcd (w, g1);  
+  ff = omod (omul (hh.v, g1), w);        
+  if (odeg ((ff)) != K / 2)
     {
       
       printf("\nbefore h.d\n");
@@ -2894,12 +2898,36 @@ pattarson (OP w, OP f)
 	//wait ();
 	return v;
       }
+
+      for(o1=1;o1<T;o1++){
+      hh=xgcd2(w,g1,o1);
+      ff = omod (omul (hh.v, g1), w);
+      printpol(o2v(ff));
+      printf(" ===========beta!\n");
+      printpol(o2v(h));
+      printf(" ===========alpha!\n");
+      ll=oadd(omul(ff,ff),omul(tt,omul(hh.v,hh.v)));
+      v=chen(ll);
+      if(v.x[K-1]>0){
+	C++;
+	
+	return v;
+      }
+      }
+      
     }
   
 
+  ll=oadd(omul(ff,ff),omul(tt,omul(hh.v,hh.v)));
+  v=chen(ll);
+  if(v.x[K-1]>0){
+    C++;	
+    return v;
+  }
+  
  
-    //hh = xgcd (w, g1);  
-    //ff = omod (omul (hh.v, g1), w);  
+    hh = xgcd (w, g1);  
+    ff = omod (omul (hh.v, g1), w);  
     for(o1=1;o1<T;o1++){
       hh=xgcd2(w,g1,o1);
       ff = omod (omul (hh.v, g1), w);
@@ -2915,7 +2943,7 @@ pattarson (OP w, OP f)
 	return v;
       }
     }
-
+  
 
     
     
@@ -2939,10 +2967,8 @@ pattarson (OP w, OP f)
     return v;
   }
 
-  //  memset(v.x,0,sizeof(v.x));
+
   return v;
-  //wait();
-  //AA++;
   
 }
 
@@ -3544,10 +3570,6 @@ lab:
       //encryotion
       //test (w, z1);
 
-      printf("{");
-      for (i = 0; i < D; i++)
-        printf ("%d,", z1[i]);
-      printf ("};\n");
 
       f = synd (z1);
 
@@ -3596,7 +3618,13 @@ lab:
         printf ("error is too few\n");
 	AA++;
 	memcpy(zz,z1,sizeof(zz));
-	//wait();
+	printf("{");
+	for (i = 0; i < D; i++)
+	  printf ("%d,", z1[i]);
+	printf ("};\n");
+	printpol(o2v(w));
+	printf(" =========goppa\n");
+	exit(1);
       }
       if(AA==1000){
 	printf("B=%d",B);
@@ -3614,10 +3642,10 @@ lab:
       }
 
       //exit(1);
-      goto label;
+      //goto patta;
       //wait();
 
-      //break;
+      break;
       }
 
   return 0;
