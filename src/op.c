@@ -54,8 +54,9 @@ extern void makeS ();
 unsigned short sy[K] = { 0 };
 
 //Goppa多項式
-static unsigned short g[K + 1] ={1,0,0,5,0,0,12,10,14};
-//  { 0 };
+static unsigned short g[K + 1] = { 0 };
+  //{1,0,0,5,0,0,12,10,14};
+// 
   //{1,0,0,0,1,6,0,0,9}; //{1,0,6,0,0,0,0,8,1};
   //
 
@@ -2769,6 +2770,8 @@ vec p2(){
 
 }
 
+
+
 //パターソンアルゴリズムでバイナリGoppa符号を復号する
 vec
 pattarson (OP w, OP f)
@@ -2866,8 +2869,16 @@ pattarson (OP w, OP f)
   printf (" alpha!=========\n");
   
   hh = xgcd (w, g1);  
-  ff = omod (omul (hh.v, g1), w);  
-  //  if (odeg ((ff)) != K / 2)
+  ff = omod (omul (hh.v, g1), w);
+  ll=oadd(omul(ff,ff),omul(tt,omul(hh.v,hh.v)));
+  v=chen(ll);
+  if(v.x[K-1]>0){
+    //wait ();
+    return v;
+  }
+  
+      
+    if (odeg ((ff)) != K / 2)
     {
       
       printf("\nbefore h.d\n");
@@ -2885,9 +2896,10 @@ pattarson (OP w, OP f)
       }
     }
   
-    
-    hh = xgcd (w, g1);  
-    ff = omod (omul (hh.v, g1), w);  
+
+ 
+    //hh = xgcd (w, g1);  
+    //ff = omod (omul (hh.v, g1), w);  
     for(o1=1;o1<T;o1++){
       hh=xgcd2(w,g1,o1);
       ff = omod (omul (hh.v, g1), w);
@@ -2911,7 +2923,7 @@ pattarson (OP w, OP f)
     {
       ll = oadd (omul (ff, ff), omul (tt, omul (hh.v, hh.v)));  //ff;
       printf("deg==1\n");
-      wait ();
+      //wait ();
     }
 
 
@@ -2935,6 +2947,9 @@ pattarson (OP w, OP f)
 }
 
 
+
+
+  
 //512bitの秘密鍵を暗号化
 void
 encrypt (char buf[], unsigned char sk[64])
@@ -3302,7 +3317,7 @@ main (void)
   int i, j, k, l;
   int count = 0;
   FILE *fp, *fq;
-  unsigned short z1[N] ={1,0,1,1,1,0,0,0,0,0,1,1,1,0,0,1};
+  unsigned short z1[N] = {0}; //{1,0,1,1,1,0,0,0,0,0,1,1,1,0,0,1};
   //  {0};
 
 
@@ -3361,9 +3376,9 @@ label:
       j=0;
       k = 0;
       flg = 0;
-      //memset (g, 0, sizeof (g));
+      memset (g, 0, sizeof (g));
       memset (ta, 0, sizeof (ta));
-      //ginit ();
+      ginit ();
 
       for (i = 0; i < K + 1; i++)
         {
@@ -3512,8 +3527,8 @@ lab:
       //printf("パターソンアルゴリズムを実行します。何か数字を入れてください。\n");
       //wait();
       count=0;
-      //memset (z1, 0, sizeof (z1));
-      /*
+      memset (z1, 0, sizeof (z1));
+      
       j = 0;
       while (j < T * 2)
         {
@@ -3525,7 +3540,7 @@ lab:
               j++;
             }
         }
-      */      
+            
       //encryotion
       //test (w, z1);
 
@@ -3565,8 +3580,8 @@ lab:
 	      for(i=0;i<N;i++)
 		printf("%d,",z1[i]);
 	      printf("};\n");
-	      AA++;
-	       wait();
+	      //AA++;
+	      //wait();
 	      break;
 	      //
               //exit (1);
@@ -3579,7 +3594,7 @@ lab:
       }
       if (count < T * 2){
         printf ("error is too few\n");
-	//AA++;
+	AA++;
 	memcpy(zz,z1,sizeof(zz));
 	//wait();
       }
@@ -3588,10 +3603,12 @@ lab:
 	wait();
       }
       if(B>10000){
+	count=0;
 	printf("false=%d\n",AA);
-	for(i=0;i<16;i++)
-	  printf("%d,",zz[i]);
-	printf("\n");
+	printf("success=%d\n",B);
+	//for(i=0;i<16;i++)
+	//printf("%d,",zz[i]);
+	//printf("\n");
 	printf("C=%d\n",C);
 	exit(1);
       }
