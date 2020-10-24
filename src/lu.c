@@ -6,7 +6,7 @@
 #include <time.h>
 
 //#define D 4096
-#define F 256*13 //2040
+#define F 12 //2040
 
 unsigned char a[F][F]={0};
 unsigned char cc[F][F]={0};
@@ -210,26 +210,31 @@ for(i=0;i<F;i++){
  }
   
  //
+ printf("S[K][K]=\n{\n");
  if(flg==F && count==F*F-F){
   for(i=0;i<F;i++){
+    printf("{");
     for(j=0;j<F;j++){
-      printf("%d",cl[i][j]);
+      printf("%d,",cl[i][j]);
       dd[j]=cl[i][j];
     }
   
-    printf("\n");
+    printf("},\n");
   }
-  
+  printf("};\n");
 
   //exit(1);
+  printf("inv_S[K][K]=\n{\n");
   for(i=0;i<F;i++){
+    printf("{");
     for(j=0;j<F;j++){
       printf("%d,",inv_a[i][j]);
       dd[j]=inv_a[i][j];
     }
-    printf("\n");
+    printf("},\n");
   }
- 
+  printf("};\n");
+     
   for(i=0;i<F;i++){
     for(j=0;j<F;j++)
       printf("%d, ",b[i][j]);
