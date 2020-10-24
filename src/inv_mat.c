@@ -30,21 +30,21 @@
 	srand(clock()+time(&t));
 
 
-        for (i = 0; i < F; i++) {
+        for (i = 0; i < N; i++) {
             a[i] = i;
         }
-        for (i = 0; i < F - 2; i++) {
+        for (i = 0; i < N - 2; i++) {
             // rand from i+1 to F-1
-            j = (rand() % (F - 1 - i)) + i + 1;
+            j = (rand() % (N - 1 - i)) + i + 1;
 
             // swap a[i] and a[j]
             x = a[j];
             a[j] = a[i];
             a[i] = x;
         }
-        if (a[F - 1] == F - 1) {
-            a[F - 1] = a[F - 2];
-            a[F - 2] = F - 1;
+        if (a[N - 1] == N - 1) {
+            a[N - 1] = a[N - 2];
+            a[N - 2] = N - 1;
         }
 
 
@@ -194,8 +194,8 @@ unsigned short cc[N][N]={0};
 
 //inverse matrix
 int matinv(){
-  unsigned short a[N][N]; //={{1,2,0,1},{1,1,2,0},{2,0,1,1},{1,2,1,1}}; //入力用の配列
-unsigned short inv_a[N][N]; //ここに逆行列が入る
+  unsigned short a[F][F]; //={{1,2,0,1},{1,1,2,0},{2,0,1,1},{1,2,1,1}}; //入力用の配列
+unsigned short inv_a[F][F]; //ここに逆行列が入る
 unsigned short buf; //一時的なデータを蓄える
  unsigned short b[N][N]={0},dd[N][N]={0};
  int i,j,k,count; //カウンタ
@@ -260,18 +260,22 @@ for(j=0;j<n;j++){
  //printf("\n");
 }
 
-printf("行列を出力\n");
+printf("行列を出力\n ={\n");
  for(i=0;i<n;i++){
+   printf("{");
    for(j=0;j<n;j++){
      //a[i][j]=rand()%N;
      printf("%3d,",c[i][j]);
    }
-   printf("\n");
+   printf("},\n");
  }
+ printf("};");
+
  
- printf("\n逆行列を出力\n");
+ printf("\n逆行列を出力\n ={\n");
  for(i=0;i<n;i++){
    count=0;
+   printf("{");
    for(j=0;j<n;j++){
      if(inv_a[i][j]==0)
        count++;
@@ -279,11 +283,11 @@ printf("行列を出力\n");
        printf("\nbaka\n\n");
        goto lab;
      }
-     printf("%3d ",inv_a[i][j]);
+     printf("%3d,",inv_a[i][j]);
    }
-   printf("\n");
+   printf("},\n");
  }
-
+ printf("};\n");
  //exit(1); 
 //検算
  for(i=0;i<n;i++){
@@ -305,10 +309,10 @@ printf("行列を出力\n");
 
 //Q-matrix
 void matmul(){
-  int i,j,k,tmp[F][F]={0};
-unsigned char x0[F];//={1,2,3,4,5,6,7,0};
-unsigned char x1[F];//={2,3,1,6,5,7,0,4};
-unsigned char x2[F]={0};
+  int i,j,k,tmp[N][N]={0};
+unsigned char x0[N];//={1,2,3,4,5,6,7,0};
+unsigned char x1[N];//={2,3,1,6,5,7,0,4};
+unsigned char x2[N]={0};
 unsigned short c[N][N]={0};
 
 unsigned short a[N][N]={0};//{{0,3,0,0,},{0,0,4,0},{0,0,0,5},{6,0,0,0}};
@@ -321,43 +325,45 @@ unsigned short cc[N][N]={0};
 
   rp(x0);
   printf("置換配列を表示\n");
-  for(i=0;i<F;i++){
+  for(i=0;i<N;i++){
     a[i][x0[i]]=rand()%N;
     printf("%d,",x0[i]);
   }
   printf("\n");
-  for(i=0;i<F;i++){
-    for(j=0;j<F;j++){
+  for(i=0;i<N;i++){
+    for(j=0;j<N;j++){
       inv_a[i][j]=gf[Inv(fg[a[j][i]])];//*inv_a[k][j];
       
     }
   }
   
-  printf("Q1-置換行列を表示\n");
-  for(i=0;i<F;i++){
-    for(j=0;j<F;j++)
+  printf("Q1-置換行列を表示\n ={\n");
+  for(i=0;i<N;i++){
+    printf("{");
+    for(j=0;j<N;j++)
       printf("%3d,",a[j][i]);
-    printf("\n");
+    printf("},\n");
   }
-  printf("\n");
+  printf("};\n");
 
-  printf("逆置換行列\n");
-  for(i=0;i<F;i++){
-    for(j=0;j<F;j++){
+  printf("逆置換行列\n ={");
+  for(i=0;i<N;i++){
+    printf("{");
+    for(j=0;j<N;j++){
 	printf("%3d,",inv_a[j][i]);	
     }
-    printf("\n");
+    printf("},\n");
   }
-  for(i=0;i<F;i++){
-    for(j=0;j<F;j++){
-      for(k=0;k<F;k++){
+  for(i=0;i<N;i++){
+    for(j=0;j<N;j++){
+      for(k=0;k<N;k++){
 	tmp[i][j]^=gf[mlt(fg[a[i][k]],fg[inv_a[k][j]])];
       }
     }
   }
-  printf("\n");
-  for(i=0;i<F;i++){
-    for(j=0;j<F;j++){
+  printf("};\n");
+  for(i=0;i<N;i++){
+    for(j=0;j<N;j++){
       printf("%d,",tmp[j][i]);
       //printf("%d,",inv_a[i][j]);
     }
