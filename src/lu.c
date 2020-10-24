@@ -222,7 +222,21 @@ for(i=0;i<F;i++){
     printf("},\n");
   }
   printf("};\n");
-
+ 
+  
+  printf("Sa[K][K]=\n{\n");
+ if(flg==F && count==F*F-F){
+  for(i=0;i<F;i++){
+    printf("0b");
+    for(j=0;j<F;j++){
+      printf("%d",cl[i][j]);
+      dd[j]=cl[i][j];
+    }
+  
+    printf(",\n");
+  }
+  printf("};\n");
+ }
   //exit(1);
   printf("inv_S[K][K]=\n{\n");
   for(i=0;i<F;i++){
@@ -234,6 +248,18 @@ for(i=0;i<F;i++){
     printf("},\n");
   }
   printf("};\n");
+ 
+  
+  printf("inv_Sa[K][K]=\n{\n");
+  for(i=0;i<F;i++){
+    printf("0b");
+    for(j=0;j<F;j++){
+      printf("%d",inv_a[i][j]);
+      dd[j]=inv_a[i][j];
+    }
+    printf(",\n");
+  }
+  printf("};\n");
      
   for(i=0;i<F;i++){
     for(j=0;j<F;j++)
@@ -243,7 +269,7 @@ for(i=0;i<F;i++){
   //  exit(1);   
  }
   
-  }
+ }
   fq=fopen("S.key","wb");
   for(i=0;i<F;i++){
     for(j=0;j<F;j++)
