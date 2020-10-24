@@ -38,14 +38,17 @@ https://www.hyperelliptic.org/tanja/students/m_marcus/whitepaper.pdf
 
 https://surface.syr.edu/cgi/viewcontent.cgi?article=1846&context=honors_capstone
 
+https://klevas.mif.vu.lt/~skersys/vsd/crypto_on_codes/goppamceliece.pdf
+
 出力の第一段目はエラーの位置と値をユークリッドアルゴリズムで計算したもの、(decode関数)
 第二は復号法であるパターソンアルゴリズムでバイナリエラーの位置を出力したものになります。(pattarson関数)
 
 # 20201021
 
 バグだと思っていたのが仕様だった。
-goppa多項式はバイナリ符号の場合は規約多項式でないと完全には動作しないのだという制限があるらしい。
-ということで多項式の規約性判定アルゴリズムを実装しなければならない。
+goppa多項式はバイナリ符号の場合は既約多項式でないと完全には動作しないのだという制限があるらしい。
+ということで多項式の既約性判定アルゴリズムを実装しなければならない。
+実を言うと以前にben-orのアルゴリズムを実装しようとしたことがあったのだが、次数が二重指数関数的に増えるので実用的でなかった。
 
 # 20201011
 
