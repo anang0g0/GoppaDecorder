@@ -293,7 +293,7 @@ printf("行列を出力\n ={\n");
  for(i=0;i<n;i++){
    for(j=0;j<n;j++){
      for(k=0;k<n;k++)
-       b[i][j]^=gf[mlt(fg[c[k][j]],fg[inv_a[i][k]])];
+       b[i][j]^=gf[mlt(fg[c[i][k]],fg[inv_a[k][j]])];
 
      printf("%d,",b[i][j]);
      // if(j==i && b[i][j]!=1 && j!=i && b[i][j]>0)
@@ -326,13 +326,13 @@ unsigned short cc[N][N]={0};
   rp(x0);
   printf("置換配列を表示\n");
   for(i=0;i<N;i++){
-    a[i][x0[i]]=rand()%N;
+    a[i][x0[i]]=1; //rand()%N;
     printf("%d,",x0[i]);
   }
   printf("\n");
   for(i=0;i<N;i++){
     for(j=0;j<N;j++){
-      inv_a[i][j]=gf[Inv(fg[a[j][i]])];//*inv_a[k][j];
+      inv_a[i][j]=a[j][i];//gf[Inv(fg[a[j][i]])];//*inv_a[k][j];
       
     }
   }
