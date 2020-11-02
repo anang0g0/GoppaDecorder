@@ -31,7 +31,7 @@
 //#include "omp.h" //clang-12
 #include <omp.h> //clang-10
 
-#include "8192.h"
+//#include "8192.h"
 #include "global.h"
 #include "struct.h"
 
@@ -50,7 +50,9 @@ extern void makeS ();
 unsigned short sy[K] = { 0 };
 
 //Goppa多項式
-static unsigned short g[K + 1] = { 0 };
+static unsigned short g[K + 1] = { 1,14,6,8,15 };
+  //{8,9,11};
+  //
 unsigned short zz[N] = { 0 };
 
 
@@ -433,12 +435,27 @@ vec vadd(vec a,vec b){
     {
       c.x[i] = a.x[i] ^ b.x[i];
     }
-  // c.x[i] = a.x[i] ^ b.x[i];
-  //  h = v2o (c);
 
   return c;
 }
 
+
+vec vmul(vec a,vec b){
+  int i,j,k,l;
+  vec c={0};
+
+  k=deg(a);
+  l=deg(b);
+  
+  for(i=0;i<k;i++){
+    for(j=0;j<l;j++)
+      if(a.x[i]>0){
+	c.x[i+j]^=gf[mlt(fg[a.x[i]],fg[b.x[j]])];
+      }
+  }
+
+  return c;
+}
 
 OP norm(OP f){
   OP h={0};
@@ -1273,9 +1290,9 @@ vx (OP f, OP g)
       g = h;
 
       vv = v[i + 2];
-      //printf ("vv==");
-      //printpol (o2v (vv));
-      //printf (" ll========\n");
+      printf ("vv==");
+      printpol (o2v (vv));
+      printf (" ========\n");
 
       if (odeg ((vv)) == T)
 	break;
@@ -1762,7 +1779,7 @@ decode (OP f, OP s)
 
   for (i = 0; i < j; i++)
     {
-      if (x.x[i] > 0)
+      if (x.x[i] > 0 || (i==0 && x.x[i]==0))
 	{
 	  e.t[i].a =
 	    gf[mlt (fg[trace (hh.d, x.x[i])], oinv (trace (l, x.x[i])))];
@@ -2497,10 +2514,10 @@ osqrt (OP f, OP w)
     }
   else if (LT (r).n == 0)
     {
-      //printpol (o2v (r));
+      printpol (o2v (r));
       printf (" r======0\n");
-      wait ();
-      exit (1);
+      //wait ();
+      //exit (1);
     }
 
   tmp = omod (omul (s, r), w);
@@ -2634,7 +2651,7 @@ pattarson (OP w, OP f)
   printf ("locater==========\n");
   //exit(1);
   r2 = oadd (ff, tt);
-//  //printpol (o2v (r2));
+  printpol (o2v (r2));
   printf (" h+x==============\n");
   //  exit(1);
   g1 = osqrt (r2, w);
@@ -3148,13 +3165,14 @@ label:
   //makeS();
   //exit(1);
 
-  memset(g,0,sizeof(g));
+  //memset(g,0,sizeof(g));
 
-  ginit ();
+  //ginit ();
 
 
   w = setpol (g, K + 1);
-  oprintpol (w);
+  printpol (o2v(w));
+  //wait();
   //exit(1);
 
   //多項式の値が0でないことを確認
@@ -3218,15 +3236,16 @@ lab:
 
       memset (zz, 0, sizeof (zz));
 
-
+      
       j = 0;
       while (j < T)
 	{
 	  l = xor128 () % N;
 	  //printf("l=%d\n",l);
-	  if (0 == zz[l] && l > 0)
+	  k=rand()%M;
+	  if (0 == zz[l] && k>0)
 	    {
-	      zz[l] = l;
+	      zz[l] = k;
 	      j++;
 	    }
 	}
@@ -3294,7 +3313,6 @@ lab:
 
       memset (zz, 0, sizeof (zz));
 
-
       j = 0;
       while (j < T * 2)
 	{
@@ -3308,7 +3326,7 @@ lab:
 	}
 
       //encryotion
-      test (w, zz);
+      //test (w, zz);
 
       for (i = 0; i < N; i++)
 	printf ("%d,", zz[i]);
@@ -3316,7 +3334,10 @@ lab:
 
       f = synd (zz);
 
-
+      printpol(o2v(f));
+      printf(" =========syn\n");
+      //exit(1);
+      
       //バグトラップのためのコード（省略）
       //trap(w,f);
       //バグトラップ（ここまで）
@@ -3327,17 +3348,18 @@ lab:
       //エラー表示
       for (i = 0; i < T * 2; i++)
 	{
-	  if (i == 0 && v.x[i] > 0)
+	  if (i == 0)
 	    {
-	      printf ("%d う\n", v.x[i]);
+	      printf ("error position=%d %d う\n", i, v.x[i]);
 	      count++;
 	    }
-	  if (v.x[i] > 0 && i > 0)
+	  if (i > 0 && v.x[i] > 0)
 	    {
-	      ++count;
-	      printf ("%d お\n", v.x[i]);
+	      printf ("error position=%d %d お\n", i, v.x[i]);
+	      count++;
 	    }
 	}
+      
       printf ("err=%dっ!! \n", count);
       if (count < T)
 	printf ("error is too few\n");
@@ -3345,7 +3367,7 @@ lab:
       
       //goto lab;
       //wait();
-
+      
       break;
     }
 
