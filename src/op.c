@@ -1728,7 +1728,22 @@ vadd (vec a, vec b)
 }
 
 
+vec vmul(vec a,vec b){
+  int i,j,k,l;
+  vec c={0};
 
+  k=deg(a);
+  l=deg(b);
+
+  for(i=0;i<k;i++){
+    for(j=0;j<l;j++)
+      if(a.x[i]>0){
+	c.x[i+j]^=gf[mlt(fg[a.x[i]],fg[b.x[j]])];
+      }
+  }
+
+  return c;
+}
 
 
 
