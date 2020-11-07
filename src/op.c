@@ -56,7 +56,8 @@ extern void makeS ();
 unsigned short sy[K] = { 0 };
 
 //Goppa多項式
-static unsigned short g[K + 1] = { 0 };
+static unsigned short g[K + 1] = { 1,0,11,14,7,0,6 };
+
   //{1,0,0,5,0,0,12,10,14};
 // 
   //{1,0,0,0,1,6,0,0,9}; //{1,0,6,0,0,0,0,8,1};
@@ -1934,11 +1935,11 @@ decode (OP f, OP s)
   w = bibun (x);
   //exit(1);
   //  w=oterml(w,d1);
-  //printpol (o2v (w));
+  printpol (o2v (w));
   printf ("@@@@@@@@@\n");
   //exit(1);
 
-  hh = xgcd (f, s);
+  h = ogcd (f, s);
   //printpol (o2v (hh.d));
   //wait();
 
@@ -1964,9 +1965,9 @@ decode (OP f, OP s)
     {
       if (x.x[i] > 0)
         {
-          e.t[i].a =
-            gf[mlt (fg[trace (hh.d, x.x[i])], oinv (trace (l, x.x[i])))];
-          //e.t[i].a = gf[mlt (fg[trace (h, x.x[i])], oinv (trace (l, x.x[i])))];
+          //e.t[i].a =
+	  //gf[mlt (fg[trace (hh.d, x.x[i])], oinv (trace (l, x.x[i])))];
+          e.t[i].a = gf[mlt (fg[trace (h, x.x[i])], oinv (trace (l, x.x[i])))];
           e.t[i].n = x.x[i];
         }
     }
@@ -3586,7 +3587,14 @@ label:
 
   //makeS();
   //exit(1);
-    
+
+
+  //1x^6+11x^4+14x^3+7x^2+6x^0+ ==========goppa
+  //15x^5+6x^4+10x^3+11x^2+6x^1+14x^0+ ==========synd
+  //0,0,0,0,4,0,0,0,8,0,0,0,12,0,0,0,
+  //4x^5+12x^4+15x^3+11x^2+10x^0+
+  //0,0,0,0,0,5,0,0,8,0,0,0,0,13,0,0
+  
   do
     {
       fail = 0;
@@ -3678,7 +3686,7 @@ lab:
     printf("\n");
   }
   printf("\n");
-  */
+  
   printf("mat\n");
 
   for(i=0;i<K;i++){
@@ -3687,7 +3695,7 @@ lab:
     printf("\n");
   }
   printf("\n");
-  
+  */
 
   
   /*
@@ -3742,6 +3750,10 @@ lab:
       memset (zz, 0, sizeof (zz));
       //for(i=1;i<4;i++)
       //zz[i]=i;
+      //zz[4]=4;
+      //zz[8]=8;
+      //zz[12]=12;
+
       
       j = 0;
       while (j < T)
@@ -3789,6 +3801,8 @@ lab:
       printf(" ==========goppa\n");
       printsage(o2v(w));
       printf(" ==========sage\n");
+      printsage(o2v(f));
+      printf(" ==========synd\n");
       printpol(o2v(f));
       printf(" ==========synd\n");
       
@@ -3815,6 +3829,11 @@ lab:
 	  printf(" ==========goppa\n");
 	  printsage(o2v(w));
 	  printf(" ==========sage\n");
+	  printsage(o2v(f));
+	  printf(" =========syn\n");
+	  printpol(o2v(f));
+	  printf(" ==========synd\n");
+
 	  for(i=0;i<D;i++)
 	    printf("%d,",zz[i]);
 	  printf("\n");
@@ -3831,7 +3850,7 @@ lab:
 	}
 
       //exit(1);
-      //goto label;
+      goto lab;
 
     
     patta:
@@ -3892,6 +3911,13 @@ lab:
 	      printf("v.x[K-1]=%d\n",v.x[K-1]);
 	      printpol(o2v(w));
 	      printf(" ============goppa\n");
+	      printsage(o2v(w));
+	      printf(" ============sage\n");
+	      printsage(o2v(f));
+	      printf(" ============syn\n");
+	      printpol(o2v(f));
+	      printf(" ==========synd\n");
+
 	      printf("{");
 	      for(i=0;i<N;i++)
 		printf("%d,",z1[i]);
@@ -3920,13 +3946,17 @@ lab:
 	printf(" =========goppa\n");
 	printsage(o2v(w));
 	printf(" =========sage\n");
+	printsage(o2v(f));
+	printf(" =========syn\n");
+	printpol(o2v(f));
+	printf(" ==========synd\n");
 	exit(1);
       }
       if(AA==1000){
 	printf("B=%d",B);
 	wait();
       }
-      if(B>10000){
+      if(B>500){
 	count=0;
 	printf("false=%d\n",AA);
 	printf("success=%d\n",B);
@@ -3936,6 +3966,8 @@ lab:
 	printf("C=%d\n",C);
 	printpol(o2v(w));
 	printf(" =======goppa\n");
+	printsage(o2v(w));
+	printf(" =======sage\n");
 	exit(1);
       }
 
