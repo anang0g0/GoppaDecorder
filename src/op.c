@@ -1192,8 +1192,18 @@ xgcd (OP f, OP g)
 	  flg=1;
           printf ("v[%d]=%d skipped deg(g)==0!\n", i, odeg ((v[i])));
           printf (" g========\n");
+	  e.d = f;
+	  e.v = v[i];
+	  e.u = u[i];
+	  
+	  free (v);
+	  free (u);
+	  
+	  return e;
+
           //exit (1);
 	  //return e;
+	  
 	  break;
         }
 
@@ -1213,9 +1223,17 @@ xgcd (OP f, OP g)
       if (deg (o2v(f)) == T - 1 || deg (o2v(v[i])) == T - 1)
         {
 	  printf("i=%d\n",i);
+	  e.d = f;
+	  e.v = v[i];
+	  e.u = u[i];
+	  
+	  free (v);
+	  free (u);
+
+	  return e;
 	  //wait();
-          break;
-        }
+          //break;
+	    }
       i++;
       /*
       */
@@ -1234,12 +1252,6 @@ xgcd (OP f, OP g)
   //exit(1);
 
 
-  e.d = f;
-  e.v = v[i];
-  e.u = u[i];
-
-  free (v);
-  free (u);
 
 
   return e;
@@ -3850,7 +3862,7 @@ lab:
 	}
 
       //exit(1);
-      goto lab;
+      //goto lab;
 
     
     patta:
@@ -3972,7 +3984,7 @@ lab:
       }
 
       //exit(1);
-      //goto lab;
+      goto lab;
       //wait();
 
       //break;
