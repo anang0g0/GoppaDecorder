@@ -56,7 +56,8 @@ extern void makeS ();
 unsigned short sy[K] = { 0 };
 
 //Goppa多項式
-static unsigned short g[K + 1] ={ 1,0,11,14,7,0,6 };
+static unsigned short g[K + 1] ={1,0,0,0,1,0,1};
+  //{ 1,0,11,14,7,0,6 };
   //{1,0,13,14,13,0,11};
 //  x^6+13x^4+14x^3+13x^2+11
   //
@@ -3642,6 +3643,7 @@ label:
   //0,0,0,0,4,0,0,0,8,0,0,0,12,0,0,0,
   //4x^5+12x^4+15x^3+11x^2+10x^0+
   //0,0,0,0,0,5,0,0,8,0,0,0,0,13,0,0
+
   
   do
     {
@@ -3652,7 +3654,7 @@ label:
       memset (g, 0, sizeof (g));
       memset (ta, 0, sizeof (ta));
       ginit ();
-
+      
       for (i = 0; i < K + 1; i++)
         {
           if (g[K - 1] > 0)
@@ -3665,6 +3667,7 @@ label:
           w = setpol (g, K + 1);
 	  j=1;
         }
+      
 
       //w = setpol (g, K + 1);
       //oprintpol (w);
@@ -3683,8 +3686,27 @@ label:
 
     }
   while (fail || j==0);
-
   
+
+  /*
+  memset(g,0,sizeof(g));
+  ginit();
+      w = setpol (g, K + 1);
+      oprintpol (w);
+  
+      //多項式の値が0でないことを確認
+      for (i = 0; i < D; i++)
+        {
+          ta[i] = trace (w, i);
+          if (ta[i] == 0)
+            {
+              printf ("trace 0 @ %d\n", i);
+              fail = 1;
+              break;
+            }
+        }
+  */
+      
   oprintpol (w);
   printf("\n");
   printsage(o2v(w));
@@ -3694,9 +3716,10 @@ label:
   
   
 #pragma omp parallel for
-  for (i = 0; i < N; i++)
+  for (i = 0; i < N; i++){
     tr[i] = oinv (ta[i]);
-
+  
+  }
 
   memset (mat, 0, sizeof (mat));
 
@@ -4021,8 +4044,8 @@ lab:
       }
 
       //exit(1);
-      goto lab;
-      //wait();
+      //goto lab;
+      wait();
 
       //break;
       }
