@@ -8,7 +8,7 @@
 #include <time.h>
 
 #define MAXN 4
-#define N 16 //order of GF(q)
+#define N 256 //order of GF(q)
 #define F 8  //dimension of matrix
 
 //elements of GF16
