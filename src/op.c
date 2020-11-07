@@ -56,7 +56,9 @@ extern void makeS ();
 unsigned short sy[K] = { 0 };
 
 //Goppa多項式
-static unsigned short g[K + 1] = { 1,0,11,14,7,0,6 };
+static unsigned short g[K + 1] ={1,0,13,14,13,0,11};
+//  x^6+13x^4+14x^3+13x^2+11
+  //{ 1,0,11,14,7,0,6 };
 
   //{1,0,0,5,0,0,12,10,14};
 // 
@@ -1220,7 +1222,7 @@ xgcd (OP f, OP g)
       g = h;
 
       //if(
-      if (deg (o2v(f)) == T - 1 || deg (o2v(v[i])) == T - 1)
+      if (deg (o2v(v[i])) == T - 1)
         {
 	  printf("i=%d\n",i);
 	  e.d = f;
@@ -1233,7 +1235,19 @@ xgcd (OP f, OP g)
 	  return e;
 	  //wait();
           //break;
-	    }
+	}else if(deg (o2v(f)) == T - 1){
+
+	printf("i=%d\n",i);
+	e.d = v[i];
+	e.v = f;
+	e.u = u[i];
+	
+	free (v);
+	free (u);
+	
+	return e;
+
+      }
       i++;
       /*
       */
@@ -1251,9 +1265,14 @@ xgcd (OP f, OP g)
   printf (" f=============\n");
   //exit(1);
 
-
-
-
+  e.d = f;
+  e.v = v[i];
+  e.u = u[i];
+  
+  free (v);
+  free (u);
+  
+  
   return e;
 }
 
@@ -1975,7 +1994,7 @@ decode (OP f, OP s)
 
   for (i = 0; i < j; i++)
     {
-      if (x.x[i] > 0)
+      if (x.x[i] >= 0)
         {
           //e.t[i].a =
 	  //gf[mlt (fg[trace (hh.d, x.x[i])], oinv (trace (l, x.x[i])))];
@@ -1983,9 +2002,9 @@ decode (OP f, OP s)
           e.t[i].n = x.x[i];
         }
     }
-  //printpol (o2v (f));
+  printpol (o2v (h));
   printf (" f============\n");
-  //printpol (o2v (l));
+  printpol (o2v (l));
   printf (" l============\n");
   //  exit(1);
 
@@ -3762,6 +3781,7 @@ lab:
       memset (zz, 0, sizeof (zz));
       //for(i=1;i<4;i++)
       //zz[i]=i;
+
       //zz[4]=4;
       //zz[8]=8;
       //zz[12]=12;
@@ -3771,14 +3791,15 @@ lab:
       while (j < T)
         {
           l = xor128 () % D;
+	  k=rand()%D;
           //printf("l=%d\n",l);
-          if (0 == zz[l] && l > 0)
+          if (0 == zz[l] && k > 0)
             {
-              zz[l] = l;
+              zz[l] = k;
               j++;
             }
         }
-      
+
       for (i = 0; i < D; i++)
         {
           if (zz[i] > 0)
@@ -3822,12 +3843,12 @@ lab:
 
       for (i = 0; i < T; i++)
         {
-          if (r.t[i].a > 0 && count > 0)        // == r.t[i].n)
+          if (r.t[i].a > 0 && i > 0)        // == r.t[i].n)
             {
               printf ("e=%d %d %s\n", r.t[i].a, r.t[i].n, "お");
               count++;
             }
-          if (count == 0 && r.t[i].a > 0)
+          if (i== 0)
             {
               printf ("\ne=%d %d %s\n", r.t[i].a, r.t[i].n, "う");
               count++;
@@ -3962,13 +3983,13 @@ lab:
 	printf(" =========syn\n");
 	printpol(o2v(f));
 	printf(" ==========synd\n");
-	exit(1);
+	//exit(1);
       }
       if(AA==1000){
 	printf("B=%d",B);
-	wait();
+	exit(1);
       }
-      if(B>500){
+      if(B>1000){
 	count=0;
 	printf("false=%d\n",AA);
 	printf("success=%d\n",B);
