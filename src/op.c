@@ -56,9 +56,10 @@ extern void makeS ();
 unsigned short sy[K] = { 0 };
 
 //Goppa多項式
-static unsigned short g[K + 1] ={1,0,13,14,13,0,11};
+static unsigned short g[K + 1] ={ 1,0,11,14,7,0,6 };
+  //{1,0,13,14,13,0,11};
 //  x^6+13x^4+14x^3+13x^2+11
-  //{ 1,0,11,14,7,0,6 };
+  //
 
   //{1,0,0,5,0,0,12,10,14};
 // 
@@ -1189,13 +1190,13 @@ xgcd (OP f, OP g)
   while (1)
     {      
       
-      if (deg(o2v(g)) == 0)
+      if ((deg(o2v(g)) == 0 && LT(g).a==0) || deg(o2v(f))==0)
         {
 	  flg=1;
           printf ("v[%d]=%d skipped deg(g)==0!\n", i, odeg ((v[i])));
           printf (" g========\n");
-	  e.d = f;
-	  e.v = v[i];
+	  e.d = v[i];
+	  e.v = f;
 	  e.u = u[i];
 	  
 	  free (v);
@@ -1238,8 +1239,8 @@ xgcd (OP f, OP g)
 	}else if(deg (o2v(f)) == T - 1){
 
 	printf("i=%d\n",i);
-	e.d = v[i];
-	e.v = f;
+	e.d = f;
+	e.v = v[i];
 	e.u = u[i];
 	
 	free (v);
@@ -1249,6 +1250,8 @@ xgcd (OP f, OP g)
 
       }
       i++;
+      if(i>512)
+	break;
       /*
       */
     }
@@ -1264,10 +1267,17 @@ xgcd (OP f, OP g)
   printf("deg(f)=%d\n",deg (o2v (f)));
   printf (" f=============\n");
   //exit(1);
-
+  //  if(deg(v[i])==T-1){
   e.d = f;
   e.v = v[i];
   e.u = u[i];
+  /*
+}else{
+    e.d=v[i];
+    e.v=f;
+    e.u=u[i];
+  }
+  */
   
   free (v);
   free (u);
@@ -2003,9 +2013,16 @@ decode (OP f, OP s)
         }
     }
   printpol (o2v (h));
-  printf (" f============\n");
+  printf (" h============\n");
   printpol (o2v (l));
   printf (" l============\n");
+  printpol (o2v (hh.v));
+  printf (" hh.v============\n");
+  printpol (o2v (hh.u));
+  printf (" hh.u============\n");
+  printpol (o2v (hh.d));
+  printf (" hh.d============\n");
+  
   //  exit(1);
 
 
@@ -3791,15 +3808,15 @@ lab:
       while (j < T)
         {
           l = xor128 () % D;
-	  k=rand()%D;
+	  //k=rand()%D;
           //printf("l=%d\n",l);
-          if (0 == zz[l] && k > 0)
+          if (0 == zz[l] && l > 0)
             {
-              zz[l] = k;
+              zz[l] = l;
               j++;
             }
         }
-
+      
       for (i = 0; i < D; i++)
         {
           if (zz[i] > 0)
@@ -3875,9 +3892,8 @@ lab:
         }
 
       printf ("err=%dっ！！\n", count);
-      if(count<T)
-	{
-	  
+      if(count!=T)
+	{	  
 	  printf("%d baka1\n",count);
 	  exit(1);
 	}
@@ -3989,7 +4005,7 @@ lab:
 	printf("B=%d",B);
 	exit(1);
       }
-      if(B>1000){
+      if(B>2000){
 	count=0;
 	printf("false=%d\n",AA);
 	printf("success=%d\n",B);
