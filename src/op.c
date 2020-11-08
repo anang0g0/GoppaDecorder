@@ -68,7 +68,7 @@ static unsigned short g[K + 1] ={1,0,0,0,1,0,1};
   //
 
 unsigned short zz[N] = { 0 };
-unsigned int AA=0,B=0,C=0;
+unsigned int AA=0,A2=0,B=0,C=0;
 
 /*
 static unsigned short g[K+1]={1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,1,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,1,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,1,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,
@@ -1055,6 +1055,37 @@ chk (OP f)
 }
 
 
+//多項式を表示する(default)
+void
+printpol (vec a)
+{
+  int i, n;
+
+  n = deg (a);
+
+  //printf ("baka\n");
+  assert (("baka\n", n >= 0));
+
+
+
+  for (i = n; i > -1; i--)
+    {
+      if (a.x[i] > 0)
+        {
+          printf ("%u", a.x[i]);
+          //if (i > 0)
+          printf ("x^%d", i);
+          //if (i > 0)
+          printf ("+");
+        }
+    }
+  //  printf("\n");
+
+  return;
+}
+
+
+
 //decode用の多項式の最大公約数
 OP
 ogcd (OP f, OP g)
@@ -1123,26 +1154,31 @@ xgcd (OP f, OP g)
   v[1].t[0].a = 1;
   v[1].t[0].n = 0;
 
-
-  //printpol (o2v (f));
+  if(odeg(f)==0){
+  printpol (o2v (f));
   printf (" f===============\n");
-  //printpol (o2v (g));
+  exit(1);
+  }
+  if(odeg(g)==0){
+  printpol (o2v (g));
   printf (" s===============\n");
-  // exit(1);
-
+   exit(1);
+  }
 
   k = 0;
   i = 0;
   while (1)
     {      
       
-      if ((odeg((g)) == 0 && LT(g).a==0) || odeg((f))==0)
+      if ((odeg((g)) == 0) || odeg((f))==0)
         {
 	  flg=1;
           printf ("v[%d]=%d skipped deg(g)==0!\n", i, odeg ((v[i])));
+	  printf ("deg(f)==0!\n", i, odeg ((f)));
+	  printf (" deg(g)==0!\n", i, odeg ((g)));
           printf (" g========\n");
-	  e.d = v[i];
-	  e.v = f;
+	  e.d = f;//v[i];
+	  e.v = v[i];
 	  e.u = u[i];
 	  
 	  free (v);
@@ -1657,35 +1693,6 @@ void printsage(vec a){
 }
 
 
-//多項式を表示する(default)
-void
-printpol (vec a)
-{
-  int i, n;
-
-  n = deg (a);
-
-  //printf ("baka\n");
-  assert (("baka\n", n >= 0));
-
-
-
-  for (i = n; i > -1; i--)
-    {
-      if (a.x[i] > 0)
-        {
-          printf ("%u", a.x[i]);
-          //if (i > 0)
-          printf ("x^%d", i);
-          //if (i > 0)
-          printf ("+");
-        }
-    }
-  //  printf("\n");
-
-  return;
-}
-
 
 
 vec
@@ -1924,9 +1931,11 @@ decode (OP f, OP s)
   //  w=oterml(w,d1);
   printpol (o2v (w));
   printf ("@@@@@@@@@\n");
+  //if(deg(o2v(w))==0)
+  //wait();
   //exit(1);
 
-  h = ogcd (f, s);
+  hh = xgcd (f, s);
   //printpol (o2v (hh.d));
   //wait();
 
@@ -1937,10 +1946,6 @@ decode (OP f, OP s)
   t2.a = t1.a;
   t2.n = 0;
 
-  if (odeg ((w)) == 0)
-    {
-      //printpol (o2v (w));
-    }
   l = oterml (w, t2);
 
   j = deg (x) + 1;
@@ -1948,26 +1953,37 @@ decode (OP f, OP s)
 
   //    exit(1);
 
-  for (i = 0; i < j; i++)
+  for (i = 0; i < T; i++)
     {
       if (x.x[i] >= 0)
         {
-          //e.t[i].a =
-	  //gf[mlt (fg[trace (hh.d, x.x[i])], oinv (trace (l, x.x[i])))];
-          e.t[i].a = gf[mlt (fg[trace (h, x.x[i])], oinv (trace (l, x.x[i])))];
+          e.t[i].a =
+	  gf[mlt (fg[trace (hh.d, x.x[i])], oinv (trace (l, x.x[i])))];
+          //e.t[i].a = gf[mlt (fg[trace (h, x.x[i])], oinv (trace (l, x.x[i])))];
           e.t[i].n = x.x[i];
         }
+      if(e.t[i].n!=e.t[i].a){
+	printf("baka @ L\n");
+	printpol(o2v(f));
+	printf(" =========goppa\n");
+	printpol(o2v(s));
+	printf(" =========syn\n");
+        printpol (o2v (h));
+	printf (" h============\n");
+	printpol (o2v (l));
+	printf (" l============\n");
+	printpol (o2v (hh.v));
+	printf (" hh.v============\n");
+	printpol (o2v (hh.u));
+	printf (" hh.u============\n");
+	printpol (o2v (hh.d));
+	printf (" hh.d============\n");
+	int o;
+	for(o=0;o<N;o++)
+	  printf("%d,",o,zz[o]);
+	//exit(1);
+      }
     }
-  printpol (o2v (h));
-  printf (" h============\n");
-  printpol (o2v (l));
-  printf (" l============\n");
-  printpol (o2v (hh.v));
-  printf (" hh.v============\n");
-  printpol (o2v (hh.u));
-  printf (" hh.u============\n");
-  printpol (o2v (hh.d));
-  printf (" hh.d============\n");
   
   //  exit(1);
 
@@ -3604,13 +3620,15 @@ label:
 
   //パリティチェックを生成する。
   //パリティチェックに0の列があったら、なくなるまでやり直す。
-  
+  if(D>256){
   do
     {
       i = deta (g);
     }
   while (i < 0);
-  
+  }else{
+    det(g);
+  }
   unsigned short gen[N][K]={0};
   
 lab:
@@ -3768,7 +3786,29 @@ lab:
               printf ("\ne=%d %d %s\n", r.t[i].a, r.t[i].n, "う");
               count++;
             }
-
+	  if(r.t[i].a!=r.t[i].n){
+	    printf("baka @ T\n");
+	    printpol(o2v(w));
+	    printf(" ==========goppa\n");
+	    printsage(o2v(w));
+	    printf(" ==========sage\n");
+	    printsage(o2v(f));
+	    printf(" =========syn\n");
+	    printpol(o2v(f));
+	    printf(" ==========synd\n");
+	    
+	    for(i=0;i<D;i++)
+	      printf("%d %d\n",i,zz[i]);
+	    printf("\n");
+	    int ii;
+	    for(ii=0;ii<T;ii++)
+              printf ("e=%d %d %s\n", r.t[ii].a, r.t[ii].n, "お");	    
+	    A2++;
+	    //wait();
+	    //exit (1);
+	    
+	    exit(1);
+	  }
         }
       if (count != T)
         {
@@ -3786,21 +3826,18 @@ lab:
 	    printf("%d,",zz[i]);
 	  printf("\n");
 
-          exit (1);
+	  A2++;
+	  wait();
+          //exit (1);
         }
 
       printf ("err=%dっ！！\n", count);
-      if(count!=T)
-	{	  
-	  printf("%d baka1\n",count);
-	  exit(1);
-	}
       
       //wait();
       //exit(1);
       //goto lab;
 
-    
+      
     patta:
 
       
@@ -3900,6 +3937,7 @@ lab:
 	printf(" ==========synd\n");
 	//exit(1);
       }
+      
       if(AA==1000){
 	printf("B=%d",B);
 	exit(1);
@@ -3907,6 +3945,7 @@ lab:
       if(B>2000){
 	count=0;
 	printf("false=%d\n",AA);
+	printf("f-euc=%d\n",A2);
 	printf("success=%d\n",B);
 	//for(i=0;i<16;i++)
 	//printf("%d,",zz[i]);
@@ -3924,7 +3963,7 @@ lab:
       //wait();
 
       //break;
-      }
+    }
 
   return 0;
 }
