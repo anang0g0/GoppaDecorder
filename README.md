@@ -46,6 +46,7 @@ https://klevas.mif.vu.lt/~skersys/vsd/crypto_on_codes/goppamceliece.pdf
 # 20201108
 
 kuboonさんの指示通りに、ompを外してみたら今まで2000回計算するのに50秒かかっていた計算がわずか6秒になった。
+頻繁に呼び出す関数の中でompは使うなといういい教訓になりました。
 
 さすがプロのアドバイスは効果があるなあ。
 これで実用レベルに躍進しました。
