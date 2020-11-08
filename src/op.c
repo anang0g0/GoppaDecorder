@@ -941,18 +941,21 @@ inv (OP a, OP n)
 // GCD
 OP ogcd2(OP xx,OP yy){
   OP tt;
-
+  EX e={0};
+  
   while (odeg(yy) > T-1){
     tt = omod(xx , yy);
     xx = yy;
     yy = tt;
     }
 
+  e.d=tt;
+  e.v=xx;
+  e.u=yy;
+  
   return tt;
   
 }
-
-
 
 
 
@@ -1906,7 +1909,6 @@ decode (OP f, OP s)
   printf ("@@@@@@@@@\n");
   //exit(1);
 
-  //hh = xgcd (f, s);
 
   h = ogcd2 (f,s);
   //printpol (o2v (hh.d));
@@ -1930,18 +1932,11 @@ decode (OP f, OP s)
 
   //    exit(1);
   //  for(j=1;j<T;j++){
-    hh=xgcd(f,s);
-    printpol(o2v(hh.d));
-    printf(" ===========hh.d\n");
-    printpol(o2v(h));
-    printf(" =========vx\n");
     
   for (i = 0; i < T; i++)
     {
       if (x.x[i] >= 0)
         {
-          //e.t[i].a =
-	  //gf[mlt (fg[trace (hh.d, x.x[i])], oinv (trace (l, x.x[i])))];
           e.t[i].a = gf[mlt (fg[trace (h, x.x[i])], oinv (trace (l, x.x[i])))];
           e.t[i].n = x.x[i];
         }
@@ -2823,10 +2818,13 @@ pattarson (OP w, OP f)
       exit (1);
     }
   //exit(1);
+
+
   hh = xgcd (w, g1);
+
   flg = 0;
-
-
+  printpol(o2v(hh.v));
+  printf(" =========hh.v\n");
   ff = omod (omul (hh.v, g1), w);
   printpol (o2v (hh.v));
   printf (" alpha!=========\n");
@@ -2840,7 +2838,8 @@ pattarson (OP w, OP f)
   printpol (o2v (hh.v));
   printf (" alpha!=========\n");
   
-  hh = xgcd (w, g1);  
+  hh = xgcd (w, g1);
+  //  h=xgcd(w,g1);
   ff = omod (omul (hh.v, g1), w);
   ll=oadd(omul(ff,ff),omul(tt,omul(hh.v,hh.v)));
   v=chen(ll);
@@ -2848,7 +2847,6 @@ pattarson (OP w, OP f)
     //wait ();
     return v;
   }
-
 
     
 
@@ -3758,7 +3756,7 @@ lab:
               printf ("\ne=%d %d %s\n", r.t[i].a, r.t[i].n, "う");
               count++;
             }
-	  	  if(r.t[i].a!=r.t[i].n){
+	  if(r.t[i].a!=r.t[i].n){
 	    printf("baka @ T\n");
 	    printpol(o2v(w));
 	    printf(" ==========goppa\n");
@@ -3875,8 +3873,10 @@ lab:
 	      printf(" ==========synd\n");
 
 	      printf("{");
-	      for(i=0;i<N;i++)
-		printf("%d,",z1[i]);
+	      for(k=0;k<N;k++){
+		if(z1[k]>0)
+		printf("%d,",z1[k]);
+	      }
 	      printf("};\n");
 	      //AA++;
 	      //wait();
@@ -3884,7 +3884,18 @@ lab:
 	      //
               //exit (1);
             }
-
+	  int cnt=0;
+	  for(k=0;k<N;k++){
+	    if(z1[k]>0){
+	      if(k!=v.x[cnt]){
+		printf("%d,%d\n",k,v.x[cnt]);
+		printsage(o2v(w));
+		printf(" ========w\n");
+		AA++;
+		exit(1);
+	      }else{cnt++;}
+	    }
+	  }
         }
       if(count==T*2){
       printf ("err=%dっ!! \n", count);
