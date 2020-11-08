@@ -9,7 +9,7 @@
 
 #define MAXN 4
 #define N 256 //order of GF(q)
-#define F 128  //dimension of matrix
+#define F 6  //dimension of matrix
 
 //elements of GF16
 //static const unsigned char gf[N]={0,1,2,4,8,9,11,15,7,14,5,10,13,3,6,12};
