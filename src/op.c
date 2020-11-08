@@ -120,7 +120,7 @@ o2v (OP f)
   vec a = { 0 };
   int i;
 
-#pragma omp parallel for
+  //#pragma omp parallel for
   for (i = 0; i < DEG; i++)
     {
       if (f.t[i].a > 0 && f.t[i].n < DEG)
@@ -268,8 +268,8 @@ norm (OP f)
 OP
 oadd (OP f, OP g)
 {
-  f=conv(f);
-  g=conv(g);
+  //f=conv(f);
+  //g=conv(g);
   assert (op_verify (f));
   assert (op_verify (g));
 
@@ -285,22 +285,16 @@ oadd (OP f, OP g)
 
   a = o2v (f);
   b = o2v (g);
+  
+  //k=deg(o2v(f));
+  //l=deg(o2v(g));
 
-  if (deg (o2v (f)) >= deg (o2v (g)))
-    {
-      k = deg (o2v (f)) + 1;
-    }
-  else
-    {
-      k = deg (o2v (g)) + 1;
-    }
-
-  for (i = 0; i < k; i++)
+  for (i = 0; i < 512; i++)
     {
       c.x[i] = a.x[i] ^ b.x[i];
     }
   h = v2o (c);
-  h=conv(h);
+  //h=conv(h);
   assert (op_verify (h));
   return h;
 }
@@ -460,17 +454,17 @@ add (OP f, OP g)
 OP
 oterml (OP f, oterm t)
 {
-  f=conv(f);
+  //f=conv(f);
   assert (op_verify (f));
   int i, k,j;
   OP h = { 0 };
   vec test;
   unsigned short n;
 
-  f=conv(f);
-  k = odeg (f);
+  //f=conv(f);
+  //k = deg (o2v(f));
   j=0;
-  for (i = 0; i < k + 1; i++)
+  for (i = 0; i < 512; i++)
     {
       h.t[i].n = f.t[i].n + t.n;
       h.t[i].a = gf[mlt (fg[f.t[i].a], fg[t.a])];
@@ -486,11 +480,11 @@ oterml (OP f, oterm t)
 OP
 omul (OP f, OP g)
 {
-  f=conv(f);
-  g=conv(g);
+  //f=conv(f);
+  //g=conv(g);
   assert (op_verify (f));
   assert (op_verify (g));
-  int i, count = 0, k;
+  int i, count = 0, k,l;
   oterm t = { 0 };
   OP h = { 0 }, e = {
     0
@@ -499,13 +493,11 @@ omul (OP f, OP g)
   };
   vec c = { 0 };
 
-  if (odeg ((f)) > odeg ((g)))
+  k=odeg(f);
+  l=odeg(g);
+  if (l > k)
     {
-      k = odeg ((f));
-    }
-  else
-    {
-      k = odeg ((g));
+      k = l;
     }
 
   for (i = 0; i < k + 1; i++)
@@ -527,7 +519,7 @@ LT (OP f)
   oterm t = { 0 };
 
 
-  k = deg (o2v (f));
+  //k = deg (o2v (f));
   for (i = 0; i < DEG; i++)
     {
       //printf("a=%d %d\n",f.t[i].a,f.t[i].n);
@@ -628,23 +620,7 @@ omod (OP f, OP g)
 
   assert (("baka^\n", LT (f).n != 0));
 
-  /*
-     if (LT (f).n == 0)
-     {
-     printf ("baka^\n");
-     //return f;
-     exit (1);
-     }
-   */
   assert (("baka(A)\n", LT (g).n != 0));
-  /*
-     if (LT (g).n == 0)
-     {
-     printf ("baka('A`)\n");
-     //return g;
-     exit (1);
-     }
-   */
   if (LT (f).n < LT (g).n)
     {
       //    exit(1);
@@ -659,44 +635,13 @@ omod (OP f, OP g)
 
 
 
-  //printf ("b=========%dx^%d\n", b.a, b.n);
-  //printpol (o2v (g));
   assert (("double baka\n", b.a != 0 && b.n != 0));
-  /*
-     if (b.a == 0 && b.n == 0)
-     {
-     printf ("double baka\n");
-     exit (1);
-     }
-   */
-  //  printf ("\nin omod g=============%d\n", odeg ((g)));
   while (LT (f).n > 0 && LT (g).n > 0)
     {
-      // printf ("in!\n");
-      //    exit(1);
 
       c = LTdiv (f, b);
-      //   printf("c========%dx^%d\n",c.a,c.n);
-      //    exit(1);
-
-      //printpol (o2v (g));
-      //printf ("\ng=================\n");
-
       h = oterml (g, c);
-      //printpol (o2v (h));
-      //printf ("\n");
-      //printf ("modh===================\n");
-
-      //printpol (o2v (f));
-      //printf ("\nmodf===================\n");
-      //     exit(1);
-
       f = oadd (f, h);
-      f = conv (f);
-      if (odeg ((f)) > 0)
-        //printpol (o2v (f));
-        //printf ("\nff1=====================\n");
-        g = conv (g);
       if (odeg ((f)) == 0 || odeg ((g)) == 0)
         {
           printf ("blake1\n");
@@ -1191,7 +1136,7 @@ xgcd (OP f, OP g)
   while (1)
     {      
       
-      if ((deg(o2v(g)) == 0 && LT(g).a==0) || deg(o2v(f))==0)
+      if ((odeg((g)) == 0 && LT(g).a==0) || odeg((f))==0)
         {
 	  flg=1;
           printf ("v[%d]=%d skipped deg(g)==0!\n", i, odeg ((v[i])));
@@ -1260,12 +1205,12 @@ xgcd (OP f, OP g)
   //printf ("i=%d\n", i);
   //wait();
   //oprintpol ((v[i]));
-  printf("deg(v)=%d\n",deg (o2v (v[i])));
+  printf("deg(v)=%d\n",odeg ( (v[i])));
   printf (" v=============\n");
-  printf("deg(u)=%d\n",deg (o2v (u[i])));
+  printf("deg(u)=%d\n",odeg ( (u[i])));
   //printpol (o2v (u[i]));
   printf (" u=============\n");
-  printf("deg(f)=%d\n",deg (o2v (f)));
+  printf("deg(f)=%d\n",odeg ( (f)));
   printf (" f=============\n");
   //exit(1);
   //  if(deg(v[i])==T-1){
@@ -1333,7 +1278,7 @@ xgcd2 (OP f, OP g ,int t)
   while (1)
     {      
       
-      if (deg(o2v(g)) == 0)
+      if (odeg((g)) == 0)
         {
 	  flg=1;
           printf ("v[%d]=%d skipped deg(g)==0!\n", i, odeg ((v[i])));
@@ -1381,12 +1326,12 @@ xgcd2 (OP f, OP g ,int t)
   //printf ("i=%d\n", i);
   //wait();
   //oprintpol ((v[i]));
-  printf("deg(v)=%d\n",deg (o2v (v[i])));
+  printf("deg(v)=%d\n",odeg ( (v[i])));
   printf (" v=============\n");
-  printf("deg(u)=%d\n",deg (o2v (u[i])));
+  printf("deg(u)=%d\n",odeg ( (u[i])));
   //printpol (o2v (u[i]));
   printf (" u=============\n");
-  printf("deg(f)=%d\n",deg (o2v (f)));
+  printf("deg(f)=%d\n",odeg ( (f)));
   printf (" f=============\n");
   //exit(1);
 
@@ -1886,7 +1831,7 @@ chen (OP f)
   for (x = 0; x < N; x++)
     {
       z = 0;
-#pragma omp parallel for reduction (^:z)
+      //#pragma omp parallel for reduction (^:z)
       for (i = 0; i < n + 1; i++)
         {
           if (f.t[i].a > 0)
@@ -2234,76 +2179,6 @@ f8 (unsigned short g[])
 
 }
 
-
-int
-detb (unsigned short g[])
-{
-  int i, j, flg = 0;
-  /*
-     for(i=0;i<N;i++){
-     for(j=0;j<K;j++)
-     mat[i][j]=0;
-     }
-   */
-#pragma omp parallel num_threads(8)
-  {
-#pragma omp sections
-    {
-      //if(omp_get_thread_num() == 0){
-#pragma omp section
-      f1 (g);
-
-      //if(omp_get_thread_num() == 1){
-#pragma omp section
-      f2 (g);
-      //}
-      //if(omp_get_thread_num() == 2){
-#pragma omp section
-      f3 (g);
-      //}
-      //if(omp_get_thread_num() == 3){
-#pragma omp section
-      f4 (g);
-      //}
-      //if(omp_get_thread_num() == 4){
-#pragma omp section
-      f5 (g);
-      //}
-      //if(omp_get_thread_num() == 5){
-#pragma omp section
-      f6 (g);
-      //}
-      //if(omp_get_thread_num() == 6){
-#pragma omp section
-      f7 (g);
-      //}
-      //if(omp_get_thread_num() == 7){
-#pragma omp section
-      f8 (g);
-      //}
-    }
-  }
-  printf ("enf of detb\n");
-  for (j = 0; j < N; j++)
-    {
-      flg = 0;
-      for (i = 0; i < K; i++)
-        {
-          //printf("%d,",mat[i][j]);
-          if (mat[j][i] > 0)
-            flg = 1;
-          //      printf("\n");
-        }
-      if (flg == 0)
-        {
-          printf ("0 is %d\n", j);
-          //exit(1);
-          return -1;
-        }
-    }
-
-  return 0;
-}
 
 
 
@@ -3236,7 +3111,7 @@ synd (unsigned short zz[])
 
   printf ("in synd\n");
 
-  #pragma omp parallel for        //num_threads(8)
+  //  #pragma omp parallel for        //num_threads(8)
   for (i = 0; i < K; i++)
     {
       syn[i] = 0;
@@ -3336,7 +3211,6 @@ test (OP w, unsigned short zz[])
   sha3_Init256 (&c);
   sha3_Update (&c, (char *) buf, strlen (buf));
   hash = sha3_Finalize (&c);
-
 
 }
 
@@ -3715,7 +3589,7 @@ label:
   wait();
   
   
-#pragma omp parallel for
+  //#pragma omp parallel for
   for (i = 0; i < N; i++){
     tr[i] = oinv (ta[i]);
   
@@ -3878,6 +3752,7 @@ lab:
       printf(" ==========synd\n");
       printpol(o2v(f));
       printf(" ==========synd\n");
+
       
       r = decode (w, f);
 
@@ -3920,7 +3795,8 @@ lab:
 	  printf("%d baka1\n",count);
 	  exit(1);
 	}
-
+      
+      //wait();
       //exit(1);
       //goto lab;
 
@@ -4045,7 +3921,7 @@ lab:
 
       //exit(1);
       //goto lab;
-      wait();
+      //wait();
 
       //break;
       }
