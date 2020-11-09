@@ -5,28 +5,28 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define O 8192
+#define O 256
 
 /* generate Galois Field over GF(2^?) */
-static const char *normal[14]={
-  "1011",
+static const unsigned long long int normal[15]={
+  0b1011,
   //"11001", /* GF(16) */
-  "10011",
-  "110111",
-  "1100001",
-  "11000001",
-//"110101001",
-  "100011101" //sage
+  0b10011,
+  0b110111,
+  0b1100001,
+  0b11000001,
+//"110101001,
+  0b100011101, //sage
 //"100011011",
-  "1100110001",
-  "11000010011",
-  "110000001101",
-  "1100101000001", /* 4096 */
+  0b1100110001,
+  0b11000010011,
+  0b110000001101,
+  0b1100101000001, /* 4096 */
 //"11011000000001", /* 8192 */
-  "10000000011011",/* Classic McEliece */
-  "110000100010001",
-  "1100000000000001",
-  "11010000000010001"};
+  0b10000000011011,/* Classic McEliece */
+  0b110000100010001,
+  0b1100000000000001,
+  0b11010000000010001};
 
 unsigned int gf[O],fg[O];
 
@@ -57,69 +57,69 @@ void mkgf(int n)
 
 
   for(i=0;i<13;i++)
-    pol=strtoul(normal[i],(char **)NULL,2);
+    pol=normal[i];//strtoul(normal[i],(char **)NULL,2);
 
 
   /* define pol */
   switch(n){
 
   case 8:
-    pol=strtoul(normal[0],(char **)NULL,2);
+    pol=normal[0];
     printf("%d\n",n);
     break;
 
   case 16:
-    pol=strtoul(normal[1],(char **)NULL,2);
+    pol=normal[1];
     printf("%d\n",n);
     break;
 
   case 32:
-    pol=strtoul(normal[2],(char **)NULL,2);
+    pol=normal[2];
 printf("%d\n",n);
     break;
 
   case 64:
-    pol=strtoul(normal[3],(char **)NULL,2);
+    pol=normal[3];
     printf("%d\n",n);
     break;
 
   case 128:
-   pol=strtoul(normal[4],(char **)NULL,2);
+    pol=normal[4];
     printf("%d\n",n);
     break;
 
   case 256:
-    pol=strtoul(normal[5],(char **)NULL,2);
+    pol=normal[5];
     printf("%d\n",n);
     break;
 
   case 512:
-    pol=strtoul(normal[6],(char **)NULL,2);
+    pol=normal[6];
     printf("%d\n",n);
     break;
 
   case 1024:
-    pol=strtoul(normal[7],(char **)NULL,2);
+    pol=normal[7];
     printf("%d\n",n);
     break;
 
   case 2048:
-    pol=strtoul(normal[8],(char **)NULL,2);
+    pol=normal[8];
     printf("%d\n",n);
     break;
 
   case 4096:
-    pol=strtoul(normal[9],(char **)NULL,2);
+    pol=normal[9];
     printf("%d\n",n);
     break;
 
   case 8192:
-   pol=strtoul(normal[10],(char **)NULL,2);
+    pol=normal[10];
     printf("%d\n",n);
     break;
 
   default : /* 16384 */
-    pol=strtoul(normal[11],(char **)NULL,2);
+    pol=normal[11];
     printf("%d\n",n);
     break;
   }
