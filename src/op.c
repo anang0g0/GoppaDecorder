@@ -971,7 +971,7 @@ zgcd (OP a, OP n)
   };
 
 
-  if (odeg ((a)) > odeg ((n)))
+  if (odeg (a) > odeg (n))
     {
       rt = a;
       a = n;
@@ -993,19 +993,15 @@ zgcd (OP a, OP n)
   x.t[0].n = 0;
   s.t[0].a = 1;
   s.t[0].n = 0;
-  while (odeg ((a)) > T)
+  while (odeg (a) > T)
     {
-      if (odeg ((a)) > 0)
-	r = omod (d, a);
-      if (LT (a).a == 0)
-	break;
-      if (LT (a).a > 0)
-	q = odiv (d, a);
-
+      r = omod (d, a);
+      q = odiv (d, a);
+      
       d = a;
       a = r;
       t = oadd (x, omul (q, s));
-
+      
       x = s;
       s = t;
     }
@@ -1015,10 +1011,11 @@ zgcd (OP a, OP n)
   x = s;
   s = t;
   gcd = d;			// $\gcd(a, n)$
-
+  
   b = LT (w);
   v = oadd (x, n);
   w = tt;
+  
   if (LT (v).n > 0 && LT (w).n > 0)
     {
       u = omod (v, w);
@@ -1034,12 +1031,13 @@ zgcd (OP a, OP n)
 
       exit (1);
     }
+  /*
   //caution !!
   if (LT (u).a > 0 && LT (d).a > 0)
     {
-      u = odiv (u, d);
+      //u = odiv (u, d);
     }
-
+    
   if (LT (u).a == 0 || LT (d).a == 0)
     {
       printf ("inv div u or d==0\n");
@@ -1050,7 +1048,7 @@ zgcd (OP a, OP n)
       printf ("no return at u==0\n");
       exit (1);
     }
-
+  */  
 
   return x;
 }
