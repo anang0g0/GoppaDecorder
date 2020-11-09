@@ -976,7 +976,7 @@ zgcd (OP a, OP n)
       rt = a;
       a = n;
       n = rt;
-      printf ("baka_i\n");
+      printf ("big is good\n");
       //exit (1);
     }
   if (LT (a).a == 0)
@@ -1011,12 +1011,10 @@ zgcd (OP a, OP n)
     }
   d = a;
   a = r;
-
+  
   x = s;
   s = t;
   gcd = d;			// $\gcd(a, n)$
-  printf ("before odiv\n");
-  //w=tt;
 
   b = LT (w);
   v = oadd (x, n);
@@ -3498,7 +3496,7 @@ label:
   //4x^5+12x^4+15x^3+11x^2+10x^0+
   //0,0,0,0,0,5,0,0,8,0,0,0,0,13,0,0
 
-
+  /*
   do
     {
       fail = 0;
@@ -3540,26 +3538,29 @@ label:
 
     }
   while (fail || j == 0);
+  */
 
-
-  /*
+  do{
+    fail=0;
      memset(g,0,sizeof(g));
+     memset(ta,0,sizeof(ta));
      ginit();
      w = setpol (g, K + 1);
      oprintpol (w);
-
+     
      //多項式の値が0でないことを確認
      for (i = 0; i < D; i++)
-     {
-     ta[i] = trace (w, i);
-     if (ta[i] == 0)
-     {
-     printf ("trace 0 @ %d\n", i);
-     fail = 1;
-     break;
-     }
-     }
-   */
+       {
+	 ta[i] = trace (w, i);
+	 if (ta[i] == 0)
+	   {
+	     printf ("trace 0 @ %d\n", i);
+	     fail = 1;
+	     break;
+	   }
+       }
+  }
+  while(fail);
 
   oprintpol (w);
   printf ("\n");
@@ -3894,10 +3895,7 @@ lab:
 		      break;
 		      //exit(1);
 		    }
-		  else
-		    {
-		      cnt++;
-		    }
+		  cnt++;
 		}
 	    }
 	}
@@ -3930,7 +3928,7 @@ lab:
 	  printf ("B=%d", B);
 	  exit (1);
 	}
-      if (B > 2000)
+      if (B > 20000)
 	{
 	  count = 0;
 	  printf ("false=%d\n", AA);
@@ -3938,7 +3936,7 @@ lab:
 	  //for(i=0;i<16;i++)
 	  //printf("%d,",zz[i]);
 	  //printf("\n");
-	  printf ("C=%d\n", C);
+	  printf ("C=%d\n", A2);
 	  printpol (o2v (w));
 	  printf (" =======goppa\n");
 	  printsage (o2v (w));

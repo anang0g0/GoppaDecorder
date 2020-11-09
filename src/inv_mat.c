@@ -8,8 +8,8 @@
 #include <time.h>
 
 #define MAXN 4
-#define N 16 //order of GF(q)
-#define F 8  //dimension of matrix
+//#define N 256 //order of GF(q)
+#define F K  //dimension of matrix
 
 //elements of GF16
 //static const unsigned char gf[N]={0,1,2,4,8,9,11,15,7,14,5,10,13,3,6,12};
