@@ -1009,47 +1009,10 @@ zgcd (OP a, OP n)
   a = r;
   
   x = s;
-  s = t;
-  gcd = d;			// $\gcd(a, n)$
-  
-  b = LT (w);
-  v = oadd (x, n);
-  w = tt;
-  
-  if (LT (v).n > 0 && LT (w).n > 0)
-    {
-      u = omod (v, w);
-    }
-  else
-    {
-      //printpol (o2v (v));
-      printf (" v===========\n");
-      //printpol (o2v (x));
-      printf (" x==0?\n");
-      //printpol (o2v (n));
-      printf (" n==0?\n");
+  //s = t;
+  //gcd = d;			// $\gcd(a, n)$
 
-      exit (1);
-    }
-  /*
-  //caution !!
-  if (LT (u).a > 0 && LT (d).a > 0)
-    {
-      //u = odiv (u, d);
-    }
-    
-  if (LT (u).a == 0 || LT (d).a == 0)
-    {
-      printf ("inv div u or d==0\n");
-      // exit(1);
-    }
-  if (LT (u).a == 0)
-    {
-      printf ("no return at u==0\n");
-      exit (1);
-    }
-  */  
-
+  
   return x;
 }
 
