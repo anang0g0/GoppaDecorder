@@ -57,6 +57,8 @@ An Application Specific Instruction Set Processor　(ASIP) for the Niederreiter 
 
 PROBABILISTIC ALGORITII4S IN F INITE FIELDS
 
+https://eprint.iacr.org/2015/1050.pdf
+
 # 20201110
 
 Rustなんかに手を出していたので何もしてません
