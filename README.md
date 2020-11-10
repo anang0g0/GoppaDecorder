@@ -48,6 +48,8 @@ https://klevas.mif.vu.lt/~skersys/vsd/crypto_on_codes/goppamceliece.pdf
 Rustなんかに手を出していたので何もしてません
 osqrtにバグがあります。直すのは明日以降です。
 
+法多項式が既約じゃないときでも、多項式の平方は計算できるのかという問題です。
+
 # 20201109
 
 バグが取れた。
