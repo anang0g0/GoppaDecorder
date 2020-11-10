@@ -43,6 +43,21 @@ https://klevas.mif.vu.lt/~skersys/vsd/crypto_on_codes/goppamceliece.pdf
 出力の第一段目はエラーの位置と値をユークリッドアルゴリズムで計算したもの、(decode関数)
 第二は復号法であるパターソンアルゴリズムでバイナリエラーの位置を出力したものになります。(pattarson関数)
 
+実装に関する参考資料（打倒ペアリング！ｗ）
+
+HOW SAGE HELPS TO IMPLEMENT　GOPPA CODES AND THE　McELIECE PUBLIC KEY CRYPTO SYSTEM
+
+Coding Theor Coding Theory-Based Cr y-Based Cryptopraphy: McEliece Cr aphy: McEliece Cryptosystems in osystems in
+Sage 
+
+Development and Evaluation of a Code-based　Cryptography Library for Constrained Devices
+
+Fast Construction of Irreducible Polynomials over Finite Fields
+
+An Application Specific Instruction Set Processor　(ASIP) for the Niederreiter Cryptosystem
+
+PROBABILISTIC ALGORITII4S IN F INITE FIELDS
+
 # 20201110
 
 Rustなんかに手を出していたので何もしてません
