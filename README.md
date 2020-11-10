@@ -47,8 +47,7 @@ https://klevas.mif.vu.lt/~skersys/vsd/crypto_on_codes/goppamceliece.pdf
 
 HOW SAGE HELPS TO IMPLEMENT　GOPPA CODES AND THE　McELIECE PUBLIC KEY CRYPTO SYSTEM
 
-Coding Theor Coding Theory-Based Cr y-Based Cryptopraphy: McEliece Cr aphy: McEliece Cryptosystems in osystems in
-Sage 
+Coding Theory-Based Cryptography:McEliece Cryptosystems in Sage
 
 Development and Evaluation of a Code-based　Cryptography Library for Constrained Devices
 
