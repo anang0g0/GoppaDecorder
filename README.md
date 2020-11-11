@@ -59,11 +59,6 @@ PROBABILISTIC ALGORITII4S IN F INITE FIELDS
 
 https://eprint.iacr.org/2015/1050.pdf
 
-# 20201111
-
-多項式の既約性判定テストとして、Ben-Orのアルゴリズムを実装しました。
-これでいつも既約多項式が生成されるようになりました。
-昨夜３時間しか寝てないのだ。
 
 # 20201110
 
