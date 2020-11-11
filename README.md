@@ -43,6 +43,31 @@ https://klevas.mif.vu.lt/~skersys/vsd/crypto_on_codes/goppamceliece.pdf
 出力の第一段目はエラーの位置と値をユークリッドアルゴリズムで計算したもの、(decode関数)
 第二は復号法であるパターソンアルゴリズムでバイナリエラーの位置を出力したものになります。(pattarson関数)
 
+実装に関する参考資料（打倒ペアリング！ｗ）
+
+HOW SAGE HELPS TO IMPLEMENT　GOPPA CODES AND THE　McELIECE PUBLIC KEY CRYPTO SYSTEM
+
+Coding Theory-Based Cryptography:McEliece Cryptosystems in Sage
+
+Development and Evaluation of a Code-based　Cryptography Library for Constrained Devices
+
+Fast Construction of Irreducible Polynomials over Finite Fields
+
+An Application Specific Instruction Set Processor　(ASIP) for the Niederreiter Cryptosystem
+
+PROBABILISTIC ALGORITII4S IN F INITE FIELDS
+
+https://eprint.iacr.org/2015/1050.pdf
+
+# 20201110
+
+Rustなんかに手を出していたので何もしてません
+osqrtにバグがあります。直すのは明日以降です。
+
+バグの取り方のメモ（実装は明日）：すべての項の次数が偶数の時は無条件ですべての項の次数を半分にした多項式を返す。
+
+追加の資料が大量に見つかったので、それを総動員して実装します。
+
 # 20201109
 
 バグが取れた。
