@@ -988,7 +988,7 @@ vgcd (OP f, OP g)
   },tmp={0};
   oterm a, b;
   int i = 0, j, k;
-  EX e = { 0 };
+  OP e = { 0 };
 
   /*
      v = malloc (sizeof (OP) * (DEG));
@@ -1009,57 +1009,55 @@ vgcd (OP f, OP g)
   v[1].t[0].a = 1;
   v[1].t[0].n = 0;
 
-
+  
   printpol(o2v(f));
   printf(" ===========f\n");
   printpol(o2v(g));
   printf(" ===========g\n");
   //  exit(1);
-
-  j=0;
-  k = 0;
-  while (LT (g).n > 0)
-    //for(j=0;j<i;j++)
+  
+  j=1;
+  //  k = odeg(f)-odeg(g);
+  while (deg (o2v(g)) > 0)
     {
-      h = omod (f, g);
-      if (LT (g).a > 0)
-	ww = odiv (f, g);
-
-      v[j+2] = oadd (v[j], omul (ww, v[j+1]));
-      u[j+2] = oadd (u[j], omul (ww, u[j+1]));
-      printf ("i+1=%d\n", j + 1);
+      printf("deg(g)=%d\n",odeg(g));
+      if(deg(o2v(g))>0)
+	h = omod (f, g);
+      // printpol(o2v(h));
+      //printf(" ===========h\n");
+      //exit(1);
+      //  if (LT (g).a > 0)
+      ww = odiv (f, g);
+      
+      v[j+1] = oadd (v[j-1], omul (ww, v[j]));
+      printpol(o2v(v[j+1]));
+      printf(" =========v[%d]\n",j);
+      //exit(1);
+      u[j+1] = oadd (u[j-1], omul (ww, u[j]));
+      //printpol(o2v(u[j+1]));
+      //printf(" =========u[%d+1]\n",j);
+      //printf ("i+1=%d\n", j + 1);
       f = g;
       g = h;
       j++;
     }
+  printf("deg(g)=%d\n",odeg(g));  
   /*
-  if(LT(h).a==1){
-    tmp=v[i+1];
-    v[i+1]=h;
-    h=tmp;
-  }
-  */
-  printf ("i=%d\n", j);
-  printpol (o2v (v[j+1]));
-  printf (" v=============\n");
-  printpol (o2v (u[j+1]));
-  printf (" u=============\n");
-  printpol (o2v (h));
-  printf (" h=============\n");
-  //exit(1);
-
-  e.d = h;
-  e.v = v[j+1];
-  e.u = u[j+1];
-
+    printf ("i=%d\n", j);
+    printpol (o2v (v[j]));
+    printf (" v=============\n");
+    //exit(1);
+    printpol (o2v (u[j]));
+    printf (" u=============\n");
+    printpol (o2v (h));
+    printf (" h=============\n");
+    //exit(1);
+    */
+    
   if(LT(h).a==1)
     return h;
   if(LT(h).a==0)
-    return e.v;
-  //free(u);
-  //free(v);
-
-  //return e;
+    return odiv(f,v[j-1]);
 }
 
 
@@ -3374,7 +3372,7 @@ main (void)
   time_t t;
   OP r1 = { 0 }, r2 = {
     0
-  },r3={0};
+  },r3={0},r4={0};
   OP g1 = { 0 }, tmp = {
     0
   };
@@ -3543,35 +3541,89 @@ label:
   
   r2.t[0].a=1;
   r2.t[0].n=0;
+  r2.t[2].a=1;
+  r2.t[2].n=2;
   r2.t[3].a=1;
   r2.t[3].n=3;
-  r2.t[5].a=1;
-  r2.t[5].n=5;
+  r2.t[4].a=1;
+  r2.t[4].n=4;
 
   r3.t[0].a=1;
   r3.t[0].n=0;
-  r3.t[2].a=1;
-  r3.t[2].n=2;
+  r3.t[1].a=1;
+  r3.t[1].n=1;
+  r3.t[3].a=1;
+  r3.t[3].n=3;
+  r3.t[4].a=1;
+  r3.t[4].n=4;
+  r3.t[5].a=1;
+  r3.t[5].n=5;
   r3.t[6].a=1;
   r3.t[6].n=6;
+
+  r4.t[0].a=1;
+  r4.t[0].n=0;
+  r4.t[2].a=1;
+  r4.t[2].n=2;
+  r4.t[6].a=1;
+  r4.t[6].n=6;
+
+  OP r5={0},r6={0};
+  r5.t[0].a=1;
+  r5.t[0].n=0;
+  r5.t[2].a=1;
+  r5.t[2].n=2;
+  r5.t[3].a=1;
+  r5.t[3].n=3;
+  r5.t[6].a=1;
+  r5.t[6].n=6;
+  r5.t[7].a=1;
+  r5.t[7].n=7;
+  r5.t[9].a=1;
+  r5.t[9].n=9;
+  r5.t[11].a=1;
+  r5.t[11].n=11;
+
+  r6.t[0].a=1;
+  r6.t[0].n=0;
+  r6.t[1].a=1;
+  r6.t[1].n=1;
+  r6.t[2].a=1;
+  r6.t[2].n=2;
+  r6.t[3].a=1;
+  r6.t[3].n=3;
+  r6.t[6].a=1;
+  r6.t[6].n=6;
+  r6.t[7].a=1;
+  r6.t[7].n=7;
+  
   EX rs={0};
-  printpol(o2v(vgcd(r2,r1)));
+  printpol(o2v(vgcd(r3,r1)));
   printf("==========gcd\n");
   tmp=vgcd(r3,r2);
   printpol(o2v(tmp));
   printf("==========gcd.v,h,u\n");
-  /*
-  printf("(");
-  printpol(o2v(rs.v));
-  printf(", ");
-  printpol(o2v(rs.d));
-  printf(", ");
-  printpol(o2v(rs.u));
-  printf(") ==========gcd.u\n");
-  */
-  
+  tmp=vgcd(r2,r1);
+  printpol(o2v(tmp));
+  printf("==========gcd.v,h,u\n"); 
+  tmp=vgcd(r4,r1);
+  printpol(o2v(tmp));
+  printf("==========gcd.v,h,u\n");
+  tmp=vgcd(r5,r4);
+  printpol(o2v(tmp));
+  printf("==========gcd.v,h,u\n");
+  tmp=vgcd(r5,r3);
+  printpol(o2v(tmp));
+  printf("==========gcd.v,h,u\n");
+  tmp=vgcd(r5,r2);
+  printpol(o2v(tmp));
+  printf("==========gcd.v,h,u\n");
+  tmp=vgcd(r5,r6);
+  printpol(o2v(tmp));
+  printf("==========gcd.v,h,u\n");
+
   //makeS();
-  //exit(1);
+  exit(1);
 
 
   //1x^6+11x^4+14x^3+7x^2+6x^0+ ==========goppa
@@ -3623,7 +3675,7 @@ label:
   //printf("irr=%d\n",l);
   //if(l==1)
   //goto label;
-  
+
   /*
   do{
     fail=0;
