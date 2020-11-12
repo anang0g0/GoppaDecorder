@@ -1132,6 +1132,7 @@ int ben_or(OP f){
 
 
 
+
 // gcd for pattarson
 OP
 zgcd (OP a, OP n)
@@ -1212,6 +1213,8 @@ zgcd (OP a, OP n)
   printf(" =======a\n");
   printpol(o2v(s));  
   printf(" =======s\n");
+  printpol(o2v(r));  
+  printf(" =======r\n");
   
   return x;
 }
@@ -3345,6 +3348,42 @@ readkey ()
 }
 
 
+OP gcd(OP a, OP b){
+  OP r={0},h={0},tmp={0};
+
+  h.t[0].a=1;
+  h.t[0].n=0;
+
+  if(odeg(a)<odeg(b)){
+    tmp = a;
+    a = b;
+    b = tmp;
+  }
+
+  printpol(o2v(a));
+  printf(" ========f\n");
+  printpol(o2v(b));
+  printf(" ========f\n");
+  
+  /* 自然数 a > b を確認・入替 */
+  if(odeg(a)<odeg(b)){
+    tmp = a;
+    a = b;
+    b = tmp;
+  }
+
+  r = omod(a , b);
+  while(odeg(r)>0){
+    a = b;
+    b = r;
+    r = omod(a , b);
+    if(LT(r).a==0)
+      return b;
+  }
+  return h;
+}
+
+
 //言わずもがな
 int
 main (void)
@@ -3568,62 +3607,59 @@ label:
   r4.t[6].a=1;
   r4.t[6].n=6;
 
-  OP r5={0},r6={0};
+  OP r5={0},r6={0},cd={0},sd={0};
   r5.t[0].a=1;
   r5.t[0].n=0;
-  r5.t[2].a=1;
-  r5.t[2].n=2;
   r5.t[3].a=1;
   r5.t[3].n=3;
-  r5.t[6].a=1;
-  r5.t[6].n=6;
-  r5.t[7].a=1;
-  r5.t[7].n=7;
-  r5.t[9].a=1;
-  r5.t[9].n=9;
-  r5.t[11].a=1;
-  r5.t[11].n=11;
+  r5.t[5].a=1;
+  r5.t[5].n=5;
 
   r6.t[0].a=1;
   r6.t[0].n=0;
-  r6.t[1].a=1;
-  r6.t[1].n=1;
-  r6.t[2].a=1;
-  r6.t[2].n=2;
-  r6.t[3].a=1;
-  r6.t[3].n=3;
-  r6.t[6].a=1;
-  r6.t[6].n=6;
-  r6.t[7].a=1;
-  r6.t[7].n=7;
+  r6.t[4].a=1;
+  r6.t[4].n=4;
+
+  cd=omul(r1,r4);
+  sd=omul(r5,r4);
+  tmp=gcd(sd,cd);
+  printpol(o2v(tmp));
+  printf(" ==gcd\n");
+  //exit(1);
   
   EX rs={0};
-  printpol(o2v(vgcd(r3,r1)));
-  printf("==========gcd\n");
-  tmp=vgcd(r3,r2);
-  printpol(o2v(tmp));
-  printf("==========gcd.v,h,u\n");
-  tmp=vgcd(r2,r1);
-  printpol(o2v(tmp));
-  printf("==========gcd.v,h,u\n"); 
-  tmp=vgcd(r4,r1);
-  printpol(o2v(tmp));
-  printf("==========gcd.v,h,u\n");
-  tmp=vgcd(r5,r4);
-  printpol(o2v(tmp));
-  printf("==========gcd.v,h,u\n");
-  tmp=vgcd(r5,r3);
-  printpol(o2v(tmp));
-  printf("==========gcd.v,h,u\n");
-  tmp=vgcd(r5,r2);
-  printpol(o2v(tmp));
-  printf("==========gcd.v,h,u\n");
-  tmp=vgcd(r5,r6);
-  printpol(o2v(tmp));
-  printf("==========gcd.v,h,u\n");
-
-  //makeS();
-  exit(1);
+    tmp=gcd(cd,sd);
+    printpol(o2v(tmp));
+    printf(" ==========gcd\n");
+    //exit(1);
+    
+    
+    printpol(o2v(gcd(r3,r1)));
+    printf("==========gcd\n");
+    tmp=gcd(r3,r2);
+    printpol(o2v(tmp));
+    printf("==========gcd.v,h,u\n");
+    tmp=gcd(r2,r1);
+    printpol(o2v(tmp));
+    printf("==========gcd.v,h,u\n"); 
+    tmp=gcd(r4,r1);
+    printpol(o2v(tmp));
+    printf("==========gcd.v,h,u\n");
+    tmp=gcd(r5,r4);
+    printpol(o2v(tmp));
+    printf("==========gcd.v,h,u\n");
+    tmp=gcd(r5,r3);
+    printpol(o2v(tmp));
+    printf("==========gcd.v,h,u\n");
+    tmp=gcd(cd,sd);
+    printpol(o2v(tmp));
+    printf("==========gcd.v,h,u\n");
+    tmp=gcd(r5,r1);
+    printpol(o2v(tmp));
+    printf("==========gcd.v,h,u\n");
+    
+    //makeS();
+    exit(1);
 
 
   //1x^6+11x^4+14x^3+7x^2+6x^0+ ==========goppa
