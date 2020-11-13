@@ -977,96 +977,47 @@ inv (OP a, OP n)
 }
 
 
+OP gcd(OP a, OP b){
+  OP r={0},h={0},tmp={0};
 
+  h.t[0].a=1;
+  h.t[0].n=0;
 
-
-//拡張ユークリッドアルゴリズム(Tで止まらない)
-OP
-vgcd (OP f, OP g)
-{
-  OP h = { 0 }
-  , ww = {
-    0
+  if(odeg(a)<odeg(b)){
+    tmp = a;
+    a = b;
+    b = tmp;
   }
-  , v[K] = {
-    0
+
+  printpol(o2v(a));
+  printf(" ========f\n");
+  printpol(o2v(b));
+  printf(" ========f\n");
+  
+  /* 自然数 a > b を確認・入替 */
+  if(odeg(a)<odeg(b)){
+    tmp = a;
+    a = b;
+    b = tmp;
   }
-    , u[K]={
-    0
-  },tmp={0};
-  oterm a, b;
-  int i = 0, j, k;
-  OP e = { 0 };
 
-  /*
-     v = malloc (sizeof (OP) * (DEG));
-     u = malloc (sizeof (OP) * (DEG));
-     memset (v, 0, sizeof (OP)*DEG);
-     memset (u, 0, sizeof (OP)*DEG);
-   */
-
-  u[0].t[0].a = 1;
-  u[0].t[0].n = 0;
-  u[1].t[0].a = 0;
-  u[1].t[0].n = 0;
-  u[2].t[0].a = 1;
-  u[2].t[0].n = 0;
-
-  v[0].t[0].a = 0;
-  v[0].t[0].n = 0;
-  v[1].t[0].a = 1;
-  v[1].t[0].n = 0;
-
+  r = omod(a , b);
+  while(odeg(r)>0){
+    a = b;
+    b = r;
+    r = omod(a , b);
+    if(LT(r).a==0)
+      return b;
+  }
   
-  printpol(o2v(f));
-  printf(" ===========f\n");
-  printpol(o2v(g));
-  printf(" ===========g\n");
-  //  exit(1);
-  
-  j=1;
-  //  k = odeg(f)-odeg(g);
-  while (deg (o2v(g)) > 0)
-    {
-      printf("deg(g)=%d\n",odeg(g));
-      if(deg(o2v(g))>0)
-	h = omod (f, g);
-      // printpol(o2v(h));
-      //printf(" ===========h\n");
-      //exit(1);
-      //  if (LT (g).a > 0)
-      ww = odiv (f, g);
-      
-      v[j+1] = oadd (v[j-1], omul (ww, v[j]));
-      printpol(o2v(v[j+1]));
-      printf(" =========v[%d]\n",j);
-      //exit(1);
-      u[j+1] = oadd (u[j-1], omul (ww, u[j]));
-      //printpol(o2v(u[j+1]));
-      //printf(" =========u[%d+1]\n",j);
-      //printf ("i+1=%d\n", j + 1);
-      f = g;
-      g = h;
-      j++;
-    }
-  printf("deg(g)=%d\n",odeg(g));  
-  /*
-    printf ("i=%d\n", j);
-    printpol (o2v (v[j]));
-    printf (" v=============\n");
-    //exit(1);
-    printpol (o2v (u[j]));
-    printf (" u=============\n");
-    printpol (o2v (h));
-    printf (" h=============\n");
-    //exit(1);
-    */
-    
-  if(LT(h).a==1)
+  if(LT(r).a==0){
+    return b;
+  }else{
+  //if(LT(r).a>0)
     return h;
-  if(LT(h).a==0)
-    return odiv(f,v[j-1]);
+  }
 }
+
 
 
 int ben_or(OP f){
@@ -1126,7 +1077,7 @@ int ben_or(OP f){
   //wait();
 
   for(j=0;j<i+1;j++){
-    cc=vgcd(f,t[j]);
+    cc=gcd(f,t[j]);
     printpol(o2v(cc));
     printf(" =======poly\n");
     if(LT(cc).n>0){
@@ -1235,16 +1186,36 @@ ogcd (OP xx, OP yy)
 {
   OP tt;
 
-  while (odeg (yy) > T - 1)
+  while (odeg (yy) > T-1)
     {
       tt = omod (xx, yy);
       xx = yy;
       yy = tt;
     }
 
+  printpol(o2v(yy));
+  printf(" =========yy\n");
+  printpol(o2v(tt));
+  printf(" =========tt\n");
 
   return tt;
 
+}
+
+//test gcd
+OP
+agcd (OP xx, OP yy)
+{
+  OP tt,tmp;
+
+  while (odeg (yy) > 0)
+    {
+      tt = omod (xx, yy);
+      xx = yy;
+      yy = tt;
+    }
+
+  return xx;
 }
 
 
@@ -1904,6 +1875,7 @@ chen (OP f)
 
   return e;
 }
+
 
 
 //ユークリッドアルゴリズムによる復号関数
@@ -2717,32 +2689,30 @@ osqrt (OP f, OP w)
       wait ();
       exit (1);
     }
-  if (LT (h).n > 0)
+  if (LT (h).n > 0 && odeg(s)>0)
     {
       ww = omod (omul (h, s), w);
     }
-  if (LT (h).n == 0)
+  if (LT (h).n == 0 || odeg(s)==0)
     {
       printpol (o2v (h));
       printf (" h=========0\n");
-      //ww = omod (omul (h, s), w);
-      //wait();
       exit (1);
     }
 
   if (LT (ww).n == 0 && LT (ww).a == 0)
     {
-      //printpol(o2v(s));
+      printpol(o2v(s));
       printf (" s===========\n");
-      //printpol(o2v(w));
+      printsage(o2v(w));
       printf (" w==============\n");
-      //printpol(o2v(r));
+      printpol(o2v(r));
       printf (" r===========\n");
-      //printpol(o2v(h));
+      printpol(o2v(h));
       printf (" h============\n");
-      //printpol (o2v (ww));
+      printpol (o2v (ww));
       printf (" ww==============\n");
-      printf (" wwが０になりました。error\n");
+      printf (" wwが0になりました。error\n");
       wait ();
       //return ww;;
       exit (1);
@@ -2900,11 +2870,11 @@ pattarson (OP w, OP f)
 
   hh = xgcd (w, g1);
   ppo = zgcd (w, g1);
-  printpol (o2v (hh.v));
+  printpol (o2v (ppo));
   printf (" =========ppo\n");
   printpol (o2v (ppo));
   printf (" =========ppo\n");
-  //if(LT(hh.v).a!=LT(ppo).a)
+  //if(LT(ppo).a!=LT(ppo).a)
   //exit(1);
   flg = 0;
   printpol (o2v (ppo));
@@ -3425,46 +3395,6 @@ EX extgcd(OP a, OP b) {
 }
 
 
-OP gcd(OP a, OP b){
-  OP r={0},h={0},tmp={0};
-
-  h.t[0].a=1;
-  h.t[0].n=0;
-
-  if(odeg(a)<odeg(b)){
-    tmp = a;
-    a = b;
-    b = tmp;
-  }
-
-  printpol(o2v(a));
-  printf(" ========f\n");
-  printpol(o2v(b));
-  printf(" ========f\n");
-  
-  /* 自然数 a > b を確認・入替 */
-  if(odeg(a)<odeg(b)){
-    tmp = a;
-    a = b;
-    b = tmp;
-  }
-
-  r = omod(a , b);
-  while(odeg(r)>0){
-    a = b;
-    b = r;
-    r = omod(a , b);
-    if(LT(r).a==0)
-      return b;
-  }
-  
-  if(LT(r).a==0){
-    return b;
-  }else{
-  //if(LT(r).a>0)
-    return h;
-  }
-}
 						    
 
 
@@ -3704,11 +3634,15 @@ label:
   r6.t[4].a=1;
   r6.t[4].n=4;
 
-  cd=omul(r1,r4);
+  cd=omul(r1,r5);
   sd=omul(r5,r4);
   tmp=gcd(sd,cd);
   printpol(o2v(tmp));
   printf(" ==gcd\n");
+  //exit(1);
+  tmp=ogcd(cd,sd);
+  printpol(o2v(tmp));
+  printf(" ==ogcd\n");
   //exit(1);
   
   EX rs={0};
