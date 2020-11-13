@@ -3760,7 +3760,7 @@ label:
     printpol(o2v(tmp) );
     printf("\n");
 
-    exit(1);
+    // exit(1);
 
 
   //1x^6+11x^4+14x^3+7x^2+6x^0+ ==========goppa
