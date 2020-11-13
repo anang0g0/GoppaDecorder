@@ -3730,7 +3730,7 @@ label:
     tmp=gcd(r4,r3);
     printpol(o2v(tmp));
     printf("==========gcd.v,h,u\n");
-    exit(1);
+    //exit(1);
     tmp=gcd(r4,r1);
     printpol(o2v(tmp));
     printf("==========gcd.v,h,u\n");
