@@ -788,6 +788,37 @@ trace (OP f, unsigned short x)
   return u;
 }
 
+
+//多項式を表示する(default)
+void
+printpol (vec a)
+{
+  int i, n;
+
+  n = deg (a);
+
+  //printf ("baka\n");
+  assert (("baka\n", n >= 0));
+
+
+
+  for (i = n; i > -1; i--)
+    {
+      if (a.x[i] > 0)
+	{
+	  printf ("%u", a.x[i]);
+	  //if (i > 0)
+	  printf ("x^%d", i);
+	  //if (i > 0)
+	  printf ("+");
+	}
+    }
+  //  printf("\n");
+
+  return;
+}
+
+
 // invert of polynomial
 OP
 inv (OP a, OP n)
@@ -812,7 +843,7 @@ inv (OP a, OP n)
     0
   }, gcd = {
     0
-  };
+  },tmp={0};
   oterm b = { 0 };
   vec vv = { 0 }, xx = {
     0
@@ -821,8 +852,11 @@ inv (OP a, OP n)
 
   if (odeg ((a)) > odeg ((n)))
     {
+      tmp=a;
+      a=n;
+      n=tmp;
       printf ("baka_i\n");
-      exit (1);
+      //exit (1);
     }
   if (LT (a).a == 0)
     {
@@ -871,7 +905,9 @@ inv (OP a, OP n)
   ////printpol (o2v (d));
   //printf ("\nout1================\n");
   gcd = d;			// $\gcd(a, n)$
-  ////printpol (o2v (gcd));
+  printpol (o2v (gcd));
+  printf(" =========gcd\n");
+  //exit(1);
   //printf ("\n");
   ////printpol (o2v (n));
   //printf ("\n");
@@ -937,38 +973,10 @@ inv (OP a, OP n)
     }
 
 
-  return u;
+    return u;
 }
 
 
-//多項式を表示する(default)
-void
-printpol (vec a)
-{
-  int i, n;
-
-  n = deg (a);
-
-  //printf ("baka\n");
-  assert (("baka\n", n >= 0));
-
-
-
-  for (i = n; i > -1; i--)
-    {
-      if (a.x[i] > 0)
-	{
-	  printf ("%u", a.x[i]);
-	  //if (i > 0)
-	  printf ("x^%d", i);
-	  //if (i > 0)
-	  printf ("+");
-	}
-    }
-  //  printf("\n");
-
-  return;
-}
 
 
 
@@ -2679,7 +2687,7 @@ osqrt (OP f, OP w)
   //  exit(1);
   if (LT (r).n > 0)
     {
-      s = inv (r, w);
+      s = inv (r, w );
     }
   else if (LT (r).n == 0)
     {
@@ -3347,6 +3355,75 @@ readkey ()
 
 }
 
+//OP sx={0},ty={0};
+
+EX extgcd(OP a, OP b) {
+
+  OP s = {0}, sx={0}, sy = {0}, t = {0}, tx = {0}, ty={0},tmp={0};
+  EX c={0};
+
+  if(odeg(b)>odeg(a)){
+    tmp=a;
+    a=b;
+    b=tmp;
+  }
+  s=a;
+  t=b;
+  sx.t[0].a=1;
+  sx.t[0].n=0;
+  ty.t[0].a=1;
+  ty.t[0].n=0;
+
+
+  //  OP temp={0};
+  tmp=omod(s,t);
+  if(odeg(tmp)==0){
+    c.d=t;
+    c.v=tx;
+    c.u=ty;
+    printf("ppp\n");
+    return c;
+  }
+  while (odeg(tmp) > 0) {
+    printpol(o2v((tmp)));
+    printf(" ========omod\n");
+    OP temp = odiv(s,t);
+    OP u= oadd(s , omul(t , temp));
+    OP ux= oadd(sx , omul(tx , temp));
+    OP uy= oadd(sy , omul(ty , temp));
+    /*
+    */
+    s = t;
+    sx = tx;
+    sy = ty;
+    t = u;
+    tx = ux;
+    ty = uy;
+    tmp=omod(s,t);
+  }
+  printpol(o2v(tmp));
+  printf(" ========omod!\n");
+
+  if(LT(tmp).a==1){
+  c.d.t[0].a=1;
+  c.d.t[0].n=0;
+  //c.d=t;
+  c.v=tx;
+  c.u=ty;
+  printf("bbb\n");
+  return c;
+  }
+  if(LT(tmp).a==0){
+    
+    c.d=t;
+    c.v=tx;
+    c.u=ty;
+    printf("ccc\n");
+  
+  return c;
+  }
+}
+
 
 OP gcd(OP a, OP b){
   OP r={0},h={0},tmp={0};
@@ -3380,8 +3457,15 @@ OP gcd(OP a, OP b){
     if(LT(r).a==0)
       return b;
   }
-  return h;
+  
+  if(LT(r).a==0){
+    return b;
+  }else{
+  //if(LT(r).a>0)
+    return h;
+  }
 }
+						    
 
 
 //言わずもがな
@@ -3628,20 +3712,25 @@ label:
   //exit(1);
   
   EX rs={0};
-    tmp=gcd(cd,sd);
-    printpol(o2v(tmp));
-    printf(" ==========gcd\n");
+    rs=extgcd(cd,sd);
+    printpol(o2v(rs.d));
+    printf(" ==========extgcd\n");
     //exit(1);
     
+    //printpol(o2v(gcd(r5,r1)));
+    //printf("==========gcd\n");
+    rs=extgcd(r4,r3);
+    printpol(o2v(rs.d));
+    printf("==========extgcd\n");
+    printpol(o2v(rs.v));
+    printf("==========tx gcd\n");
+    printpol(o2v(rs.u));
+    printf("==========ty gcd\n");
     
-    printpol(o2v(gcd(r3,r1)));
-    printf("==========gcd\n");
-    tmp=gcd(r3,r2);
+    tmp=gcd(r4,r3);
     printpol(o2v(tmp));
     printf("==========gcd.v,h,u\n");
-    tmp=gcd(r2,r1);
-    printpol(o2v(tmp));
-    printf("==========gcd.v,h,u\n"); 
+    exit(1);
     tmp=gcd(r4,r1);
     printpol(o2v(tmp));
     printf("==========gcd.v,h,u\n");
@@ -3656,9 +3745,21 @@ label:
     printf("==========gcd.v,h,u\n");
     tmp=gcd(r5,r1);
     printpol(o2v(tmp));
-    printf("==========gcd.v,h,u\n");
-    
-    //makeS();
+    printf("==========agaaa\n");
+
+    //    OP gcd;
+    OP xx={0},yy={0};
+    printf(" a= ");
+    printpol(o2v(r5) );
+    printf("\n");
+    printf(" b= ");
+    printpol(o2v(r4) );
+    printf("\n");
+
+    tmp=gcd(r5,r4);
+    printpol(o2v(tmp) );
+    printf("\n");
+
     exit(1);
 
 
