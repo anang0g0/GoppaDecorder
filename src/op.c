@@ -39,7 +39,7 @@
 #include "lu.c"
 #include "sha3.c"
 
-#define TH 8
+#define TH omp_get_max_threads()
 
 extern unsigned long xor128 (void);
 extern int mlt (int x, int y);
