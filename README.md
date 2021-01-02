@@ -59,6 +59,10 @@ PROBABILISTIC ALGORITII4S IN F INITE FIELDS
 
 https://eprint.iacr.org/2015/1050.pdf
 
+# 20210103
+
+2020年の開発日記をdiary2020.txtに移しました。
+
 # 20201220
 
 ちょっと遅かったですが、参考文献をアップロードしました。
