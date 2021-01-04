@@ -1,4 +1,4 @@
-# GoppaDecorder(Goppie)
+# GoppaDecorder(デコオダア)
 
 １．プログラム実行に当たって(op.c)　20200304,20200817
 
