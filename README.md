@@ -2,18 +2,14 @@
 
 １．プログラム実行に当たって(op.c)　20200304,20200817
 
-https://clang.llvm.org/get_started.html
+https://apt.llvm.org/
 
 https://openmp.llvm.org/
 
 これらを読んで実行環境を作ってください。
 
-あるいは、./llvm.sh
+clang-10をインストールするようにしてください。
 
-https://qiita.com/kojiohta/items/fb6c307365d1db388acc
-（正しくはこう）
-
-を実行してclang-10をインストールするようにしてください。
 clangのバージョンに応じてMakefileを書き換えてください。
 
 cd src/
