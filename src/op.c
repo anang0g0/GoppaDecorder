@@ -4128,6 +4128,7 @@ count=0;
 	      printpol (o2v (f));
 	      printf (" ==========synd\n");
 
+
 	      for (i = 0; i < D; i++)
 		printf ("%d %d\n", i, zz[i]);
 	      printf ("\n");
