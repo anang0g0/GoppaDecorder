@@ -1,6 +1,12 @@
 
 all:
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+	clang -Wall -g -pg -O3  -mtune=narive -march=native -ffast-math -funroll-loops  -fopenmp op.c
+
+amd:
+>>>>>>> refs/remotes/origin/main
 	clang-10 -Wall -g -pg -O3  -mtune=znver2 -march=znver2 -ffast-math -funroll-loops  -fopenmp op.c
 
 ori:

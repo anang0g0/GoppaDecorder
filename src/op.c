@@ -45,10 +45,14 @@
 //#include "golay.c"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 //#define K 8
 =======
 #define TH omp_get_max_threads()
 >>>>>>> 8e7868be154f4bc49b3de2329ad8286ed0fb8198
+=======
+#define TH 8
+>>>>>>> refs/remotes/origin/main
 
 extern unsigned long xor128 (void);
 extern int mlt (int x, int y);
@@ -1778,6 +1782,30 @@ ipow (unsigned int q, unsigned int u)
   printf ("in ipow====%d\n", m);
 
   return m;
+}
+
+
+OP ww[T]={0};
+
+OP bib(int i,OP d){
+int id,j;
+
+OP t[T]={0};
+ //omp_set_num_threads(omp_get_max_threads());
+ id = omp_get_thread_num ();  
+ t[id]=d;
+
+//#pragma omp parallel for
+	for (j = 0; j < T; j++)
+	  {
+	    // #pragma omp critical
+	    if (i != j)
+	      {
+		t[id] = omul (t[id], ww[j]);
+	      }
+	  }
+
+return t[id];
 }
 
 

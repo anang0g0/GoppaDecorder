@@ -1,5 +1,6 @@
-# GoppaDecorder(Goppie)
+# GoppaDecorder(デコオダア)
 
+<<<<<<< HEAD
 １．プログラム実行に当たって(op.c)　20200304,20200817,20210103
 
 実行しようとすると異常終了するので（スタックオーバーフロー）、
@@ -7,19 +8,21 @@
 ulimit -s unlimited
 
 を必ず実行してください。
+=======
+１．プログラム実行に当たって(op.c)　20200304,20200817,20210110
+>>>>>>> refs/remotes/origin/main
 
-https://clang.llvm.org/get_started.html
+キーロガーが不安な方は、シングルタスクでネットに接続できないパソコンでビルドしてください。
+
+
+https://apt.llvm.org/
 
 https://openmp.llvm.org/
 
 これらを読んで実行環境を作ってください。
 
-あるいは、./llvm.sh
+clang-10をインストールするようにしてください。
 
-https://qiita.com/kojiohta/items/fb6c307365d1db388acc
-（正しくはこう）
-
-を実行してclang-10をインストールするようにしてください。
 clangのバージョンに応じてMakefileを書き換えてください。
 
 cd src/
@@ -30,6 +33,7 @@ make
 
 llvmのclangを使って並列処理をします。（環境を整えるのが難しいですが）
 
+<<<<<<< HEAD
 op.c内のmain関数の中のdetをdetaに書き換えました。
 
 gccを使いたい場合は、make gccとすること。
@@ -55,16 +59,22 @@ https://klevas.mif.vu.lt/~skersys/vsd/crypto_on_codes/goppamceliece.pdf
 HOW SAGE HELPS TO IMPLEMENT　GOPPA CODES AND THE　McELIECE PUBLIC KEY CRYPTO SYSTEM
 
 Coding Theory-Based Cryptography:McEliece Cryptosystems in Sage
+=======
+gccだと並列化に失敗しますが、原因はわかりません。
+>>>>>>> refs/remotes/origin/main
 
-Development and Evaluation of a Code-based　Cryptography Library for Constrained Devices
+# 20210111
 
-Fast Construction of Irreducible Polynomials over Finite Fields
+PentiumIIIで動作確認。
+カギ生成から復号まで約6分。
+遅い・・・。
 
-An Application Specific Instruction Set Processor　(ASIP) for the Niederreiter Cryptosystem
+# 20210105
 
-PROBABILISTIC ALGORITII4S IN F INITE FIELDS
+Niederreiter暗号を作るために使うもののはず。
 
-https://eprint.iacr.org/2015/1050.pdf
+https://ja.wikipedia.org/wiki/%E3%83%9E%E3%83%83%E3%82%AF%E3%82%A8%E3%83%AA%E3%82%B9%E6%9A%97%E5%8F%B7
+これとか。
 
 # 20210103
 
