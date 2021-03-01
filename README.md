@@ -1,6 +1,12 @@
 # GoppaDecorder(Goppie)
 
-１．プログラム実行に当たって(op.c)　20200304,20200817
+１．プログラム実行に当たって(op.c)　20200304,20200817,20210103
+
+実行しようとすると異常終了するので（スタックオーバーフロー）、
+
+ulimit -s unlimited
+
+を必ず実行してください。
 
 https://clang.llvm.org/get_started.html
 
@@ -43,6 +49,7 @@ https://klevas.mif.vu.lt/~skersys/vsd/crypto_on_codes/goppamceliece.pdf
 出力の第一段目はエラーの位置と値をユークリッドアルゴリズムで計算したもの、(decode関数)
 第二は復号法であるパターソンアルゴリズムでバイナリエラーの位置を出力したものになります。(pattarson関数)
 
+<<<<<<< HEAD
 実装に関する参考資料（打倒ペアリング！ｗ）
 
 HOW SAGE HELPS TO IMPLEMENT　GOPPA CODES AND THE　McELIECE PUBLIC KEY CRYPTO SYSTEM
@@ -64,6 +71,18 @@ https://eprint.iacr.org/2015/1050.pdf
 2020年の開発日記をdiary2020.txtに移しました。
 
 # 20201220
+=======
+20201009
+
+実装が悪いので遅いですが、本来はRSAより復号速度が速いです。
+高速化と最適化が今後の課題ですが、ここにあるのは適当に書いたものなので、そのうち書き直します。
+
+https://hal.inria.fr/file/index/docid/607772/filename/69.pdf
+
+実装が終わったと言えばそれまでなんですが、上の論文が面白そうなのでまたやってみたくなりました。
+
+とりあえずグローバル変数は使わないようにしたいと思います。
+>>>>>>> 8e7868be154f4bc49b3de2329ad8286ed0fb8198
 
 ちょっと遅かったですが、参考文献をアップロードしました。
 
