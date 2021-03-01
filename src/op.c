@@ -44,15 +44,7 @@
 #include "inv_mat.c"
 //#include "golay.c"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 //#define K 8
-=======
-#define TH omp_get_max_threads()
->>>>>>> 8e7868be154f4bc49b3de2329ad8286ed0fb8198
-=======
-#define TH 8
->>>>>>> refs/remotes/origin/main
 
 extern unsigned long xor128 (void);
 extern int mlt (int x, int y);
@@ -1785,110 +1777,10 @@ ipow (unsigned int q, unsigned int u)
 }
 
 
-OP ww[T]={0};
-
-OP bib(int i,OP d){
-int id,j;
-
-OP t[T]={0};
- //omp_set_num_threads(omp_get_max_threads());
- id = omp_get_thread_num ();  
- t[id]=d;
-
-//#pragma omp parallel for
-	for (j = 0; j < T; j++)
-	  {
-	    // #pragma omp critical
-	    if (i != j)
-	      {
-		t[id] = omul (t[id], ww[j]);
-	      }
-	  }
-
-return t[id];
-}
-
-
-OP ww[T]={0};
-
-OP bib(int i,OP d){
-int id,j;
-
-OP t[T]={0};
- //omp_set_num_threads(omp_get_max_threads());
- id = omp_get_thread_num ();  
- t[id]=d;
-
-//#pragma omp parallel for
-	for (j = 0; j < T; j++)
-	  {
-	    // #pragma omp critical
-	    if (i != j)
-	      {
-		t[id] = omul (t[id], ww[j]);
-	      }
-	  }
-
-return t[id];
-}
-
 
 //多項式の形式的微分
 OP
 bibun (vec a)
-{
-  OP w[T*2] = { 0 };
-  OP l = { 0 }
-  , t[T] = {0},d={0};
-  int i, j, n, id;
-  vec tmp = { 0 };
-
-
-  n = deg (a);
-  printf ("n=%d\n", n);
-  if (n == 0)
-    {           
-      printf ("baka8\n");
-      //  exit(1);
-    }
-memset(ww,0,sizeof(ww));
-  // #pragma omp parallel num_threads(8)
-  for (i = 0; i < T; i++)
-    {
-      ww[i].t[0].a = a.x[i];
-      ww[i].t[0].n = 0;
-      ww[i].t[1].a = 1;
-      ww[i].t[1].n = 1;
-
-      ////printpol(o2v(w[i]));
-    }
-  //  exit(1);
-
-  tmp.x[0] = 1;
-  //
-  d = v2o (tmp);
-    
-// omp_set_num_threads(omp_get_max_threads());
-#pragma omp parallel num_threads(TH)
-  {
-  //#pragma omp parallel for    
-  #pragma omp for schedule(static)
-    for (i = 0; i < T; i++)
-      {
-    t[i]=bib(i,d);	
-      }
-}
-
-  for (i = 0; i < T; i++)
-      l = oadd (l, t[i]);
-
-  return l;
-}
-
-
-//多項式の形式的微分
-OP
-bibun_old (vec a)
 {
   OP w[T * 2] = { 0 };
   OP l = { 0 }
@@ -3618,7 +3510,6 @@ unsigned short invP[N][N]=
     };
 */
 
-<<<<<<< HEAD
   unsigned short A0[K][K] = {
     {4, 1, 0, 4, 5, 9, 15, 11},
     {12, 12, 4, 5, 12, 11, 3, 12},
@@ -3703,9 +3594,6 @@ sa.t[6].n=5;
 printpol(o2v(sa));
 //exit(1);
 
-=======
-  
->>>>>>> 8e7868be154f4bc49b3de2329ad8286ed0fb8198
 //公開鍵matはグローバル変数でスタック領域に取る。
 //ヒープ領域は使うときはここを有効にしてください。
 /*
@@ -4127,8 +4015,6 @@ count=0;
 	      printf (" =========syn\n");
 	      printpol (o2v (f));
 	      printf (" ==========synd\n");
-
-
 	      for (i = 0; i < D; i++)
 		printf ("%d %d\n", i, zz[i]);
 	      printf ("\n");
@@ -4138,7 +4024,6 @@ count=0;
 	      A2++;
 	      //wait();
 	      //exit (1);
-
 	      exit (1);
 	    }
 */
