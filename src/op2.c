@@ -4120,7 +4120,7 @@ for(i=0;i<deg(o2v(sa));i++){
 memset(r.t,0,sizeof(r.t));
 printpol(o2v(sb));
 printf(" =final pol\n");
-r=decode(ga,sa);
+r=decode(ga,sb);
 
 if(elo(r)<0)
 goto nn;
