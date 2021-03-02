@@ -10,10 +10,10 @@
 //を表す。ここではDは符号長にしている。
 #define N 16 // (^^;)?
 #define M 16 //有限体の元の数
-#define K (6) //符号の次元
+#define K (10) //符号の次元
 #define DEG (K*2)
 #define T (K/2) //エラーの数
-#define E (4) //拡大体のビット数
+#define E (8) //拡大体のビット数
 #define D (16) //符号長（短縮符号）
 #define F  E*K //2040
 
