@@ -3395,6 +3395,51 @@ EX extgcd(OP a, OP b) {
 }
 
 
+OP mkg(){
+int i,j,k,fail,flg,l;
+OP w={0};
+
+  do
+    {
+      fail = 0;
+      j = 0;
+      k = 0;
+      flg = 0;
+      l=0;
+      memset (g, 0, sizeof (g));
+      memset (ta, 0, sizeof (ta));
+      ginit ();
+      for (i = 0; i < K + 1; i++)
+	{
+	  if (g[K - 1] > 0)
+	    flg = 1;
+	  if (i % 2 == 1 && g[i] > 0 && i < K)
+	    k++;
+	}
+      if ((k > 0 && flg == 0) || (k > 1 && flg == 1))
+	{
+	  w = setpol (g, K + 1);
+	  j = 1;
+	}
+      //w = setpol (g, K + 1);
+      //oprintpol (w);
+      //多項式の値が0でないことを確認
+      for (i = 0; i < D; i++)
+	{
+	  ta[i] = trace (w, i);
+	  if (ta[i] == 0)
+	    {
+	      printf ("trace 0 @ %d\n", i);
+	      fail = 1;
+	      break;
+	    }
+	}
+      
+    }
+  while (fail || j == 0);
+
+return w;
+}
 						    
 
 
@@ -3561,6 +3606,8 @@ unsigned short invP[N][N]=
     {0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
   };
 
+
+
 OP lb[T+1]={0};
 OP ua={0};
 OP ga={0};
@@ -3575,22 +3622,7 @@ vec xc={0};
 srand(clock());
 //syndrome 固定
 sa=setpol(tb,T*2);
-/*
-sa.t[0].a=6;
-sa.t[0].n=0;
-sa.t[1].a=5;
-sa.t[1].n=1;
-sa.t[2].a=1;
-sa.t[2].n=2;
-sa.t[3].a=4;
-sa.t[3].n=3;
-sa.t[4].a=2;
-sa.t[4].n=4;
-sa.t[5].a=12;
-sa.t[5].n=5;
-*/
 
-//sa=setpol(tb,3);
 printpol(o2v(sa));
 wait();
 //exit(1);
@@ -3738,44 +3770,6 @@ label:
   //0,0,0,0,0,5,0,0,8,0,0,0,0,13,0,0
 
     
-  do
-    {
-      fail = 0;
-      j = 0;
-      k = 0;
-      flg = 0;
-      l=0;
-      memset (g, 0, sizeof (g));
-      memset (ta, 0, sizeof (ta));
-      ginit ();
-      for (i = 0; i < K + 1; i++)
-	{
-	  if (g[K - 1] > 0)
-	    flg = 1;
-	  if (i % 2 == 1 && g[i] > 0 && i < K)
-	    k++;
-	}
-      if ((k > 0 && flg == 0) || (k > 1 && flg == 1))
-	{
-	  w = setpol (g, K + 1);
-	  j = 1;
-	}
-      //w = setpol (g, K + 1);
-      //oprintpol (w);
-      //多項式の値が0でないことを確認
-      for (i = 0; i < D; i++)
-	{
-	  ta[i] = trace (w, i);
-	  if (ta[i] == 0)
-	    {
-	      printf ("trace 0 @ %d\n", i);
-	      fail = 1;
-	      break;
-	    }
-	}
-      
-    }
-  while (fail || j == 0);
   //l=ben_or(w);
   //printf("irr=%d\n",l);
   //if(l==1)
@@ -3811,6 +3805,9 @@ label:
   while(flg==1);
   */  
   
+w=mkg();
+memset(mat,0,sizeof(mat));
+
   oprintpol (w);
   printf ("\n");
   printsage (o2v (w));
@@ -3826,7 +3823,7 @@ label:
 
     }
 
-  memset (mat, 0, sizeof (mat));
+ 
 
   printf ("\nすげ、オレもうイキそ・・・\n");
   //keygen(g);
@@ -3913,48 +3910,93 @@ lab:
 
 srand(clock());
 
+
+zz[2]=11;
+zz[4]=1;
+zz[9]=11;
+zz[10]=6;
+zz[12]=7;
+
+f=synd(zz);
+printpol(o2v(f));
+printf(" =:first pol\n");
+r=decode(w,f);
+
+count=0;
+      for (i = 0; i < T; i++)
+	{
+        if(i>0 && r.t[i].a==0){
+        printf("baka-z\n");
+        exit(1);
+        }
+	  if (r.t[i].a > 0 && i > 0)	// == r.t[i].n)
+	    {
+	      printf ("e=%d %d %s\n", r.t[i].a, r.t[i].n, "お");
+	      count++;
+	    }
+	  if (i == 0)
+	    {
+	      printf ("\ne=%d %d %s\n", r.t[i].a, r.t[i].n, "う");
+	      count++;
+	    }
+        zz[r.t[i].n]=r.t[i].a;
+	}
+      if (count != T)
+	{
+	  printf ("error pattarn too few %d\n", count);
+	  printpol (o2v (w));
+	  printf (" ==========goppa\n");
+	  printsage (o2v (w));
+	  printf (" ==========sage\n");
+	  printsage (o2v (f));
+	  printf (" =========syn\n");
+	  printpol (o2v (f));
+	  printf (" ==========synd\n");
+
+goto nn;
+
+	 // exit (1);
+	}
+//exit(1);
+
+
+
 cc:
 memset(lb,0,sizeof(lb));
 for(i=0;i<T;i++){
+    count=0;
 lb[i].t[0].a=rand()%M;
 lb[i].t[0].n=0;
 lb[i].t[1].a=1;
 lb[i].t[1].n=1;
+for(j=0;j<i;j++){
+    while(lb[i].t[0].a==lb[j].t[0].a)
+    lb[i].t[0].a=rand()%M;
 }
-/*
-lb[1].t[0].a=rand()%16;
-lb[1].t[0].n=0;
-lb[1].t[1].a=1;
-lb[1].t[1].n=1;
-lb[2].t[0].a=rand()%16;;
-lb[2].t[0].n=0;
-lb[2].t[1].a=1;
-lb[2].t[1].n=1;
-*/
+
+}
+
 lb[T].t[0].a=1;
 lb[T].t[0].n=0;
 lb[T].t[1].a=0;
 lb[T].t[1].n=1;
 
-printpol(o2v(lb[0]));
+for(i=0;i<T;i++){
+printpol(o2v(lb[i]));
 printf("\n");
-printpol(o2v(lb[1]));
-printf("\n");
-printpol(o2v(lb[2]));
-printf("\n");
+}
 //exit(1);
 for(i=0;i<T;i++)
 lb[T]=omul(lb[T],lb[i]);
 
-//lb[3]=omul(lb[3],lb[0]);
-//lb[3]=omul(lb[3],lb[1]);
-//lb[3]=omul(lb[3],lb[2]);
 //sa=setpol(tb,5);
 printpol(o2v(lb[T]));
 printf("\n");
 printpol(o2v(sa));
 printf("\n");
 //exit(1);
+wait();
+
  nn:
 while(1){
   memset(xa,0,sizeof(xa));
@@ -3967,43 +4009,63 @@ for(i=0;i<T;i++){
 ua.t[i].a=xa[i];
 ua.t[i].n=i;
 }
-/*
-ua.t[1].a=xa[1];
-ua.t[1].n=1;
-ua.t[3].a=xa[2];
-ua.t[3].n=2;
-*/
+
 if(xa[T-1]==0)
 goto nn;
 printpol(o2v(ua));
-printf("\n");
+printf(" =u(x)\n");
 //exit(1);
+
 aa=omul(sa,lb[T]);
 ya=omod(aa,ua);
 if(deg(o2v(ya))<T){
-  printpol(o2v(odiv(aa,ua)));
-  ga=odiv(aa,ua);
-printf("\n");
+    
+    aa=oadd(aa,ya);
+    if(deg(o2v(omod(aa,ua)))>0){
+    printf(" a!\n");
+    goto cc;
+    }else if(deg(o2v(omod(aa,ua)))==0){
+    ga=odiv(aa,ua);
+    printpol(o2v(ga)); 
+    i=deta(o2v(ga).x);
+    if(i<0){
+        printf("i=0\n");
+        goto cc;
+    }
+    
+    }
+wait();
+//exit(1);
 }
 printpol(o2v(ga));
-printf("\n");
-deta(o2v(ga).x);
+printf(" =g(x)\n");
+//deta(o2v(ga).x);
+printpol(o2v(sa));
+printf(" =S(x)\n");
+//exit(1);
+wait();
+
+OP sb={0};
+memset(zz,0,sizeof(zz));
+
+/*
+
+sb=synd(zz);
+*/
+
+memset(r.t,0,sizeof(r.t));
 r=decode(ga,sa);
 
 if(deg(o2v(r))<T)
 exit(1);
-//goto cc;
-//xc=chen(r);
-j=0;
-//goto nn;
-//exit(1);
-//goto nn;
-
-
 
 count=0;
       for (i = 0; i < T; i++)
 	{
+        if(i>0 && r.t[i].a==0){
+        printf("baka-z\n");
+        exit(1);
+        }
 	  if (r.t[i].a > 0 && i > 0)	// == r.t[i].n)
 	    {
 	      printf ("e=%d %d %s\n", r.t[i].a, r.t[i].n, "お");
@@ -4014,30 +4076,7 @@ count=0;
 	      printf ("\ne=%d %d %s\n", r.t[i].a, r.t[i].n, "う");
 	      count++;
 	    }
-      /*
-	  if (r.t[i].a != r.t[i].n)
-	    {
-	      printf ("baka @ T\n");
-	      printpol (o2v (w));
-	      printf (" ==========goppa\n");
-	      printsage (o2v (w));
-	      printf (" ==========sage\n");
-	      printsage (o2v (f));
-	      printf (" =========syn\n");
-	      printpol (o2v (f));
-	      printf (" ==========synd\n");
-	      for (i = 0; i < D; i++)
-		printf ("%d %d\n", i, zz[i]);
-	      printf ("\n");
-	      int ii;
-	      for (ii = 0; ii < T; ii++)
-		printf ("e=%d %d %s\n", r.t[ii].a, r.t[ii].n, "お");
-	      A2++;
-	      //wait();
-	      //exit (1);
-	      exit (1);
-	    }
-*/
+        zz[r.t[i].n]=r.t[i].a;
 	}
       if (count != T)
 	{
@@ -4056,15 +4095,113 @@ goto nn;
 	 // exit (1);
 	}
 
+//
+
+exit(1);
+
+
+
+ memset (mat, 0, sizeof (mat));
+i=-1;
+while(i<0){
+w=mkg();
+i=deta(o2v(w).x);
+}
+    printf("end!\n");
+
+//exit(1);
+for(i=0;i<M;i++)
+printf("%d,",zz[i]);
+printf("\n");
+
+sb=synd(zz);
+
+printpol(o2v(sb));
+printf(" =ssb\n");
+//OP sb={0};
+      printf ("err=%dっ！！\n", count);
+//wait();
+//exit(1);
+
+
+memset(r.t,0,sizeof(r.t));
+r=decode(sb,w);
+
+if(deg(o2v(r))<T)
+exit(1);
+//goto cc;
+//xc=chen(r);
+j=0;
+//goto nn;
+//exit(1);
+//goto nn;
+
+//r=decode(ga,sb);
+
+count=0;
+      for (i = 0; i < T; i++)
+	{
+        if(i>0 && r.t[i].a==0){
+        printf("baka-z\n");
+        exit(1);
+        }
+	  if (r.t[i].a > 0 && i > 0)	// == r.t[i].n)
+	    {
+	      printf ("e=%d %d %s\n", r.t[i].a, r.t[i].n, "お");
+	      count++;
+	    }
+	  if (i == 0)
+	    {
+	      printf ("\ne=%d %d %s\n", r.t[i].a, r.t[i].n, "う");
+	      count++;
+	    }
+
+	}
+      if (count != T)
+	{
+	  printf ("error pattarn too few %d\n", count);
+	  printpol (o2v (w));
+	  printf (" ==========goppa\n");
+	  printsage (o2v (w));
+	  printf (" ==========sage\n");
+	  printsage (o2v (f));
+	  printf (" =========syn\n");
+	  printpol (o2v (f));
+	  printf (" ==========synd\n");
+
+goto nn;
+
+	 // exit (1);
+
+	}
+
+//OP sb={0};
       printf ("err=%dっ！！\n", count);
 
-printpol(o2v(sa));
-printf("\n");
-printpol(o2v(ga));
-printf("\n");
-printpol(o2v(lb[3]));
-printf("\n");
+exit(1);
 
+
+memset(zz,0,sizeof(zz));
+zz[2]=11;
+zz[4]=1;
+zz[9]=11;
+zz[10]=6;
+zz[12]=7;
+
+sb=synd(zz);
+printpol(o2v(sb));
+printf(" =zz\n");
+printpol(o2v(sa));
+printf(" =S(x)\n");
+wait();
+printpol(o2v(ga));
+printf(" =g(x)\n");
+printpol(o2v(lb[T]));
+printf(" =l(x)\n");
+//for(i=0;i<T;i++)
+//zz[r.t[i].n]=r.t[i].a;
+//printpol(o2v(synd(zz)));
+//printf("\n");
 exit(1);
 }
 
