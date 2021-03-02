@@ -1,6 +1,6 @@
 
 all:
-	clang-10 -Wall -g -pg -O3  -mtune=narive -march=native -ffast-math -funroll-loops  -fopenmp op.c
+	clang-10 -Wall -g -pg -O3  -mtune=narive -march=native -ffast-math -funroll-loops  -fopenmp op2.c
 
 amd:
 	clang-10 -Wall -g -pg -O3  -mtune=znver2 -march=znver2 -ffast-math -funroll-loops  -fopenmp op.c
