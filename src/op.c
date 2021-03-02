@@ -1928,8 +1928,8 @@ decode (OP f, OP s)
 	  printvec (o2v (f));
 	  for (i = 0; i < M; i++)
 	    printf ("%d,", zz[i]);
-	  //exit (1);
-	  return v2o(x);
+	  exit (1);
+	  //return f;
 	}
     }
   //exit(1);
@@ -1943,7 +1943,7 @@ decode (OP f, OP s)
     {
       //printpol (o2v (r));
       printf ("baka5 deg(r)<T\n");
-      return r;
+      exit (1);
     }
 
 
@@ -1986,8 +1986,8 @@ decode (OP f, OP s)
 	    gf[mlt (fg[trace (h, x.x[i])], oinv (trace (l, x.x[i])))];
 	  e.t[i].n = x.x[i];
 	}
-//      if (e.t[i].a != e.t[i].n)
-//	break;
+      if (e.t[i].a != e.t[i].n)
+	break;
     }
   //}
   printpol (o2v (h));
@@ -2029,7 +2029,7 @@ setpol (unsigned short f[], int n)
 
 
   memset (c, 0, sizeof (c));
-  memcpy (c, f, n*2);
+  memcpy (c, f, 2 * n);
   a = Setvec (n);
 
   g = v2o (a);
@@ -3561,39 +3561,6 @@ unsigned short invP[N][N]=
     {0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
   };
 
-OP lb[4]={0};
-OP ua={0};
-OP ga={0};
-OP sa={0};
-OP wa={0};
-OP aa={0};
-OP ya={0};
-char va[2]={1,1};
-char va2[2]={1,2};
-char va3[2]={1,3};
-unsigned char tb[6]={3,2,3,4,5,5};
-char xa[3]={0};
-vec xc={0};
-
-srand(clock());
-//syndrome 固定
-sa.t[0].a=6;
-sa.t[0].n=0;
-sa.t[1].a=5;
-sa.t[1].n=1;
-sa.t[3].a=1;
-sa.t[3].n=2;
-sa.t[4].a=4;
-sa.t[4].n=3;
-sa.t[5].a=2;
-sa.t[5].n=4;
-sa.t[6].a=12;
-sa.t[6].n=5;
-
-//sa=setpol(tb,3);
-printpol(o2v(sa));
-//exit(1);
-
 //公開鍵matはグローバル変数でスタック領域に取る。
 //ヒープ領域は使うときはここを有効にしてください。
 /*
@@ -3907,156 +3874,6 @@ lab:
      }
      //exit(1);
    */
-
-
-
-srand(clock());
-
-cc:
-memset(lb,0,sizeof(lb));
-lb[0].t[0].a=rand()%16;
-lb[0].t[0].n=0;
-lb[0].t[1].a=1;
-lb[0].t[1].n=1;
-lb[1].t[0].a=rand()%16;
-lb[1].t[0].n=0;
-lb[1].t[1].a=1;
-lb[1].t[1].n=1;
-lb[2].t[0].a=rand()%16;;
-lb[2].t[0].n=0;
-lb[2].t[1].a=1;
-lb[2].t[1].n=1;
-lb[3].t[0].a=1;
-lb[3].t[0].n=0;
-lb[3].t[1].a=0;
-lb[3].t[1].n=1;
-
-printpol(o2v(lb[0]));
-printf("\n");
-printpol(o2v(lb[1]));
-printf("\n");
-printpol(o2v(lb[2]));
-printf("\n");
-//exit(1);
-
-lb[3]=omul(lb[3],lb[0]);
-lb[3]=omul(lb[3],lb[1]);
-lb[3]=omul(lb[3],lb[2]);
-//sa=setpol(tb,5);
-printpol(o2v(lb[3]));
-printf("\n");
-printpol(o2v(sa));
-printf("\n");
-//exit(1);
- nn:
-while(1){
-  memset(xa,0,sizeof(xa));
-//    memset(sa.t,0,sizeof(sa));
-    memset(xc.x,0,sizeof(xc));  
-  memset(ua.t,0,sizeof(ua));
-for(i=0;i<3;i++)
-xa[i]=rand()%16;
-ua.t[0].a=xa[0];
-ua.t[0].n=0;
-ua.t[1].a=xa[1];
-ua.t[1].n=1;
-ua.t[3].a=xa[2];
-ua.t[3].n=2;
-if(xa[2]==0)
-goto nn;
-printpol(o2v(ua));
-printf("\n");
-//exit(1);
-aa=omul(sa,lb[3]);
-ya=omod(aa,ua);
-if(deg(o2v(ya))<T){
-  printpol(o2v(odiv(aa,ua)));
-  ga=odiv(aa,ua);
-printf("\n");
-}
-printpol(o2v(ga));
-printf("\n");
-deta(o2v(ga).x);
-r=decode(ga,sa);
-
-if(deg(o2v(r))<T)
-exit(1);
-//goto cc;
-//xc=chen(r);
-j=0;
-//goto nn;
-//exit(1);
-//goto nn;
-
-
-
-count=0;
-      for (i = 0; i < T; i++)
-	{
-	  if (r.t[i].a > 0 && i > 0)	// == r.t[i].n)
-	    {
-	      printf ("e=%d %d %s\n", r.t[i].a, r.t[i].n, "お");
-	      count++;
-	    }
-	  if (i == 0)
-	    {
-	      printf ("\ne=%d %d %s\n", r.t[i].a, r.t[i].n, "う");
-	      count++;
-	    }
-      /*
-	  if (r.t[i].a != r.t[i].n)
-	    {
-	      printf ("baka @ T\n");
-	      printpol (o2v (w));
-	      printf (" ==========goppa\n");
-	      printsage (o2v (w));
-	      printf (" ==========sage\n");
-	      printsage (o2v (f));
-	      printf (" =========syn\n");
-	      printpol (o2v (f));
-	      printf (" ==========synd\n");
-	      for (i = 0; i < D; i++)
-		printf ("%d %d\n", i, zz[i]);
-	      printf ("\n");
-	      int ii;
-	      for (ii = 0; ii < T; ii++)
-		printf ("e=%d %d %s\n", r.t[ii].a, r.t[ii].n, "お");
-	      A2++;
-	      //wait();
-	      //exit (1);
-	      exit (1);
-	    }
-*/
-	}
-      if (count != T)
-	{
-	  printf ("error pattarn too few %d\n", count);
-	  printpol (o2v (w));
-	  printf (" ==========goppa\n");
-	  printsage (o2v (w));
-	  printf (" ==========sage\n");
-	  printsage (o2v (f));
-	  printf (" =========syn\n");
-	  printpol (o2v (f));
-	  printf (" ==========synd\n");
-
-goto nn;
-
-	 // exit (1);
-	}
-
-      printf ("err=%dっ！！\n", count);
-
-printpol(o2v(sa));
-printf("\n");
-printpol(o2v(ga));
-printf("\n");
-printpol(o2v(lb[3]));
-printf("\n");
-
-exit(1);
-}
-
 
   //decode開始
   k = 0;
