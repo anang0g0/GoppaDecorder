@@ -3443,6 +3443,53 @@ return w;
 						    
 
 
+int elo(OP r){
+int count,i,j,k;
+
+
+count=0;
+      for (i = 0; i < T; i++)
+	{
+        if(i>0 && r.t[i].a==0){
+        printf("baka-z\n");
+        return -1;
+        //exit(1);
+        }
+	  if (r.t[i].a > 0 && i > 0)	// == r.t[i].n)
+	    {
+	      printf ("e=%d %d %s\n", r.t[i].a, r.t[i].n, "お");
+	      count++;
+	    }
+	  if (i == 0)
+	    {
+	      printf ("\ne=%d %d %s\n", r.t[i].a, r.t[i].n, "う");
+	      count++;
+	    }
+        //zz[r.t[i].n]=r.t[i].a;
+	}
+      if (count != T)
+	{
+	  printf ("error pattarn too few %d\n", count);
+      return -1;
+      /*
+	  printpol (o2v (w));
+	  printf (" ==========goppa\n");
+	  printsage (o2v (w));
+	  printf (" ==========sage\n");
+	  printsage (o2v (f));
+	  printf (" =========syn\n");
+	  printpol (o2v (f));
+	  printf (" ==========synd\n");
+    */
+//goto nn;
+
+	 // exit (1);
+	}
+
+return 0;
+}
+
+
 //言わずもがな
 int
 main (void)
@@ -3775,8 +3822,7 @@ label:
   //if(l==1)
   //goto label;
 
-  /*
-  do{
+  /*do{
     fail=0;
     flg=0;
     memset(g,0,sizeof(g));
@@ -3832,14 +3878,15 @@ memset(mat,0,sizeof(mat));
 
   //パリティチェックを生成する。
   //パリティチェックに0の列があったら、なくなるまでやり直す。
-
-  do
+do
     {
       i = deta (g);
     }
   while (i < 0);
 
   unsigned short gen[N][K] = { 0 };
+
+OP sb={0};
 
 lab:
 
@@ -3917,49 +3964,26 @@ zz[9]=11;
 zz[10]=6;
 zz[12]=7;
 
-f=synd(zz);
-printpol(o2v(f));
+sa=synd(zz);
+printpol(o2v(sa));
 printf(" =:first pol\n");
-r=decode(w,f);
 
-count=0;
-      for (i = 0; i < T; i++)
-	{
-        if(i>0 && r.t[i].a==0){
-        printf("baka-z\n");
-        exit(1);
-        }
-	  if (r.t[i].a > 0 && i > 0)	// == r.t[i].n)
-	    {
-	      printf ("e=%d %d %s\n", r.t[i].a, r.t[i].n, "お");
-	      count++;
-	    }
-	  if (i == 0)
-	    {
-	      printf ("\ne=%d %d %s\n", r.t[i].a, r.t[i].n, "う");
-	      count++;
-	    }
-        zz[r.t[i].n]=r.t[i].a;
-	}
-      if (count != T)
-	{
-	  printf ("error pattarn too few %d\n", count);
-	  printpol (o2v (w));
-	  printf (" ==========goppa\n");
-	  printsage (o2v (w));
-	  printf (" ==========sage\n");
-	  printsage (o2v (f));
-	  printf (" =========syn\n");
-	  printpol (o2v (f));
-	  printf (" ==========synd\n");
-
-goto nn;
-
-	 // exit (1);
-	}
+r=decode(w,sa);
+//printf("%d\n",deg(o2v(r)));
+if(elo(r)<0)
+goto label;
 //exit(1);
 
-
+/*
+memset(zz,0,sizeof(zz));
+for(i=0;i<T;i++)
+zz[r.t[i].n]=r.t[i].a;
+sa=synd(zz);
+printpol(o2v(sa));
+printf(" =same?\n");
+//exit(1);
+wait();
+*/
 
 cc:
 memset(lb,0,sizeof(lb));
@@ -3998,7 +4022,7 @@ printf("\n");
 wait();
 
  nn:
-while(1){
+//while(1){
   memset(xa,0,sizeof(xa));
 //    memset(sa.t,0,sizeof(sa));
     memset(xc.x,0,sizeof(xc));  
@@ -4016,6 +4040,7 @@ printpol(o2v(ua));
 printf(" =u(x)\n");
 //exit(1);
 
+memset(mat,0,sizeof(mat));
 aa=omul(sa,lb[T]);
 ya=omod(aa,ua);
 if(deg(o2v(ya))<T){
@@ -4030,11 +4055,11 @@ if(deg(o2v(ya))<T){
     i=deta(o2v(ga).x);
     if(i<0){
         printf("i=0\n");
-        goto cc;
+        //goto cc;
     }
-    
     }
-wait();
+
+//wait();
 //exit(1);
 }
 printpol(o2v(ga));
@@ -4045,13 +4070,16 @@ printf(" =S(x)\n");
 //exit(1);
 wait();
 
-OP sb={0};
+
 memset(zz,0,sizeof(zz));
 
 /*
 
 sb=synd(zz);
 */
+printpol(o2v(sa));
+printf(" =:2nd pol\n");
+
 
 memset(r.t,0,sizeof(r.t));
 r=decode(ga,sa);
@@ -4059,439 +4087,47 @@ r=decode(ga,sa);
 if(deg(o2v(r))<T)
 exit(1);
 
-count=0;
-      for (i = 0; i < T; i++)
-	{
-        if(i>0 && r.t[i].a==0){
-        printf("baka-z\n");
-        exit(1);
-        }
-	  if (r.t[i].a > 0 && i > 0)	// == r.t[i].n)
-	    {
-	      printf ("e=%d %d %s\n", r.t[i].a, r.t[i].n, "お");
-	      count++;
-	    }
-	  if (i == 0)
-	    {
-	      printf ("\ne=%d %d %s\n", r.t[i].a, r.t[i].n, "う");
-	      count++;
-	    }
-        zz[r.t[i].n]=r.t[i].a;
-	}
-      if (count != T)
-	{
-	  printf ("error pattarn too few %d\n", count);
-	  printpol (o2v (w));
-	  printf (" ==========goppa\n");
-	  printsage (o2v (w));
-	  printf (" ==========sage\n");
-	  printsage (o2v (f));
-	  printf (" =========syn\n");
-	  printpol (o2v (f));
-	  printf (" ==========synd\n");
 
-goto nn;
-
-	 // exit (1);
-	}
-
-//
-
-exit(1);
-
-
-
- memset (mat, 0, sizeof (mat));
-i=-1;
-while(i<0){
-w=mkg();
-i=deta(o2v(w).x);
-}
-    printf("end!\n");
+if(elo(r)<0)
+goto cc;
 
 //exit(1);
+
+memset(zz,0,sizeof(zz));
+for(i=0;i<T;i++)
+    zz[r.t[i].n]=r.t[i].a;
+
+//if(sa.t[0].a!=sb.t[0].a)
+//goto nn;
+
+//
+//deta(o2v(ga).x);
 for(i=0;i<M;i++)
 printf("%d,",zz[i]);
 printf("\n");
-
-sb=synd(zz);
-
-printpol(o2v(sb));
-printf(" =ssb\n");
-//OP sb={0};
-      printf ("err=%dっ！！\n", count);
-//wait();
 //exit(1);
 
-
-memset(r.t,0,sizeof(r.t));
-r=decode(sb,w);
-
-if(deg(o2v(r))<T)
-exit(1);
-//goto cc;
-//xc=chen(r);
-j=0;
-//goto nn;
-//exit(1);
-//goto nn;
-
-//r=decode(ga,sb);
-
-count=0;
-      for (i = 0; i < T; i++)
-	{
-        if(i>0 && r.t[i].a==0){
-        printf("baka-z\n");
-        exit(1);
-        }
-	  if (r.t[i].a > 0 && i > 0)	// == r.t[i].n)
-	    {
-	      printf ("e=%d %d %s\n", r.t[i].a, r.t[i].n, "お");
-	      count++;
-	    }
-	  if (i == 0)
-	    {
-	      printf ("\ne=%d %d %s\n", r.t[i].a, r.t[i].n, "う");
-	      count++;
-	    }
-
-	}
-      if (count != T)
-	{
-	  printf ("error pattarn too few %d\n", count);
-	  printpol (o2v (w));
-	  printf (" ==========goppa\n");
-	  printsage (o2v (w));
-	  printf (" ==========sage\n");
-	  printsage (o2v (f));
-	  printf (" =========syn\n");
-	  printpol (o2v (f));
-	  printf (" ==========synd\n");
-
-goto nn;
-
-	 // exit (1);
-
-	}
-
-//OP sb={0};
-      printf ("err=%dっ！！\n", count);
-
-exit(1);
-
-
-memset(zz,0,sizeof(zz));
-zz[2]=11;
-zz[4]=1;
-zz[9]=11;
-zz[10]=6;
-zz[12]=7;
-
+memset(sb.t,0,sizeof(sb.t));
 sb=synd(zz);
-printpol(o2v(sb));
-printf(" =zz\n");
-printpol(o2v(sa));
-printf(" =S(x)\n");
-wait();
-printpol(o2v(ga));
-printf(" =g(x)\n");
-printpol(o2v(lb[T]));
-printf(" =l(x)\n");
-//for(i=0;i<T;i++)
-//zz[r.t[i].n]=r.t[i].a;
-//printpol(o2v(synd(zz)));
-//printf("\n");
-exit(1);
-}
-
-
-  //decode開始
-  k = 0;
-  while (1)
-    {
-
-      o1 = 0;
-
-      count = 0;
-
-      memset (zz, 0, sizeof (zz));
-      //for(i=1;i<4;i++)
-      //zz[i]=i;
-
-      //zz[4]=4;
-      //zz[8]=8;
-      //zz[12]=12;
-
-
-      j = 0;
-      while (j < T)
-	{
-	  l = xor128 () % D;
-	  //k=rand()%D;
-	  //printf("l=%d\n",l);
-	  if (0 == zz[l] && l > 0)
-	    {
-	      zz[l] = l;
-	      j++;
-	    }
-	}
-
-      for (i = 0; i < D; i++)
-	{
-	  if (zz[i] > 0)
-	    printf ("l=%d %d\n", i, zz[i]);
-	}
-      //exit(1);
-
-      f = synd (zz);
-      //exit(1);
-      /*      
-         f=conv(f);
-         ef=o2v(f);
-         for(j=0;j<K;j++){
-         for(i=0;i<K;i++)
-         gh.x[j]^=gf[mlt(fg[ef.x[i]],fg[invA0[i][j]])];
-         }
-         f=v2o(gh);
-         f=conv(f);
-         //exit(1);
-       */
-      count = 0;
-      /*
-         count = 0;
-         for (i = 0; i < N; i++)
-         {
-         if (zz[i] > 0)
-         count++;
-         }
-         printf ("%d\n", count);
-       */
-      printpol (o2v (w));
-      printf (" ==========goppa\n");
-      printsage (o2v (w));
-      printf (" ==========sage\n");
-      printsage (o2v (f));
-      printf (" ==========synd\n");
-      printpol (o2v (f));
-      printf (" ==========synd\n");
-
-
-      r = decode (w, f);
-
-      for (i = 0; i < T; i++)
-	{
-	  if (r.t[i].a > 0 && i > 0)	// == r.t[i].n)
-	    {
-	      printf ("e=%d %d %s\n", r.t[i].a, r.t[i].n, "お");
-	      count++;
-	    }
-	  if (i == 0)
-	    {
-	      printf ("\ne=%d %d %s\n", r.t[i].a, r.t[i].n, "う");
-	      count++;
-	    }
-	  if (r.t[i].a != r.t[i].n)
-	    {
-	      printf ("baka @ T\n");
-	      printpol (o2v (w));
-	      printf (" ==========goppa\n");
-	      printsage (o2v (w));
-	      printf (" ==========sage\n");
-	      printsage (o2v (f));
-	      printf (" =========syn\n");
-	      printpol (o2v (f));
-	      printf (" ==========synd\n");
-
-	      for (i = 0; i < D; i++)
-		printf ("%d %d\n", i, zz[i]);
-	      printf ("\n");
-	      int ii;
-	      for (ii = 0; ii < T; ii++)
-		printf ("e=%d %d %s\n", r.t[ii].a, r.t[ii].n, "お");
-	      A2++;
-	      //wait();
-	      //exit (1);
-
-	      exit (1);
-	    }
-
-	}
-      if (count != T)
-	{
-	  printf ("error pattarn too few %d\n", count);
-	  printpol (o2v (w));
-	  printf (" ==========goppa\n");
-	  printsage (o2v (w));
-	  printf (" ==========sage\n");
-	  printsage (o2v (f));
-	  printf (" =========syn\n");
-	  printpol (o2v (f));
-	  printf (" ==========synd\n");
-
-	  for (i = 0; i < D; i++)
-	    printf ("%d,", zz[i]);
-	  printf ("\n");
-
-	  exit (1);
-	}
-
-      printf ("err=%dっ！！\n", count);
-
-      //wait();
-      //exit(1);
-      //goto lab;
-
-
-    patta:
-
-
-
-      //printf("パターソンアルゴリズムを実行します。何か数字を入れてください。\n");
-      //wait();
-      count = 0;
-      memset (z1, 0, sizeof (z1));
-
-      j = 0;
-
-      while (j < T * 2)
-	{
-	  l = xor128 () % D;
-	  //printf ("l=%d\n", l);
-	  if (0 == z1[l])
-	    {
-	      z1[l] = 1;
-	      printf ("l=%d\n", l);
-	      j++;
-	    }
-	}
-      //wait();
-
-      //for(i=0;i<8;i++)
-      //z1[i]=1;
-
-      //encryotion
-      //test (w, z1);
-
-
-      f = synd (z1);
-
-
-      //バグトラップのためのコード（省略）
-      //trap(w,f);
-      //バグトラップ（ここまで）
-
-      count = 0;
-      //復号化の本体
-      v = pattarson (w, f);
-      //エラー表示
-      for (i = 0; i < T * 2; i++)
-	{
-	  if (i == 0)
-	    {
-	      printf ("error position=%d %d う\n", i, v.x[i]);
-	      count++;
-	    }
-	  if (i > 0 && v.x[i] > 0)
-	    {
-	      printf ("error position=%d %d お\n", i, v.x[i]);
-	      count++;
-	    }
-	  if (i > 0 && v.x[i] == 0)
-	    {
-	      printf ("baka %d %d\n", i, v.x[i]);
-	      printf ("v.x[K-1]=%d\n", v.x[K - 1]);
-	      printpol (o2v (w));
-	      printf (" ============goppa\n");
-	      printsage (o2v (w));
-	      printf (" ============sage\n");
-	      printsage (o2v (f));
-	      printf (" ============syn\n");
-	      printpol (o2v (f));
-	      printf (" ==========synd\n");
-
-	      printf ("{");
-	      for (k = 0; k < N; k++)
-		{
-		  if (z1[k] > 0)
-		    printf ("%d,", z1[k]);
-		}
-	      printf ("};\n");
-	      //AA++;
-	      //wait();
-	      break;
-	      //
-	      //exit (1);
-	    }
-	  int cnt = 0;
-	  for (k = 0; k < N; k++)
-	    {
-	      if (z1[k] > 0)
-		{
-		  if (k != v.x[cnt])
-		    {
-		      printf ("%d,%d\n", k, v.x[cnt]);
-		      printsage (o2v (w));
-		      printf (" ========w\n");
-		      AA++;
-		      break;
-		      //exit(1);
-		    }
-		  cnt++;
-		}
-	    }
-	}
-      if (count == T * 2)
-	{
-	  printf ("err=%dっ!! \n", count);
-	  B++;
-	}
-      if (count < T * 2)
-	{
-	  printf ("error is too few\n");
-	  AA++;
-	  memcpy (zz, z1, sizeof (zz));
-	  printf ("{");
-	  for (i = 0; i < D; i++)
-	    printf ("%d,", z1[i]);
-	  printf ("};\n");
-	  printpol (o2v (w));
-	  printf (" =========goppa\n");
-	  printsage (o2v (w));
-	  printf (" =========sage\n");
-	  printsage (o2v (f));
-	  printf (" =========syn\n");
-	  printpol (o2v (f));
-	  printf (" ==========synd\n");
-	  //exit(1);
-	}
-      if (AA == 1000)
-	{
-	  printf ("B=%d", B);
-	  exit (1);
-	}
-      if (B > 20000)
-	{
-	  count = 0;
-	  printf ("false=%d\n", AA);
-	  printf ("success=%d\n", B);
-	  //for(i=0;i<16;i++)
-	  //printf("%d,",zz[i]);
-	  //printf("\n");
-	  printf ("C=%d\n", A2);
-	  printpol (o2v (w));
-	  printf (" =======goppa\n");
-	  printsage (o2v (w));
-	  printf (" =======sage\n");
-	  exit (1);
-	}
-
-      //exit(1);
-      goto label;
-      //wait();
-
-      //break;
+/*
+for(i=0;i<deg(o2v(sa));i++){
+    if(o2v(f).x[i]!=o2v(sa).x[i]){
+    wait();
+    //goto cc;
     }
+}
+*/
+memset(r.t,0,sizeof(r.t));
+printpol(o2v(sb));
+printf(" =final pol\n");
+r=decode(ga,sa);
+
+if(elo(r)<0)
+goto nn;
+//exit(1);
+
+
+
 
   return 0;
 }
