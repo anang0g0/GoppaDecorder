@@ -34,7 +34,7 @@
 #include <omp.h>		//clang-10
 
 #include "debug.c"
-//#include "8192.h"
+#include "8192.h"
 #include "global.h"
 #include "struct.h"
 
@@ -56,7 +56,7 @@ extern void makeS ();
 unsigned short sy[K] = { 0 };
 
 //Goppa多項式
-static unsigned short g[K + 1] = { 1, 1, 1, 0, 1, 0, 1 };
+static unsigned short g[K + 1] = { 1, 0, 0, 0, 1, 0, 1 };
 
   //{ 1,0,11,14,7,0,6 };
   //{1,0,13,14,13,0,11};
@@ -1508,8 +1508,8 @@ ginit (void)
 
 
   g[K] = 1;			//xor128();
-  g[0] = rand () % N;
-  while (count < ((K / 2) - 0))
+  g[0] = rand () %  N;
+  while (count < ((K / 2) - 1))
     {
       printf ("@\n");
       j = rand () % (K - 1);
@@ -3440,11 +3440,28 @@ EX extgcd(OP a, OP b) {
   }
 }
 
-
+unsigned short vv[K][N]={0};
 unsigned short gt[K][K]={0};
+void van(){
+int i,j,k;
+
+printf("van der\n");
+for(i=0;i<N;i++)
+vv[0][i]=1;
+for(i=1;i<K;i++){
+  for(j=0;j<N;j++)
+  vv[i][j]=gf[mltn(i,fg[j])];
+}
+for(i=0;i<K;i++){
+  for(j=0;j<N;j++)
+  printf("%d,",vv[i][j]);
+  printf("\n");
+}
+
+}
 
 
-OP mkg(){
+OP kotei(){
 int i,j,k,fail,flg,l;
 OP w={0};
 
@@ -3466,99 +3483,17 @@ aa:
 	  if (i % 2 == 1 && g[i] > 0 && i < K)
 	    k++;
 	}
+  
       if ((k > 0 && flg == 0) || (k > 1 && flg == 1))
 	{
 	  w = setpol (g, K + 1);
 	  j = 1;
 	}
-      //w = setpol (g, K + 1);
-      //oprintpol (w);
-      //多項式の値が0でないことを確認
-      for (i = 0; i < D; i++)
-	{
-	  ta[i] = trace (w, i);
-	  if (ta[i] == 0)
-	    {
-	      printf ("trace 0 @ %d\n", i);
-	      fail = 1;
-	      break;
-	    }
-	}
-      
-    }
-  while (fail || j == 0);
-
-
-memset(mat,0,sizeof(mat));
-
-  oprintpol (w);
-  printf ("\n");
-  printsage (o2v (w));
-  printf ("\n");
-  printf ("sagemath で既約性を検査してください！\n");
-  wait ();
-
-
-  //#pragma omp parallel for
-  for (i = 0; i < N; i++)
-    {
-      tr[i] = oinv (ta[i]);
-
-    }
-
- 
-
-  printf ("\nすげ、オレもうイキそ・・・\n");
-  //keygen(g);
-
-
-
-  //パリティチェックを生成する。
-  //パリティチェックに0の列があったら、なくなるまでやり直す。
-        //w=mkg();
-      i = deta (g);
-    
-if (i < 0);{
-printf("i=%d\n",i);
-wait();
-}
-
-return w;
-}
-
-
-
-
-OP kotei(){
-int i,j,k,fail,flg,l;
-OP w={0};
-
-aa:
-  do
-    {
-      fail = 0;
-      j = 0;
-      k = 0;
-      flg = 0;
-      l=0;
-      //memset (g, 0, sizeof (g));
-      memset (ta, 0, sizeof (ta));
-      //ginit ();
-      for (i = 0; i < K + 1; i++)
-	{
-	  if (g[K - 1] > 0)
-	    flg = 1;
-	  if (i % 2 == 1 && g[i] > 0 && i < K)
-	    k++;
-	}
-      if ((k > 0 && flg == 0) || (k > 1 && flg == 1))
-	{
-	  w = setpol (g, K + 1);
-	  j = 1;
-	}
+  /*
       w = setpol (g, K + 1);
       oprintpol (w);
       j=1;
+      */
       //多項式の値が0でないことを確認
       for (i = 0; i < D; i++)
 	{
@@ -3633,6 +3568,159 @@ wait();
 
 return w;
 }
+
+
+OP ogt(){
+    int i,j,k;
+  OP w={0};
+  unsigned short abc[N][K]={0};
+
+for(i=0;i<K;i++){
+    for(j=0;j<K;j++)
+    gt[j+i][i]=g[j];
+
+    }
+    for(i=0;i<K;i++){
+        for(j=0;j<K;j++)
+        printf("%d,",gt[j][i]);
+        printf("\n");
+    }
+/*
+exit(1);
+
+// w=kotei();
+memset(ma,0,sizeof(ma));
+
+for(i=0;i<K;i++)
+printf("%d,",gt[i][0]);
+printf("\n");
+//ogt();
+printf("\n");
+//exit(1);
+for(i=0;i<K;i++)
+ma[0][i]=gt[i][0];
+for(i=0;i<K;i++){
+  for(j=1;j<N;j++){
+    for(k=0;k<K;k++)
+  ma[j][i]^=gf[mlt(fg[gt[i][k]],fg[mat[j][k]])];
+  }
+}
+
+memcpy(mat,ma,sizeof(mat));
+for(i=0;i<N;i++){
+  for(j=0;j<K;j++){
+//    mat[i][K-j-1]=abc[i][j];
+  printf("%d,",mat[i][j]);
+  }
+  printf("\n");
+
+}
+//  exit(1);
+*/
+
+return w;
+}
+
+
+unsigned short dd[N][N]={0};
+
+OP mkg(){
+int i,j,k,fail,flg,l;
+OP w={0};
+
+aa:
+  do
+    {
+      fail = 0;
+      j = 0;
+      k = 0;
+      flg = 0;
+      l=0;
+      memset (g, 0, sizeof (g));
+      memset (ta, 0, sizeof (ta));
+      ginit ();
+      for (i = 0; i < K + 1; i++)
+	{
+	  if (g[K - 1] > 0)
+	    flg = 1;
+	  if (i % 2 == 1 && g[i] > 0 && i < K)
+	    k++;
+	}
+      if ((k > 0 && flg == 0) || (k > 1 && flg == 1))
+	{
+	  w = setpol (g, K + 1);
+	  j = 1;
+	}
+      //w = setpol (g, K + 1);
+      //oprintpol (w);
+      //j=1;
+      //多項式の値が0でないことを確認
+      for (i = 0; i < D; i++)
+	{
+	  ta[i] = trace (w, i);
+	  if (ta[i] == 0)
+	    {
+	      printf ("trace 0 @ %d\n", i);
+	      fail = 1;
+	      break;
+	    }
+	}
+      
+    }
+  while (fail || j == 0);
+
+
+memset(mat,0,sizeof(mat));
+
+  oprintpol (w);
+  printf ("\n");
+  printsage (o2v (w));
+  printf ("\n");
+  printf ("sagemath で既約性を検査してください！\n");
+  wait ();
+
+
+  //#pragma omp parallel for
+  for (i = 0; i < N; i++)
+    {
+      tr[i] = oinv (ta[i]);
+
+    }
+
+van();
+ogt(); 
+memset(dd,0,sizeof(dd));
+
+for(i=0;i<N;i++)
+dd[i][i]=gf[tr[i]];
+/*
+for(i=0;i<N;i++){
+  for(j=0;j<N;j++)
+  printf("%d,",dd[i][j]);
+  printf("\n");
+}
+*/
+  printf ("\nすげ、オレもうイキそ・・・\n");
+  //keygen(g);
+
+//exit(1);
+
+  //パリティチェックを生成する。
+  //パリティチェックに0の列があったら、なくなるまでやり直す。
+        //w=mkg();
+      i = deta (g);
+  
+if (i < 0);{
+printf("i=%d\n",i);
+wait();
+}
+
+
+return w;
+}
+
+
+
 
 
 
@@ -3796,54 +3884,6 @@ return 0;
 
 
 
-OP ogt(){
-    int i,j,k;
-  OP w={0};
-  unsigned short abc[N][K]={0};
-
-for(i=0;i<K;i++){
-    for(j=0;j<K;j++)
-    gt[j+i][i]=g[j];
-
-    }
-    for(i=0;i<K;i++){
-        for(j=0;j<K;j++)
-        printf("%d,",gt[j][i]);
-        printf("\n");
-    }
-
- w=kotei();
-memset(ma,0,sizeof(ma));
-
-for(i=0;i<K;i++)
-printf("%d,",g[i]);
-printf("\n");
-//ogt();
-printf("\n");
-//exit(1);
-for(i=0;i<K;i++)
-ma[0][i]=g[i];
-for(i=0;i<K;i++){
-  for(j=1;j<N;j++){
-    for(k=0;k<K;k++)
-  ma[j][i]^=gf[mlt(fg[gt[i][k]],fg[mat[j][k]])];
-  }
-}
-
-memcpy(mat,ma,sizeof(mat));
-for(i=0;i<N;i++){
-  for(j=0;j<K;j++){
-//    mat[i][K-j-1]=abc[i][j];
-  printf("%d,",mat[i][j]);
-  }
-  printf("\n");
-
-}
-//  exit(1);
-
-
-return w;
-}
 
 
 int oequ(OP f,OP g){
@@ -4225,9 +4265,38 @@ wait();
 
 //ginit();
 
+//van();
+//ogt();
 
-label:  
+//exit(1);
+
+memset(ma,0,sizeof(ma));
+memset(mat,0,sizeof(mat));
+label:
 w=mkg();
+
+//w=ogt();
+/*
+//#pragma omp paralell for
+for(i=0;i<K;i++){
+  for(j=0;j<N;j++){
+    for(k=0;k<N;k++)
+    ma[j][i]^=gf[mlt(fg[vv[i][k]],fg[dd[k][j]])];
+  }
+}
+for(i=0;i<K;i++){
+  for(j=0;j<N;j++){
+    for(k=0;k<K;k++)
+    mat[j][i]^=gf[mlt(fg[gt[i][k]],fg[ma[j][k]])];
+  }
+}
+*/
+
+for(i=0;i<N;i++){
+  for(j=0;j<K;j++)
+  printf("%d,",mat[i][j]);
+  printf("\n");
+}
 //exit(1);
   unsigned short gen[N][K] = { 0 };
 
@@ -4302,18 +4371,19 @@ lab:
 
 srand(clock());
 
-
+/*
 zz[0]=1;
 zz[1]=2;
 zz[2]=4;
-/*
+
 zz[4]=4;
 zz[5]=5;
 */
 
 //w=setpol(g,K+1);
-//for(i=1;i<T+1;i++)
-//zz[i]=i;
+for(i=0;i<T;i++)
+zz[i]=i+1;
+//zz[rand()%N]=rand()%N;
 
 //sa=synd2(zz);
 sa=synd(zz);
