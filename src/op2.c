@@ -34,7 +34,7 @@
 #include <omp.h>		//clang-10
 
 #include "debug.c"
-#include "8192.h"
+//#include "8192.h"
 #include "global.h"
 #include "struct.h"
 
@@ -56,7 +56,7 @@ extern void makeS ();
 unsigned short sy[K] = { 0 };
 
 //Goppa多項式
-static unsigned short g[K + 1] = { 1, 0, 0, 0, 1, 0, 1 };
+static unsigned short g[K + 1] = { 1, 0, 1, 1, 0, 1, 1 };
 
   //{ 1,0,11,14,7,0,6 };
   //{1,0,13,14,13,0,11};
@@ -3587,10 +3587,8 @@ for(i=0;i<K;i++){
     }
 /*
 exit(1);
-
 // w=kotei();
 memset(ma,0,sizeof(ma));
-
 for(i=0;i<K;i++)
 printf("%d,",gt[i][0]);
 printf("\n");
@@ -3605,7 +3603,6 @@ for(i=0;i<K;i++){
   ma[j][i]^=gf[mlt(fg[gt[i][k]],fg[mat[j][k]])];
   }
 }
-
 memcpy(mat,ma,sizeof(mat));
 for(i=0;i<N;i++){
   for(j=0;j<K;j++){
@@ -3613,7 +3610,6 @@ for(i=0;i<N;i++){
   printf("%d,",mat[i][j]);
   }
   printf("\n");
-
 }
 //  exit(1);
 */
@@ -3636,9 +3632,9 @@ aa:
       k = 0;
       flg = 0;
       l=0;
-      memset (g, 0, sizeof (g));
+      //memset (g, 0, sizeof (g));
       memset (ta, 0, sizeof (ta));
-      ginit ();
+      //ginit ();
       for (i = 0; i < K + 1; i++)
 	{
 	  if (g[K - 1] > 0)
@@ -3651,9 +3647,9 @@ aa:
 	  w = setpol (g, K + 1);
 	  j = 1;
 	}
-      //w = setpol (g, K + 1);
-      //oprintpol (w);
-      //j=1;
+      w = setpol (g, K + 1);
+      oprintpol (w);
+      j=1;
       //多項式の値が0でないことを確認
       for (i = 0; i < D; i++)
 	{
@@ -3687,8 +3683,8 @@ memset(mat,0,sizeof(mat));
 
     }
 
-van();
-ogt(); 
+//van();
+//ogt(); 
 memset(dd,0,sizeof(dd));
 
 for(i=0;i<N;i++)
@@ -3704,7 +3700,7 @@ for(i=0;i<N;i++){
   //keygen(g);
 
 //exit(1);
-
+/*
   //パリティチェックを生成する。
   //パリティチェックに0の列があったら、なくなるまでやり直す。
         //w=mkg();
@@ -3714,7 +3710,7 @@ if (i < 0);{
 printf("i=%d\n",i);
 wait();
 }
-
+*/
 
 return w;
 }
@@ -4265,8 +4261,8 @@ wait();
 
 //ginit();
 
-//van();
-//ogt();
+van();
+ogt();
 
 //exit(1);
 
@@ -4276,7 +4272,7 @@ label:
 w=mkg();
 
 //w=ogt();
-/*
+
 //#pragma omp paralell for
 for(i=0;i<K;i++){
   for(j=0;j<N;j++){
@@ -4290,7 +4286,7 @@ for(i=0;i<K;i++){
     mat[j][i]^=gf[mlt(fg[gt[i][k]],fg[ma[j][k]])];
   }
 }
-*/
+
 
 for(i=0;i<N;i++){
   for(j=0;j<K;j++)
@@ -4375,7 +4371,6 @@ srand(clock());
 zz[0]=1;
 zz[1]=2;
 zz[2]=4;
-
 zz[4]=4;
 zz[5]=5;
 */
@@ -4385,8 +4380,8 @@ for(i=0;i<T;i++)
 zz[i]=i+1;
 //zz[rand()%N]=rand()%N;
 
-//sa=synd2(zz);
-sa=synd(zz);
+sa=synd2(zz);
+//sa=synd(zz);
 printpol(o2v(sa));
 printf(" =: pol\n");
 printpol(o2v(w));
