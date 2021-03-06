@@ -4155,7 +4155,7 @@ lab:
 	  exit (1);
 	}
 
-      //exit(1);
+      exit(1);
       goto label;
       //wait();
 
@@ -4164,3 +4164,5 @@ lab:
 
   return 0;
 }
+
+
