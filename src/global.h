@@ -13,7 +13,7 @@
 #define K (256) //符号の次元
 #define DEG (K*2)
 #define T (K/2) //エラーの数
-#define E (8) //拡大体のビット数
+#define E (13) //拡大体のビット数
 #define D (8192) //符号長（短縮符号）
 #define F  E*K //2040
 
