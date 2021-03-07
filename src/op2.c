@@ -3620,13 +3620,14 @@ aa:
 	  w = setpol (g, K + 1);
 	  j = 1;
 	}
-    */  
+   */  
+   
       w = setpol (g, K + 1);
       oprintpol (w);
       j=1;
       
       //多項式の値が0でないことを確認
-      for (i = 0; i < D; i++)
+  for (i = 0; i < N; i++)
 	{
 	  ta[i] = trace (w, i);
 	  if (ta[i] == 0)
@@ -3675,10 +3676,11 @@ for(i=0;i<N;i++){
   //keygen(g);
 //exit(1);
 
+
 unsigned short s,ms[K]={0};
-//#pragma omp parallel for default(none) private(i,j) shared(ma,vv,tr,fg,gf)
+//#pragma omp parallel for private(i,j) shared(vv,tr,fg,gf,ma)
   for(j=0;j<N;j++){
-    for(i=0;i<K;i++){
+      for(i=0;i<K;i++){
     ma[j][i]=gf[mlt(fg[vv[i][j]],tr[j])];
 }
 }
@@ -3687,6 +3689,7 @@ unsigned short s,ms[K]={0};
 for(i=0;i<K;i++){
   for(j=0;j<N;j++){
     s=0;
+    //#pragma omp parallel for reduction(^:s)
       for(k=0;k<K;k++)
         s^=gf[mlt(fg[gt[i][k]],fg[ma[j][k]])];
 
