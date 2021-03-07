@@ -4348,6 +4348,7 @@ label:
 w=mkg();
 //ogt();
 
+
 unsigned short s,ms[K]={0};
 //#pragma omp parallel for default(none) private(i,j) shared(ma,vv,tr,fg,gf)
   for(j=0;j<N;j++){
@@ -4365,7 +4366,6 @@ for(i=0;i<K;i++){
 
     mat[j][i]=s;
   }
-
 }
 
 
