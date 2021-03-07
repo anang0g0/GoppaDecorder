@@ -2305,9 +2305,9 @@ deta (unsigned short g[])
 	det2 (i, g);
       }
   }
-  for(i=0;i<K;i++)
-  	  printf ("%d,", mat[i][0]);
-        printf("\n");
+//  for(i=0;i<K;i++)
+ // 	  printf ("%d,", mat[i][0]);
+//        printf("\n");
   for (j = 0; j < N; j++)
     {
       flg = 0;
@@ -3618,22 +3618,26 @@ for(i=0;i<K;i++)
 mat[0][i]=g[i];
 for(i=0;i<N;i++)
 mat[i][0]=gf[tr[i]];
+/*
 for(i=0;i<N;i++){
     for(j=0;j<1;j++)
     printf("%d,",mat[i][j]);
 }
     printf("\n");
+    */
 //exit(1);
 for(i=0;i<N;i++){
     for(j=0;j<K;j++)
     mat[i][j]=gf[mlt(tr[i],mltn(j,fg[i]))];
     
 }
+/*
 for(i=0;i<N;i++){
     for(j=0;j<K;j++)
     printf("%d,",mat[i][j]);
     printf("\n");
 }
+*/
 //exit(1);
   
 
@@ -3882,7 +3886,7 @@ memset(mat,0,sizeof(mat));
   for (i = 0; i < N; i++)
     {
       tr[i] = oinv (ta[i]);
-    printf("%d,",gf[tr[i]]);
+    //printf("%d,",gf[tr[i]]);
     }
 //exit(1);
  
@@ -3893,29 +3897,34 @@ memset(mat,0,sizeof(mat));
 
   //パリティチェックを生成する。
   //パリティチェックに0の列があったら、なくなるまでやり直す。
-for(i=0;i<N;i++)
-printf("%d,",gf[tr[i]]);
-printf("\n");
+  
+//for(i=0;i<N;i++)
+//printf("%d,",gf[tr[i]]);
+//printf("\n");
 for(i=0;i<K;i++)
 mat[0][i]=g[i];
 for(i=0;i<N;i++)
 mat[i][0]=gf[tr[i]];
+/*
 for(i=0;i<N;i++){
     for(j=0;j<1;j++)
     printf("%d,",mat[i][j]);
 }
     printf("\n");
+    */
 //exit(1);
 for(i=0;i<N;i++){
     for(j=0;j<K;j++)
     mat[i][j]=gf[mlt(tr[i],mltn(j,fg[i]))];
     
 }
+/*
 for(i=0;i<N;i++){
     for(j=0;j<K;j++)
     printf("%d,",mat[i][j]);
     printf("\n");
 }
+*/
 //exit(1);
   
 
@@ -4373,12 +4382,13 @@ w=mkg();
 //exit(1);
 //test();
 
-
+/*
 for(i=0;i<N;i++){
   for(j=0;j<K;j++)
   printf("%d,",mat[i][j]);
   printf("\n");
 }
+*/
 //exit(1);
   unsigned short gen[N][K] = { 0 };
 
@@ -4463,6 +4473,7 @@ zz[5]=5;
 */
 
 count=0;
+memset(zz,0,sizeof(zz));
 //w=setpol(g,K+1);
 while(count<T){
   j=rand()%N;
@@ -4496,7 +4507,11 @@ if((count=elo(r))<0){
 }
 if(count==T){
   printf("っ！ %d\n",count);
+}else{
+  perintf("%d\n",count);
+  exit(1);
 }
+//goto label;
 exit(1);
 
 OP pp[1000]={0};
@@ -4648,7 +4663,7 @@ if(deg(o2v(ya))<T){
       flg = 0;
       for (i = 0; i < K; i++)
 	{
-	  printf ("%d,", mat[i][j]);
+//	  printf ("%d,", mat[i][j]);
 	  if (mat[j][i] > 0)
 	    flg = 1;
 	}
@@ -4697,7 +4712,7 @@ exit(1);
       flg = 0;
       for (i = 0; i < K; i++)
 	{
-	  printf ("%d,", mat[i][j]);
+//	  printf ("%d,", mat[i][j]);
 	  if (mat[j][i] > 0)
 	    flg = 1;
 	}
