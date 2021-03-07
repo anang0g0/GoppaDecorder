@@ -3702,9 +3702,10 @@ for(i=0;i<N;i++){
 */
   printf ("\nすげ、オレもうイキそ・・・\n");
   //keygen(g);
-
 //exit(1);
 
+
+/*
   //パリティチェックを生成する。
   //パリティチェックに0の列があったら、なくなるまでやり直す。
         //w=mkg();
@@ -3714,7 +3715,7 @@ if (i < 0);{
 printf("i=%d\n",i);
 wait();
 }
-
+*/
 
 return w;
 }
@@ -4278,12 +4279,12 @@ w=mkg();
 
 
 //w=ogt();
-/*
+
 //#pragma omp paralell for
+
 for(i=0;i<K;i++){
   for(j=0;j<N;j++){
-    for(k=0;k<N;k++)
-    ma[j][i]^=gf[mlt(fg[vv[i][k]],fg[dd[k][j]])];
+    ma[j][i]^=gf[mlt(fg[vv[i][j]],tr[j])];
   }
 }
 for(i=0;i<K;i++){
@@ -4292,7 +4293,7 @@ for(i=0;i<K;i++){
     mat[j][i]^=gf[mlt(fg[gt[i][k]],fg[ma[j][k]])];
   }
 }
-*/
+
 
 for(i=0;i<N;i++){
   for(j=0;j<K;j++)
@@ -4387,8 +4388,8 @@ for(i=0;i<T;i++)
 zz[i]=i+1;
 //zz[rand()%N]=rand()%N;
 
-//sa=synd2(zz);
-sa=synd(zz);
+sa=synd2(zz);
+//sa=synd(zz);
 printpol(o2v(sa));
 printf(" =: pol\n");
 printpol(o2v(w));
