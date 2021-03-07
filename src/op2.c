@@ -4353,7 +4353,7 @@ unsigned short s,ms[K]={0};
 //#pragma omp parallel for default(none) private(i,j) shared(ma,vv,tr,fg,gf)
   for(j=0;j<N;j++){
     for(i=0;i<K;i++){
-    ma[j][i]^=gf[mlt(fg[vv[i][j]],tr[j])];
+    ma[j][i]=gf[mlt(fg[vv[i][j]],tr[j])];
 }
 }
 
@@ -4361,8 +4361,8 @@ unsigned short s,ms[K]={0};
 for(i=0;i<K;i++){
   for(j=0;j<N;j++){
     s=0;
-    for(k=0;k<K;k++)
-    s^=gf[mlt(fg[gt[i][k]],fg[ma[j][k]])];
+      for(k=0;k<K;k++)
+        s^=gf[mlt(fg[gt[i][k]],fg[ma[j][k]])];
 
     mat[j][i]=s;
   }
