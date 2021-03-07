@@ -1778,10 +1778,82 @@ ipow (unsigned int q, unsigned int u)
 }
 
 
+OP ww[T]={0};
+
+OP bib(int i,OP d){
+int id,j;
+
+OP t={0};
+
+ printf("thread=%d\n", omp_get_thread_num ());  
+
+ t=d;
+
+    for (j = 0; j < T; j++)
+      {
+        if (i != j)
+          {
+        t = omul (t, ww[j]);
+          }
+      }
+
+return t;
+}
+
 
 //多項式の形式的微分
 OP
 bibun (vec a)
+{
+  OP w[T*2] = { 0 };
+  OP l = { 0 }
+  , t[T] = {0},d={0};
+  int i, j, n, id;
+  vec tmp = { 0 };
+
+
+  n = deg (a);
+  printf ("n=%d\n", n);
+  if (n == 0)
+    {           
+      printf ("baka8\n");
+       exit(1);
+    }
+memset(ww,0,sizeof(ww));
+
+#pragma omp parallel num_threads(omp_get_max_threads())
+  for (i = 0; i < T; i++)
+    {
+      ww[i].t[0].a = a.x[i];
+      ww[i].t[0].n = 0;
+      ww[i].t[1].a = 1;
+      ww[i].t[1].n = 1;
+
+    }
+
+  tmp.x[0] = 1;
+
+  d = v2o (tmp);
+
+#pragma omp parallel num_threads(omp_get_max_threads())
+  {
+  #pragma omp for schedule(static)
+    for (i = 0; i < T; i++)
+      {
+    t[i]=bib(i,d);  
+      }
+}
+
+  for (i = 0; i < T; i++)
+      l = oadd (l, t[i]);
+
+  return l;
+}
+
+
+//多項式の形式的微分
+OP
+bibun_old (vec a)
 {
   OP w[T * 2] = { 0 };
   OP l = { 0 }
@@ -3833,7 +3905,6 @@ return w;
 }
 
 
-
 int elo(OP r){
 int count,i,j,k;
 
@@ -4277,21 +4348,24 @@ label:
 w=mkg();
 //ogt();
 
-
-//w=ogt();
-
-//#pragma omp paralell for
-
-for(i=0;i<K;i++){
+unsigned short s,ms[K]={0};
+//#pragma omp parallel for default(none) private(i,j) shared(ma,vv,tr,fg,gf)
   for(j=0;j<N;j++){
+    for(i=0;i<K;i++){
     ma[j][i]^=gf[mlt(fg[vv[i][j]],tr[j])];
-  }
 }
+}
+
+#pragma omp parallel for default(none) private(i,j,k,s) shared(mat,gt,ma,fg,gf)
 for(i=0;i<K;i++){
   for(j=0;j<N;j++){
+    s=0;
     for(k=0;k<K;k++)
-    mat[j][i]^=gf[mlt(fg[gt[i][k]],fg[ma[j][k]])];
+    s^=gf[mlt(fg[gt[i][k]],fg[ma[j][k]])];
+
+    mat[j][i]=s;
   }
+
 }
 
 
