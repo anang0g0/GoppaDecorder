@@ -3593,7 +3593,7 @@ memset(mat,0,sizeof(mat));
   printsage (o2v (w));
   printf ("\n");
   printf ("sagemath で既約性を検査してください！\n");
-  wait ();
+//  wait ();
 
 
   //#pragma omp parallel for
@@ -3758,7 +3758,7 @@ memset(mat,0,sizeof(mat));
   printsage (o2v (w));
   printf ("\n");
   printf ("sagemath で既約性を検査してください！\n");
-  wait ();
+//  wait ();
 
 
   //#pragma omp parallel for
@@ -3879,7 +3879,7 @@ memset(mat,0,sizeof(mat));
   printsage (o2v (w));
   printf ("\n");
   printf ("sagemath で既約性を検査してください！\n");
-  wait ();
+//  wait ();
 
 
   //#pragma omp parallel for
@@ -4185,7 +4185,7 @@ srand(clock());
 sa=setpol(tb,T*2);
 
 printpol(o2v(sa));
-wait();
+//wait();
 //exit(1);
 
 //公開鍵matはグローバル変数でスタック領域に取る。
@@ -4214,160 +4214,6 @@ wait();
 
 
   
-  r1.t[0].a=1;
-  r1.t[0].n=0;
-  r1.t[1].a=1;
-  r1.t[1].n=1;
-  r1.t[3].a=1;
-  r1.t[3].n=3;
-  
-  r2.t[0].a=1;
-  r2.t[0].n=0;
-  r2.t[2].a=1;
-  r2.t[2].n=2;
-  r2.t[3].a=1;
-  r2.t[3].n=3;
-  r2.t[4].a=1;
-  r2.t[4].n=4;
-
-  r3.t[0].a=1;
-  r3.t[0].n=0;
-  r3.t[1].a=1;
-  r3.t[1].n=1;
-  r3.t[3].a=1;
-  r3.t[3].n=3;
-  r3.t[4].a=1;
-  r3.t[4].n=4;
-  r3.t[5].a=1;
-  r3.t[5].n=5;
-  r3.t[6].a=1;
-  r3.t[6].n=6;
-
-  r4.t[0].a=1;
-  r4.t[0].n=0;
-  r4.t[2].a=1;
-  r4.t[2].n=2;
-  r4.t[6].a=1;
-  r4.t[6].n=6;
-
-  OP r5={0},r6={0},cd={0},sd={0};
-  r5.t[0].a=1;
-  r5.t[0].n=0;
-  r5.t[3].a=1;
-  r5.t[3].n=3;
-  r5.t[5].a=1;
-  r5.t[5].n=5;
-
-  r6.t[0].a=1;
-  r6.t[0].n=0;
-  r6.t[4].a=1;
-  r6.t[4].n=4;
-
-  cd=omul(r1,r5);
-  sd=omul(r5,r4);
-  tmp=gcd(sd,cd);
-  printpol(o2v(tmp));
-  printf(" ==gcd\n");
-  //exit(1);
-  tmp=ogcd(cd,sd);
-  printpol(o2v(tmp));
-  printf(" ==ogcd\n");
-  //exit(1);
-  
-  EX rs={0};
-    rs=extgcd(cd,sd);
-    printpol(o2v(rs.d));
-    printf(" ==========extgcd\n");
-    //exit(1);
-    
-    //printpol(o2v(gcd(r5,r1)));
-    //printf("==========gcd\n");
-    rs=extgcd(r4,r3);
-    printpol(o2v(rs.d));
-    printf("==========extgcd\n");
-    printpol(o2v(rs.v));
-    printf("==========tx gcd\n");
-    printpol(o2v(rs.u));
-    printf("==========ty gcd\n");
-    
-    tmp=gcd(r4,r3);
-    printpol(o2v(tmp));
-    printf("==========gcd.v,h,u\n");
-    //exit(1);
-    tmp=gcd(r4,r1);
-    printpol(o2v(tmp));
-    printf("==========gcd.v,h,u\n");
-    tmp=gcd(r5,r4);
-    printpol(o2v(tmp));
-    printf("==========gcd.v,h,u\n");
-    tmp=gcd(r5,r3);
-    printpol(o2v(tmp));
-    printf("==========gcd.v,h,u\n");
-    tmp=gcd(cd,sd);
-    printpol(o2v(tmp));
-    printf("==========gcd.v,h,u\n");
-    tmp=gcd(r5,r1);
-    printpol(o2v(tmp));
-    printf("==========agaaa\n");
-
-    //    OP gcd;
-    OP xx={0},yy={0};
-    printf(" a= ");
-    printpol(o2v(r5) );
-    printf("\n");
-    printf(" b= ");
-    printpol(o2v(r4) );
-    printf("\n");
-
-    tmp=gcd(r5,r4);
-    printpol(o2v(tmp) );
-    printf("\n");
-
-    // exit(1);
-
-
-  //1x^6+11x^4+14x^3+7x^2+6x^0+ ==========goppa
-  //15x^5+6x^4+10x^3+11x^2+6x^1+14x^0+ ==========synd
-  //0,0,0,0,4,0,0,0,8,0,0,0,12,0,0,0,
-  //4x^5+12x^4+15x^3+11x^2+10x^0+
-  //0,0,0,0,0,5,0,0,8,0,0,0,0,13,0,0
-
-    
-  //l=ben_or(w);
-  //printf("irr=%d\n",l);
-  //if(l==1)
-  //goto l;
-
-  /*do{
-    fail=0;
-    flg=0;
-    memset(g,0,sizeof(g));
-    memset(ta,0,sizeof(ta));
-    ginit();
-    w = setpol (g, K + 1);
-    printsage (o2v(w));
-    printf("\n");
-    //wait();
-    flg=ben_or(w);
-    printf("irr=%d\n",flg);
-    //exit(1);
-    
-    //多項式の値が0でないことを確認
-    for (i = 0; i < D; i++)
-      {
-	ta[i] = trace (w, i);
-	if (ta[i] == 0)
-	  {
-	    printf ("trace 0 @ %d\n", i);
-	    fail = 1;
-	    break;
-	  }
-      }
-  }
-  while(flg==1);
-  */  
-
-//ginit();
 
 van();
 
@@ -4378,87 +4224,12 @@ memset(ma,0,sizeof(ma));
 memset(mat,0,sizeof(mat));
 label:
 w=mkg();
-//ogt();
-//exit(1);
-//test();
 
-/*
-for(i=0;i<N;i++){
-  for(j=0;j<K;j++)
-  printf("%d,",mat[i][j]);
-  printf("\n");
-}
-*/
-//exit(1);
   unsigned short gen[N][K] = { 0 };
 
 OP sb={0};
 
 lab:
-
-  //matmul ();
-  //matinv ();
-  // makeS();
-  //exit(1);
-
-  /*
-     printf("gen\n");
-     for(i=0;i<K;i++){
-     for(j=0;j<M;j++){
-     for(k=0;k<M;k++)
-     gen[j][i]^=gf[mlt(fg[mat[k][i]],fg[P[k][j]])];
-     printf("%2d,",gen[j][i]);
-     }
-     printf("\n");
-     }
-     printf("\n");
-     printf("mat\n");
-     for(i=0;i<K;i++){
-     for(j=0;j<N;j++)
-     printf("%2d,",mat[j][i]);
-     printf("\n");
-     }
-     printf("\n");
-   */
-
-
-  /*
-     for(i=0;i<K;i++){
-     for(j=0;j<N;j++)
-     mat[j][i]=0;
-     }
-     for(i=0;i<K;i++){
-     for(j=0;j<N;j++){
-     for(k=0;k<N;k++)
-     mat[j][i]^=gf[mlt(fg[gen[i][k]],invP[k][j])];
-     }
-     }
-     for(j=0;j<K;j++){
-     for(i=0;i<N;i++)
-     printf("%d,",mat[i][k]);
-     printf("\n");
-     }
-     printf("\n");
-     exit(1);
-   */
-
-  //vec ef={0},gh={0};
-
-  //memcpy(mat,gen,sizeof(mat));
-  /*  
-     for(i=0;i<8;i++){
-     for(j=0;j<M;j++)
-     mat[j][i]=gen[i][j];
-     }
-     printf("gen2mat\n");
-     for(i=0;i<8;i++){
-     for(j=0;j<M;j++)
-     printf("%2d,",mat[j][i]);
-     printf("\n");
-     }
-     //exit(1);
-   */
-
 
 
 srand(clock());
@@ -4615,7 +4386,7 @@ printf("\n");
 printpol(o2v(sa));
 printf("\n");
 //exit(1);
-wait();
+//wait();
 
  nn:
 //while(1){
