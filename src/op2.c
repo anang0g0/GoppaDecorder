@@ -3776,6 +3776,24 @@ for(i=0;i<N;i++){
   //keygen(g);
 //exit(1);
 
+unsigned short s,ms[K]={0};
+//#pragma omp parallel for default(none) private(i,j) shared(ma,vv,tr,fg,gf)
+  for(j=0;j<N;j++){
+    for(i=0;i<K;i++){
+    ma[j][i]=gf[mlt(fg[vv[i][j]],tr[j])];
+}
+}
+
+#pragma omp parallel for default(none) private(i,j,k,s) shared(mat,gt,ma,fg,gf)
+for(i=0;i<K;i++){
+  for(j=0;j<N;j++){
+    s=0;
+      for(k=0;k<K;k++)
+        s^=gf[mlt(fg[gt[i][k]],fg[ma[j][k]])];
+
+    mat[j][i]=s;
+  }
+}
 
 /*
   //パリティチェックを生成する。
@@ -4349,24 +4367,6 @@ w=mkg();
 //ogt();
 
 
-unsigned short s,ms[K]={0};
-//#pragma omp parallel for default(none) private(i,j) shared(ma,vv,tr,fg,gf)
-  for(j=0;j<N;j++){
-    for(i=0;i<K;i++){
-    ma[j][i]=gf[mlt(fg[vv[i][j]],tr[j])];
-}
-}
-
-#pragma omp parallel for default(none) private(i,j,k,s) shared(mat,gt,ma,fg,gf)
-for(i=0;i<K;i++){
-  for(j=0;j<N;j++){
-    s=0;
-      for(k=0;k<K;k++)
-        s^=gf[mlt(fg[gt[i][k]],fg[ma[j][k]])];
-
-    mat[j][i]=s;
-  }
-}
 
 
 for(i=0;i<N;i++){
