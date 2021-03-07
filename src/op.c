@@ -4232,8 +4232,8 @@ lab:
 	  exit (1);
 	}
 
-      //exit(1);
-      goto label;
+      exit(1);
+      //goto label;
       //wait();
 
       //break;
