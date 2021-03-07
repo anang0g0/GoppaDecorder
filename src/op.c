@@ -34,7 +34,7 @@
 #include <omp.h>		//clang-10
 
 #include "debug.c"
-//#include "8192.h"
+#include "8192.h"
 #include "global.h"
 #include "struct.h"
 
@@ -1496,6 +1496,7 @@ init_pol (OP f)
   return f;
 }
 
+
 //ランダム多項式の生成
 static void
 ginit (void)
@@ -1506,13 +1507,14 @@ ginit (void)
 
   printf ("in ginit\n");
 
+memset(g,0,K+1);
 
   g[K] = 1;			//xor128();
-  g[0] = rand () % N;
-  while (count < ((K / 2) - 0))
+  g[0] = rand () %  N;
+  while (count < ((K / 2) - 1))
     {
       printf ("@\n");
-      j = rand () % (K - 1);
+      j = rand () % K; //(K - 1);
       if (j < K && j > 0 && g[j] == 0)
 	{
 	  g[j] = rand () % N;
