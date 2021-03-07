@@ -35,7 +35,7 @@
 #include <omp.h>		//clang-10
 
 #include "debug.c"
-//#include "8192.h"
+#include "8192.h"
 #include "global.h"
 #include "struct.h"
 
@@ -52,7 +52,7 @@ extern int mlt (int x, int y);
 extern int mltn (int n, int a);
 extern void makeS ();
 
-//#pragma omp threadprivate(mat)
+//# omp thread private(mat)
 //シンドロームのコピー
 unsigned short sy[K] = { 0 };
 
@@ -1822,7 +1822,7 @@ bibun (vec a)
     }
 memset(ww,0,sizeof(ww));
 
-#pragma omp parallel num_threads(omp_get_max_threads())
+//#pragma omp parallel num_threads(omp_get_max_threads())
   for (i = 0; i < T; i++)
     {
       ww[i].t[0].a = a.x[i];
@@ -3538,117 +3538,6 @@ for(i=0;i<K;i++){
 }
 
 
-OP kotei(){
-int i,j,k,fail,flg,l;
-OP w={0};
-
-aa:
-  do
-    {
-      fail = 0;
-      j = 0;
-      k = 0;
-      flg = 0;
-      l=0;
-      memset (g, 0, sizeof (g));
-      memset (ta, 0, sizeof (ta));
-      ginit ();
-      for (i = 0; i < K + 1; i++)
-	{
-	  if (g[K - 1] > 0)
-	    flg = 1;
-	  if (i % 2 == 1 && g[i] > 0 && i < K)
-	    k++;
-	}
-  
-      if ((k > 0 && flg == 0) || (k > 1 && flg == 1))
-	{
-	  w = setpol (g, K + 1);
-	  j = 1;
-	}
-  /*
-      w = setpol (g, K + 1);
-      oprintpol (w);
-      j=1;
-      */
-      //多項式の値が0でないことを確認
-      for (i = 0; i < D; i++)
-	{
-	  ta[i] = trace (w, i);
-	  if (ta[i] == 0)
-	    {
-	      printf ("trace 0 @ %d\n", i);
-	      fail = 1;
-	      break;
-	    }
-	}
-      
-    }
-  while (fail || j == 0);
-
-
-memset(mat,0,sizeof(mat));
-
-  oprintpol (w);
-  printf ("\n");
-  printsage (o2v (w));
-  printf ("\n");
-  printf ("sagemath で既約性を検査してください！\n");
-//  wait ();
-
-
-  //#pragma omp parallel for
-  for (i = 0; i < N; i++)
-    {
-      tr[i] = oinv (ta[i]);
-    printf("%d,",gf[tr[i]]);
-    }
-//exit(1);
- 
-
-  printf ("\nすげ、オレもうイキそ・・・\n");
-  //keygen(g);
-
-
-  //パリティチェックを生成する。
-  //パリティチェックに0の列があったら、なくなるまでやり直す。
-for(i=0;i<N;i++)
-printf("%d,",gf[tr[i]]);
-printf("\n");
-for(i=0;i<K;i++)
-mat[0][i]=g[i];
-for(i=0;i<N;i++)
-mat[i][0]=gf[tr[i]];
-/*
-for(i=0;i<N;i++){
-    for(j=0;j<1;j++)
-    printf("%d,",mat[i][j]);
-}
-    printf("\n");
-    */
-//exit(1);
-for(i=0;i<N;i++){
-    for(j=0;j<K;j++)
-    mat[i][j]=gf[mlt(tr[i],mltn(j,fg[i]))];
-    
-}
-/*
-for(i=0;i<N;i++){
-    for(j=0;j<K;j++)
-    printf("%d,",mat[i][j]);
-    printf("\n");
-}
-*/
-//exit(1);
-  
-
-if (i < 0);{
-printf("i=%d\n",i);
-wait();
-}
-
-return w;
-}
 
 
 OP ogt(){
@@ -3762,7 +3651,7 @@ memset(mat,0,sizeof(mat));
 //  wait ();
 
 
-  //#pragma omp parallel for
+  #pragma omp parallel for
   for (i = 0; i < N; i++)
     {
       tr[i] = oinv (ta[i]);
@@ -3820,122 +3709,6 @@ wait();
 return w;
 }
 
-
-
-
-
-
-
-
-OP mk2(){
-int i,j,k,fail,flg,l;
-OP w={0};
-
-aa:
-  do
-    {
-      fail = 0;
-      j = 0;
-      k = 0;
-      flg = 0;
-      l=0;
-      memset (g, 0, sizeof (g));
-      memset (ta, 0, sizeof (ta));
-      ginit ();
-      for (i = 0; i < K + 1; i++)
-	{
-	  if (g[K - 1] > 0)
-	    flg = 1;
-	  if (i % 2 == 1 && g[i] > 0 && i < K)
-	    k++;
-	}
-      if ((k > 0 && flg == 0) || (k > 1 && flg == 1))
-	{
-	  w = setpol (g, K + 1);
-	  j = 1;
-	}
-      //w = setpol (g, K + 1);
-      //oprintpol (w);
-      //j=1;
-      //多項式の値が0でないことを確認
-      for (i = 0; i < D; i++)
-	{
-	  ta[i] = trace (w, i);
-	  if (ta[i] == 0)
-	    {
-	      printf ("trace 0 @ %d\n", i);
-	      fail = 1;
-	      break;
-	    }
-	}
-      
-    }
-  while (fail || j == 0);
-
-
-memset(mat,0,sizeof(mat));
-
-  oprintpol (w);
-  printf ("\n");
-  printsage (o2v (w));
-  printf ("\n");
-  printf ("sagemath で既約性を検査してください！\n");
-//  wait ();
-
-
-  //#pragma omp parallel for
-  for (i = 0; i < N; i++)
-    {
-      tr[i] = oinv (ta[i]);
-    //printf("%d,",gf[tr[i]]);
-    }
-//exit(1);
- 
-
-  printf ("\nすげ、オレもうイキそ・・・\n");
-  //keygen(g);
-
-
-  //パリティチェックを生成する。
-  //パリティチェックに0の列があったら、なくなるまでやり直す。
-  
-//for(i=0;i<N;i++)
-//printf("%d,",gf[tr[i]]);
-//printf("\n");
-for(i=0;i<K;i++)
-mat[0][i]=g[i];
-for(i=0;i<N;i++)
-mat[i][0]=gf[tr[i]];
-/*
-for(i=0;i<N;i++){
-    for(j=0;j<1;j++)
-    printf("%d,",mat[i][j]);
-}
-    printf("\n");
-    */
-//exit(1);
-for(i=0;i<N;i++){
-    for(j=0;j<K;j++)
-    mat[i][j]=gf[mlt(tr[i],mltn(j,fg[i]))];
-    
-}
-/*
-for(i=0;i<N;i++){
-    for(j=0;j<K;j++)
-    printf("%d,",mat[i][j]);
-    printf("\n");
-}
-*/
-//exit(1);
-  
-
-if (i < 0);{
-printf("i=%d\n",i);
-wait();
-}
-
-return w;
-}
 
 
 int elo(OP r){
