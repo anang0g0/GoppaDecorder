@@ -3519,18 +3519,21 @@ void van(){
 int i,j,k;
 
 printf("van der\n");
+
 for(i=0;i<N;i++)
 vv[0][i]=1;
+#pragma omp parallel for private(i,j)
 for(i=1;i<K;i++){
   for(j=0;j<N;j++)
   vv[i][j]=gf[mltn(i,fg[j])];
 }
+/*
 for(i=0;i<K;i++){
   for(j=0;j<N;j++)
   printf("%d,",vv[i][j]);
   printf("\n");
 }
-
+*/
 }
 
 
@@ -3648,16 +3651,18 @@ OP ogt(){
   OP w={0};
   unsigned short abc[N][K]={0};
 
+#pragma omp parallel for private(i,j)
 for(i=0;i<K;i++){
     for(j=0;j<K;j++)
     gt[j+i][i]=g[j];
-
     }
+/*
     for(i=0;i<K;i++){
         for(j=0;j<K;j++)
         printf("%d,",gt[j][i]);
         printf("\n");
     }
+    */
 /*
 exit(1);
 // w=kotei();
