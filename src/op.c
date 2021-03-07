@@ -3971,10 +3971,10 @@ count=0;
 
 	 // exit (1);
 	}
-exit(1);
+//exit(1);
 
 
-return 0;
+return count;
 }
 
 
@@ -4462,9 +4462,18 @@ zz[4]=4;
 zz[5]=5;
 */
 
+count=0;
 //w=setpol(g,K+1);
-for(i=0;i<T;i++)
-zz[i]=i+1;
+while(count<T){
+  j=rand()%N;
+  if(zz[j]==0){
+    k=rand()%N;
+    if(k>0){
+    zz[j]=k;
+    count++;
+    }
+  }
+  }
 //zz[rand()%N]=rand()%N;
 
 sa=synd2(zz);
@@ -4478,12 +4487,15 @@ printf("%d,",zz[i]);
 printf(" first error\n");
 r=decode(w,sa);
 //printf("%d\n",deg(o2v(r)));
-if(elo(r)<0){
+if((count=elo(r))<0){
   //exit(1);
     goto label;
     for(i=0;i<N;i++)
     printf("%d,",zz[i]);
     printf("\n");
+}
+if(count==T){
+  printf("っ！ %d\n",count);
 }
 exit(1);
 
