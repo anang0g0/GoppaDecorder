@@ -34,7 +34,7 @@
 #include <omp.h>		//clang-10
 
 #include "debug.c"
-//#include "8192.h"
+#include "8192.h"
 #include "global.h"
 #include "struct.h"
 
@@ -56,7 +56,7 @@ extern void makeS ();
 unsigned short sy[K] = { 0 };
 
 //Goppa多項式
-static unsigned short g[K + 1] = { 1, 0, 1, 1, 0, 1, 1 };
+static unsigned short g[K + 1] = {0};//{ 1, 0, 0, 0, 1, 0, 1 };
 
   //{ 1,0,11,14,7,0,6 };
   //{1,0,13,14,13,0,11};
@@ -1506,13 +1506,14 @@ ginit (void)
 
   printf ("in ginit\n");
 
+memset(g,0,K+1);
 
   g[K] = 1;			//xor128();
   g[0] = rand () %  N;
   while (count < ((K / 2) - 1))
     {
       printf ("@\n");
-      j = rand () % (K - 1);
+      j = rand () % K; //(K - 1);
       if (j < K && j > 0 && g[j] == 0)
 	{
 	  g[j] = rand () % N;
@@ -3632,9 +3633,9 @@ aa:
       k = 0;
       flg = 0;
       l=0;
-      //memset (g, 0, sizeof (g));
+      memset (g, 0, sizeof (g));
       memset (ta, 0, sizeof (ta));
-      //ginit ();
+      ginit ();
       for (i = 0; i < K + 1; i++)
 	{
 	  if (g[K - 1] > 0)
@@ -3642,14 +3643,17 @@ aa:
 	  if (i % 2 == 1 && g[i] > 0 && i < K)
 	    k++;
 	}
+  /*
       if ((k > 0 && flg == 0) || (k > 1 && flg == 1))
 	{
 	  w = setpol (g, K + 1);
 	  j = 1;
 	}
+    */  
       w = setpol (g, K + 1);
       oprintpol (w);
       j=1;
+      
       //多項式の値が0でないことを確認
       for (i = 0; i < D; i++)
 	{
@@ -3658,14 +3662,14 @@ aa:
 	    {
 	      printf ("trace 0 @ %d\n", i);
 	      fail = 1;
-	      break;
+        break;
 	    }
 	}
       
     }
   while (fail || j == 0);
 
-
+ogt();
 memset(mat,0,sizeof(mat));
 
   oprintpol (w);
@@ -3700,7 +3704,7 @@ for(i=0;i<N;i++){
   //keygen(g);
 
 //exit(1);
-/*
+
   //パリティチェックを生成する。
   //パリティチェックに0の列があったら、なくなるまでやり直す。
         //w=mkg();
@@ -3710,7 +3714,7 @@ if (i < 0);{
 printf("i=%d\n",i);
 wait();
 }
-*/
+
 
 return w;
 }
@@ -4262,7 +4266,7 @@ wait();
 //ginit();
 
 van();
-ogt();
+
 
 //exit(1);
 
@@ -4270,9 +4274,11 @@ memset(ma,0,sizeof(ma));
 memset(mat,0,sizeof(mat));
 label:
 w=mkg();
+//ogt();
+
 
 //w=ogt();
-
+/*
 //#pragma omp paralell for
 for(i=0;i<K;i++){
   for(j=0;j<N;j++){
@@ -4286,7 +4292,7 @@ for(i=0;i<K;i++){
     mat[j][i]^=gf[mlt(fg[gt[i][k]],fg[ma[j][k]])];
   }
 }
-
+*/
 
 for(i=0;i<N;i++){
   for(j=0;j<K;j++)
@@ -4371,6 +4377,7 @@ srand(clock());
 zz[0]=1;
 zz[1]=2;
 zz[2]=4;
+
 zz[4]=4;
 zz[5]=5;
 */
@@ -4380,8 +4387,8 @@ for(i=0;i<T;i++)
 zz[i]=i+1;
 //zz[rand()%N]=rand()%N;
 
-sa=synd2(zz);
-//sa=synd(zz);
+//sa=synd2(zz);
+sa=synd(zz);
 printpol(o2v(sa));
 printf(" =: pol\n");
 printpol(o2v(w));
