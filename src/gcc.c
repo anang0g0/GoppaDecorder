@@ -45,7 +45,7 @@ extern void makeS();
 //シンドロームのコピー
 unsigned short sy[K]={0};
 //Goppa多項式
-static unsigned short g[K+1]={0};
+static unsigned short g[K+1]={1,0,0,0,1,0,1};
 unsigned short tr[N]={0};
 unsigned short ta[N]={0};
 
@@ -1418,7 +1418,7 @@ OP decode (OP f, OP s){
     {
       printf ("x[%d]=1\n", x.x[i]);
       if (x.x[i] == 0)
-	k++;
+      	k++;
       if (k > 1)
 	{
 	  printf ("baka0\n");
@@ -2309,6 +2309,288 @@ void test(OP w,unsigned short zz[]){
 }
 
 
+unsigned short
+v2a (oterm a)
+{
+  int i, j;
+
+  for (j = 0; j < M; j++)
+    {
+      if (gf[j] == a.a && a.a > 1)
+	{
+	  return j - 1;
+	}
+    }
+
+}
+
+
+
+void
+printsage (vec a)
+{
+  int i, j, k;
+  oterm b;
+
+  printf ("poly=");
+  for (i = 0; i < DEG; i++)
+    {
+      if (a.x[i] > 0)
+	{
+	  b.a = a.x[i];
+	  b.n = i;
+	  j = v2a (b);
+	  printf ("B('a^%d')*X**%d+", j, i);
+	}
+    }
+
+}
+
+
+
+OP
+synd2 (unsigned short zz[])
+{
+  unsigned short syn[K] = { 0 }, s = 0;
+  int i, j, t1;
+  OP f = { 0 };
+
+
+  printf ("in synd\n");
+
+  //  #pragma omp parallel for        //num_threads(8)
+  for (i = 0; i < K; i++)
+    {
+      syn[i] = 0;
+      s = 0;
+      //#pragma omp parallel num_threads(8)
+      for (j = 0; j < M; j++)
+	{
+	  syn[i] ^= gf[mlt (fg[zz[j]], fg[mat[j][i]])];
+	}
+      sy[K-i] = syn[i];		//=s;
+      //printf ("syn%d,", syn[i]);
+    }
+  //printf ("\n");
+/*
+  for (int j = 0; j < K / 2; j++)
+    {
+      t1 = syn[j];
+      syn[j] = syn[K - j - 1];
+      syn[K - j - 1] = t1;
+    }
+*/
+
+  f = setpol (syn, K);
+printpol (o2v (f));
+  printf (" syn=============\n");
+  //  exit(1);
+
+  return f;
+}
+
+
+unsigned short vv[K][N]={0};
+unsigned short gt[K][K]={0};
+void van(){
+int i,j,k;
+
+printf("van der\n");
+
+for(i=0;i<N;i++)
+vv[0][i]=1;
+//#pragma omp parallel for private(i,j)
+for(i=1;i<K;i++){
+  for(j=0;j<N;j++)
+  vv[i][j]=gf[mltn(i,fg[j])];
+}
+/*
+for(i=0;i<K;i++){
+  for(j=0;j<N;j++)
+  printf("%d,",vv[i][j]);
+  printf("\n");
+}
+*/
+}
+
+
+
+
+OP ogt(){
+    int i,j,k;
+  OP w={0};
+  unsigned short abc[N][K]={0};
+
+//#pragma omp parallel for private(i,j)
+for(i=0;i<K;i++){
+    for(j=0;j<K;j++)
+    gt[j+i][i]=g[j];
+    }
+
+    for(i=0;i<K;i++){
+        for(j=0;j<K;j++)
+        printf("%d,",gt[j][i]);
+        printf("\n");
+    }
+    //exit(1);
+/*
+exit(1);
+// w=kotei();
+memset(ma,0,sizeof(ma));
+for(i=0;i<K;i++)
+printf("%d,",gt[i][0]);
+printf("\n");
+//ogt();
+printf("\n");
+//exit(1);
+for(i=0;i<K;i++)
+ma[0][i]=gt[i][0];
+for(i=0;i<K;i++){
+  for(j=1;j<N;j++){
+    for(k=0;k<K;k++)
+  ma[j][i]^=gf[mlt(fg[gt[i][k]],fg[mat[j][k]])];
+  }
+}
+memcpy(mat,ma,sizeof(mat));
+for(i=0;i<N;i++){
+  for(j=0;j<K;j++){
+//    mat[i][K-j-1]=abc[i][j];
+  printf("%d,",mat[i][j]);
+  }
+  printf("\n");
+}
+//  exit(1);
+*/
+
+return w;
+}
+
+
+unsigned short dd[N][N]={0};
+
+
+OP mkg(){
+int i,j,k,fail,flg,l;
+OP w={0};
+
+aa:
+  do
+    {
+      fail = 0;
+      j = 0;
+      k = 0;
+      flg = 0;
+      l=0;
+      memset (g, 0, sizeof (g));
+      memset (ta, 0, sizeof (ta));
+      ginit ();
+      for (i = 0; i < K + 1; i++)
+	{
+	  if (g[K - 1] > 0)
+	    flg = 1;
+	  if (i % 2 == 1 && g[i] > 0 && i < K)
+	    k++;
+	}
+  /*
+      if ((k > 0 && flg == 0) || (k > 1 && flg == 1))
+	{
+	  w = setpol (g, K + 1);
+	  j = 1;
+	}
+   */
+   
+      w = setpol (g, K + 1);
+      oprintpol (w);
+      j=1;
+      
+      //多項式の値が0でないことを確認
+  for (i = 0; i < N; i++)
+	{
+	  ta[i] = trace (w, i);
+	  if (ta[i] == 0)
+	    {
+	      printf ("trace 0 @ %d\n", i);
+	      fail = 1;
+        break;
+	    }
+	}
+      
+    }
+  while (fail || j == 0);
+
+
+memset(mat,0,sizeof(mat));
+
+  oprintpol (w);
+  printf ("\n");
+  printsage (o2v (w));
+  printf ("\n");
+  printf ("sagemath で既約性を検査してください！\n");
+  wait ();
+
+//  #pragma omp parallel for
+  for (i = 0; i < N; i++)
+    {
+      tr[i] = oinv (ta[i]);
+    printf ("%d,",tr[i]);
+    }
+
+//exit(1);
+//van();
+
+memset(dd,0,sizeof(dd));
+
+
+  printf ("\nすげ、オレもうイキそ・・・\n");
+  //keygen(g);
+//exit(1);
+
+
+unsigned short s,ms[K]={0};
+//#pragma omp parallel for private(i,j) shared(vv,tr,fg,gf,ma)
+  for(j=0;j<N;j++){
+      for(i=0;i<K;i++){
+    ma[j][i]=gf[mlt(fg[vv[i][j]],tr[j])];
+    printf("%d,",ma[j][i]);
+}
+printf("\n");
+}
+//exit(1);
+
+ogt(); 
+//#pragma omp parallel for default(none) private(i,j,k,s) shared(mat,gt,ma,fg,gf)
+for(i=0;i<K;i++){
+  for(j=0;j<N;j++){
+    s=0;
+    //#pragma omp parallel for reduction(^:s)
+      for(k=0;k<K;k++)
+        s^=gf[mlt(fg[gt[i][k]],fg[ma[j][k]])];
+
+    mat[j][i]=s;
+  }
+}
+for(i=0;i<N;i++){
+for(j=0;j<K;j++)
+printf("%d,",mat[i][j]);
+}
+//exit(1);
+
+/*
+  //パリティチェックを生成する。
+  //パリティチェックに0の列があったら、なくなるまでやり直す。
+        //w=mkg();
+      i = deta (g);
+  
+if (i < 0);{
+printf("i=%d\n",i);
+wait();
+}
+*/
+
+return w;
+}
+
+
 //言わずもがな
 int main (void){
   int i, j, k, l,n;
@@ -2351,10 +2633,16 @@ int main (void){
   //  exit(1);
 
 label:
+van();
+
+//
 
   for (i = 0; i < K + 1; i++)
     g[i] = 0;
   ginit ();
+
+//memset(mat,0,sizeof(mat));
+//w=mkg();
 
   /*
   fp=fopen("sk.key","rb");
@@ -2384,6 +2672,7 @@ label:
     }
   printf ("@");
   //keygen(g);
+
   key2 (g);
   //det(g);
   //exit(1);
@@ -2392,9 +2681,9 @@ label:
   //filedec(w,argc,argv);
   //exit(1);
 
-  
-  fq = fopen ("H.key", "rb");
-  fread (dd, 2, K * N, fq);
+  /*
+//  fq = fopen ("H.key", "rb");
+//  fread (dd, 2, K * N, fq);
   //#pragma omp parallel for
   for (i = 0; i < N; i++)
     {
@@ -2402,7 +2691,7 @@ label:
 	mat[i][j] = dd[K * i + j];
     }
   fclose (fq);
-  
+*/  
   
   //  #pragma omp parallel for
   for (j = 0; j < N; j++)
@@ -2493,7 +2782,7 @@ label:
     }
   }
 
-  f=synd(zz);
+  f=synd2(zz);
   printpol(o2v(f));
   printf("\n");
   //wait();
@@ -2541,6 +2830,7 @@ label:
   }
   printf("err=%dっ！！\n",o1);
 
+//exit(1);
   //goto label;
  
   
@@ -2677,7 +2967,7 @@ label:
       pattarson (w, f, zz);
       //wait();
       
-      //break;
+      break;
   }
     //goto label;
     //for(i=0;i<N;i++)
