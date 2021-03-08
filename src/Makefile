@@ -1,11 +1,11 @@
 
 all:
-	clang-10 -Wall -g -pg -O3  -mtune=native -march=native -ffast-math -funroll-loops  -fopenmp op2.c
+	clang-10 -Wall -g -pg -O3  -mtune=znver2 -march=znver2 -ffast-math -funroll-loops  -fopenmp op2.c
 
 amd:
 	clang-10 -Wall -g -pg -O3  -mtune=znver2 -march=znver2 -ffast-math -funroll-loops  -fopenmp op.c
 
-test:
+alg:
 	clang-10 -Wall -g -pg -O3  -mtune=znver2 -march=znver2 -ffast-math -funroll-loops  -fopenmp alg.c
 
 ori:
@@ -16,9 +16,6 @@ oo:
 
 amd:
 	clang-10 -Wall -g -pg -O3 -mtune=znver2 -march=znver2 -ffast-math -funroll-loops  -fopenmp op.c
-
-gcc:
-	gcc -Wall -g -pg -O3 -mtune=znver2 -march=znver2 -ffast-math -funroll-loops  -fopenmp op.c
 
 train:
 	clang-10 -Wall -g -pg -O3 -mtune=znver2 -march=znver2 -ffast-math -funroll-loops  -fopenmp train.c
