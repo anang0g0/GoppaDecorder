@@ -34,7 +34,7 @@
 #include <omp.h>		//clang-10
 
 #include "debug.c"
-//#include "8192.h"
+#include "8192.h"
 #include "global.h"
 #include "struct.h"
 

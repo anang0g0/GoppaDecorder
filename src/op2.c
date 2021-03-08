@@ -2298,7 +2298,7 @@ deta (unsigned short g[])
 
   //
   //
-#pragma omp parallel num_threads(8)
+#pragma omp parallel omp_get_max_threads()
   {
 #pragma omp for schedule(static)
     for (i = 0; i < D; i++)
