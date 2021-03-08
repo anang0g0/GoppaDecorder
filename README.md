@@ -50,8 +50,6 @@ HOW SAGE HELPS TO IMPLEMENT　GOPPA CODES AND THE　McELIECE PUBLIC KEY CRYPTO S
 
 Coding Theory-Based Cryptography:McEliece Cryptosystems in Sage
 
-gccだと並列化に失敗しますが、原因はわかりません。
-
 
 # 20210308
 
