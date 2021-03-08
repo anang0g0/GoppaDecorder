@@ -34,6 +34,7 @@ op.c内のmain関数の中のdetをdetaに書き換えました。
 AMD用の最適化オプションznver2を使用。
 
 gccで実行すると並列化に失敗します。
+clang でなければ動きませんが原因はわかりません。
 
 https://arxiv.org/pdf/1907.12754.pdf
 ホワイトペーパー
