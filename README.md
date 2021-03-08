@@ -31,10 +31,9 @@ llvmのclangを使って並列処理をします。（環境を整えるのが�
 
 op.c内のmain関数の中のdetをdetaに書き換えました。
 
-gccを使いたい場合は、make gccとすること。
-実行環境はgcc-9.2.0。
 AMD用の最適化オプションznver2を使用。
-gccの場合、パリティチェック生成の並列化に失敗することがあります。
+
+gccで実行すると並列化に失敗します。
 
 https://arxiv.org/pdf/1907.12754.pdf
 ホワイトペーパー
@@ -55,6 +54,13 @@ HOW SAGE HELPS TO IMPLEMENT　GOPPA CODES AND THE　McELIECE PUBLIC KEY CRYPTO S
 Coding Theory-Based Cryptography:McEliece Cryptosystems in Sage
 
 gccだと並列化に失敗しますが、原因はわかりません。
+
+
+# 20210308
+
+69.pdfを参考に、パリティ検査行列を行列に分解できるという性質を使って今まで10秒かかっていた処理を2秒で終わらせることができるようになりました。
+
+リスト復号を実装に取り入れることを検討しています。
 
 # 20210307
 
