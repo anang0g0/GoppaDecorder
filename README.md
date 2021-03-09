@@ -50,6 +50,10 @@ HOW SAGE HELPS TO IMPLEMENT　GOPPA CODES AND THE　McELIECE PUBLIC KEY CRYPTO S
 
 Coding Theory-Based Cryptography:McEliece Cryptosystems in Sage
 
+# 20210309
+
+LiCENSEをGoldwasser名義で追加しました。
+GPLライセンスです。
 
 # 20210308
 
