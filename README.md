@@ -52,7 +52,7 @@ Coding Theory-Based Cryptography:McEliece Cryptosystems in Sage
 
 # 20210309
 
-LiCENSEをGoldwasser名義で追加しました。
+LiCENSEをG01dwasser名義で追加しました。
 GPLライセンスです。
 
 # 20210308
