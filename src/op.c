@@ -2863,7 +2863,7 @@ p2 ()
 
 
 //パターソンアルゴリズムでバイナリGoppa符号を復号する
-vec
+OP
 pattarson (OP w, OP f)
 {
   OP g1 = { 0 }
@@ -2977,7 +2977,7 @@ pattarson (OP w, OP f)
   if (v.x[K - 1] > 0)
     {
       //wait ();
-      return v;
+      return v2o(v);
     }
 
 
@@ -2999,7 +2999,7 @@ pattarson (OP w, OP f)
       if (v.x[K - 1] > 0)
 	{
 	  //wait ();
-	  return v;
+	  return v2o(v);
 	}
 
     }
@@ -3010,7 +3010,7 @@ pattarson (OP w, OP f)
   if (v.x[K - 1] > 0)
     {
       C++;
-      return v;
+      return v2o(v);
     }
 
 
@@ -3032,11 +3032,11 @@ pattarson (OP w, OP f)
 
   if (v.x[K - 1] > 0)
     {
-      return v;
+      return v2o(v);
     }
 
 
-  return v;
+  return v2o(v);
 
 }
 
@@ -3104,7 +3104,7 @@ decrypt (OP w)
   unsigned short buf[K] = { 0 }, tmp[K] = {
     0
   };
-  OP f = { 0 };
+  OP f = { 0 },r={0};
   vec v = { 0 };
   const uint8_t *hash = { 0 };
   sha3_context c = { 0 };
@@ -3123,9 +3123,11 @@ decrypt (OP w)
 
   printf ("in decrypt\n");
   f = setpol (buf, K);
-  v = pattarson (w, f);
-  //v=o2v(h);
-  //  exit(1);
+  r = pattarson (w, f);
+  v=o2v(r);
+// elo(r);
+    //exit(1);
+//v=o2v(r);
 
 
   j = 0;
@@ -3224,6 +3226,48 @@ synd (unsigned short zz[])
   f = setpol (syn, K);
   //printpol (o2v (f));
   //printf (" syn=============\n");
+  //  exit(1);
+
+  return f;
+}
+
+
+OP
+synd2 (unsigned short zz[])
+{
+  unsigned short syn[K] = { 0 }, s = 0;
+  int i, j, t1;
+  OP f = { 0 };
+
+
+  printf ("in synd\n");
+
+  //  #pragma omp parallel for        //num_threads(8)
+  for (i = 0; i < K; i++)
+    {
+      syn[i] = 0;
+      s = 0;
+      //#pragma omp parallel num_threads(8)
+      for (j = 0; j < M; j++)
+	{
+	  syn[i] ^= gf[mlt (fg[zz[j]], fg[mat[j][i]])];
+	}
+      sy[K-i] = syn[i];		//=s;
+      //printf ("syn%d,", syn[i]);
+    }
+  //printf ("\n");
+/*
+  for (int j = 0; j < K / 2; j++)
+    {
+      t1 = syn[j];
+      syn[j] = syn[K - j - 1];
+      syn[K - j - 1] = t1;
+    }
+*/
+
+  f = setpol (syn, K);
+printpol (o2v (f));
+  printf (" syn=============\n");
   //  exit(1);
 
   return f;
@@ -3471,6 +3515,268 @@ EX extgcd(OP a, OP b) {
   }
 }
 
+
+unsigned short vv[K][N]={0};
+unsigned short gt[K][K]={0};
+void van(){
+int i,j,k;
+
+printf("van der\n");
+
+for(i=0;i<N;i++)
+vv[0][i]=1;
+#pragma omp parallel for private(i,j)
+for(i=1;i<K;i++){
+  for(j=0;j<N;j++)
+  vv[i][j]=gf[mltn(i,fg[j])];
+}
+/*
+for(i=0;i<K;i++){
+  for(j=0;j<N;j++)
+  printf("%d,",vv[i][j]);
+  printf("\n");
+}
+*/
+}
+
+
+
+
+OP ogt(){
+    int i,j,k;
+  OP w={0};
+  unsigned short abc[N][K]={0};
+
+#pragma omp parallel for private(i,j)
+for(i=0;i<K;i++){
+    for(j=0;j<K;j++)
+    gt[j+i][i]=g[j];
+    }
+/*
+    for(i=0;i<K;i++){
+        for(j=0;j<K;j++)
+        printf("%d,",gt[j][i]);
+        printf("\n");
+    }
+    */
+/*
+exit(1);
+// w=kotei();
+memset(ma,0,sizeof(ma));
+for(i=0;i<K;i++)
+printf("%d,",gt[i][0]);
+printf("\n");
+//ogt();
+printf("\n");
+//exit(1);
+for(i=0;i<K;i++)
+ma[0][i]=gt[i][0];
+for(i=0;i<K;i++){
+  for(j=1;j<N;j++){
+    for(k=0;k<K;k++)
+  ma[j][i]^=gf[mlt(fg[gt[i][k]],fg[mat[j][k]])];
+  }
+}
+memcpy(mat,ma,sizeof(mat));
+for(i=0;i<N;i++){
+  for(j=0;j<K;j++){
+//    mat[i][K-j-1]=abc[i][j];
+  printf("%d,",mat[i][j]);
+  }
+  printf("\n");
+}
+//  exit(1);
+*/
+
+return w;
+}
+
+
+unsigned short dd[N][N]={0};
+
+OP mkg(){
+int i,j,k,fail,flg,l;
+OP w={0};
+
+aa:
+  do
+    {
+      fail = 0;
+      j = 0;
+      k = 0;
+      flg = 0;
+      l=0;
+      memset (g, 0, sizeof (g));
+      memset (ta, 0, sizeof (ta));
+      ginit ();
+      for (i = 0; i < K + 1; i++)
+	{
+	  if (g[K - 1] > 0)
+	    flg = 1;
+	  if (i % 2 == 1 && g[i] > 0 && i < K)
+	    k++;
+	}
+  /*
+      if ((k > 0 && flg == 0) || (k > 1 && flg == 1))
+	{
+	  w = setpol (g, K + 1);
+	  j = 1;
+	}
+   */  
+   
+      w = setpol (g, K + 1);
+      oprintpol (w);
+      j=1;
+      
+      //多項式の値が0でないことを確認
+  for (i = 0; i < N; i++)
+	{
+	  ta[i] = trace (w, i);
+	  if (ta[i] == 0)
+	    {
+	      printf ("trace 0 @ %d\n", i);
+	      fail = 1;
+        break;
+	    }
+	}
+      
+    }
+  while (fail || j == 0);
+
+ogt();
+memset(mat,0,sizeof(mat));
+
+  oprintpol (w);
+  printf ("\n");
+  printsage (o2v (w));
+  printf ("\n");
+  printf ("sagemath で既約性を検査してください！\n");
+//  wait ();
+
+
+  #pragma omp parallel for
+  for (i = 0; i < N; i++)
+    {
+      tr[i] = oinv (ta[i]);
+
+    }
+
+//van();
+//ogt(); 
+memset(dd,0,sizeof(dd));
+
+for(i=0;i<N;i++)
+dd[i][i]=gf[tr[i]];
+/*
+for(i=0;i<N;i++){
+  for(j=0;j<N;j++)
+  printf("%d,",dd[i][j]);
+  printf("\n");
+}
+*/
+  printf ("\nすげ、オレもうイキそ・・・\n");
+  //keygen(g);
+//exit(1);
+
+
+unsigned short s,ms[K]={0};
+//#pragma omp parallel for private(i,j) shared(vv,tr,fg,gf,ma)
+  for(j=0;j<N;j++){
+      for(i=0;i<K;i++){
+    ma[j][i]=gf[mlt(fg[vv[i][j]],tr[j])];
+}
+}
+
+#pragma omp parallel for default (none) private(i,j,k,s) shared(mat,gt,ma,fg,gf)
+for(i=0;i<K;i++){
+  for(j=0;j<N;j++){
+    s=0;
+    //#pragma omp parallel for reduction(^:s)
+      for(k=0;k<K;k++)
+        s^=gf[mlt(fg[gt[i][k]],fg[ma[j][k]])];
+
+    mat[j][i]=s;
+  }
+}
+
+/*
+  //パリティチェックを生成する。
+  //パリティチェックに0の列があったら、なくなるまでやり直す。
+        //w=mkg();
+      i = deta (g);
+  
+if (i < 0);{
+printf("i=%d\n",i);
+wait();
+}
+*/
+
+return w;
+}
+
+int elo(OP r){
+int count,i,j,k;
+
+
+count=0;
+      for (i = 0; i < T; i++)
+	{
+    
+        if(i>0 && r.t[i].n==0){
+        printf("baka-z\n");
+        //return -1;
+        exit(1);
+        }
+	  if (r.t[i].a > 0 && i > 0)	// == r.t[i].n)
+	    {
+	      printf ("e=%d %d %s\n", r.t[i].a, r.t[i].n, "お");
+	      count++;
+	    }
+	  if (i == 0)
+	    {
+	      printf ("\ne=%d %d %s\n", r.t[i].a, r.t[i].n, "う");
+	      count++;
+	    }
+        //zz[r.t[i].n]=r.t[i].a;
+	}
+      if (count != T)
+	{
+	  printf ("error pattarn too few %d\n", count);
+      return -1;
+      /*
+	  printpol (o2v (w));
+	  printf (" ==========goppa\n");
+	  printsage (o2v (w));
+	  printf (" ==========sage\n");
+	  printsage (o2v (f));
+	  printf (" =========syn\n");
+	  printpol (o2v (f));
+	  printf (" ==========synd\n");
+    */
+//goto nn;
+
+	 // exit (1);
+	}
+//exit(1);
+
+
+return count;
+}
+
+
+int oequ(OP f,OP g){
+vec v,x;
+int i,flg=0;
+
+v=o2v(f);
+x=o2v(g);
+for(i=0;i<512;i++){
+    if(v.x[i]!=x.x[i])
+    return -1;
+}
+
+return 0;
+}
 
 						    
 
@@ -3780,7 +4086,8 @@ label:
   //4x^5+12x^4+15x^3+11x^2+10x^0+
   //0,0,0,0,0,5,0,0,8,0,0,0,0,13,0,0
 
-    
+
+  van();
   do
     {
       fail = 0;
@@ -3859,7 +4166,7 @@ label:
   printsage (o2v (w));
   printf ("\n");
   printf ("sagemath で既約性を検査してください！\n");
-  wait ();
+  //wait ();
 
 
   //#pragma omp parallel for
@@ -3879,12 +4186,15 @@ label:
   //パリティチェックを生成する。
   //パリティチェックに0の列があったら、なくなるまでやり直す。
 
+  w=mkg();
+
+/*
   do
     {
       i = deta (g);
     }
   while (i < 0);
-
+*/
   unsigned short gen[N][K] = { 0 };
 
 lab:
@@ -3990,7 +4300,7 @@ lab:
 	}
       //exit(1);
 
-      f = synd (zz);
+      f = synd2 (zz);
       //exit(1);
       /*      
          f=conv(f);
@@ -4024,7 +4334,8 @@ lab:
 
 
       r = decode (w, f);
-
+      elo(r);
+/*
       for (i = 0; i < T; i++)
 	{
 	  if (r.t[i].a > 0 && i > 0)	// == r.t[i].n)
@@ -4081,7 +4392,7 @@ lab:
 
 	  exit (1);
 	}
-
+*/
       printf ("err=%dっ！！\n", count);
 
       //wait();
@@ -4120,7 +4431,7 @@ lab:
       //test (w, z1);
 
 
-      f = synd (z1);
+      f = synd2 (z1);
 
 
       //バグトラップのためのコード（省略）
@@ -4129,8 +4440,12 @@ lab:
 
       count = 0;
       //復号化の本体
-      v = pattarson (w, f);
+      r = pattarson (w, f);
       //エラー表示
+      elo(r);
+    //  exit(1);
+    v=o2v(r);
+
       for (i = 0; i < T * 2; i++)
 	{
 	  if (i == 0)
@@ -4187,6 +4502,7 @@ lab:
 		}
 	    }
 	}
+  
       if (count == T * 2)
 	{
 	  printf ("err=%dっ!! \n", count);
