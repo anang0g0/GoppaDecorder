@@ -72,12 +72,12 @@ static void ginit (void){
 	}
     }
 
-  /*  
+  
   for (i = 0; i < K + 1; i++)
   gg[i] = g[K - i];
 
   memcpy(g,gg,sizeof(g));
-  */
+  
 
 }
 
@@ -2782,7 +2782,7 @@ van();
     }
   }
 
-  f=synd2(zz);
+  f=synd(zz);
   printpol(o2v(f));
   printf("\n");
   //wait();
@@ -2830,7 +2830,7 @@ van();
   }
   printf("err=%dっ！！\n",o1);
 
-//exit(1);
+exit(1);
   //goto label;
  
   
