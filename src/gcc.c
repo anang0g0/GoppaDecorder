@@ -2641,20 +2641,11 @@ van();
     g[i] = 0;
   ginit ();
 
-//memset(mat,0,sizeof(mat));
+
+memset(mat,0,sizeof(mat));
 //w=mkg();
-
-  /*
-  fp=fopen("sk.key","rb");
-  fread(g,2,K+1,fp);
-  fclose(fp);
-  
-  for(i=0;i<K+1;i++)
-    gg[K-i]=g[i];
-  for(i=0;i<K+1;i++)
-    g[i]=gg[i];
-  */
-
+//exit(1);
+ 
   w = setpol (g, K + 1);
   oprintpol (w);
   //exit(1);
@@ -2674,6 +2665,7 @@ van();
   //keygen(g);
 
   key2 (g);
+  
   //det(g);
   //exit(1);
   //fileenc(argc,argv);
@@ -2782,7 +2774,7 @@ van();
     }
   }
 
-  f=synd2(zz);
+  f=synd(zz);
   printpol(o2v(f));
   printf("\n");
   //wait();
