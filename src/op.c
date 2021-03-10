@@ -3687,7 +3687,7 @@ unsigned short s,ms[K]={0};
 }
 }
 
-#pragma omp parallel for default (none) private(i,j,k,s) shared(mat,gt,ma,fg,gf)
+#pragma omp parallel for default (none) private(i,j,k,s) shared(mat,gt,ma,gf,fg)
 for(i=0;i<K;i++){
   for(j=0;j<N;j++){
     s=0;
