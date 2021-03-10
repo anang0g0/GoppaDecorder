@@ -2774,7 +2774,7 @@ memset(mat,0,sizeof(mat));
     }
   }
 
-  f=synd(zz);
+  f=synd2(zz);
   printpol(o2v(f));
   printf("\n");
   //wait();
