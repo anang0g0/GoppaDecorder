@@ -1,6 +1,12 @@
 # GoppaDecorder(Goppie)
 
-１．プログラム実行に当たって(op.c)　20200304,20200817
+１．プログラム実行に当たって(op.c)　20200304,20200817,20210103
+
+実行しようとすると異常終了するので（スタックオーバーフロー）、
+
+ulimit -s unlimited
+
+を必ず実行してください。
 
 https://clang.llvm.org/get_started.html
 
