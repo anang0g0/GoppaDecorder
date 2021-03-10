@@ -2298,7 +2298,7 @@ deta (unsigned short g[])
 
   //
   //
-#pragma omp parallel omp_get_max_threads()
+#pragma omp parallel num_threads(8)//omp_get_max_threads()
   {
 #pragma omp for schedule(static)
     for (i = 0; i < D; i++)
@@ -3685,7 +3685,7 @@ unsigned short s,ms[K]={0};
 }
 }
 
-#pragma omp parallel for default(none) private(i,j,k,s) shared(mat,gt,ma,fg,gf)
+#pragma omp parallel for default(none) private(i,j,k,s) shared(mat,gt,ma,gf,fg)
 for(i=0;i<K;i++){
   for(j=0;j<N;j++){
     s=0;
