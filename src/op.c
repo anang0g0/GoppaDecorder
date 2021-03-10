@@ -1889,7 +1889,7 @@ deta (unsigned short g[])
 
   //
   //
-#pragma omp parallel num_threads(8)
+#pragma omp parallel num_threads(omp_get_max_threads()) //num_max_threads()
   {
 #pragma omp for schedule(static)
     for (i = 0; i < N; i++)
@@ -3131,6 +3131,7 @@ for(i=0;i<N;i++){
   printf ("\nすげ、オレもうイキそ・・・\n");
   //keygen(g);
 //exit(1);
+/*
 for(i=0;i<N;i++)
 printf("%d,",tr[i]);
 printf("\n");
@@ -3143,6 +3144,7 @@ printf("\n");
 printf("\n");
 }
 //exit(1);
+*/
 
 
 unsigned short s,ms[K]={0};
@@ -3152,15 +3154,9 @@ unsigned short s,ms[K]={0};
     ma[j][i]=gf[mlt(fg[vv[i][j]],tr[j])];
 }
 }
-for(i=0;i<N;i++){
-  for(j=0;j<K;j++)
-  printf("%d,",ma[i][j]);
-  printf("\n");
 
-}
 //exit(1);
-
-//#pragma omp parallel for default (none) private(i,j,k,s) shared(mat,gt,ma,gf,fg)
+#pragma omp parallel for default (none) private(i,j,k,s) shared(mat,gt,ma,gf,fg)
 for(i=0;i<K;i++){
   for(j=0;j<N;j++){
     s=0;
@@ -3172,20 +3168,16 @@ for(i=0;i<K;i++){
   }
 }
 
-for(i=0;i<N;i++){
-  for(j=0;j<K;j++)
-  printf("%d,",mat[i][j]);
-  printf("\n");
-
-}
 //exit(1);
 
 /*
   //パリティチェックを生成する。
   //パリティチェックに0の列があったら、なくなるまでやり直す。
         //w=mkg();
+    i=-1;
+    while(i<0){
       i = deta (g);
-  
+    }
 if (i != 0){
 printf("aan i=%d\n",i);
 wait();
