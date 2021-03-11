@@ -8,7 +8,7 @@
 //status    : now in debugging (ver 0.8)
 // 0ベクトルが出ないように生成多項式のトレースチェックを入れた。
 //date      :  20160310
-//auther    : the queer who thinking about cryptographic future
+//auther    : the queer who thining about cryptographic future
 //code name : OVP - One Variable Polynomial library with OpenMP friendly
 //status    : now in debugging (ver 0.1)
 
@@ -787,6 +787,27 @@ printf("n=%d\n",n);
   return g;
 }
 
+//多項式のべき乗
+OP
+fpow (OP f, unsigned short n)
+{
+  int i;
+  OP g = { 0 };
+
+printf("n=%d\n",n);
+  g = f;
+  //memcpy(g.t,f.t,sizeof(f.t));
+
+  for (i = 1; i < n+1; i++){
+    g = omul (g, g);
+    printpol(o2v(g));
+    printf(" =g\n");
+  }
+
+
+  return g;
+}
+
 
 //多項式のべき乗余
 OP
@@ -1444,7 +1465,7 @@ ginit (void)
 
   g[K] = 1;			//xor128();
   g[0] = rand () % 2; //N;
-  while (count < ((K / 2) - 0))
+  while (count < 5)//((K / 2) - 0))
     {
       printf ("@\n");
       j = rand () % (K - 1);
@@ -1736,12 +1757,12 @@ int ben_or(OP f){
   
   n=deg(o2v(f));
 
-  for(i=1;i<n/2+1;i++){
+  for(i=2;i<n/2+1;i++){
     j=ipow(2,i);
     printf("j=%d\n",j);
     //if(LT(f).n==0)
     //break;
-    w=omod(oadd(opow(s,j),u),f);
+    w=omod(oadd(fpow(s,i),u),f);
     printpol(o2v(w));
     printf(" =w\n");
     if(deg(o2v(w))!=0)
@@ -1752,13 +1773,11 @@ int ben_or(OP f){
     if(LT(g).n>0){
       printf("%d\n",i);
     return -1;
-    } else {
-      return 0;
-    }
+    } 
     
   }
  
-  return 1;
+  return 0;
 }
 
 
@@ -4025,20 +4044,50 @@ label:
   printf(" ==ogcd\n");
 
 //  memset(f,0,sizeof(f));
+  //f.t[16].a=1;
+  //f.t[16].n=16;
+/*
   f.t[8].a=1;
   f.t[8].n=8;
-  f.t[6].a=1;
-  f.t[6].n=6;
   f.t[5].a=1;
   f.t[5].n=5;
-  f.t[1].a=1;
-  f.t[1].n=1;
+  f.t[3].a=1;
+  f.t[3].n=3;
+  */
+ /*
+  f.t[256].a=1;
+  f.t[256].n=256;
+  
+  f.t[16].a=1;
+  f.t[16].n=16;
+  f.t[12].a=1;
+  f.t[12].n=12;
+  f.t[10].a=1;
+  f.t[10].n=10;
+  f.t[7].a=1;
+  f.t[7].n=7;
+  f.t[5].a=1;
+  f.t[5].n=5;
+  f.t[4].a=1;
+  f.t[4].n=4;
   f.t[0].a=1;
   f.t[0].n=0;
-
-  //printf("%d\n",ben_or(f));
-  //exit(1);
-  
+*/
+/*
+while(1){
+memset(g,0,sizeof(g));
+ginit();
+f=setpol(g,K+1);
+i=ben_or(f);
+if(i==0){
+  printpol(o2v(w));
+  printf(" =w\n");
+  printf("%d\n",ben_or(f));
+  exit(1);
+}
+}
+exit(1);
+*/
   EX rs={0};
     rs=extgcd(cd,sd);
     printpol(o2v(rs.d));
