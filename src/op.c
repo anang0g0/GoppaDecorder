@@ -778,7 +778,7 @@ printf("n=%d\n",n);
   //memcpy(g.t,f.t,sizeof(f.t));
 
   for (i = 1; i < n; i++){
-    g = omul (g, g);
+    g = omul (g, f);
     printpol(o2v(g));
     printf(" =g\n");
   }
@@ -1745,17 +1745,17 @@ int ben_or(OP f){
     printpol(o2v(w));
     printf(" =w\n");
     if(deg(o2v(w))!=0)
-    g=agcd(f,w);
+    g=gcd(f,w);
     printpol(o2v(g));
     printf(" =g\n");
-    /*
-    if(LT(g).n==0){
+    
+    if(LT(g).n>0){
       printf("%d\n",i);
     return -1;
     } else {
       return 0;
     }
-    */
+    
   }
  
   return 1;
