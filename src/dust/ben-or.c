@@ -18,7 +18,10 @@
 #define E 4
 #define D 2*K
 
+
 unsigned short c[2*K+1]={0};
+unsigned short gf[2]={0,1};
+unsigned short fg[2]={0,1};
 
 
 typedef struct {
@@ -1218,9 +1221,9 @@ int main(int argc,char **argv){
   //     exit(1);
    
 
-  while(odeg(ff)<40){
+//  while(odeg(ff)<40){
       ff=benor(7,40);
-  }
+//  }
     oprintpol(ff);
     printf(" irr?=============\n");
     exit(1);
