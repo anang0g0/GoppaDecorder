@@ -736,19 +736,52 @@ odiv (OP f, OP g)
 }
 
 
+//多項式を表示する(default)
+void
+printpol (vec a)
+{
+  int i, n;
+
+  n = deg (a);
+
+  //printf ("baka\n");
+  assert (("baka\n", n >= 0));
+
+
+
+  for (i = n; i > -1; i--)
+    {
+      if (a.x[i] > 0)
+	{
+	  printf ("%u", a.x[i]);
+	  //if (i > 0)
+	  printf ("x^%d", i);
+	  //if (i > 0)
+	  printf ("+");
+	}
+    }
+  //  printf("\n");
+
+  return;
+}
+
+
 //多項式のべき乗
 OP
-opow (OP f, int n)
+opow (OP f, unsigned short n)
 {
   int i;
   OP g = { 0 };
 
-
+printf("n=%d\n",n);
   g = f;
   //memcpy(g.t,f.t,sizeof(f.t));
 
-  for (i = 1; i < n; i++)
-    g = omul (g, f);
+  for (i = 1; i < n; i++){
+    g = omul (g, g);
+    printpol(o2v(g));
+    printf(" =g\n");
+  }
 
 
   return g;
@@ -789,34 +822,6 @@ trace (OP f, unsigned short x)
 }
 
 
-//多項式を表示する(default)
-void
-printpol (vec a)
-{
-  int i, n;
-
-  n = deg (a);
-
-  //printf ("baka\n");
-  assert (("baka\n", n >= 0));
-
-
-
-  for (i = n; i > -1; i--)
-    {
-      if (a.x[i] > 0)
-	{
-	  printf ("%u", a.x[i]);
-	  //if (i > 0)
-	  printf ("x^%d", i);
-	  //if (i > 0)
-	  printf ("+");
-	}
-    }
-  //  printf("\n");
-
-  return;
-}
 
 
 // invert of polynomial
@@ -1018,76 +1023,6 @@ OP gcd(OP a, OP b){
   }
 }
 
-
-
-int ben_or(OP f){
-  int i,j,k,l,flg=0;
-  OP t[10]={0},s={0},u={0},w={0};
-  OP cc={0};
-  vec v={0},x={0};
-  
-  v.x[N]=1;
-  x.x[1]=1;
-  s=v2o(v);
-  printpol(v);
-  printf("\n");
-  printpol(o2v(omul(s,s)));
-  printf("\n");
-  printpol(o2v(f));
-  printf(" ===========f\n");
-  //exit(1);
-  //wait();  
-  u=v2o(x);
-  //t[0].t[1].a=1;
-  //t[0].t[1].n=1;
-  t[0].t[16].a=1;
-  t[0].t[16].n=16;
-  /*
-  t[1].t[1].a=1;
-  t[1].t[1].n=1;
-  t[1].t[256].a=1;
-  t[1].t[256].n=256;
-  t[2].t[1].a=1;
-  t[2].t[1].n=1;
-  t[2].t[4096].a=1;
-  t[2].t[4096].n=4096;
-  
-  t[3].t[1].a=1;
-  t[3].t[1].n=1;
-  t[3].t[16].a=1;
-  t[3].t[65536].n=65536;
-  */
-  //l=xsqrt(K);
-  i=0;
-  while(odeg(t[i])<257){
-    printpol(o2v(t[i]));
-    printf(" =======poly2\n");
-    s=omul(t[i],t[i]);
-    i++;
-    t[i]=s;
-    if(i==4)
-      break;
-  }
-  for(j=0;j<i+1;j++){
-    t[j]=oadd(t[j],u);
-    printpol(o2v(t[j]));
-    printf("\n");
-  }
-  printf("i=%d\n",i);
-  //wait();
-
-  for(j=0;j<i+1;j++){
-    cc=gcd(f,t[j]);
-    printpol(o2v(cc));
-    printf(" =======poly\n");
-    if(LT(cc).n>0){
-      flg=1;
-      break;
-      }
-    }
-
-  return flg;
-}
 
 
 
@@ -1508,14 +1443,14 @@ ginit (void)
 
 
   g[K] = 1;			//xor128();
-  g[0] = rand () % N;
+  g[0] = rand () % 2; //N;
   while (count < ((K / 2) - 0))
     {
       printf ("@\n");
       j = rand () % (K - 1);
       if (j < K && j > 0 && g[j] == 0)
 	{
-	  g[j] = rand () % N;
+	  g[j] = rand () % 2;//N;
 	  count++;
 	}
     }
@@ -1764,7 +1699,7 @@ vmul (vec a, vec b)
 
 //整数のべき乗
 unsigned int
-ipow (unsigned int q, unsigned int u)
+ipow (unsigned short q, unsigned short u)
 {
   unsigned int i, m = 1;
 
@@ -1774,6 +1709,68 @@ ipow (unsigned int q, unsigned int u)
   printf ("in ipow====%d\n", m);
 
   return m;
+}
+
+
+
+int ben_or(OP f){
+  int i,j,k,n,l,flg=0;
+  OP t[10]={0},s={0},u={0},w={0};
+  OP cc={0},g={0};
+  vec v={0},x={0};
+  
+  v.x[1]=1;
+  x.x[1]=1;
+  s=v2o(v);
+  printpol(v);
+  printf("\n");
+  printpol(o2v(omul(s,s)));
+  printf("\n");
+  printpol(o2v(f));
+  printf(" ===========f\n");
+  //exit(1);
+  //wait();  
+  u=v2o(x);
+  //t[0].t[1].a=1;
+  //t[0].t[1].n=1;
+  
+  n=deg(o2v(f));
+
+  for(i=1;i<n/2+1;i++){
+    j=ipow(2,i);
+    printf("j=%d\n",j);
+    //if(LT(f).n==0)
+    //break;
+    w=omod(oadd(opow(s,j),u),f);
+    printpol(o2v(w));
+    printf(" =w\n");
+    if(deg(o2v(w))!=0)
+    g=agcd(f,w);
+    printpol(o2v(g));
+    printf(" =g\n");
+    /*
+    if(LT(g).n==0){
+      printf("%d\n",i);
+    return -1;
+    } else {
+      return 0;
+    }
+    */
+  }
+ 
+  return 1;
+}
+
+
+
+int testbit(unsigned int a,unsigned int i){
+  int j,k;
+
+  if(a&(1<<i)>0){
+    return 1;
+  } else {
+    return 0;
+  }
 }
 
 
@@ -4026,6 +4023,20 @@ label:
   tmp=ogcd(cd,sd);
   printpol(o2v(tmp));
   printf(" ==ogcd\n");
+
+//  memset(f,0,sizeof(f));
+  f.t[8].a=1;
+  f.t[8].n=8;
+  f.t[6].a=1;
+  f.t[6].n=6;
+  f.t[5].a=1;
+  f.t[5].n=5;
+  f.t[1].a=1;
+  f.t[1].n=1;
+  f.t[0].a=1;
+  f.t[0].n=0;
+
+  //printf("%d\n",ben_or(f));
   //exit(1);
   
   EX rs={0};
@@ -4128,8 +4139,10 @@ label:
   while (fail || j == 0);
   //l=ben_or(w);
   //printf("irr=%d\n",l);
-  //if(l==1)
+  //if(l!=0)
   //goto label;
+
+
 
   /*
   do{
