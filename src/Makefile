@@ -8,5 +8,8 @@ amd:
 gcc: 
 	gcc -Wall -g -pg -O3 -mtune=native -march=native -ffast-math -funroll-loops  -fopenmp gcc.c
 
+oo: 
+	clang-10 -Wall -g -pg -O3 -mtune=native -march=native -ffast-math -funroll-loops  -fopenmp alg.c
+
 clean:
 	rm -f a.out
