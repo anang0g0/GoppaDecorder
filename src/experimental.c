@@ -35,7 +35,7 @@
 #include <omp.h>		//clang-10
 
 #include "debug.c"
-#include "8192.h"
+//#include "8192.h"
 #include "global.h"
 #include "struct.h"
 
@@ -3724,8 +3724,8 @@ count=0;
     
         if(i>0 && r.t[i].n==0){
         printf("baka-z\n");
-        //return -1;
-        exit(1);
+        return -1;
+        //exit(1);
         }
 	  if (r.t[i].a > 0 && i > 0)	// == r.t[i].n)
 	    {
@@ -4011,14 +4011,14 @@ lab:
 
 srand(clock());
 
-/*
-zz[0]=1;
-zz[1]=2;
-zz[2]=4;
-zz[4]=4;
-zz[5]=5;
-*/
 
+//zz[0]=1;
+zz[1]=1;
+zz[2]=2;
+zz[3]=3;
+//zz[5]=5;
+
+/*
 count=0;
 memset(zz,0,sizeof(zz));
 //w=setpol(g,K+1);
@@ -4033,11 +4033,11 @@ while(count<T){
   }
   }
 //zz[rand()%N]=rand()%N;
-
+*/
 sa=synd2(zz);
 //sa=synd(zz);
 printpol(o2v(sa));
-printf(" =: pol\n");
+printf(" =first pol\n");
 printpol(o2v(w));
 printf(" =first pol g(x)\n");
 for(i=0;i<N;i++)
@@ -4059,7 +4059,7 @@ if(count==T){
   exit(1);
 }
 //goto label;
-exit(1);
+//exit(1);
 
 OP pp[1000]={0};
 
@@ -4072,7 +4072,6 @@ printpol(o2v(sa));
 printf(" =first vinel@\n");
 printpol(o2v(f));
 printf(" =first vinel gx\n");
-exit(1);
 
 
 memset(zz,0,sizeof(zz));
@@ -4082,6 +4081,9 @@ zz[r.t[i].n]=r.t[i].a;
 for(i=0;i<N;i++)
 printf("%d,",zz[i]);
 printf(" first value %d\n",count);
+exit(1);
+
+
 sb=synd(zz);
 printpol(o2v(sb));
 printf(" =firstful\n");
@@ -4118,7 +4120,7 @@ printpol(o2v(w));
 printf(" =first!\n");
 printpol(o2v(f));
 printf(" =first!\n");
-exit(1);
+//exit(1);
 }
 }
 exit(1);
