@@ -1838,7 +1838,7 @@ memset(ww,0,sizeof(ww));
   d = v2o (tmp);
     
 // omp_set_num_threads(omp_get_max_threads());
-#pragma omp parallel num_threads(TH)
+#pragma omp parallel num_threads(omp_get_max_threads()) //num_threads(TH)
   {
   //#pragma omp parallel for    
   #pragma omp for schedule(static)
