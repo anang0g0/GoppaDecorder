@@ -3135,7 +3135,7 @@ printf("\n");
 //exit(1);
 */
 
-/*
+
 unsigned short s,ms[K]={0};
 //#pragma omp parallel for private(i,j) shared(vv,tr,fg,gf,ma)
   for(j=0;j<N;j++){
@@ -3156,10 +3156,10 @@ for(i=0;i<K;i++){
     mat[j][i]=s;
   }
 }
-*/
+
 //exit(1);
 
-
+/*
   //パリティチェックを生成する。
   //パリティチェックに0の列があったら、なくなるまでやり直す。
         //w=mkg();
@@ -3171,7 +3171,7 @@ if (i != 0){
 printf("aan i=%d\n",i);
 wait();
 }
-
+*/
 
 return w;
 }
@@ -3376,7 +3376,7 @@ lab:
       }
       //exit(1);
       
-      f = synd (zz);
+      f = synd2 (zz);
       
       
       count = 0;
@@ -3453,7 +3453,7 @@ lab:
 	printf ("%d,", zz[i]);
       printf ("\n");
 
-      f = synd (zz);
+      f = synd2 (zz);
 
 
       //バグトラップのためのコード（省略）
