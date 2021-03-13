@@ -1214,7 +1214,6 @@ inv (OP a, OP n)
     {
       printf ("v=============0\n");
     }
-
   printf ("d==============\n");
   */
   //  } //end of a>0
@@ -2858,7 +2857,6 @@ test (OP w, unsigned short zz[])
 /*
 void trap(OP w,OP f){
   OP hh={0},d,tt,ff,tmp,r2;
-
   
   hh = gcd (w, f);
       if (odeg ((hh.d)) > 0)
@@ -2867,12 +2865,8 @@ void trap(OP w,OP f){
 	  wait ();
 	  goto label;
 	}
-
-
       tt.t[0].n = 1;
       tt.t[0].a = 1;
-
-
       ff = inv (f, w);
       tmp = omod (omul (ff, f), w);
       if (odeg ((tmp)) > 0)
@@ -2886,8 +2880,6 @@ void trap(OP w,OP f){
 	  wait ();
 	  //  goto label;
 	}
-
-
       r2 = oadd (ff, tt);
       //printpol (o2v (r2));
       printf (" h+x==============\n");
@@ -2925,8 +2917,6 @@ void trap(OP w,OP f){
 	  //exit(1);
 	  goto label;
 	}
-
-
       hh = xgcd (w, g1);
       ff = omod (omul (hh.v, g1), w);
       //printpol (o2v (ff));
@@ -3136,7 +3126,6 @@ for(i=0;i<N;i++)
 printf("%d,",tr[i]);
 printf("\n");
 //exit(1);
-
   for(j=0;j<N;j++){
       for(i=0;i<K;i++){
     printf("%d,",vv[i][j]);
@@ -3306,14 +3295,10 @@ label:
 
 /*
   memset(g,0,sizeof(g));
-
   ginit ();
-
-
   w = setpol (g, K + 1);
   oprintpol (w);
   //exit(1);
-
   //多項式の値が0でないことを確認
   for (i = 0; i < N; i++)
     {
@@ -3325,19 +3310,12 @@ label:
 	  //exit(1);
 	}
     }
-
 #pragma omp parallel for
   for (i = 0; i < N; i++)
     tr[i] = oinv (ta[i]);
-
-
   memset (mat, 0, sizeof (mat));
-
   printf ("\nすげ、オレもうイキそ・・・\n");
   //keygen(g);
-
-
-
   //パリティチェックを生成する。
   //パリティチェックに0の列があったら、なくなるまでやり直す。
   do{
