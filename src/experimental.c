@@ -4055,7 +4055,7 @@ if((count=elo(r))<0){
 if(count==T){
   printf("っ！ %d\n",count);
 }else{
-  perintf("%d\n",count);
+  printf("%d\n",count);
   exit(1);
 }
 //goto label;
