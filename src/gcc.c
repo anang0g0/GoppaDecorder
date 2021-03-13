@@ -2558,6 +2558,7 @@ printf("\n");
 //exit(1);
 
 ogt(); 
+/*
 //#pragma omp parallel for default(none) private(i,j,k,s) shared(mat,gt,ma,fg,gf)
 for(i=0;i<K;i++){
   for(j=0;j<N;j++){
@@ -2574,8 +2575,8 @@ for(j=0;j<K;j++)
 printf("%d,",mat[i][j]);
 }
 //exit(1);
+*/
 
-/*
   //パリティチェックを生成する。
   //パリティチェックに0の列があったら、なくなるまでやり直す。
         //w=mkg();
@@ -2585,7 +2586,7 @@ if (i < 0);{
 printf("i=%d\n",i);
 wait();
 }
-*/
+
 
 return w;
 }
