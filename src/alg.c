@@ -34,7 +34,7 @@
 #include <omp.h>		//clang-10
 
 #include "debug.c"
-//#include "8192.h"
+#include "8192.h"
 #include "global.h"
 #include "struct.h"
 
@@ -4013,7 +4013,7 @@ if(elo(r)<0){
     printf("%d,",zz[i]);
     printf("\n");
 }
-//exit(1);
+exit(1);
 
 
 
