@@ -8,7 +8,7 @@
 #include "chash.c"
 
 //#define D 4096
-#define F 12 //2040
+#define F 12
 
 unsigned char a[F][F]={0};
 unsigned char cc[F][F]={0};
@@ -46,8 +46,8 @@ while(1){
     break;
 }
 */
-memset(a,0,sizeof(a));
-memset(bb,0,sizeof(bb));
+//memset(a,0,sizeof(a));
+//memset(cc,0,sizeof(cc));
 #pragma omp parallel for    
   for(i=0;i<F;i++){
     a[i][i]=1;
@@ -70,6 +70,12 @@ memset(bb,0,sizeof(bb));
   }
 //a[1][1]=0;
   int l;
+
+  for(i=0;i<F;i++){
+      for(j=0;j<F;j++)
+      cc[i][j]=rand()%2;
+  }
+  /*
 #pragma omp parallel for private(j,k)
   for(i=0;i<F;i++){
 #pragma omp parallel num_threads(8)
@@ -85,6 +91,7 @@ memset(bb,0,sizeof(bb));
     }
   }
 cc[0][0]=rand()%2;
+*/
 }
 
 
@@ -95,7 +102,7 @@ void makeS(){
   unsigned int flg=0,count=0;
   time_t t;
   FILE *fq;
-  unsigned char inv_a[F][F]; //ここに逆行列が入る
+  unsigned char inv_a[F][F]={0}; //ここに逆行列が入る
   unsigned char buf; //一時的なデータを蓄える
   int n=F;  //配列の次数
 
@@ -130,7 +137,11 @@ labo:
     //  printf("\n");
   }
 
-memset(inv_a,0,sizeof(inv_a));  
+//memset(inv_a,0,sizeof(inv_a));  
+for(i=0;i<F;i++){
+    for(j=0;j<F;j++)
+    inv_a[i][j]=0;
+}
 //単位行列を作る
 #pragma omp parallel for private(j)
 for(i=0;i<F;i++){
@@ -145,7 +156,7 @@ for(i=0;i<F;i++){
 for(i=0;i<F;i++){
   if(cc[i][i]==0){
   j=i;
-  while(cc[j][i]==0){
+  while(cc[j][i]==0 && j<F){
     j++;
     //buf=cc[j++][i];
   }
@@ -154,9 +165,10 @@ for(i=0;i<F;i++){
   
   //  exit(1);
   //#pragma omp parallel for  
-  
+  if(j>=F)
+  goto labo;
  for(k=0;k<F;k++){
- cc[i][k]^=cc[j][k];
+ cc[i][k]^=cc[j][k]%2;
  inv_a[i][k]^=inv_a[j][k];
  }
  
@@ -168,7 +180,7 @@ for(i=0;i<F;i++){
    if(cc[l][i]==1){
      //#pragma omp parallel for  
      for(k=0;k<F;k++){
-     cc[l][k]^=cc[i][k];
+     cc[l][k]^=cc[i][k]%2;
      inv_a[l][k]^=inv_a[i][k];
      }
    }
@@ -186,7 +198,7 @@ for(i=0;i<F;i++){
      if(cc[k][i]==1){
        for(j=0;j<F;j++){
        // if(a[k][i]==1){
-	 cc[k][j]^=cc[i][j];
+	 cc[k][j]^=cc[i][j]%2;
 	 inv_a[k][j]^=inv_a[i][j];
 	 //}
      }
@@ -200,7 +212,7 @@ for(i=0;i<F;i++){
 //逆行列を出力
 for(i=0;i<F;i++){
  for(j=0;j<F;j++){
-  printf(" %d,",inv_a[i][j]);
+  printf("a %d,",inv_a[i][j]);
  }
  printf("\n");
  }
