@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include "global.h"
+#include "chash.c"
 
 //#define D 4096
 #define F 12 //2040
@@ -12,7 +14,8 @@ unsigned char a[F][F]={0};
 unsigned char cc[F][F]={0};
 unsigned char bb[F][F]={0};
 unsigned char cl[F][F];
-  
+unsigned char s[F]={0};
+
   //{{0,1,0,1},{1,0,0,1},{0,0,1,0},{0,0,1,1}};
 //{{0,1,1,1},{1,0,1,1},{0,0,1,1},{1,0,0,1}}; //{{1,2,0,-1},{-1,1,2,0},{2,0,1,1},{1,-2,-1,1}}; //入力用の配列
 
@@ -21,9 +24,30 @@ unsigned char cl[F][F];
 
 
 void g2(){
-  int i,j,k;
+  int i,j,k,flg,count=0;
 
-
+/*
+while(1){
+    memset(cc,0,sizeof(cc));
+    for(j=0;j<F;j++)
+    s[j]=rand()%2;
+    flg=0;
+    for(k=0;k<F;k++){
+        for(j=0;j<F;j++)
+        if(cc[k][j]!=s[j])
+            flg=1;
+    }
+    if(flg==1){
+    for(j=0;j<F;j++)
+    cc[count][j]=s[j];
+    count++;
+    }
+    if(count==F)
+    break;
+}
+*/
+memset(a,0,sizeof(a));
+memset(bb,0,sizeof(bb));
 #pragma omp parallel for    
   for(i=0;i<F;i++){
     a[i][i]=1;
@@ -44,7 +68,7 @@ void g2(){
       bb[j][i]=xor128()%2;
     }
   }
-
+//a[1][1]=0;
   int l;
 #pragma omp parallel for private(j,k)
   for(i=0;i<F;i++){
@@ -60,6 +84,7 @@ void g2(){
     }
     }
   }
+cc[0][0]=rand()%2;
 }
 
 
@@ -79,8 +104,13 @@ void makeS(){
   for(i=0;i<F;i++)
     b[i]=malloc(F*sizeof(unsigned char *));
   
-  while(flg<F || count!=F*F-F){
-    
+  while(flg!=F || count!=F*F-F)
+  //while(count!=F*F-F)
+  //while(flg!=F)
+  {
+labo:
+//memset(b,0,sizeof(b));
+    flg=0;
     srand(clock()+time(&t));
 
     g2();
@@ -100,7 +130,7 @@ void makeS(){
     //  printf("\n");
   }
 
-  
+memset(inv_a,0,sizeof(inv_a));  
 //単位行列を作る
 #pragma omp parallel for private(j)
 for(i=0;i<F;i++){
@@ -114,18 +144,22 @@ for(i=0;i<F;i++){
 
 for(i=0;i<F;i++){
   if(cc[i][i]==0){
-  j=0;
+  j=i;
   while(cc[j][i]==0){
-    buf=cc[j++][i];
+    j++;
+    //buf=cc[j++][i];
   }
+//  cc[i][i]=1;
   //  printf("j=%d\n",j);
   
   //  exit(1);
   //#pragma omp parallel for  
+  
  for(k=0;k<F;k++){
  cc[i][k]^=cc[j][k];
  inv_a[i][k]^=inv_a[j][k];
  }
+ 
   }
   //  exit(1);
   
@@ -209,9 +243,13 @@ for(i=0;i<F;i++){
    }   
  }
   
+  //if(cl[0][0]>0)
+  //  goto labo;
  //
  printf("S[K][K]=\n{\n");
- if(flg==F && count==F*F-F){
+ if(flg==F && count==(F*F-F))
+//if(flg==F)
+ {
   for(i=0;i<F;i++){
     printf("{");
     for(j=0;j<F;j++){
@@ -270,6 +308,8 @@ for(i=0;i<F;i++){
  }
   
  }
+
+ /*
   fq=fopen("S.key","wb");
   for(i=0;i<F;i++){
     for(j=0;j<F;j++)
@@ -286,8 +326,15 @@ for(i=0;i<F;i++){
     fwrite(dd,1,n,fq);  
   }
   fclose(fq);
+*/
 
   free(b);
   
 }
 
+
+main(){
+
+makeS();
+
+}
