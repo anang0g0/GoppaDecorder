@@ -3628,7 +3628,8 @@ aa:
 	{
 	  w = setpol (g, K + 1);
 	  j = 1;
-	}  
+	}
+   
    /*
       w = setpol (g, K + 1);
       oprintpol (w);
@@ -4132,11 +4133,11 @@ label:
 	  j = 1;
 	}
   /*
-      j=1;
-      w = setpol (g, K + 1);
-      oprintpol (w);
+    j=1;
+    w = setpol (g, K + 1);
+    oprintpol (w);
+  */
       //多項式の値が0でないことを確認
-      */
       for (i = 0; i < D; i++)
 	{
 	  ta[i] = trace (w, i);
@@ -4540,6 +4541,7 @@ lab:
       if (count < T * 2)
 	{
 	  printf ("error is too few\n");
+    exit(1);
 	  AA++;
 	  memcpy (zz, z1, sizeof (zz));
 	  printf ("{");
@@ -4577,11 +4579,11 @@ lab:
 	  exit (1);
 	}
 
-      exit(1);
+      //exit(1);
       //goto label;
       //wait();
 
-      //break;
+    break;
     }
 
   return 0;
