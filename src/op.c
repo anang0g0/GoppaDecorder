@@ -3438,7 +3438,6 @@ void ogt(){
   unsigned short abc[N][K]={0};
 
 
-
 //#pragma omp parallel for private(i,j)
 for(i=0;i<K;i++){
     for(j=0;j<K-i;j++)
@@ -3448,12 +3447,12 @@ for(i=0;i<K;i++){
 }
 
 
+
 unsigned short dd[N][N]={0};
 
 OP mkg(){
 int i,j,k,fail,flg,l;
 OP w={0};
-
 
 
 aa:
@@ -3545,7 +3544,7 @@ unsigned short s,ms[K]={0};
 }
 
 
-//#pragma omp parallel for default (none) private(i,j,k,s) shared(mat,gt,ma,gf,fg)
+#pragma omp parallel for default (none) private(i,j,k,s) shared(mat,gt,ma,gf,fg)
 for(i=0;i<K;i++){
   for(j=0;j<N;j++){
     s=0;
@@ -3558,17 +3557,6 @@ for(i=0;i<K;i++){
   //printf("\n");
 }
 //  printf("\n");
-/*
-  printf("\n");
-for(j=0;j<K;j++){
-  for(i=0;i<N;i++){
-    printf("%d,",vb[j][i]);
-  }
- printf("\n");
-}
-printf("\n");
-//exit(1);
-*/
 //exit(1);
 
 
