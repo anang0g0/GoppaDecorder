@@ -3533,13 +3533,14 @@ for(i=1;i<K;i++){
   for(j=0;j<N;j++)
   vb[i][j]=gf[mltn(i,fg[j])];
 }
-
+/*
 for(i=0;i<K;i++){
   for(j=0;j<N;j++)
   printf("%d,",vb[i][j]);
   printf("\n");
 }
 //exit(1);
+*/
 
 }
 
@@ -3553,13 +3554,13 @@ OP ogt(){
 
 
 
-//#pragma omp parallel for private(i,j)
+//pragma omp parallel for private(i,j)
 for(i=0;i<K;i++){
     for(j=0;j<K-i;j++)
     gt[i][j+i]=g[j];
     }
 
-
+/*
 printf("\n");
     for(i=0;i<K;i++){
         for(j=0;j<K;j++)
@@ -3567,6 +3568,7 @@ printf("\n");
         printf("\n");
     }
 //    exit(1);
+*/
 /*
 exit(1);
 // w=kotei();
@@ -3666,7 +3668,7 @@ memset(mat,0,sizeof(mat));
 //  wait ();
 
 
-  #pragma omp parallel for
+  //#pragma omp parallel for
   for (i = 0; i < N; i++)
     {
       tr[i] = oinv (ta[i]);
@@ -3697,7 +3699,7 @@ unsigned short s,ms[K]={0};
 }
 
 
-//#pragma omp parallel for default (none) private(i,j,k,s) shared(mat,gt,ma,gf,fg)
+#pragma omp parallel for default (none) private(i,j,k,s) shared(mat,gt,ma,gf,fg)
 for(i=0;i<K;i++){
   for(j=0;j<N;j++){
     s=0;
