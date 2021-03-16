@@ -1503,26 +1503,27 @@ init_pol (OP f)
 static void
 ginit (void)
 {
-  int j, count = 0;
+  int j, count = 0,k=0;
   unsigned short gg[K + 1] = { 0 };
-  //unsigned short g[K+1]={0};
+  
 
   printf ("in ginit\n");
 
-
   g[K] = 1;			//xor128();
-  g[0] = rand () % 2; //N;
-  while (count < ((K / 2) - 0))
-    {
-      printf ("@\n");
-      j = rand () % (K - 1);
+  g[0] = rand () % N;
+  k=rand()%(K-2);
+  if(k>0){
+  while (count < k)
+  {
+    printf("in whule\n");
+     j = rand () % (K - 1);
       if (j < K && j > 0 && g[j] == 0)
 	{
-	  g[j] = rand () % 2; //N;
+	  g[j] = rand () % N;
 	  count++;
 	}
     }
-
+  }
 
   for (j = 0; j < K + 1; j++)
     gg[j] = g[K - j];
@@ -3482,10 +3483,11 @@ aa:
 	  if (g[K - 1] > 0)
 	    flg = 1;
 	  if (i % 2 == 1 && g[i] > 0 && i < K)
-	    k++;
+  	  k++;
 	}
   //偶数項だけにならないようにする
     if ((k > 0 && flg == 0) || (k > 1 && flg == 1))
+  //if(k>0)
 	{
 	  w = setpol (g, K + 1);
 	  j = 1;
@@ -3594,6 +3596,10 @@ int count,i,j,k;
 
 
 count=0;
+if(deg(o2v(r))<T){
+  printf("deg <T\n");
+  exit(1);
+}
       for (i = 0; i < T; i++)
 	{
     
@@ -3980,7 +3986,8 @@ label:
 	  if (i % 2 == 1 && g[i] > 0 && i < K)
 	    k++;
 	}
-      if ((k > 0 && flg == 0) || (k > 1 && flg == 1))
+  //if(k>0)
+    if ((k > 0 && flg == 0) || (k > 1 && flg == 1))
 	{
 	  w = setpol (g, K + 1);
 	  j = 1;
@@ -4437,7 +4444,7 @@ lab:
       //goto label;
       //wait();
 
-    //break;
+    break;
     }
 
   return 0;
