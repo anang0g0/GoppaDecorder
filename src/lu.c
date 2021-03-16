@@ -4,15 +4,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+//#include "global.h"
+//#include "chash.c"
 
 //#define D 4096
-#define F 12 //2040
+#define F 2040
 
 unsigned char a[F][F]={0};
 unsigned char cc[F][F]={0};
 unsigned char bb[F][F]={0};
 unsigned char cl[F][F];
-  
+unsigned char s[F]={0};
+
   //{{0,1,0,1},{1,0,0,1},{0,0,1,0},{0,0,1,1}};
 //{{0,1,1,1},{1,0,1,1},{0,0,1,1},{1,0,0,1}}; //{{1,2,0,-1},{-1,1,2,0},{2,0,1,1},{1,-2,-1,1}}; //入力用の配列
 
@@ -21,9 +24,11 @@ unsigned char cl[F][F];
 
 
 void g2(){
-  int i,j,k;
+  int i,j,k,flg,count=0;
 
-
+/*
+//memset(a,0,sizeof(a));
+//memset(cc,0,sizeof(cc));
 #pragma omp parallel for    
   for(i=0;i<F;i++){
     a[i][i]=1;
@@ -44,8 +49,16 @@ void g2(){
       bb[j][i]=xor128()%2;
     }
   }
-
+  */
+//a[1][1]=0;
   int l;
+
+  for(i=0;i<F;i++){
+      for(j=0;j<F;j++)
+      cc[i][j]=rand()%2;
+  }
+  
+/*
 #pragma omp parallel for private(j,k)
   for(i=0;i<F;i++){
 #pragma omp parallel num_threads(8)
@@ -60,47 +73,59 @@ void g2(){
     }
     }
   }
+cc[0][0]=rand()%2;
+*/
 }
 
 
 void makeS(){
   int i,j,k,l;
-  unsigned char **b;
+  unsigned char b[F][F]={0};
   unsigned char dd[F]={0};
   unsigned int flg=0,count=0;
   time_t t;
   FILE *fq;
-  unsigned char inv_a[F][F]; //ここに逆行列が入る
+  unsigned char inv_a[F][F]={0}; //ここに逆行列が入る
   unsigned char buf; //一時的なデータを蓄える
   int n=F;  //配列の次数
 
 
-  b=malloc(F*sizeof(unsigned char *));
-  for(i=0;i<F;i++)
-    b[i]=malloc(F*sizeof(unsigned char *));
+//  b=malloc(F*sizeof(unsigned char *));
+ // for(i=0;i<F;i++)
+ //   b[i]=malloc(F*sizeof(unsigned char *));
   
-  while(flg<F || count!=F*F-F){
-    
+  //while(flg!=F || count!=F*F-F)
+  //while(count!=F*F-F)
+  while(flg!=F)
+  {
+labo:
+//memset(cc,0,sizeof(cc));
+    flg=0;
+    count=0;
     srand(clock()+time(&t));
 
-    g2();
+    //g2();
+    for(i=0;i<F;i++){
+    for(j=0;j<F;j++)
+    cc[i][j]=xor128()%2;
+    }
     printf("end of g2\n");
     //exit(1);
     
-    flg=0;
 #pragma omp parallel for private(j)
   for(i=0;i<F;i++){
 
     for(j=0;j<F;j++){
-      //  printf("%d,",a[i][j]);
+    //printf("%d,",cc[i][j]);
       cl[i][j]=cc[i][j];
       dd[j]=cc[i][j];
 
     }
-    //  printf("\n");
+    //printf("\n");
   }
 
-  
+//memset(inv_a,0,sizeof(inv_a));  
+
 //単位行列を作る
 #pragma omp parallel for private(j)
 for(i=0;i<F;i++){
@@ -114,18 +139,36 @@ for(i=0;i<F;i++){
 
 for(i=0;i<F;i++){
   if(cc[i][i]==0){
-  j=0;
-  while(cc[j][i]==0){
-    buf=cc[j++][i];
+  j=i;
+  /*
+  cc[i][i]=1;
+  for(k=i+1;k<F;k++)
+    cc[i][k]^=rand()%2;
+  //printf("i=%d\n",i);
+  */
+
+  while(cc[j][i]==0 && j<F){
+    j++;
+    //buf=cc[j++][i];
   }
+
+//  cc[i][i]=1;
   //  printf("j=%d\n",j);
   
   //  exit(1);
   //#pragma omp parallel for  
+  if(j>=F){
+      printf("baka %d\n",j);
+      //exit(1);
+    goto labo;
+      
+  }
  for(k=0;k<F;k++){
- cc[i][k]^=cc[j][k];
+ cc[i][k]^=cc[j][k]%2;
  inv_a[i][k]^=inv_a[j][k];
  }
+
+cc[i][i]=1; 
   }
   //  exit(1);
   
@@ -134,7 +177,7 @@ for(i=0;i<F;i++){
    if(cc[l][i]==1){
      //#pragma omp parallel for  
      for(k=0;k<F;k++){
-     cc[l][k]^=cc[i][k];
+     cc[l][k]^=cc[i][k]%2;
      inv_a[l][k]^=inv_a[i][k];
      }
    }
@@ -152,7 +195,7 @@ for(i=0;i<F;i++){
      if(cc[k][i]==1){
        for(j=0;j<F;j++){
        // if(a[k][i]==1){
-	 cc[k][j]^=cc[i][j];
+	 cc[k][j]^=cc[i][j]%2;
 	 inv_a[k][j]^=inv_a[i][j];
 	 //}
      }
@@ -166,7 +209,7 @@ for(i=0;i<F;i++){
 //逆行列を出力
 for(i=0;i<F;i++){
  for(j=0;j<F;j++){
-  printf(" %d,",inv_a[i][j]);
+  printf("a %d,",inv_a[i][j]);
  }
  printf("\n");
  }
@@ -209,9 +252,13 @@ for(i=0;i<F;i++){
    }   
  }
   
+  //if(cl[0][0]>0)
+  //  goto labo;
  //
  printf("S[K][K]=\n{\n");
- if(flg==F && count==F*F-F){
+if(flg==F && count==(F*F-F))
+//if(flg==F)
+ {
   for(i=0;i<F;i++){
     printf("{");
     for(j=0;j<F;j++){
@@ -270,6 +317,8 @@ for(i=0;i<F;i++){
  }
   
  }
+
+ /*
   fq=fopen("S.key","wb");
   for(i=0;i<F;i++){
     for(j=0;j<F;j++)
@@ -278,7 +327,6 @@ for(i=0;i<F;i++){
     
   }
   fclose(fq);
-
   fq=fopen("inv_S.key","wb");
   for(i=0;i<F;i++){
     for(j=0;j<F;j++)
@@ -286,8 +334,18 @@ for(i=0;i<F;i++){
     fwrite(dd,1,n,fq);  
   }
   fclose(fq);
+*/
 
-  free(b);
+  //free(b);
   
 }
 
+/*
+main(){
+
+makeS();
+if(cl[0][0]==0)
+printf("good!\n");
+
+}
+*/
