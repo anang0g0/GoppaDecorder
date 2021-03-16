@@ -7,35 +7,10 @@
 
 //#define M 256
 
-typedef union {
-  unsigned long long int u[8];
-  unsigned char d[64];
-} arrayul;
-
-typedef struct a4 {
-  unsigned char ar[4];
-} array;
-
-typedef struct a8 {
-  unsigned char ar[8];
-} array8;
-
-typedef struct {
-  unsigned int h[16];
-} array16;
-
-typedef struct aN {
-  unsigned char ar[8192];
-} arrayn;
-
-typedef struct pub {
-  unsigned char a[8192];
-  unsigned char b[8192];
-} set;
 
 //nomal bases
-//unsigned short gf[M]={0,1,2,4,8,9,11,15,7,14,5,10,13,3,6,12};
-//unsigned short fg[M]={0,1,2,13,3,10,14,8,4,5,11,6,15,12,9,7};
+unsigned short gf[M]={0,1,2,4,8,9,11,15,7,14,5,10,13,3,6,12};
+unsigned short fg[M]={0,1,2,13,3,10,14,8,4,5,11,6,15,12,9,7};
 
 //sage比較用
 //unsigned short gf[16]={0,1,2,4,8,3,6,12,11,5,10,7,14,15,13,9};
