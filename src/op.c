@@ -34,7 +34,7 @@
 #include <omp.h>		//clang-10
 
 #include "debug.c"
-//#include "8192.h"
+#include "8192.h"
 #include "global.h"
 #include "struct.h"
 
@@ -88,6 +88,9 @@ oinv (unsigned short a)
 {
   int i;
 
+if(a==0)
+return -1;
+
   for (i = 0; i < N; i++)
     {
       if (gf[mlt (fg[a], i)] == 1)
@@ -95,7 +98,7 @@ oinv (unsigned short a)
     }
 
   printf ("no return \n");
-  exit (1);
+//  exit (1);
 }
 
 
@@ -3690,7 +3693,7 @@ unsigned short s,ms[K]={0};
       for(i=0;i<K;i++){
     ma[j][i]=gf[mlt(fg[vb[i][j]],tr[j])];
 }
-printf("tr[%d]=%d\n",j,tr[j]);
+//printf("tr[%d]=%d\n",j,tr[j]);
 }
 
 
@@ -3701,12 +3704,12 @@ for(i=0;i<K;i++){
     //#pragma omp parallel for reduction(^:s)
       for(k=0;k<K;k++)
         s^=gf[mlt(fg[gt[k][i]],fg[ma[j][k]])];
-printf("%d,",s);
+//printf("%d,",s);
     mat[j][i]=s;
   }
-  printf("\n");
+  //printf("\n");
 }
-  printf("\n");
+//  printf("\n");
 /*
   printf("\n");
 for(j=0;j<K;j++){
@@ -4213,7 +4216,7 @@ label:
 
   w=mkg();
 
-
+/*
 for(i=0;i<N;i++){
   for(j=0;j<K;j++)
 printf("%d,",mat[i][j]);
@@ -4221,6 +4224,7 @@ printf("\n");
 }
 printf("\n");
 //exit(1);
+*/
 
 /*
   do
