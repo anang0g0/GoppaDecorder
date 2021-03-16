@@ -50,6 +50,18 @@ HOW SAGE HELPS TO IMPLEMENT　GOPPA CODES AND THE　McELIECE PUBLIC KEY CRYPTO S
 
 Coding Theory-Based Cryptography:McEliece Cryptosystems in Sage
 
+# 20210316
+
+自分でも何やってるんだかわからなくなってきたのでファイルを整理した。
+
+そしてパターソン復号アルゴリズムに欠陥があることを思い出した。
+
+それは、偶数次の項しか持たない多項式の復号に失敗するということ。
+（これは半分仕様のようなものだけど、具体例が解けないことで思い出した）
+
+これだけやってまだ完璧でないところがあるというのは、単に根性だけではバグをなくすことは出来ないということだ。
+ていうかやってるうちに忘れるんだけども。
+
 # 20210309
 
 LICENSEを追加しました。
