@@ -2186,114 +2186,6 @@ det2 (int i, unsigned short g[])
 
 
 
-
-void
-f1 (unsigned short g[])
-{
-  int i;
-
-  for (i = 0; i < 836; i++)
-    {
-      det2 (i, g);
-    }
-
-
-}
-
-void
-f2 (unsigned short g[])
-{
-  int i;
-
-  for (i = 836; i < 1672; i++)
-    {
-      det2 (i, g);
-    }
-
-
-}
-
-void
-f3 (unsigned short g[])
-{
-  int i;
-
-  for (i = 1672; i < 2508; i++)
-    {
-      det2 (i, g);
-    }
-
-
-}
-
-void
-f4 (unsigned short g[])
-{
-  int i;
-
-  for (i = 2508; i < 3344; i++)
-    {
-      det2 (i, g);
-    }
-
-
-}
-
-void
-f5 (unsigned short g[])
-{
-  int i;
-
-  for (i = 3344; i < 4180; i++)
-    {
-      det2 (i, g);
-    }
-
-
-}
-
-void
-f6 (unsigned short g[])
-{
-  int i;
-
-  for (i = 4180; i < 5016; i++)
-    {
-      det2 (i, g);
-    }
-
-
-}
-
-void
-f7 (unsigned short g[])
-{
-  int i;
-
-  for (i = 5016; i < 5852; i++)
-    {
-      det2 (i, g);
-    }
-
-
-}
-
-void
-f8 (unsigned short g[])
-{
-  int i;
-
-  for (i = 5852; i < 6688; i++)
-    {
-      det2 (i, g);
-    }
-
-
-}
-
-
-
-
 //パリティチェック行列を生成する
 int
 deta (unsigned short g[])
@@ -3533,72 +3425,26 @@ for(i=1;i<K;i++){
   for(j=0;j<N;j++)
   vb[i][j]=gf[mltn(i,fg[j])];
 }
-/*
-for(i=0;i<K;i++){
-  for(j=0;j<N;j++)
-  printf("%d,",vb[i][j]);
-  printf("\n");
-}
-//exit(1);
-*/
+
 
 }
 
 
 
 
-OP ogt(){
+void ogt(){
     int i,j,k;
   OP w={0};
   unsigned short abc[N][K]={0};
 
 
 
-//pragma omp parallel for private(i,j)
+//#pragma omp parallel for private(i,j)
 for(i=0;i<K;i++){
     for(j=0;j<K-i;j++)
     gt[i][j+i]=g[j];
     }
 
-/*
-printf("\n");
-    for(i=0;i<K;i++){
-        for(j=0;j<K;j++)
-        printf("%d,",gt[i][j]);
-        printf("\n");
-    }
-//    exit(1);
-*/
-/*
-exit(1);
-// w=kotei();
-memset(ma,0,sizeof(ma));
-for(i=0;i<K;i++)
-printf("%d,",gt[i][0]);
-printf("\n");
-//ogt();
-printf("\n");
-//exit(1);
-for(i=0;i<K;i++)
-ma[0][i]=gt[i][0];
-for(i=0;i<K;i++){
-  for(j=1;j<N;j++){
-    for(k=0;k<K;k++)
-  ma[j][i]^=gf[mlt(fg[gt[i][k]],fg[mat[j][k]])];
-  }
-}
-memcpy(mat,ma,sizeof(mat));
-for(i=0;i<N;i++){
-  for(j=0;j<K;j++){
-//    mat[i][K-j-1]=abc[i][j];
-  printf("%d,",mat[i][j]);
-  }
-  printf("\n");
-}
-//  exit(1);
-*/
-
-return w;
 }
 
 
@@ -3668,7 +3514,7 @@ memset(mat,0,sizeof(mat));
 //  wait ();
 
 
-  //#pragma omp parallel for
+  #pragma omp parallel for
   for (i = 0; i < N; i++)
     {
       tr[i] = oinv (ta[i]);
@@ -3699,7 +3545,7 @@ unsigned short s,ms[K]={0};
 }
 
 
-#pragma omp parallel for default (none) private(i,j,k,s) shared(mat,gt,ma,gf,fg)
+//#pragma omp parallel for default (none) private(i,j,k,s) shared(mat,gt,ma,gf,fg)
 for(i=0;i<K;i++){
   for(j=0;j<N;j++){
     s=0;
