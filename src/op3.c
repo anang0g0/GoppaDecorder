@@ -34,7 +34,7 @@
 #include <omp.h>		//clang-10
 
 #include "debug.c"
-#include "8192.h"
+//#include "8192.h"
 #include "global.h"
 #include "struct.h"
 
@@ -4065,7 +4065,7 @@ lab:
 	}
       if (count != T)
 	{
-	  printf ("error pattarn too few %d\n", count);
+	  printf ("error pattarn too few decode %d\n", count);
 	  printpol (o2v (w));
 	  printf (" ==========goppa\n");
 	  printsage (o2v (w));
@@ -4194,7 +4194,7 @@ lab:
 	}
       if (count < T * 2)
 	{
-	  printf ("error is too few\n");
+	  printf ("error is too few patta\n");
 	  AA++;
 	  memcpy (zz, z1, sizeof (zz));
 	  printf ("{");
@@ -4211,12 +4211,12 @@ lab:
 	  printf (" ==========synd\n");
 	  //exit(1);
 	}
-      if (AA == 1000)
+      if (AA == 100)
 	{
 	  printf ("B=%d", B);
 	  exit (1);
 	}
-      if (B > 20000)
+      if (B > 200)
 	{
 	  count = 0;
 	  printf ("false=%d\n", AA);
@@ -4232,7 +4232,7 @@ lab:
 	  exit (1);
 	}
 
-      exit(1);
+      //exit(1);
       goto label;
       //wait();
 
