@@ -34,7 +34,7 @@
 #include <omp.h>		//clang-10
 
 #include "debug.c"
-#include "8192.h"
+//#include "8192.h"
 #include "global.h"
 #include "struct.h"
 
@@ -44,7 +44,7 @@
 #include "inv_mat.c"
 //#include "golay.c"
 
-#define TH 8
+#define TH omp_get_max_threads()
 
 extern unsigned long xor128 (void);
 extern int mlt (int x, int y);
@@ -1511,14 +1511,14 @@ ginit (void)
 
 
   g[K] = 1;			//xor128();
-  g[0] = rand () % N;
+  g[0] = rand () % 2; //N;
   while (count < ((K / 2) - 0))
     {
       printf ("@\n");
       j = rand () % (K - 1);
       if (j < K && j > 0 && g[j] == 0)
 	{
-	  g[j] = rand () % N;
+	  g[j] = rand () % 2; //N;
 	  count++;
 	}
     }
@@ -2566,7 +2566,7 @@ isqrt (unsigned short u)
 OP
 osqrt (OP f, OP w)
 {
-  int i, j, k, jj, n;
+  int i, j, k, jj, n,flg=0;
   OP even = { 0 }, odd = {
     0
   }, h = {
@@ -2601,9 +2601,9 @@ osqrt (OP f, OP w)
 	  odd.t[jj].n = (f.t[i].n - 1) / 2;
 	  odd.t[jj++].a = gf[isqrt (f.t[i].a)];
 	  printf (" odd %d\n", i);
+    flg=1;
 	}
     }
-
 
   k = deg (o2v (w));
   //printf ("%d\n", k);
@@ -3438,7 +3438,7 @@ void ogt(){
   unsigned short abc[N][K]={0};
 
 
-//#pragma omp parallel for private(i,j)
+#pragma omp parallel for private(i,j)
 for(i=0;i<K;i++){
     for(j=0;j<K-i;j++)
     gt[i][j+i]=g[j];
@@ -3446,7 +3446,18 @@ for(i=0;i<K;i++){
 
 }
 
+int isquad(OP w){
+int i,j,flg=0;
+vec b={0};
 
+b=o2v(w);
+for(i=0;i<DEG;i++){
+  if(b.x[i]>0 && i%2==1)
+  return 0;
+}
+
+return -1;
+}
 
 unsigned short dd[N][N]={0};
 
@@ -3474,10 +3485,12 @@ aa:
 	    k++;
 	}
   
-      if ((k > 0 && flg == 0) || (k > 1 && flg == 1))
+    if ((k > 0 && flg == 0) || (k > 1 && flg == 1))
 	{
 	  w = setpol (g, K + 1);
 	  j = 1;
+    if(isquad(w)==-1)
+    exit(1);
 	}
    
    /*
@@ -4423,7 +4436,7 @@ lab:
       //goto label;
       //wait();
 
-    break;
+    //break;
     }
 
   return 0;
