@@ -3484,16 +3484,17 @@ aa:
 	  if (i % 2 == 1 && g[i] > 0 && i < K)
 	    k++;
 	}
-  
+  //偶数項だけにならないようにする
     if ((k > 0 && flg == 0) || (k > 1 && flg == 1))
 	{
 	  w = setpol (g, K + 1);
 	  j = 1;
-    if(isquad(w)==-1)
-    exit(1);
+    //if(isquad(w)==-1)
+    //exit(1);
 	}
    
-   /*
+   /* 
+   //偶数項だけだとpattarson復号に失敗する
       w = setpol (g, K + 1);
       oprintpol (w);
       j=1;
