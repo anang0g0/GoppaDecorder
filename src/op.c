@@ -3516,7 +3516,7 @@ EX extgcd(OP a, OP b) {
 }
 
 
-unsigned short vv[K][N]={0};
+unsigned short vb[K][N]={0};
 unsigned short gt[K][K]={0};
 void van(){
 int i,j,k;
@@ -3524,19 +3524,20 @@ int i,j,k;
 printf("van der\n");
 
 for(i=0;i<N;i++)
-vv[0][i]=1;
+vb[0][i]=1;
 #pragma omp parallel for private(i,j)
 for(i=1;i<K;i++){
   for(j=0;j<N;j++)
-  vv[i][j]=gf[mltn(i,fg[j])];
+  vb[i][j]=gf[mltn(i,fg[j])];
 }
-/*
+
 for(i=0;i<K;i++){
   for(j=0;j<N;j++)
-  printf("%d,",vv[i][j]);
+  printf("%d,",vb[i][j]);
   printf("\n");
 }
-*/
+//exit(1);
+
 }
 
 
@@ -3547,18 +3548,22 @@ OP ogt(){
   OP w={0};
   unsigned short abc[N][K]={0};
 
-#pragma omp parallel for private(i,j)
+
+
+//#pragma omp parallel for private(i,j)
 for(i=0;i<K;i++){
-    for(j=0;j<K;j++)
-    gt[j+i][i]=g[j];
+    for(j=0;j<K-i;j++)
+    gt[i][j+i]=g[j];
     }
-/*
+
+
+printf("\n");
     for(i=0;i<K;i++){
         for(j=0;j<K;j++)
-        printf("%d,",gt[j][i]);
+        printf("%d,",gt[i][j]);
         printf("\n");
     }
-    */
+//    exit(1);
 /*
 exit(1);
 // w=kotei();
@@ -3598,6 +3603,8 @@ OP mkg(){
 int i,j,k,fail,flg,l;
 OP w={0};
 
+
+
 aa:
   do
     {
@@ -3616,18 +3623,17 @@ aa:
 	  if (i % 2 == 1 && g[i] > 0 && i < K)
 	    k++;
 	}
-  /*
+  
       if ((k > 0 && flg == 0) || (k > 1 && flg == 1))
 	{
 	  w = setpol (g, K + 1);
 	  j = 1;
-	}
-   */  
-   
+	}  
+   /*
       w = setpol (g, K + 1);
       oprintpol (w);
       j=1;
-      
+     */ 
       //多項式の値が0でないことを確認
   for (i = 0; i < N; i++)
 	{
@@ -3642,6 +3648,8 @@ aa:
       
     }
   while (fail || j == 0);
+
+
 
 ogt();
 memset(mat,0,sizeof(mat));
@@ -3667,13 +3675,9 @@ memset(dd,0,sizeof(dd));
 
 for(i=0;i<N;i++)
 dd[i][i]=gf[tr[i]];
-/*
-for(i=0;i<N;i++){
-  for(j=0;j<N;j++)
-  printf("%d,",dd[i][j]);
-  printf("\n");
-}
-*/
+
+
+
   printf ("\nすげ、オレもうイキそ・・・\n");
   //keygen(g);
 //exit(1);
@@ -3683,21 +3687,38 @@ unsigned short s,ms[K]={0};
 //#pragma omp parallel for private(i,j) shared(vv,tr,fg,gf,ma)
   for(j=0;j<N;j++){
       for(i=0;i<K;i++){
-    ma[j][i]=gf[mlt(fg[vv[i][j]],tr[j])];
+    ma[j][i]=gf[mlt(fg[vb[i][j]],tr[j])];
 }
+printf("tr[%d]=%d\n",j,tr[j]);
 }
 
-#pragma omp parallel for default (none) private(i,j,k,s) shared(mat,gt,ma,gf,fg)
+
+//#pragma omp parallel for default (none) private(i,j,k,s) shared(mat,gt,ma,gf,fg)
 for(i=0;i<K;i++){
   for(j=0;j<N;j++){
     s=0;
     //#pragma omp parallel for reduction(^:s)
       for(k=0;k<K;k++)
-        s^=gf[mlt(fg[gt[i][k]],fg[ma[j][k]])];
-
+        s^=gf[mlt(fg[gt[k][i]],fg[ma[j][k]])];
+printf("%d,",s);
     mat[j][i]=s;
   }
+  printf("\n");
 }
+  printf("\n");
+/*
+  printf("\n");
+for(j=0;j<K;j++){
+  for(i=0;i<N;i++){
+    printf("%d,",vb[j][i]);
+  }
+ printf("\n");
+}
+printf("\n");
+//exit(1);
+*/
+//exit(1);
+
 
 /*
   //パリティチェックを生成する。
@@ -4110,9 +4131,12 @@ label:
 	  w = setpol (g, K + 1);
 	  j = 1;
 	}
-      //w = setpol (g, K + 1);
-      //oprintpol (w);
+  /*
+      j=1;
+      w = setpol (g, K + 1);
+      oprintpol (w);
       //多項式の値が0でないことを確認
+      */
       for (i = 0; i < D; i++)
 	{
 	  ta[i] = trace (w, i);
@@ -4188,6 +4212,15 @@ label:
 
   w=mkg();
 
+
+for(i=0;i<N;i++){
+  for(j=0;j<K;j++)
+printf("%d,",mat[i][j]);
+printf("\n");
+}
+printf("\n");
+//exit(1);
+
 /*
   do
     {
@@ -4196,6 +4229,7 @@ label:
   while (i < 0);
 */
   unsigned short gen[N][K] = { 0 };
+
 
 lab:
 
