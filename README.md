@@ -55,7 +55,7 @@ https://digitalcommons.iwu.edu/cgi/viewcontent.cgi?article=1013&context=math_hon
 
 # 20210317
 
-多項式の既約性判定テスト Ben-Orのアルゴリズムを実装しました。
+バイナリ係数を持つ多項式の既約性判定テスト、Ben-Orのアルゴリズムを実装しました。
 バグがないか確認中ですがとりあえず公開します。
 
 # 20210316（変更点）
