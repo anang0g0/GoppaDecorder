@@ -1934,7 +1934,7 @@ int ben_or(OP f){
     if(deg(o2v(u))==0 && LT(u).a==0)
     return -1;
     if(deg(o2v(u))==0 && LT(u).a==1)
-    break;
+    return -1;
     u=gcd(f,u);
     if(deg(o2v(u))>0)
     return -1;
@@ -4438,7 +4438,7 @@ lab:
 	  printf ("B=%d", B);
 	  exit (1);
 	}
-      if (B > 1000)
+      if (B > 10000)
 	{
 	  count = 0;
 	  printf ("false=%d\n", AA);
