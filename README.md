@@ -50,9 +50,12 @@ HOW SAGE HELPS TO IMPLEMENT　GOPPA CODES AND THE　McELIECE PUBLIC KEY CRYPTO S
 
 Coding Theory-Based Cryptography:McEliece Cryptosystems in Sage
 
+Testing Irreducibility of Trinomials over GF(2) 
+https://digitalcommons.iwu.edu/cgi/viewcontent.cgi?article=1013&context=math_honproj
+
 # 20210317
 
-多項式の既約性判定テスト Ben-Orのアルゴリズムを実装しました。
+バイナリ係数を持つ多項式の既約性判定テスト、Ben-Orのアルゴリズムを実装しました。
 バグがないか確認中ですがとりあえず公開します。
 
 # 20210316（変更点）
