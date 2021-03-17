@@ -166,7 +166,8 @@ wait (void)
   int n;			// 読み込む変数はローカルに取るべし
   printf (" (enter number and hit return) ");	// 何か表示させたほうが良いだろう
   fflush (stdout);		// just in case
-  scanf ("%d", &n);		// fgets(line, LINESIZE, stdin); という手も
+  fgets();
+  //scanf ("%d", &n);		// fgets(line, LINESIZE, stdin); という手も
 }
 
 
@@ -1913,9 +1914,8 @@ chen (OP f)
 
 
 int ben_or(OP f){
-  int i,j,k,n,l,flg=0;
-  OP t[10]={0},s={0},u={0},w={0},r={0};
-  OP cc={0},g={0};
+  int i,n,flg=0;
+  OP s={0},u={0},r={0};
   vec v={0},x={0};
 
 
@@ -1928,17 +1928,25 @@ int ben_or(OP f){
   if(n==0)
   return -1;
 
-  for(i=0;i<n/2;i++){
+  i=0;
+  while(i<n/2){
+    flg=1;
     r=omod(opow(r,2),f);
     u=oadd(r,s);
     if(deg(o2v(u))==0 && LT(u).a==0)
     return -1;
-    if(deg(o2v(u))==0 && LT(u).a==1)
-    return -1;
+    if(deg(o2v(u))==0 && LT(u).a==1){
+    i++;
+    flg=0;
+    }
+    if(deg(o2v(u))>0)
     u=gcd(f,u);
     if(deg(o2v(u))>0)
     return -1;
+    if(flg==1)
+    i++;
   }
+
   //printf("irreducible\n");
   
   return 0;
@@ -2901,7 +2909,7 @@ pattarson (OP w, OP f)
 	    printf (" s,wは互いに素じゃありません。\n");
       flg2=1;
 	    //wait ();
-    //exit(1);
+    exit(1);
 	  //goto label;
 	    }
 
@@ -4078,9 +4086,18 @@ label:
 
   printf ("\nすげ、オレもうイキそ・・・\n");
   //keygen(g);
-
-
-
+/*
+OP qq={0};
+for(i=0b1000000000001;i<0b1111111111111+1;i++){
+    qq=v2o(i2v(i));
+      k=ben_or(qq);
+if(k==0){
+printpol(o2v(qq));
+printf(" =irreducible\n");
+}
+}
+exit(1);
+*/
   //パリティチェックを生成する。
   //パリティチェックに0の列があったら、なくなるまでやり直す。
 
