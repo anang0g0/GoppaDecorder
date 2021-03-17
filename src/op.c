@@ -758,6 +758,8 @@ opow (OP f, int n)
 }
 
 
+
+
 //多項式のべき乗余
 OP
 opowmod (OP f, OP mod, int n)
@@ -995,7 +997,7 @@ OP gcd(OP a, OP b){
   printpol(o2v(a));
   printf(" ========f\n");
   printpol(o2v(b));
-  printf(" ========f\n");
+  printf(" ========g\n");
   
   /* 自然数 a > b を確認・入替 */
   if(odeg(a)<odeg(b)){
@@ -1019,77 +1021,6 @@ OP gcd(OP a, OP b){
   //if(LT(r).a>0)
     return h;
   }
-}
-
-
-
-int ben_or(OP f){
-  int i,j,k,l,flg=0;
-  OP t[10]={0},s={0},u={0},w={0};
-  OP cc={0};
-  vec v={0},x={0};
-  
-  v.x[N]=1;
-  x.x[1]=1;
-  s=v2o(v);
-  printpol(v);
-  printf("\n");
-  printpol(o2v(omul(s,s)));
-  printf("\n");
-  printpol(o2v(f));
-  printf(" ===========f\n");
-  //exit(1);
-  //wait();  
-  u=v2o(x);
-  //t[0].t[1].a=1;
-  //t[0].t[1].n=1;
-  t[0].t[16].a=1;
-  t[0].t[16].n=16;
-  /*
-  t[1].t[1].a=1;
-  t[1].t[1].n=1;
-  t[1].t[256].a=1;
-  t[1].t[256].n=256;
-  t[2].t[1].a=1;
-  t[2].t[1].n=1;
-  t[2].t[4096].a=1;
-  t[2].t[4096].n=4096;
-  
-  t[3].t[1].a=1;
-  t[3].t[1].n=1;
-  t[3].t[16].a=1;
-  t[3].t[65536].n=65536;
-  */
-  //l=xsqrt(K);
-  i=0;
-  while(odeg(t[i])<257){
-    printpol(o2v(t[i]));
-    printf(" =======poly2\n");
-    s=omul(t[i],t[i]);
-    i++;
-    t[i]=s;
-    if(i==4)
-      break;
-  }
-  for(j=0;j<i+1;j++){
-    t[j]=oadd(t[j],u);
-    printpol(o2v(t[j]));
-    printf("\n");
-  }
-  printf("i=%d\n",i);
-  //wait();
-
-  for(j=0;j<i+1;j++){
-    cc=gcd(f,t[j]);
-    printpol(o2v(cc));
-    printf(" =======poly\n");
-    if(LT(cc).n>0){
-      flg=1;
-      break;
-      }
-    }
-
-  return flg;
 }
 
 
@@ -1219,6 +1150,29 @@ agcd (OP xx, OP yy)
     }
 
   return xx;
+}
+
+
+
+//多項式のべき乗
+OP
+fpow (OP f, unsigned short n)
+{
+  int i;
+  OP g = { 0 };
+
+printf("n=%d\n",n);
+  g = f;
+  //memcpy(g.t,f.t,sizeof(f.t));
+
+  for (i = 1; i < n+1; i++){
+    g = omul (g, g);
+    printpol(o2v(g));
+    printf(" =g\n");
+  }
+
+
+  return g;
 }
 
 
@@ -1475,7 +1429,7 @@ xgcd (OP f, OP g)
   free (v);
   free (u);
   printf ("end of fnc\n");
-  wait ();
+//  wait ();
 
   return e;
 }
@@ -1510,7 +1464,7 @@ ginit (void)
   printf ("in ginit\n");
 
   g[K] = 1;			//xor128();
-  g[0] = rand () % N;
+  g[0] = rand () % 2; //N;
   k=rand()%(K-2);
   if(k>0){
   while (count < k)
@@ -1519,7 +1473,7 @@ ginit (void)
      j = rand () % (K - 1);
       if (j < K && j > 0 && g[j] == 0)
 	{
-	  g[j] = rand () % N;
+	  g[j] = rand () % 2; //N;
 	  count++;
 	}
     }
@@ -1955,6 +1909,39 @@ chen (OP f)
 
 
   return e;
+}
+
+
+int ben_or(OP f){
+  int i,j,k,n,l,flg=0;
+  OP t[10]={0},s={0},u={0},w={0},r={0};
+  OP cc={0},g={0};
+  vec v={0},x={0};
+
+
+  v.x[1]=1;
+  x.x[1]=1;
+  s=v2o(x);
+  r=v2o(v);
+  n=deg(o2v(f));
+
+  if(n==0)
+  return -1;
+
+  for(i=0;i<n/2;i++){
+    r=omod(opow(r,2),f);
+    u=oadd(r,s);
+    if(deg(o2v(u))==0 && LT(u).a==0)
+    return -1;
+    if(deg(o2v(u))==0 && LT(u).a==1)
+    break;
+    u=gcd(f,u);
+    if(deg(o2v(u))>0)
+    return -1;
+  }
+  //printf("irreducible\n");
+  
+  return 0;
 }
 
 
@@ -2747,6 +2734,8 @@ osqrt (OP f, OP w)
 }
 
 
+
+
 vec
 p2 ()
 {
@@ -2754,6 +2743,74 @@ p2 ()
 
 
 
+}
+
+
+EX extgcd(OP a, OP b) {
+
+  OP s = {0}, sx={0}, sy = {0}, t = {0}, tx = {0}, ty={0},tmp={0};
+  EX c={0};
+
+  if(odeg(b)>odeg(a)){
+    tmp=a;
+    a=b;
+    b=tmp;
+  }
+  s=a;
+  t=b;
+  sx.t[0].a=1;
+  sx.t[0].n=0;
+  ty.t[0].a=1;
+  ty.t[0].n=0;
+
+
+  //  OP temp={0};
+  tmp=omod(s,t);
+  if(odeg(tmp)==0){
+    c.d=t;
+    c.v=tx;
+    c.u=ty;
+    printf("ppp\n");
+    return c;
+  }
+  while (odeg(tmp) > 0) {
+    printpol(o2v((tmp)));
+    printf(" ========omod\n");
+    OP temp = odiv(s,t);
+    OP u= oadd(s , omul(t , temp));
+    OP ux= oadd(sx , omul(tx , temp));
+    OP uy= oadd(sy , omul(ty , temp));
+    /*
+    */
+    s = t;
+    sx = tx;
+    sy = ty;
+    t = u;
+    tx = ux;
+    ty = uy;
+    tmp=omod(s,t);
+  }
+  printpol(o2v(tmp));
+  printf(" ========omod!\n");
+
+  if(LT(tmp).a==1){
+  c.d.t[0].a=1;
+  c.d.t[0].n=0;
+  //c.d=t;
+  c.v=tx;
+  c.u=ty;
+  printf("bbb\n");
+  return c;
+  }
+  if(LT(tmp).a==0){
+    
+    c.d=t;
+    c.v=tx;
+    c.u=ty;
+    printf("ccc\n");
+  
+  return c;
+  }
 }
 
 
@@ -2766,7 +2823,7 @@ pattarson (OP w, OP f)
   , ll = {
     0
   }, op = { 0 };
-  int i, j, k, l, c, n, count = 0;
+  int i, j, k, l, c, n, count = 0,flg2=0;
   int flg, o1 = 0;
   OP tt = { 0 }, ff = {
     0
@@ -2792,7 +2849,7 @@ pattarson (OP w, OP f)
   if (odeg ((b2)) > 0)
     {
       printf ("逆元が計算できません。error\n");
-      wait ();
+      //wait ();
       exit (1);
     }
   printf ("locater==========\n");
@@ -2821,7 +2878,7 @@ pattarson (OP w, OP f)
       printpol (o2v (g1));
       printf (" g1============\n");
       printf (" g1は平方ではありません。error");
-      wait ();
+      //wait ();
       exit (1);
     }
   printpol (o2v (w));
@@ -2835,9 +2892,19 @@ pattarson (OP w, OP f)
       //printpol (o2v (g1));
       printf (" g1============\n");
       printf ("平方が０になりました。 error\n");
-      wait ();
+      //wait ();
       exit (1);
     }
+    hh = extgcd (w, f);
+     if (odeg ((hh.d)) > 0)
+	    {
+	    printf (" s,wは互いに素じゃありません。\n");
+      flg2=1;
+	    //wait ();
+    //exit(1);
+	  //goto label;
+	    }
+
   //exit(1);
   OP ppo = { 0 };
 
@@ -2894,7 +2961,7 @@ pattarson (OP w, OP f)
       v = chen (ll);
       if (v.x[K - 1] > 0)
 	{
-	  //wait ();
+	  wait ();
 	  return v2o(v);
 	}
 
@@ -2906,6 +2973,9 @@ pattarson (OP w, OP f)
   if (v.x[K - 1] > 0)
     {
       C++;
+      printf("ll\n");
+      wait();
+
       return v2o(v);
     }
 
@@ -2914,7 +2984,7 @@ pattarson (OP w, OP f)
     {
       ll = oadd (omul (ff, ff), omul (tt, omul (ppo, ppo)));	//ff;
       printf ("deg==1\n");
-      //wait ();
+      exit(1);
     }
 
 
@@ -2931,8 +3001,9 @@ pattarson (OP w, OP f)
       return v2o(v);
     }
 
-
-  return v2o(v);
+printf("flg2=%d\n",flg2);
+exit(1);
+  //return v2o(v);
 
 }
 
@@ -3344,72 +3415,6 @@ readkey ()
 
 //OP sx={0},ty={0};
 
-EX extgcd(OP a, OP b) {
-
-  OP s = {0}, sx={0}, sy = {0}, t = {0}, tx = {0}, ty={0},tmp={0};
-  EX c={0};
-
-  if(odeg(b)>odeg(a)){
-    tmp=a;
-    a=b;
-    b=tmp;
-  }
-  s=a;
-  t=b;
-  sx.t[0].a=1;
-  sx.t[0].n=0;
-  ty.t[0].a=1;
-  ty.t[0].n=0;
-
-
-  //  OP temp={0};
-  tmp=omod(s,t);
-  if(odeg(tmp)==0){
-    c.d=t;
-    c.v=tx;
-    c.u=ty;
-    printf("ppp\n");
-    return c;
-  }
-  while (odeg(tmp) > 0) {
-    printpol(o2v((tmp)));
-    printf(" ========omod\n");
-    OP temp = odiv(s,t);
-    OP u= oadd(s , omul(t , temp));
-    OP ux= oadd(sx , omul(tx , temp));
-    OP uy= oadd(sy , omul(ty , temp));
-    /*
-    */
-    s = t;
-    sx = tx;
-    sy = ty;
-    t = u;
-    tx = ux;
-    ty = uy;
-    tmp=omod(s,t);
-  }
-  printpol(o2v(tmp));
-  printf(" ========omod!\n");
-
-  if(LT(tmp).a==1){
-  c.d.t[0].a=1;
-  c.d.t[0].n=0;
-  //c.d=t;
-  c.v=tx;
-  c.u=ty;
-  printf("bbb\n");
-  return c;
-  }
-  if(LT(tmp).a==0){
-    
-    c.d=t;
-    c.v=tx;
-    c.u=ty;
-    printf("ccc\n");
-  
-  return c;
-  }
-}
 
 
 unsigned short vb[K][N]={0};
@@ -3494,7 +3499,16 @@ aa:
     //if(isquad(w)==-1)
     //exit(1);
 	}
-   
+     l=ben_or(w);
+  printf("irr=%d\n",l);
+  if(l== -1){
+  goto aa;
+  }else{
+    printpol(o2v(w));
+    printf(" =irreducible\n");
+    //exit(1);
+  }
+
    /* 
    //偶数項だけだとpattarson復号に失敗する
       w = setpol (g, K + 1);
@@ -3596,18 +3610,21 @@ int count,i,j,k;
 
 
 count=0;
+/*
 if(deg(o2v(r))<T){
   printf("deg <T\n");
   exit(1);
 }
+  */
       for (i = 0; i < T; i++)
 	{
-    
+    /*
         if(i>0 && r.t[i].n==0){
         printf("baka-z\n");
         //return -1;
         exit(1);
         }
+        */
 	  if (r.t[i].a > 0 && i > 0)	// == r.t[i].n)
 	    {
 	      printf ("e=%d %d %s\n", r.t[i].a, r.t[i].n, "お");
@@ -3659,7 +3676,6 @@ for(i=0;i<512;i++){
 return 0;
 }
 
-						    
 
 
 //言わずもがな
@@ -3969,6 +3985,7 @@ label:
 
 
   van();
+
   do
     {
       fail = 0;
@@ -3992,11 +4009,11 @@ label:
 	  w = setpol (g, K + 1);
 	  j = 1;
 	}
-  /*
-    j=1;
-    w = setpol (g, K + 1);
-    oprintpol (w);
-  */
+  
+  //  j=1;
+  //  w = setpol (g, K + 1);
+  //  oprintpol (w);
+  
       //多項式の値が0でないことを確認
       for (i = 0; i < D; i++)
 	{
@@ -4011,10 +4028,6 @@ label:
       
     }
   while (fail || j == 0);
-  //l=ben_or(w);
-  //printf("irr=%d\n",l);
-  //if(l==1)
-  //goto label;
 
   /*
   do{
@@ -4402,9 +4415,9 @@ lab:
       if (count < T * 2)
 	{
 	  printf ("error is too few\n");
-    exit(1);
+
 	  AA++;
-	  memcpy (zz, z1, sizeof (zz));
+	  //memcpy (zz, z1, sizeof (zz));
 	  printf ("{");
 	  for (i = 0; i < D; i++)
 	    printf ("%d,", z1[i]);
@@ -4417,14 +4430,15 @@ lab:
 	  printf (" =========syn\n");
 	  printpol (o2v (f));
 	  printf (" ==========synd\n");
-	  //exit(1);
+    printf("へげえええーっ");
+	  exit(1);
 	}
-      if (AA == 1000)
+      if (AA == 10)
 	{
 	  printf ("B=%d", B);
 	  exit (1);
 	}
-      if (B > 20000)
+      if (B > 1000)
 	{
 	  count = 0;
 	  printf ("false=%d\n", AA);
@@ -4439,12 +4453,12 @@ lab:
 	  printf (" =======sage\n");
 	  exit (1);
 	}
-
+wait();
       //exit(1);
-      //goto label;
+      goto label;
       //wait();
 
-    break;
+    //break;
     }
 
   return 0;
