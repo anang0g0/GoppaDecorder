@@ -50,6 +50,10 @@ HOW SAGE HELPS TO IMPLEMENT　GOPPA CODES AND THE　McELIECE PUBLIC KEY CRYPTO S
 
 Coding Theory-Based Cryptography:McEliece Cryptosystems in Sage
 
+# 20210317
+
+多項式の既約性判定テスト Ben-Orのアルゴリズムを実装しました。
+バグがないか確認中ですがとりあえず公開します。
 
 # 20210316（変更点）
 
