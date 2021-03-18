@@ -466,7 +466,7 @@ oterml (OP f, oterm t)
   int i, k, j;
   OP h = { 0 };
   vec test;
-  unsigned short n;
+  unsigned int n;
 
   //f=conv(f);
   //k = deg (o2v(f));
@@ -861,6 +861,8 @@ opow (OP f, int n)
 
   for (i = 1; i < n; i++)
     g = omul (g, f);
+printpol(o2v(g));
+printf(" =ooo\n");
 
 
   return g;
@@ -876,8 +878,16 @@ opowmod (OP f, OP mod, int n)
   OP g;
   int i;
 
-  g = omod (opow (f, n), mod);
+  g=f;  
+  for (i = 1; i < n; i++){
+    g = omul (g, f);
+   if(odeg(g)>odeg(mod))
+    g = omod(g,mod);
+  }
 
+printpol(o2v(g));
+printf(" =ooo\n");
+  
 
   return g;
 }
@@ -1327,28 +1337,6 @@ agcd (OP xx, OP yy)
   return yy;
 }
 
-
-
-//多項式のべき乗
-OP
-fpow (OP f, unsigned short n)
-{
-  int i;
-  OP g = { 0 };
-
-printf("n=%d\n",n);
-  g = f;
-  //memcpy(g.t,f.t,sizeof(f.t));
-
-  for (i = 1; i < n+1; i++){
-    g = omul (g, g);
-    printpol(o2v(g));
-    printf(" =g\n");
-  }
-
-
-  return g;
-}
 
 
 
@@ -2058,7 +2046,7 @@ int i,flg=0;
 
 v=o2v(f);
 x=o2v(g);
-for(i=0;i<512;i++){
+for(i=0;i<DEG;i++){
     if(v.x[i]!=x.x[i])
     return -1;
 }
@@ -2088,7 +2076,8 @@ int ben_or(OP f){
   while(i<n){
     flg=1;
     //for gf256 deg=32
-    r=omod(opow(r,4),f);
+    r=opowmod(r,f,16);
+
     //for GF2 
     //r=omod(opow(r,2),f);
 
