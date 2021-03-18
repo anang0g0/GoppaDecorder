@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define O 4096
+#define O 8192
 
 /* generate Galois Field over GF(2^?) */
 static const unsigned long long int normal[15]={
@@ -23,7 +23,7 @@ static const unsigned long long int normal[15]={
   0b110000001101,
   0b1000011101011,  //sage 4096
   //0b1100101000001, /* 4096 */
-//"11011000000001", /* 8192 */
+//0b11011000000001, /* 8192 */
   0b10000000011011,/* Classic McEliece */
   0b110000100010001,
   0b1100000000000001,
