@@ -34,7 +34,7 @@
 #include <omp.h>		//clang-10
 
 #include "debug.c"
-//#include "8192.h"
+//#include "4096.h"
 #include "global.h"
 #include "struct.h"
 
@@ -1096,7 +1096,8 @@ printsage (vec a)
 	  b.a = a.x[i];
 	  b.n = i;
 	  j = v2a (b);
-	  printf ("B('a^%d')*X**%d+", j, i);
+    //printf ("X**%d+", i); //for GF2
+	  printf ("B('a^%d')*X**%d+", j, i);  //for GF(2^m)
 	}
     }
 
@@ -1638,7 +1639,7 @@ ginit (void)
   printf ("in ginit\n");
 
   g[K] = 1;			//xor128();
-  g[0] = rand () % N;
+  g[0] = rand () % N; //or N
   k=rand()%(K-2);
   if(k>0){
   while (count < k)
@@ -1647,7 +1648,7 @@ ginit (void)
      j = rand () % (K - 1);
       if (j < K && j > 0 && g[j] == 0)
 	{
-	  g[j] = rand () % N;
+	  g[j] = rand () % N; //or N;
 	  count++;
 	}
     }
@@ -2086,8 +2087,10 @@ int ben_or(OP f){
   i=0;
   while(i<n){
     flg=1;
-    r=omod(opow(r,16),f);
-    //r=omod(opow(r,4),f);
+    //for gf256 deg=32
+    r=omod(opow(r,4),f);
+    //for GF2 
+    //r=omod(opow(r,2),f);
 
     //r=omod(opow(r,32),f); 
     u=oadd(r,s);
