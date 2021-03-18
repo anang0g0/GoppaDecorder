@@ -879,8 +879,8 @@ opowmod (OP f, OP mod, int n)
   int i;
 
   g=f;  
-  for (i = 1; i < n; i++){
-    g = omul (g, f);
+  for (i = 1; i < 6; i++){
+    g = omul (g, g);
    if(odeg(g)>odeg(mod))
     g = omod(g,mod);
   }
