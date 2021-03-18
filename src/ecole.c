@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define O 256
+#define O 4096
 
 /* generate Galois Field over GF(2^?) */
 static const unsigned long long int normal[15]={
@@ -21,7 +21,8 @@ static const unsigned long long int normal[15]={
   0b1100110001,
   0b11000010011,
   0b110000001101,
-  0b1100101000001, /* 4096 */
+  0b1000011101011,  //sage 4096
+  //0b1100101000001, /* 4096 */
 //"11011000000001", /* 8192 */
   0b10000000011011,/* Classic McEliece */
   0b110000100010001,
@@ -40,7 +41,7 @@ for(i=0;i<n;i++){
       fg[j]=i;
   }
 }
-  printf("unsigned short fg[%d]={",O);
+  printf("unsigned int fg[%d]={",O);
   for(i=0;i<O;i++)
   printf("%d,",fg[i]);
 printf("};\n");
@@ -145,7 +146,7 @@ printf("%d\n",n);
     gf[i]=bit;
     bit=(bit<<1);
   }
-  printf("unsigned short gf[%d]={",O);
+  printf("unsigned int gf[%d]={",O);
   for(i=0;i<L;i++)
     printf("%u,",gf[i]);
   
