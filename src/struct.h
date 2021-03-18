@@ -15,7 +15,7 @@ typedef struct{
 } OP;
 
 typedef union {
-  unsigned short x[DEG]; //配列の添字を次数に、配列の値を係数に持つ多項式の表現
+  unsigned int x[DEG]; //配列の添字を次数に、配列の値を係数に持つ多項式の表現
   unsigned long long int e[DEG/4];
 } vec;
 
