@@ -5,8 +5,8 @@
 
 //monomial
 typedef struct{
-  unsigned short n; //単項式の次数
-  unsigned short a; //単項式の係数
+  unsigned int n; //単項式の次数
+  unsigned int a; //単項式の係数
 } oterm;
 
 //polynomial
