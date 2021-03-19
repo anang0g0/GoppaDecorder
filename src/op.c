@@ -885,7 +885,7 @@ opowmod (OP f, OP mod, int n)
 //#pragma omp parallel num_threads(8)
   {
 //#pragma omp for schedule(static)
-  for (i = 1; i < 13; i++){
+  for (i = 1; i < n; i++){
     g = omul (g, g);
    if(odeg(g)>odeg(mod))
     g = omod(g,mod);
