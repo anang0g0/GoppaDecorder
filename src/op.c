@@ -885,7 +885,7 @@ opowmod (OP f, OP mod, int n)
 //#pragma omp parallel num_threads(8)
   {
 //#pragma omp for schedule(static)
-  for (i = 1; i < 13; i++){
+  for (i = 1; i < n; i++){
     g = omul (g, g);
    if(odeg(g)>odeg(mod))
     g = omod(g,mod);
@@ -2069,10 +2069,10 @@ return 0;
 
 
 
-
+//GF(4096) then 
 int ben_or(OP f){
   int i,n,flg=0;
-  OP s={0},u={0},r={0};
+  OP s={0},u={0},r={0},g={0};
   vec v={0},x={0};
 
 
@@ -2086,11 +2086,17 @@ int ben_or(OP f){
   return -1;
 
   i=0;
-  while(i<n){
+
+int m=14;
+
+ 
+  g=r;  
+  while(i<n/2+1){  //if GF(8192) and m==14
+// while(i<n){  //if GF(4096) and m==7
     flg=1;
     //for gf8192 deg=128
-    r=opowmod(r,f,13);
-//    r=opowmod(r,f,7);
+   r=opowmod(r,f,m);
+
     //r=opowmod(r,f,6);
     //for GF2 
     //r=omod(opow(r,2),f);
