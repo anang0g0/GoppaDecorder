@@ -53,6 +53,9 @@ Coding Theory-Based Cryptography:McEliece Cryptosystems in Sage
 Testing Irreducibility of Trinomials over GF(2) 
 https://digitalcommons.iwu.edu/cgi/viewcontent.cgi?article=1013&context=math_honproj
 
+# 20200319
+
+GF(8192)上で、既約多項式を生成できるようになった。
 
 # 20210318
 
