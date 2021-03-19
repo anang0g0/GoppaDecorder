@@ -57,6 +57,10 @@ https://digitalcommons.iwu.edu/cgi/viewcontent.cgi?article=1013&context=math_hon
 
 GF(8192)上で、既約多項式を生成できるようになった。
 
+拡大帯でも同じアルゴリズムが使えるというのは驚きだった。
+
+こういう規則性は勘で簡単にわかる人もいると思うけどすごく大変だった。
+
 # 20210318
 
 拡大体において既約多項式を計算するben_or関数と、opowmod関数を作成して、既約なGoppa多項式のみ生成するように改良した。
