@@ -165,12 +165,7 @@ wait (void)
   int a;			// 読み込む変数はローカルに取るべし
   printf (" (enter number and hit return) ");	// 何か表示させたほうが良いだろう
   fflush (stdout);		// just in case
-<<<<<<< HEAD
-  fgets(&a, 1, stdin);
-  //scanf ("%d", &n);		// fgets(line, LINESIZE, stdin); という手も
-=======
-  scanf ("%d", &n);		// fgets(line, LINESIZE, stdin); という手も
->>>>>>> 4f73ec899d540be60830483ae1ebb33b35909ca7
+  scanf ("%d", &a);		// fgets(line, LINESIZE, stdin); という手も
 }
 
 
