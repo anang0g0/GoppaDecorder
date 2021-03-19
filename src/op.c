@@ -63,13 +63,9 @@ static unsigned short g[K + 1] = {1,0,0,0,0,10,8,10,1};
 
   //{ 1,0,11,14,7,0,6 };
   //{1,0,13,14,13,0,11};
-//  x^6+13x^4+14x^3+13x^2+11
-  //
 
-  //{1,0,0,5,0,0,12,10,14};
-// 
-  //{1,0,0,0,1,6,0,0,9}; //{1,0,6,0,0,0,0,8,1};
-  //
+
+
 
 unsigned short zz[N] = { 0 };
 
@@ -2072,7 +2068,7 @@ return 0;
 //GF(4096) then 
 int ben_or(OP f){
   int i,n,flg=0;
-  OP s={0},u={0},r={0},g={0};
+  OP s={0},u={0},r={0};
   vec v={0},x={0};
 
 
@@ -2087,17 +2083,21 @@ int ben_or(OP f){
 
   i=0;
 
-//if GF(8192) and m==14 or if GF(4096) and m==7 if GF(16384) is testing
-int m=14;
+//if GF(8192) is 2^m and m==13 so mm=m+1=14 or if GF(4096) and m==7 if GF(16384) is testing
+  int mm=14; // mm=13 as a for GF(4096)=2^12+1
 
  
-  g=r;  
   while(i<n/2+1){ 
     flg=1;
-    //for gf8192 deg=128
-   r=opowmod(r,f,14);
-    //r=opowmod(r,f,7);
-    //for GF2 
+    //over GH(8192) 2^14
+    //r=opowmod(r,f,mm);
+    r=opowmod(r,f,mm);
+
+  
+    //over GF(4096)
+    //r=opowmod(r,f,13);
+    
+    //over GF2 
     //r=omod(opow(r,2),f);
 
     u=oadd(r,s);
@@ -3706,7 +3706,7 @@ exit(1);
   printf("\n");
     //wait();
   }
-exit(1);
+  //exit(1);
   
 
    /* 
