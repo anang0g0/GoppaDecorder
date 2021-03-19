@@ -2092,17 +2092,14 @@ int m=14;
 
  
   g=r;  
-  while(i<n/2+1){ //if m%2==1
-// while(i<n){  // if m%2==0
+  while(i<n/2+1){ 
     flg=1;
     //for gf8192 deg=128
-   r=opowmod(r,f,m);
-
-    //r=opowmod(r,f,6);
+   r=opowmod(r,f,14);
+    //r=opowmod(r,f,7);
     //for GF2 
     //r=omod(opow(r,2),f);
 
-    //r=omod(opow(r,16),f); 
     u=oadd(r,s);
     if(deg(o2v(u))==0 && LT(u).a==0)
     return -1;
@@ -3709,7 +3706,7 @@ exit(1);
   printf("\n");
     //wait();
   }
-//exit(1);
+exit(1);
   
 
    /* 
