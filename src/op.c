@@ -163,10 +163,10 @@ v2o (vec a)
 void
 wait (void)
 {
-  int n;			// 読み込む変数はローカルに取るべし
+  int a;			// 読み込む変数はローカルに取るべし
   printf (" (enter number and hit return) ");	// 何か表示させたほうが良いだろう
   fflush (stdout);		// just in case
-  fgets();
+  fgets(&a, 1, stdin);
   //scanf ("%d", &n);		// fgets(line, LINESIZE, stdin); という手も
 }
 
