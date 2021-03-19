@@ -53,6 +53,20 @@ Coding Theory-Based Cryptography:McEliece Cryptosystems in Sage
 Testing Irreducibility of Trinomials over GF(2) 
 https://digitalcommons.iwu.edu/cgi/viewcontent.cgi?article=1013&context=math_honproj
 
+# 20210319
+
+GF(8192)上で、既約多項式を生成できるようになった。
+
+拡大帯でも同じアルゴリズムが使えるというのは驚きだった。
+
+こういう規則性は勘で簡単にわかる人もいると思うけどすごく大変だった。
+
+# 20210318
+
+拡大体において既約多項式を計算するben_or関数と、opowmod関数を作成して、既約なGoppa多項式のみ生成するように改良した。
+
+次数が上がると桁溢れが起きるというopowmodのバグに気づかなかったら、この関数の実装は完成しなかっただろう。
+
 # 20210317
 
 バイナリ係数を持つ多項式の既約性判定テスト、Ben-Orのアルゴリズムを実装しました。

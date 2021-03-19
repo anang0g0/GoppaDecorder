@@ -5,8 +5,8 @@
 
 //monomial
 typedef struct{
-  unsigned short n; //単項式の次数
-  unsigned short a; //単項式の係数
+  unsigned int n; //単項式の次数
+  unsigned int a; //単項式の係数
 } oterm;
 
 //polynomial
@@ -15,7 +15,7 @@ typedef struct{
 } OP;
 
 typedef union {
-  unsigned short x[DEG]; //配列の添字を次数に、配列の値を係数に持つ多項式の表現
+  unsigned int x[DEG]; //配列の添字を次数に、配列の値を係数に持つ多項式の表現
   unsigned long long int e[DEG/4];
 } vec;
 

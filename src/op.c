@@ -34,7 +34,8 @@
 #include <omp.h>		//clang-10
 
 #include "debug.c"
-//#include "8192.h"
+#include "8192.h"
+//#include "4096.h"
 #include "global.h"
 #include "struct.h"
 
@@ -56,17 +57,15 @@ extern void makeS ();
 unsigned short sy[K] = { 0 };
 
 //Goppa多項式
-static unsigned short g[K + 1] = { 1, 0, 0, 0, 1, 0, 1 };
+static unsigned short g[K + 1] = {1,0,0,0,0,10,8,10,1};
+//1,0,0,14,12,3,0,15,3
+//{ 1, 0, 0, 0, 1, 0, 1 };
 
   //{ 1,0,11,14,7,0,6 };
   //{1,0,13,14,13,0,11};
-//  x^6+13x^4+14x^3+13x^2+11
-  //
 
-  //{1,0,0,5,0,0,12,10,14};
-// 
-  //{1,0,0,0,1,6,0,0,9}; //{1,0,6,0,0,0,0,8,1};
-  //
+
+
 
 unsigned short zz[N] = { 0 };
 
@@ -166,8 +165,12 @@ wait (void)
   int a;			// 読み込む変数はローカルに取るべし
   printf (" (enter number and hit return) ");	// 何か表示させたほうが良いだろう
   fflush (stdout);		// just in case
+<<<<<<< HEAD
   fgets(&a, 1, stdin);
   //scanf ("%d", &n);		// fgets(line, LINESIZE, stdin); という手も
+=======
+  scanf ("%d", &n);		// fgets(line, LINESIZE, stdin); という手も
+>>>>>>> 4f73ec899d540be60830483ae1ebb33b35909ca7
 }
 
 
@@ -465,7 +468,7 @@ oterml (OP f, oterm t)
   int i, k, j;
   OP h = { 0 };
   vec test;
-  unsigned short n;
+  unsigned int n;
 
   //f=conv(f);
   //k = deg (o2v(f));
@@ -609,6 +612,38 @@ coeff (OP f, unsigned short d)
 }
 
 
+//多項式を表示する(default)
+void
+printpol (vec a)
+{
+  int i, n;
+
+  n = deg (a);
+
+  //printf ("baka\n");
+  assert (("baka\n", n >= 0));
+
+
+
+  for (i = n; i > -1; i--)
+    {
+      if (a.x[i] > 0)
+	{
+	  printf ("%u", a.x[i]);
+	  //if (i > 0)
+	  printf ("x^%d", i);
+	  //if (i > 0)
+	  printf ("+");
+	}
+    }
+  //  printf("\n");
+
+  return;
+}
+
+
+
+
 //多項式の剰余を取る
 OP
 omod (OP f, OP g)
@@ -624,9 +659,9 @@ omod (OP f, OP g)
 
   n = LT (g).n;
 
-  assert (("baka^\n", LT (f).n != 0));
+//  assert (("baka^\n", LT (f).n != 0));
 
-  assert (("baka(A)\n", LT (g).n != 0));
+//  assert (("baka(A)\n", LT (g).n != 0));
 		 
   if (LT (f).n < LT (g).n)
     {
@@ -662,6 +697,81 @@ omod (OP f, OP g)
 
   return f;
 }
+
+
+
+
+/*
+//多項式の剰余を取る
+OP
+omod (OP f, OP g)
+{
+  int i = 0, j, n, k;
+  OP h = { 0 }, tmp,e = {
+    0
+  };
+  oterm a, b = { 0 }, c = {
+    0
+  };
+
+
+  n = LT (g).n;
+
+//printpol(o2v(f));
+//printf(" ====@f\n");
+//printpol(o2v(g));
+//printf(" ====@g\n");
+
+  assert (("baka^\n", LT (f).n != 0));
+
+  assert (("baka(A)\n", LT (g).n != 0));
+		 
+  if (LT (f).n < LT (g).n)
+    {
+      printf("us\n");
+      //wait();
+      //    exit(1);
+      return f;
+    }
+
+  //printf ("in omod\n");
+  //exit(1);
+
+  k = LT (g).n;
+  b = LT (g);
+
+
+
+  assert (("double baka\n", b.a != 0 && b.n != 0));
+  while ((LT (f).n > 0 && LT (g).n > 0))
+    {
+      //printf("b.a=%d b.n=%d\n",b.a,b.n);
+      c = LTdiv (f, b);
+      h = oterml (g, c);
+//      printpol(o2v(h));
+//      printf(" ===@h\n");
+    //  printpol(o2v(f));
+  //    printf(" ===@fx\n");
+      
+      f = oadd (f, h);
+      if (deg (o2v(f)) == 0 || deg (o2v(g)) == 0)
+	{
+//    printf("f.a=%d f.n=%d\n",LT(f).a, deg(o2v(f)));
+//    printf("g.a=%d g.n=%d\n",LT(g).a, deg(o2v(g)));
+//	  printf ("blake1\n");
+	  break;
+	}
+
+      if (c.n == 0 || b.n == 0)
+	      break;
+//  b=LT(h);
+    }
+
+
+  return f;
+}
+*/
+
 
 
 //多項式の商を取る
@@ -753,6 +863,9 @@ opow (OP f, int n)
 
   for (i = 1; i < n; i++)
     g = omul (g, f);
+  
+//printpol(o2v(g));
+//printf(" =ooo\n");
 
 
   return g;
@@ -765,11 +878,30 @@ opow (OP f, int n)
 OP
 opowmod (OP f, OP mod, int n)
 {
-  OP g;
+  OP g={0},h={0};
   int i;
 
-  g = omod (opow (f, n), mod);
+  g=f;  
 
+//#pragma omp parallel num_threads(8)
+  {
+//#pragma omp for schedule(static)
+  for (i = 1; i < n; i++){
+    g = omul (g, g);
+   if(odeg(g)>odeg(mod))
+    g = omod(g,mod);
+  }
+  }
+  /*
+  for (i = 0; i < 10; i++){
+    g = omul (g, f);
+   if(odeg(g)>odeg(mod))
+    g = omod(g,mod);
+  }
+*/
+//printpol(o2v(g));
+//printf(" =ooo\n");
+  
 
   return g;
 }
@@ -794,35 +926,6 @@ trace (OP f, unsigned short x)
   return u;
 }
 
-
-//多項式を表示する(default)
-void
-printpol (vec a)
-{
-  int i, n;
-
-  n = deg (a);
-
-  //printf ("baka\n");
-  assert (("baka\n", n >= 0));
-
-
-
-  for (i = n; i > -1; i--)
-    {
-      if (a.x[i] > 0)
-	{
-	  printf ("%u", a.x[i]);
-	  //if (i > 0)
-	  printf ("x^%d", i);
-	  //if (i > 0)
-	  printf ("+");
-	}
-    }
-  //  printf("\n");
-
-  return;
-}
 
 
 // invert of polynomial
@@ -983,6 +1086,49 @@ inv (OP a, OP n)
 }
 
 
+unsigned short
+v2a (oterm a)
+{
+  int i, j;
+
+if(a.a==0)
+  return 0;
+
+  for (j = 0; j < M; j++)
+    {
+      if (gf[j] == a.a && a.a > 1)
+	{
+	  return j - 1;
+	}
+    }
+
+}
+
+
+
+void
+printsage (vec a)
+{
+  int i, j, k;
+  oterm b;
+
+  printf ("poly=");
+  for (i = 0; i < DEG; i++)
+    {
+      if (a.x[i] > 0)
+	{
+	  b.a = a.x[i];
+	  b.n = i;
+	  j = v2a (b);
+    //printf ("X**%d+", i); //for GF2
+	  printf ("B('a^%d')*X**%d+", j, i);  //for GF(2^m)
+	}
+    }
+
+}
+
+
+
 OP gcd(OP a, OP b){
   OP r={0},h={0},tmp={0};
 
@@ -1024,6 +1170,52 @@ OP gcd(OP a, OP b){
   }
 }
 
+/*
+OP gcd(OP a, OP b){
+  OP r={0},h={0},tmp={0};
+
+  h.t[0].a=1;
+  h.t[0].n=0;
+
+  if(odeg(a)<odeg(b)){
+    tmp = a;
+    a = b;
+    b = tmp;
+  }
+
+  printsage(o2v(a));
+  printf(" ========a\n");
+  printsage(o2v(b));
+  printf(" ========b\n");
+  
+  // 自然数 a > b を確認・入替 
+  r = omod(a , b);
+  while(odeg(r)>0){
+    a = b;
+    b = r;
+    r = omod(a , b);
+    if(LT(r).a==0){
+      printf("e-!\n");
+      printpol(o2v(a));
+      printf(" =a\n");
+      printpol(o2v(b));
+      printf(" =b\n");
+      printpol(o2v(r));
+      printf(" =r\n");
+      //wait();
+      
+      return b;
+    }
+  }
+  
+  if(LT(r).a==0){
+    return b;
+  }else if(LT(r).a==1){
+
+    return h;
+  }
+}
+*/
 
 
 
@@ -1141,40 +1333,24 @@ ogcd (OP xx, OP yy)
 OP
 agcd (OP xx, OP yy)
 {
-  OP tt,tmp;
+  OP tt={0},tmp;
 
-  while (odeg (yy) > 0)
+  if(deg(o2v(xx))<deg(o2v(yy))){
+    tmp=xx;
+    xx=yy;
+    yy=tmp;
+  }
+  tt=omod(xx,yy);
+  while (LT (tt).n > 0)
     {
-      tt = omod (xx, yy);
       xx = yy;
       yy = tt;
+      tt = omod (xx, yy);
     }
 
-  return xx;
+  return yy;
 }
 
-
-
-//多項式のべき乗
-OP
-fpow (OP f, unsigned short n)
-{
-  int i;
-  OP g = { 0 };
-
-printf("n=%d\n",n);
-  g = f;
-  //memcpy(g.t,f.t,sizeof(f.t));
-
-  for (i = 1; i < n+1; i++){
-    g = omul (g, g);
-    printpol(o2v(g));
-    printf(" =g\n");
-  }
-
-
-  return g;
-}
 
 
 
@@ -1465,7 +1641,7 @@ ginit (void)
   printf ("in ginit\n");
 
   g[K] = 1;			//xor128();
-  g[0] = rand () % 2; //N;
+  g[0] = rand () % N; //or N
   k=rand()%(K-2);
   if(k>0){
   while (count < k)
@@ -1474,7 +1650,7 @@ ginit (void)
      j = rand () % (K - 1);
       if (j < K && j > 0 && g[j] == 0)
 	{
-	  g[j] = rand () % 2; //N;
+	  g[j] = rand () % N; //or N;
 	  count++;
 	}
     }
@@ -1630,42 +1806,7 @@ printvec (vec v)
 }
 
 
-unsigned short
-v2a (oterm a)
-{
-  int i, j;
 
-  for (j = 0; j < M; j++)
-    {
-      if (gf[j] == a.a && a.a > 1)
-	{
-	  return j - 1;
-	}
-    }
-
-}
-
-
-
-void
-printsage (vec a)
-{
-  int i, j, k;
-  oterm b;
-
-  printf ("poly=");
-  for (i = 0; i < DEG; i++)
-    {
-      if (a.x[i] > 0)
-	{
-	  b.a = a.x[i];
-	  b.n = i;
-	  j = v2a (b);
-	  printf ("B('a^%d')*X**%d+", j, i);
-	}
-    }
-
-}
 
 
 
@@ -1913,6 +2054,23 @@ chen (OP f)
 }
 
 
+int oequ(OP f,OP g){
+vec v,x;
+int i,flg=0;
+
+v=o2v(f);
+x=o2v(g);
+for(i=0;i<DEG;i++){
+    if(v.x[i]!=x.x[i])
+    return -1;
+}
+
+return 0;
+}
+
+
+
+//GF(4096) then 
 int ben_or(OP f){
   int i,n,flg=0;
   OP s={0},u={0},r={0};
@@ -1929,9 +2087,24 @@ int ben_or(OP f){
   return -1;
 
   i=0;
-  while(i<n/2){
+
+//if GF(8192) is 2^m and m==13 so mm=m+1=14 or if GF(4096) and m==7 if GF(16384) is testing
+  int mm=14; // mm=13 as a for GF(4096)=2^12+1
+
+ 
+  while(i<n/2+1){ 
     flg=1;
-    r=omod(opow(r,2),f);
+    //over GH(8192) 2^14
+    //r=opowmod(r,f,mm);
+    r=opowmod(r,f,mm);
+
+  
+    //over GF(4096)
+    //r=opowmod(r,f,13);
+    
+    //over GF2 
+    //r=omod(opow(r,2),f);
+
     u=oadd(r,s);
     if(deg(o2v(u))==0 && LT(u).a==0)
     return -1;
@@ -2903,13 +3076,22 @@ pattarson (OP w, OP f)
       //wait ();
       exit (1);
     }
-    hh = extgcd (w, f);
-     if (odeg ((hh.d)) > 0)
+    h = gcd (f, w);
+     if (odeg ((h)) > 0)
 	    {
+        printsage(o2v(w));
+        printf(" =goppa\n");
+        printsage(o2v(f));
+        printf(" =syn\n");
+        printpol(o2v(h));
+        printf(" =gcd\n");
+               
+            //printf("f-ben_or=%d\n",ben_or(f));
+            //printf("w-ben_or=%d\n",ben_or(w)); 
 	    printf (" s,wは互いに素じゃありません。\n");
       flg2=1;
 	    //wait ();
-    exit(1);
+      exit(1);
 	  //goto label;
 	    }
 
@@ -3010,8 +3192,8 @@ pattarson (OP w, OP f)
     }
 
 printf("flg2=%d\n",flg2);
-exit(1);
-  //return v2o(v);
+//exit(1);
+  return v2o(v);
 
 }
 
@@ -3473,6 +3655,8 @@ for(i=0;i<DEG;i++){
 return -1;
 }
 
+
+
 unsigned short dd[N][N]={0};
 
 OP mkg(){
@@ -3507,15 +3691,23 @@ aa:
     //if(isquad(w)==-1)
     //exit(1);
 	}
-     l=ben_or(w);
+
+    
+//既約性判定のためのBen-Orアルゴリズム。拡大体にも対応している。デフォルトでGF(8192)
+//既約多項式しか使わない。
+ l=ben_or(w);
   printf("irr=%d\n",l);
   if(l== -1){
   goto aa;
   }else{
     printpol(o2v(w));
     printf(" =irreducible\n");
-    //exit(1);
+    printsage(o2v(w));
+  printf("\n");
+    //wait();
   }
+  //exit(1);
+  
 
    /* 
    //偶数項だけだとpattarson復号に失敗する
@@ -3523,6 +3715,7 @@ aa:
       oprintpol (w);
       j=1;
      */ 
+    
       //多項式の値が0でないことを確認
   for (i = 0; i < N; i++)
 	{
@@ -3539,6 +3732,23 @@ aa:
   while (fail || j == 0);
 
 
+memset (ta, 0, sizeof (ta));
+//w=setpol(ag,K+1);
+//printpol(o2v(w));
+//printf(" =poly\n");
+
+  for (i = 0; i < N; i++)
+	{
+	  ta[i] = trace (w, i);
+	  if (ta[i] == 0)
+	    {
+	      printf ("trace 0 @ %d\n", i);
+	      fail = 1;
+        break;
+	    }
+	}
+
+
 
 ogt();
 memset(mat,0,sizeof(mat));
@@ -3548,16 +3758,17 @@ memset(mat,0,sizeof(mat));
   printsage (o2v (w));
   printf ("\n");
   printf ("sagemath で既約性を検査してください！\n");
-//  wait ();
+ wait ();
 
 
   #pragma omp parallel for
   for (i = 0; i < N; i++)
     {
       tr[i] = oinv (ta[i]);
-
+printf("%d,",tr[i]);
     }
-
+printf("\n");
+wait();
 //van();
 //ogt(); 
 memset(dd,0,sizeof(dd));
@@ -3589,14 +3800,20 @@ for(i=0;i<K;i++){
     //#pragma omp parallel for reduction(^:s)
       for(k=0;k<K;k++)
         s^=gf[mlt(fg[gt[k][i]],fg[ma[j][k]])];
-//printf("%d,",s);
+    //printf("%d,",s);
     mat[j][i]=s;
   }
-  //printf("\n");
+  printf("\n");
 }
-//  printf("\n");
+  printf("\n");
 //exit(1);
-
+for(i=0;i<K;i++){
+  for(j=0;j<N;j++)
+  printf("%d,",mat[j][i]);
+  printf("\n");
+}
+printf("\n");
+wait();
 
 /*
   //パリティチェックを生成する。
@@ -3669,20 +3886,6 @@ if(deg(o2v(r))<T){
 return count;
 }
 
-
-int oequ(OP f,OP g){
-vec v,x;
-int i,flg=0;
-
-v=o2v(f);
-x=o2v(g);
-for(i=0;i<512;i++){
-    if(v.x[i]!=x.x[i])
-    return -1;
-}
-
-return 0;
-}
 
 
 
@@ -3994,85 +4197,18 @@ label:
 
   van();
 
-  do
-    {
-      fail = 0;
-      j = 0;
-      k = 0;
-      flg = 0;
-      l=0;
-      memset (g, 0, sizeof (g));
-      memset (ta, 0, sizeof (ta));
-      ginit ();
-      for (i = 0; i < K + 1; i++)
-	{
-	  if (g[K - 1] > 0)
-	    flg = 1;
-	  if (i % 2 == 1 && g[i] > 0 && i < K)
-	    k++;
-	}
-  //if(k>0)
-    if ((k > 0 && flg == 0) || (k > 1 && flg == 1))
-	{
-	  w = setpol (g, K + 1);
-	  j = 1;
-	}
-  
-  //  j=1;
-  //  w = setpol (g, K + 1);
-  //  oprintpol (w);
-  
-      //多項式の値が0でないことを確認
-      for (i = 0; i < D; i++)
-	{
-	  ta[i] = trace (w, i);
-	  if (ta[i] == 0)
-	    {
-	      printf ("trace 0 @ %d\n", i);
-	      fail = 1;
-	      break;
-	    }
-	}
-      
-    }
-  while (fail || j == 0);
+  memset (mat, 0, sizeof (mat));
 
-  /*
-  do{
-    fail=0;
-    flg=0;
-    memset(g,0,sizeof(g));
-    memset(ta,0,sizeof(ta));
-    ginit();
-    w = setpol (g, K + 1);
-    printsage (o2v(w));
-    printf("\n");
-    //wait();
-    flg=ben_or(w);
-    printf("irr=%d\n",flg);
-    //exit(1);
-    
-    //多項式の値が0でないことを確認
-    for (i = 0; i < D; i++)
-      {
-	ta[i] = trace (w, i);
-	if (ta[i] == 0)
-	  {
-	    printf ("trace 0 @ %d\n", i);
-	    fail = 1;
-	    break;
-	  }
-      }
-  }
-  while(flg==1);
-  */  
+  printf ("\nすげ、オレもうイキそ・・・\n");
   
+  w=mkg();
+
   oprintpol (w);
   printf ("\n");
   printsage (o2v (w));
   printf ("\n");
   printf ("sagemath で既約性を検査してください！\n");
-  //wait ();
+  wait ();
 
 
   //#pragma omp parallel for
@@ -4082,13 +4218,13 @@ label:
 
     }
 
-  memset (mat, 0, sizeof (mat));
+printf("a@");
+wait();
 
-  printf ("\nすげ、オレもうイキそ・・・\n");
   //keygen(g);
 /*
 OP qq={0};
-for(i=0b1000000000001;i<0b1111111111111+1;i++){
+for(i=0b10000000000000001;i<0b11111111111111111+1;i++){
     qq=v2o(i2v(i));
       k=ben_or(qq);
 if(k==0){
@@ -4101,7 +4237,7 @@ exit(1);
   //パリティチェックを生成する。
   //パリティチェックに0の列があったら、なくなるまでやり直す。
 
-  w=mkg();
+
 
 /*
 for(i=0;i<N;i++){
@@ -4447,15 +4583,19 @@ lab:
 	  printf (" =========syn\n");
 	  printpol (o2v (f));
 	  printf (" ==========synd\n");
-    printf("へげえええーっ");
-	  exit(1);
-	}
+    printf("へげえええーっ\n");
+	  //exit(1);
+  exit(1);
+  
+  }
+    
       if (AA == 10)
 	{
 	  printf ("B=%d", B);
 	  exit (1);
 	}
-      if (B > 10000)
+  
+      if (B > 1000)
 	{
 	  count = 0;
 	  printf ("false=%d\n", AA);
@@ -4470,12 +4610,13 @@ lab:
 	  printf (" =======sage\n");
 	  exit (1);
 	}
+  
 wait();
       //exit(1);
-      goto label;
+      //goto patta;
       //wait();
 
-    //break;
+    break;
     }
 
   return 0;
