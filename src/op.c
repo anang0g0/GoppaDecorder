@@ -3686,13 +3686,8 @@ aa:
     //if(isquad(w)==-1)
     //exit(1);
 	}
-	  //w = setpol (g, K + 1);
-	  //j = 1;
-/*
-    printsage(o2v(w));
-  printf("\n");
-exit(1); 
-*/ 
+
+    
 //既約性判定のためのBen-Orアルゴリズム。拡大体にも対応している。デフォルトでGF(8192)
 //既約多項式しか使わない。
  l=ben_or(w);
@@ -4613,10 +4608,10 @@ lab:
   
 wait();
       //exit(1);
-      goto patta;
+      //goto patta;
       //wait();
 
-    //break;
+    break;
     }
 
   return 0;
