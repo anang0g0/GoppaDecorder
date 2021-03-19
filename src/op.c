@@ -2087,7 +2087,7 @@ int ben_or(OP f){
 
   i=0;
 
-//if GF(8192) and m==14 or if GF(4096) and m==7
+//if GF(8192) and m==14 or if GF(4096) and m==7 if GF(16384) is testing
 int m=14;
 
  
@@ -3696,6 +3696,8 @@ aa:
   printf("\n");
 exit(1); 
 */ 
+//既約性判定のためのBen-Orアルゴリズム。拡大体にも対応している。デフォルトでGF(8192)
+//既約多項式しか使わない。
  l=ben_or(w);
   printf("irr=%d\n",l);
   if(l== -1){
@@ -3707,9 +3709,9 @@ exit(1);
   printf("\n");
     //wait();
   }
-exit(1);
+//exit(1);
   
-//poly=B('a^0')*X**0+B('a^9')*X**1+B('a^3')*X**2+B('a^9')*X**3+B('a^0')*X**8
+
    /* 
    //偶数項だけだとpattarson復号に失敗する
       w = setpol (g, K + 1);
