@@ -34,7 +34,8 @@
 #include <omp.h>		//clang-10
 
 #include "debug.c"
-#include "4096.h"
+#include "8192.h"
+//#include "4096.h"
 #include "global.h"
 #include "struct.h"
 
@@ -861,8 +862,9 @@ opow (OP f, int n)
 
   for (i = 1; i < n; i++)
     g = omul (g, f);
-printpol(o2v(g));
-printf(" =ooo\n");
+  
+//printpol(o2v(g));
+//printf(" =ooo\n");
 
 
   return g;
@@ -875,16 +877,27 @@ printf(" =ooo\n");
 OP
 opowmod (OP f, OP mod, int n)
 {
-  OP g;
+  OP g={0},h={0};
   int i;
 
   g=f;  
-  for (i = 1; i < 6; i++){
+
+//#pragma omp parallel num_threads(8)
+  {
+//#pragma omp for schedule(static)
+  for (i = 1; i < n; i++){
     g = omul (g, g);
    if(odeg(g)>odeg(mod))
     g = omod(g,mod);
   }
-
+  }
+  /*
+  for (i = 0; i < 10; i++){
+    g = omul (g, f);
+   if(odeg(g)>odeg(mod))
+    g = omod(g,mod);
+  }
+*/
 //printpol(o2v(g));
 //printf(" =ooo\n");
   
@@ -2075,13 +2088,14 @@ int ben_or(OP f){
   i=0;
   while(i<n){
     flg=1;
-    //for gf256 deg=32
-    r=opowmod(r,f,64);
- 
+    //for gf8192 deg=128
+    r=opowmod(r,f,13);
+//    r=opowmod(r,f,7);
+    //r=opowmod(r,f,6);
     //for GF2 
     //r=omod(opow(r,2),f);
 
-    //r=omod(opow(r,32),f); 
+    //r=omod(opow(r,16),f); 
     u=oadd(r,s);
     if(deg(o2v(u))==0 && LT(u).a==0)
     return -1;
@@ -2101,56 +2115,6 @@ int ben_or(OP f){
   
   return 0;
 }
-
-/*
-int ben_or(OP f){
-  int i,n,flg=0,j,k;
-  OP s={0},u={0},r={0},t;
-  vec v={0},x={0};
-
-
-  v.x[1]=1;
-  x.x[1]=1;
-  s=v2o(x);
-  r=v2o(v);
-  n=deg(o2v(f));
-
-  if(n==0)
-  return -1;
-j=0;
-  i=0;
-  k=2;
-  while(i<n/2){
-    flg=1;
-    r=omod(opow(r,2),f);
-//    r=omod(opow(r,k),f);
-    printpol(o2v(r));
-    printf(" =rx\n");
-    u=oadd(r,s);
-    if(j==0)
-    t=u;
-    if(deg(o2v(u))==0 && LT(u).a==1){
-    i++;
-    flg=0;
-    }
-    if(deg(o2v(u))>0 && odeg(f)>0)
-    u=gcd(f,u);
-    if(deg(o2v(u))>0){
-      printpol(o2v(u));
-      printf(" =u\n");
-    return -1;
-    }
-    if(flg==1)
-    i++;
-    j=1;
-  }
-
-  //printf("irreducible\n");
-
-  return 0;
-
-}
-*/
 
 
 
