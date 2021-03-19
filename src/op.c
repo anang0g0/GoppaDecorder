@@ -2087,12 +2087,13 @@ int ben_or(OP f){
 
   i=0;
 
+//if GF(8192) and m==14 or if GF(4096) and m==7
 int m=14;
 
  
   g=r;  
-  while(i<n/2+1){  //if GF(8192) and m==14
-// while(i<n){  //if GF(4096) and m==7
+  while(i<n/2+1){ //if m%2==1
+// while(i<n){  // if m%2==0
     flg=1;
     //for gf8192 deg=128
    r=opowmod(r,f,m);
