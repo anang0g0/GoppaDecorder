@@ -33,7 +33,7 @@
 #include <omp.h> //clang-10
 
 #include "debug.c"
-#include "8192.h"
+//#include "8192.h"
 //#include "4096.h"
 #include "global.h"
 #include "struct.h"
@@ -66,7 +66,7 @@ static unsigned short g[K + 1] = {1, 0, 0, 0, 0, 10, 8, 10, 1};
 
 unsigned short zz[N] = {0};
 
-unsigned int AA = 0, B = 0, C = 0, A2 = 0;
+unsigned int AA = 0, B = 0; //, C = 0, A2 = 0;
 
 /*
 static unsigned short g[K+1]={1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,1,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,1,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,1,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,
@@ -779,7 +779,7 @@ OP opowmod(OP f, OP mod, int n)
   int i, j = 0;
 
   //繰り返し２乗法
-  for (i = 1; i < n; i++)
+  for (i = 1; i < n + 1; i++)
   {
     f = omul(f, f);
     if (odeg(f) > odeg(mod))
@@ -1795,12 +1795,15 @@ int oequ(OP f, OP g)
   return 0;
 }
 
-//GF(4096) then
+//GF(2^m) then set m in this function.
 int ben_or(OP f)
 {
   int i, n, flg = 0;
   OP s = {0}, u = {0}, r = {0};
   vec v = {0}, x = {0};
+  //if GF(8192) is 2^m and m==13 or if GF(4096) and m==12 if GF(16384) is testing
+  int m = 4;
+  // m=12 as a for GF(4096)=2^12 defined @ gloal.h or here,for example m=4 and GF(16)
 
   v.x[1] = 1;
   x.x[1] = 1;
@@ -1813,16 +1816,13 @@ int ben_or(OP f)
 
   i = 0;
 
-  //if GF(8192) is 2^m and m==13 so mm=m+1=14 or if GF(4096) and m==7 if GF(16384) is testing
-  int mm = 14; // mm=13 as a for GF(4096)=2^12+1
-
   //r(x)^{q^i} square pow mod
   while (i < n / 2 + 1)
   {
     flg = 1;
     //over GH(8192) 2^14
     //r=opowmod(r,f,mm);
-    r = opowmod(r, f, mm);
+    r = opowmod(r, f, m);
 
     //over GF(4096)
     //r=opowmod(r,f,13);
@@ -2251,7 +2251,7 @@ void pubkeygen()
 #pragma omp parallel for
     for (k = 0; k < N; k++)
       pub[i][k] = tmp[i][P[k]]; //&A[k][j];
-          //    }
+                                //    }
   }
 
 #pragma omp parallel for private(j)
@@ -2763,17 +2763,6 @@ OP pattarson(OP w, OP f)
     }
   }
 
-  ll = oadd(omul(ff, ff), omul(tt, omul(ppo, ppo)));
-  v = chen(ll);
-  if (v.x[K - 1] > 0)
-  {
-    C++;
-    printf("ll\n");
-    wait();
-
-    return v2o(v);
-  }
-
   if (odeg((ff)) == 1)
   {
     ll = oadd(omul(ff, ff), omul(tt, omul(ppo, ppo))); //ff;
@@ -3272,7 +3261,7 @@ aa:
       printf("\n");
       //wait();
     }
-    //exit(1);
+    //    exit(1);
 
     /* 
          //偶数項だけだとpattarson復号に失敗する
@@ -4126,7 +4115,7 @@ lab:
       //for(i=0;i<16;i++)
       //printf("%d,",zz[i]);
       //printf("\n");
-      printf("C=%d\n", A2);
+      //printf("C=%d\n", A2);
       printpol(o2v(w));
       printf(" =======goppa\n");
       printsage(o2v(w));
@@ -4139,7 +4128,7 @@ lab:
     //goto patta;
     //wait();
 
-    break;
+    //break;
   }
 
   return 0;
