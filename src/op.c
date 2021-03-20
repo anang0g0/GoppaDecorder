@@ -3261,7 +3261,7 @@ aa:
       printf("\n");
       //wait();
     }
-    //    exit(1);
+   // exit(1);
 
     /* 
          //偶数項だけだとpattarson復号に失敗する
@@ -3594,6 +3594,9 @@ unsigned short invP[N][N]=
   }
 */
 
+if(K>N)
+printf("configuration error! too big K\n");
+
 #ifdef SRAND
   srand(SRAND);
 #else
@@ -3734,7 +3737,8 @@ label:
   printsage(o2v(w));
   printf("\n");
   printf("sagemath で既約性を検査してください！\n");
-  wait();
+//exit(1);
+  //wait();
 
   //#pragma omp parallel for
   for (i = 0; i < N; i++)
@@ -3743,7 +3747,9 @@ label:
   }
 
   printf("a@");
-  wait();
+  //wait();
+//exit(1);
+
 
   //keygen(g);
   /*
@@ -3778,7 +3784,7 @@ printf("\n");
     }
   while (i < 0);
 */
-  unsigned short gen[N][K] = {0};
+//  unsigned short gen[N][K] = {0};
 
 lab:
 
@@ -3846,7 +3852,7 @@ lab:
 
   //decode開始
   k = 0;
-  while (1)
+//  while (1)
   {
 
     o1 = 0;
@@ -3860,6 +3866,8 @@ lab:
     //zz[4]=4;
     //zz[8]=8;
     //zz[12]=12;
+printf("@b\n");
+//exit(1);
 
     j = 0;
     while (j < T)
@@ -3874,12 +3882,12 @@ lab:
       }
     }
 
-    for (i = 0; i < D; i++)
+    for (i = 0; i < N; i++)
     {
       if (zz[i] > 0)
         printf("l=%d %d\n", i, zz[i]);
     }
-    //exit(1);
+   
 
     f = synd2(zz);
     //exit(1);
@@ -4123,8 +4131,8 @@ lab:
       exit(1);
     }
 
-    wait();
-    //exit(1);
+    //wait();
+    exit(1);
     //goto patta;
     //wait();
 
