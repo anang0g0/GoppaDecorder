@@ -1,4 +1,4 @@
-#define DEG 512
+#define DEG 1024
 
 /* -*- mode: C; coding:utf-8 -*- */
 
@@ -28,7 +28,7 @@ typedef union {
 typedef struct{
   OP u; //inverse of polynomial?
   OP v; //error locater
-  OP d; //gcd
+ OP d; //gcd
 } EX;
 
 
