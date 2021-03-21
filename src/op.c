@@ -1,23 +1,4 @@
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //date 20200331:xgcdの終了条件が２つになってしまう。ogcdとxgcdで使い分ける。
 //date : 20200326 鍵生成が det と deta で高い確率で一致する。detaは並列処理。
 //date 20200229 : pattarson algorithm implementation ver 1.0
@@ -3318,11 +3299,11 @@ unsigned short dd[N][N] = {0};
 
 OP mkg()
 {
-  int i, j, k, fail, flg, l;
+  int i, j, k, fail, flg, l,ii=0;
   OP w = {0};
 
 aa:
-  /*
+  
   do
   {
     fail = 0;
@@ -3333,6 +3314,11 @@ aa:
     memset(g, 0, sizeof(g));
     memset(ta, 0, sizeof(ta));
     ginit();
+    ii++;
+    if(ii>1000){
+      printf("erro=%d\n",ii);
+    exit(1);
+    }
     for (i = 0; i < K + 1; i++)
     {
       if (g[K - 1] > 0)
@@ -3378,17 +3364,17 @@ aa:
       }
     }
   } while (fail || j == 0);
-*/
+
 
   //多項式を固定したい場合コメントアウトする。
+  /*
   memset(ta, 0, sizeof(ta));
   w = setpol(g, K + 1);
   printpol(o2v(w));
   //printf(" =poly\n");
 
   for (i = 0; i < N; i++)
-  {
-    ta[i] = trace(w, i);
+  {    ta[i] = trace(w, i);
     if (ta[i] == 0)
     {
       printf("trace 0 @ %d\n", i);
@@ -3396,6 +3382,7 @@ aa:
       break;
     }
   }
+*/
 
   ogt();
   memset(mat, 0, sizeof(mat));
@@ -4245,3 +4232,4 @@ lab:
 
   return 0;
 }
+
