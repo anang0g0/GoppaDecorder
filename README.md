@@ -17,8 +17,8 @@ https://openmp.llvm.org/
 
 これらを読んで実行環境を作ってください。
 
-clang-10を入れましょう。（というかこれ以外動作保証しません）
-
+clang-10推奨。
+gccでも動くようになりました。(20210319)
 
 cd src/
 
@@ -26,11 +26,9 @@ make
 
 とやれば出来ます。
 
-
 AMD用の最適化オプションznver2を使用。
 
-gccで実行すると並列化に失敗します。
-clang-10 でなければ動きませんが原因はわかりません。
+参考文献：
 
 https://arxiv.org/pdf/1907.12754.pdf
 ホワイトペーパー
@@ -52,6 +50,12 @@ Coding Theory-Based Cryptography:McEliece Cryptosystems in Sage
 
 Testing Irreducibility of Trinomials over GF(2) 
 https://digitalcommons.iwu.edu/cgi/viewcontent.cgi?article=1013&context=math_honproj
+
+
+# 20210321
+
+clang-11で動かないバグを修正中。
+gcc-10で動作を確認。
 
 # 20210319
 
