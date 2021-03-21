@@ -1,3 +1,4 @@
+
 //date 20200331:xgcdの終了条件が２つになってしまう。ogcdとxgcdで使い分ける。
 //date : 20200326 鍵生成が det と deta で高い確率で一致する。detaは並列処理。
 //date 20200229 : pattarson algorithm implementation ver 1.0
@@ -58,7 +59,7 @@ unsigned short sy[K] = {0};
 //1x^6+14x^3+13x^1+14x^0+ =irreducible
 
 //Goppa多項式
-static unsigned short g[K + 1] = {1,0,0,14,0,13,14};
+static unsigned short g[K + 1] = {1,0,7,13,6,2,0,12,10};
 //{1, 0, 0, 0, 0, 10, 8, 10, 1};
 //1,0,0,14,12,3,0,15,3
 //{ 1, 0, 0, 0, 1, 0, 1 };
@@ -628,17 +629,12 @@ omod (OP f, OP g)
   oterm a, b = { 0 }, c = {
     0
   };
-
-
   n = LT (g).n;
-
 //printpol(o2v(f));
 //printf(" ====@f\n");
 //printpol(o2v(g));
 //printf(" ====@g\n");
-
   assert (("baka^\n", LT (f).n != 0));
-
   assert (("baka(A)\n", LT (g).n != 0));
 		 
   if (LT (f).n < LT (g).n)
@@ -648,15 +644,10 @@ omod (OP f, OP g)
       //    exit(1);
       return f;
     }
-
   //printf ("in omod\n");
   //exit(1);
-
   k = LT (g).n;
   b = LT (g);
-
-
-
   assert (("double baka\n", b.a != 0 && b.n != 0));
   while ((LT (f).n > 0 && LT (g).n > 0))
     {
@@ -676,13 +667,10 @@ omod (OP f, OP g)
 //	  printf ("blake1\n");
 	  break;
 	}
-
       if (c.n == 0 || b.n == 0)
 	      break;
 //  b=LT(h);
     }
-
-
   return f;
 }
 */
@@ -1027,16 +1015,13 @@ OP gcd(OP a, OP b)
 /*
 OP gcd(OP a, OP b){
   OP r={0},h={0},tmp={0};
-
   h.t[0].a=1;
   h.t[0].n=0;
-
   if(odeg(a)<odeg(b)){
     tmp = a;
     a = b;
     b = tmp;
   }
-
   printsage(o2v(a));
   printf(" ========a\n");
   printsage(o2v(b));
@@ -1065,7 +1050,6 @@ OP gcd(OP a, OP b){
   if(LT(r).a==0){
     return b;
   }else if(LT(r).a==1){
-
     return h;
   }
 }
@@ -1774,9 +1758,13 @@ vec chen(OP f)
     {
       e.x[count] = x;
       count++;
+      printf("%d\n",x);
     }
-    //    printf("%d\n",x);
+
   }
+printpol(e);
+printf(" ==eee!\n");
+//exit(1);
 
   return e;
 }
@@ -2966,7 +2954,7 @@ OP synd2(unsigned short zz[])
   int i, j, t1;
   OP f = {0};
 
-  printf("in synd\n");
+  printf("in synd2\n");
 
   //  #pragma omp parallel for        //num_threads(8)
   for (i = 0; i < K; i++)
@@ -2978,18 +2966,10 @@ OP synd2(unsigned short zz[])
     {
       syn[i] ^= gf[mlt(fg[zz[j]], fg[mat[j][i]])];
     }
-    sy[K - i] = syn[i]; //=s;
+
     //printf ("syn%d,", syn[i]);
   }
   //printf ("\n");
-  /*
-  for (int j = 0; j < K / 2; j++)
-    {
-      t1 = syn[j];
-      syn[j] = syn[K - j - 1];
-      syn[K - j - 1] = t1;
-    }
-*/
 
   f = setpol(syn, K);
   printpol(o2v(f));
@@ -3220,6 +3200,7 @@ OP mkg()
   OP w = {0};
 
 aa:
+/*
   do
   {
     fail = 0;
@@ -3265,12 +3246,6 @@ aa:
     }
    // exit(1);
 
-    /*
-         //偶数項だけだとpattarson復号に失敗する
-         w = setpol (g, K + 1);
-         oprintpol (w);
-         j=1;
-      */ 
 
     //多項式の値が0でないことを確認
     for (i = 0; i < N; i++)
@@ -3285,7 +3260,7 @@ aa:
     }
 
   } while (fail || j == 0);
-
+*/
 
   memset(ta, 0, sizeof(ta));
   w=setpol(g,K+1);
@@ -3396,13 +3371,13 @@ if(deg(o2v(r))<T){
   */
   for (i = 0; i < T; i++)
   {
-    
+    /*
          if(i>0 && r.t[i].n==0){
          printf("baka-z\n");
-         //return -1;
-         exit(1);
+         return -1;
+         //exit(1);
          }
-       
+      */ 
     if (r.t[i].a > 0 && i > 0) // == r.t[i].n)
     {
       printf("e=%d %d %s\n", r.t[i].a, r.t[i].n, "お");
@@ -3866,9 +3841,10 @@ lab:
     //for(i=1;i<4;i++)
     //zz[i]=i;
   
-    //zz[1]=1;
-    //zz[2]=2;
+    //zz[1]=2;
+    //zz[2]=3;
     //zz[3]=4;
+    //zz[4]=5;
 printf("@b\n");
 //exit(1);
 
