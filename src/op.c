@@ -3262,6 +3262,7 @@ aa:
   } while (fail || j == 0);
 */
 
+//多項式を固定したい場合コメントアウトする。
   memset(ta, 0, sizeof(ta));
   w=setpol(g,K+1);
   printpol(o2v(w));
@@ -3830,7 +3831,7 @@ lab:
 
   //decode開始
   k = 0;
-//  while (1)
+ while (1)
   {
 
     o1 = 0;
@@ -3841,13 +3842,13 @@ lab:
     //for(i=1;i<4;i++)
     //zz[i]=i;
   
-    //zz[1]=2;
-    //zz[2]=3;
-    //zz[3]=4;
-    //zz[4]=5;
+    zz[1]=1;
+    zz[2]=2;
+    zz[3]=3;
+    zz[4]=4;
 printf("@b\n");
 //exit(1);
-
+/*
     j = 0;
     while (j < T)
     {
@@ -3860,7 +3861,7 @@ printf("@b\n");
         j++;
       }
     }
-
+*/
     for (i = 0; i < N; i++)
     {
       if (zz[i] > 0)
@@ -4006,7 +4007,7 @@ printf("@b\n");
     //復号化の本体
     r = pattarson(w, f);
     //エラー表示
-    elo(r);
+    //elo(r);
     //  exit(1);
     v = o2v(r);
 
@@ -4118,7 +4119,7 @@ printf("@b\n");
     }
 
     //wait();
-    exit(1);
+    //exit(1);
     //goto patta;
     //wait();
 
