@@ -59,7 +59,7 @@ unsigned short sy[K] = {0};
 //1x^6+14x^3+13x^1+14x^0+ =irreducible
 
 //Goppa多項式
-static unsigned short g[K + 1] = {1,0,7,13,6,2,0,12,10};
+static unsigned short g[K + 1] = {1, 0, 7, 13, 6, 2, 0, 12, 10};
 //{1, 0, 0, 0, 0, 10, 8, 10, 1};
 //1,0,0,14,12,3,0,15,3
 //{ 1, 0, 0, 0, 1, 0, 1 };
@@ -1758,13 +1758,12 @@ vec chen(OP f)
     {
       e.x[count] = x;
       count++;
-      printf("%d\n",x);
+      printf("%d\n", x);
     }
-
   }
-printpol(e);
-printf(" ==eee!\n");
-//exit(1);
+  printpol(e);
+  printf(" ==eee!\n");
+  //exit(1);
 
   return e;
 }
@@ -1841,129 +1840,114 @@ int ben_or(OP f)
   return 0;
 }
 
-
 //ユークリッドアルゴリズムによる復号関数
-OP
-decode (OP f, OP s)
+OP decode(OP f, OP s)
 {
   int i, j, k, count = 0;
-  OP r = { 0 }, w =
-  {
-  0}, e =
-  {
-  0}, l =
-  {
-  0};
+  OP r = {0}, w = {0}, e = {0}, l = {0};
   oterm t1, t2, d1, a, b;
-  vec x = { 0 };
+  vec x = {0};
   unsigned short d = 0;
-  OP h = { 0 };
-  EX hh = { 0 };
+  OP h = {0};
+  EX hh = {0};
 
-
-  printf ("in decode\n");
+  printf("in decode\n");
   //printpol (o2v (s));
-  printf ("\nsyn===========\n");
-  r = vx (f, s);
+  printf("\nsyn===========\n");
+  r = vx(f, s);
   //h=ogcd(f,s);
 
-  if (odeg ((r)) == 0)
-    {
-      printf ("baka12\n");
-      exit (1);
-    }
+  if (odeg((r)) == 0)
+  {
+    printf("baka12\n");
+    exit(1);
+  }
   k = 0;
   // exit(1);
-  x = chen (r);
+  x = chen(r);
   // exit(1);
 
-
-
   for (i = 0; i < T; i++)
+  {
+    // printf ("x[%d]=1\n", x.x[i]);
+    if (x.x[i] == 0)
+      k++;
+    if (k > 1)
     {
-      // printf ("x[%d]=1\n", x.x[i]);
-      if (x.x[i] == 0)
-	k++;
-      if (k > 1)
-	{
-	  printf ("baka0\n");
-	  printvec (o2v (f));
-	  for (i = 0; i < N; i++)
-	    printf ("%d,", zz[i]);
-	  exit (1);
-	  //return f;
-	}
+      printf("baka0\n");
+      printvec(o2v(f));
+      for (i = 0; i < N; i++)
+        printf("%d,", zz[i]);
+      exit(1);
+      //return f;
     }
+  }
   //exit(1);
 
   //  printf("\n");
 
-  printf ("あっ、でる！\n");
+  printf("あっ、でる！\n");
   //  exit(1);
 
-  if (odeg ((r)) < T)
-    {
-      //printpol (o2v (r));
-      printf ("baka5 deg(r)<T\n");
-      exit (1);
-    }
+  if (odeg((r)) < T)
+  {
+    //printpol (o2v (r));
+    printf("baka5 deg(r)<T\n");
+    exit(1);
+  }
 
-
-  w = bibun (x);
+  w = bibun(x);
   //exit(1);
   //  w=oterml(w,d1);
   //printpol (o2v (w));
-  printf ("@@@@@@@@@\n");
+  printf("@@@@@@@@@\n");
   //exit(1);
 
-  hh = xgcd (f, s);
+  hh = xgcd(f, s);
   //printpol (o2v (hh.d));
   //wait();
 
-
   //  exit(1);
-  t1 = LT (r);
+  t1 = LT(r);
 
   t2.a = t1.a;
   t2.n = 0;
 
-  if (odeg ((w)) == 0)
-    {
-      //printpol (o2v (w));
-    }
-  l = oterml (w, t2);
+  if (odeg((w)) == 0)
+  {
+    //printpol (o2v (w));
+  }
+  l = oterml(w, t2);
 
-  j = deg (x) + 1;
-  printf ("%d\n", j);
+  j = deg(x) + 1;
+  printf("%d\n", j);
 
   //    exit(1);
 
   for (i = 0; i < j; i++)
+  {
+    if (x.x[i] > 0)
     {
-      if (x.x[i] > 0)
-	{
-	  e.t[i].a =
-	    gf[mlt (fg[trace (hh.d, x.x[i])], oinv (trace (l, x.x[i])))];
-	  //e.t[i].a = gf[mlt (fg[trace (h, x.x[i])], oinv (trace (l, x.x[i])))];
-	  e.t[i].n = x.x[i];
-	}
+      e.t[i].a =
+          gf[mlt(fg[trace(hh.d, x.x[i])], oinv(trace(l, x.x[i])))];
+      //e.t[i].a = gf[mlt (fg[trace (h, x.x[i])], oinv (trace (l, x.x[i])))];
+      e.t[i].n = x.x[i];
     }
+  }
   //printpol (o2v (f));
-  printf (" f============\n");
+  printf(" f============\n");
   //printpol (o2v (l));
-  printf (" l============\n");
+  printf(" l============\n");
   //  exit(1);
 
-
   for (i = 0; i < T; i++)
-    if (gf[trace (h, x.x[i])] == 0)
-      printf ("h=0");
+    if (gf[trace(h, x.x[i])] == 0)
+      printf("h=0");
   //printf("\n");
   for (i = 0; i < T; i++)
-    if (gf[oinv (trace (l, x.x[i]))] == 0)
-      printf ("l=0\n");
+    if (gf[oinv(trace(l, x.x[i]))] == 0)
+      printf("l=0\n");
   //  printf("\n");
-
 
   return e;
 }
@@ -2093,7 +2077,6 @@ OP decode(OP f, OP s)
   return e;
 }
 */
-
 
 //配列の値を係数として多項式に設定する
 OP setpol(unsigned short f[], int n)
@@ -3330,7 +3313,7 @@ OP mkg()
   OP w = {0};
 
 aa:
-/*
+  /*
   do
   {
     fail = 0;
@@ -3392,9 +3375,9 @@ aa:
   } while (fail || j == 0);
 */
 
-//多項式を固定したい場合コメントアウトする。
+  //多項式を固定したい場合コメントアウトする。
   memset(ta, 0, sizeof(ta));
-  w=setpol(g,K+1);
+  w = setpol(g, K + 1);
   printpol(o2v(w));
   //printf(" =poly\n");
 
@@ -3508,7 +3491,7 @@ if(deg(o2v(r))<T){
          return -1;
          //exit(1);
          }
-      */ 
+      */
     if (r.t[i].a > 0 && i > 0) // == r.t[i].n)
     {
       printf("e=%d %d %s\n", r.t[i].a, r.t[i].n, "お");
@@ -3703,8 +3686,8 @@ unsigned short invP[N][N]=
   }
 */
 
-if(K>N)
-printf("configuration error! K is too big K\n");
+  if (K > N)
+    printf("configuration error! K is too big K\n");
 
 #ifdef SRAND
   srand(SRAND);
@@ -3846,7 +3829,7 @@ label:
   printsage(o2v(w));
   printf("\n");
   printf("sagemath で既約性を検査してください！\n");
-//exit(1);
+  //exit(1);
   //wait();
 
   //#pragma omp parallel for
@@ -3857,8 +3840,7 @@ label:
 
   printf("a@");
   //wait();
-//exit(1);
-
+  //exit(1);
 
   //keygen(g);
   /*
@@ -3893,7 +3875,7 @@ printf("\n");
     }
   while (i < 0);
 */
-//  unsigned short gen[N][K] = {0};
+  //  unsigned short gen[N][K] = {0};
 
 lab:
 
@@ -3961,7 +3943,7 @@ lab:
 
   //decode開始
   k = 0;
- while (1)
+  while (1)
   {
 
     o1 = 0;
@@ -3971,15 +3953,15 @@ lab:
     memset(zz, 0, sizeof(zz));
     //for(i=1;i<4;i++)
     //zz[i]=i;
-  
-    zz[0]=1;
-    zz[1]=2;
-    zz[2]=4;
-    zz[3]=8;
-printf("@b\n");
-//exit(1);
 
-/*
+    zz[0] = 1;
+    zz[1] = 2;
+    zz[2] = 4;
+    zz[3] = 8;
+    printf("@b\n");
+    //exit(1);
+
+    /*
     j = 0;
     while (j < T)
     {
@@ -3998,7 +3980,6 @@ printf("@b\n");
       if (zz[i] > 0)
         printf("l=%d %d\n", i, zz[i]);
     }
-   
 
     f = synd2(zz);
     //exit(1);
@@ -4033,12 +4014,12 @@ printf("@b\n");
     printf(" ==========synd\n");
 
     r = decode(w, f);
-    count=elo(r);
-    if(count<0){
+    count = elo(r);
+    if (count < 0)
+    {
       printf("baka-@\n");
       exit(1);
     }
-
 
     //exit(1);
     /*
