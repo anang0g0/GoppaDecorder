@@ -1676,63 +1676,7 @@ OP bibun(vec a)
   return l;
 }
 
-//多項式の形式的微分
-OP bibun_old(vec a)
-{
-  OP w[T * 2] = {0};
-  OP l = {0}, t = {
-                  0};
-  int i, j, n, id;
-  vec tmp = {0};
 
-  n = deg(a);
-  printf("n=%d\n", n);
-  if (n == 0)
-  {
-    printf("baka8\n");
-    //  exit(1);
-  }
-
-  //
-  for (i = 0; i < T; i++)
-  {
-    w[i].t[0].a = a.x[i];
-    w[i].t[0].n = 0;
-    w[i].t[1].a = 1;
-    w[i].t[1].n = 1;
-    ////printpol(o2v(w[i]));
-  }
-  //exit(1);
-
-  tmp.x[0] = 1;
-  //
-
-  //#pragma omp parallel for private(i,j)
-  for (i = 0; i < T; i++)
-  {
-    t = v2o(tmp);
-    //
-    for (j = 0; j < T; j++)
-    {
-      // #pragma omp critical
-      if (i != j)
-      {
-        t = omul(t, w[j]);
-      }
-    }
-
-    //printpol(o2v(t));
-    //
-    if (deg(o2v(t)) == 0)
-    {
-      printf("baka9\n");
-      // exit(1);
-    }
-    l = oadd(l, t);
-  }
-
-  return l;
-}
 
 //chen探索
 vec chen(OP f)
@@ -2933,7 +2877,7 @@ unsigned short dd[N][N] = {0};
 
 OP mkg()
 {
-  int i, j, k, fail, flg, l;
+  int i, j, k, fail, flg, l,count=0;
   OP w = {0};
 
 aa:
@@ -2975,7 +2919,7 @@ aa:
       i++;
       if(i>100)
       exit(1);
-      
+
       goto aa;
     }
     else
@@ -3000,6 +2944,11 @@ aa:
         break;
       }
     }
+count++;
+if(count>100){
+  printf("bakaunt\n");
+exit(1);
+}
 
   } while (fail || j == 0);
 
@@ -3369,122 +3318,6 @@ unsigned short invP[N][N]=
 
 label:
 
-  r1.t[0].a = 1;
-  r1.t[0].n = 0;
-  r1.t[1].a = 1;
-  r1.t[1].n = 1;
-  r1.t[3].a = 1;
-  r1.t[3].n = 3;
-
-  r2.t[0].a = 1;
-  r2.t[0].n = 0;
-  r2.t[2].a = 1;
-  r2.t[2].n = 2;
-  r2.t[3].a = 1;
-  r2.t[3].n = 3;
-  r2.t[4].a = 1;
-  r2.t[4].n = 4;
-
-  r3.t[0].a = 1;
-  r3.t[0].n = 0;
-  r3.t[1].a = 1;
-  r3.t[1].n = 1;
-  r3.t[3].a = 1;
-  r3.t[3].n = 3;
-  r3.t[4].a = 1;
-  r3.t[4].n = 4;
-  r3.t[5].a = 1;
-  r3.t[5].n = 5;
-  r3.t[6].a = 1;
-  r3.t[6].n = 6;
-
-  r4.t[0].a = 1;
-  r4.t[0].n = 0;
-  r4.t[2].a = 1;
-  r4.t[2].n = 2;
-  r4.t[6].a = 1;
-  r4.t[6].n = 6;
-
-  OP r5 = {0}, r6 = {0}, cd = {0}, sd = {0};
-  r5.t[0].a = 1;
-  r5.t[0].n = 0;
-  r5.t[3].a = 1;
-  r5.t[3].n = 3;
-  r5.t[5].a = 1;
-  r5.t[5].n = 5;
-
-  r6.t[0].a = 1;
-  r6.t[0].n = 0;
-  r6.t[4].a = 1;
-  r6.t[4].n = 4;
-
-  cd = omul(r1, r5);
-  sd = omul(r5, r4);
-  tmp = gcd(sd, cd);
-  printpol(o2v(tmp));
-  printf(" ==gcd\n");
-  //exit(1);
-  tmp = ogcd(cd, sd);
-  printpol(o2v(tmp));
-  printf(" ==ogcd\n");
-  //exit(1);
-
-  EX rs = {0};
-  rs = extgcd(cd, sd);
-  printpol(o2v(rs.d));
-  printf(" ==========extgcd\n");
-  //exit(1);
-
-  //printpol(o2v(gcd(r5,r1)));
-  //printf("==========gcd\n");
-  rs = extgcd(r4, r3);
-  printpol(o2v(rs.d));
-  printf("==========extgcd\n");
-  printpol(o2v(rs.v));
-  printf("==========tx gcd\n");
-  printpol(o2v(rs.u));
-  printf("==========ty gcd\n");
-
-  tmp = gcd(r4, r3);
-  printpol(o2v(tmp));
-  printf("==========gcd.v,h,u\n");
-  //exit(1);
-  tmp = gcd(r4, r1);
-  printpol(o2v(tmp));
-  printf("==========gcd.v,h,u\n");
-  tmp = gcd(r5, r4);
-  printpol(o2v(tmp));
-  printf("==========gcd.v,h,u\n");
-  tmp = gcd(r5, r3);
-  printpol(o2v(tmp));
-  printf("==========gcd.v,h,u\n");
-  tmp = gcd(cd, sd);
-  printpol(o2v(tmp));
-  printf("==========gcd.v,h,u\n");
-  tmp = gcd(r5, r1);
-  printpol(o2v(tmp));
-  printf("==========agaaa\n");
-
-  //    OP gcd;
-  OP xx = {0}, yy = {0};
-  printf(" a= ");
-  printpol(o2v(r5));
-  printf("\n");
-  printf(" b= ");
-  printpol(o2v(r4));
-  printf("\n");
-
-  tmp = gcd(r5, r4);
-  printpol(o2v(tmp));
-  printf("\n");
-
-  // exit(1);
-
-  //1x^6+11x^4+14x^3+7x^2+6x^0+ ==========goppa
-  //15x^5+6x^4+10x^3+11x^2+6x^1+14x^0+ ==========synd
-  //0,0,0,0,4,0,0,0,8,0,0,0,12,0,0,0,
-  //4x^5+12x^4+15x^3+11x^2+10x^0+
-  //0,0,0,0,0,5,0,0,8,0,0,0,0,13,0,0
 
   van();
 
