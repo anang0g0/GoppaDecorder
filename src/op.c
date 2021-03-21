@@ -55,9 +55,11 @@ extern void makeS();
 //シンドロームのコピー
 unsigned short sy[K] = {0};
 
-//Goppa多項式
-static unsigned short g[K + 1] = {1, 0, 0, 0, 0, 10, 8, 10, 1};
+//1x^6+14x^3+13x^1+14x^0+ =irreducible
 
+//Goppa多項式
+static unsigned short g[K + 1] = {1,0,0,14,0,13,14};
+//{1, 0, 0, 0, 0, 10, 8, 10, 1};
 //1,0,0,14,12,3,0,15,3
 //{ 1, 0, 0, 0, 1, 0, 1 };
 
@@ -3263,12 +3265,12 @@ aa:
     }
    // exit(1);
 
-    /* 
+    /*
          //偶数項だけだとpattarson復号に失敗する
          w = setpol (g, K + 1);
          oprintpol (w);
          j=1;
-       */
+      */ 
 
     //多項式の値が0でないことを確認
     for (i = 0; i < N; i++)
@@ -3284,9 +3286,10 @@ aa:
 
   } while (fail || j == 0);
 
+
   memset(ta, 0, sizeof(ta));
-  //w=setpol(ag,K+1);
-  //printpol(o2v(w));
+  w=setpol(g,K+1);
+  printpol(o2v(w));
   //printf(" =poly\n");
 
   for (i = 0; i < N; i++)
@@ -3393,13 +3396,13 @@ if(deg(o2v(r))<T){
   */
   for (i = 0; i < T; i++)
   {
-    /*
+    
          if(i>0 && r.t[i].n==0){
          printf("baka-z\n");
          //return -1;
          exit(1);
          }
-       */
+       
     if (r.t[i].a > 0 && i > 0) // == r.t[i].n)
     {
       printf("e=%d %d %s\n", r.t[i].a, r.t[i].n, "お");
@@ -3595,7 +3598,7 @@ unsigned short invP[N][N]=
 */
 
 if(K>N)
-printf("configuration error! too big K\n");
+printf("configuration error! K is too big K\n");
 
 #ifdef SRAND
   srand(SRAND);
@@ -3731,7 +3734,7 @@ label:
   printf("\nすげ、オレもうイキそ・・・\n");
 
   w = mkg();
-
+  //w=setpol(g,K+1);
   oprintpol(w);
   printf("\n");
   printsage(o2v(w));
@@ -3862,17 +3865,17 @@ lab:
     memset(zz, 0, sizeof(zz));
     //for(i=1;i<4;i++)
     //zz[i]=i;
-
-    //zz[4]=4;
-    //zz[8]=8;
-    //zz[12]=12;
+  
+    //zz[1]=1;
+    //zz[2]=2;
+    //zz[3]=4;
 printf("@b\n");
 //exit(1);
 
     j = 0;
     while (j < T)
     {
-      l = xor128() % D;
+      l = xor128() % N;
       //k=rand()%D;
       //printf("l=%d\n",l);
       if (0 == zz[l] && l > 0)
@@ -3922,7 +3925,14 @@ printf("@b\n");
     printf(" ==========synd\n");
 
     r = decode(w, f);
-    elo(r);
+    count=elo(r);
+    if(count<0){
+      printf("baka-@\n");
+      exit(1);
+    }
+
+
+    //exit(1);
     /*
       for (i = 0; i < T; i++)
 	{
@@ -3979,7 +3989,7 @@ printf("@b\n");
     printf("err=%dっ！！\n", count);
 
     //wait();
-    //exit(1);
+    exit(1);
     //goto lab;
 
   patta:
