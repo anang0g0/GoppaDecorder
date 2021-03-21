@@ -1967,121 +1967,6 @@ decode (OP f, OP s)
 }
 
 
-/*
-//ユークリッドアルゴリズムによる復号関数
-OP decode(OP f, OP s)
-{
-  int i, j, k, count = 0;
-  OP r = {0}, w = {0}, e = {0}, l = {0};
-  oterm t1, t2, d1, a, b;
-  vec x = {0};
-  unsigned short d = 0;
-  OP h = {0};
-  EX hh = {0};
-
-  printf("in decode\n");
-  //printpol (o2v (s));
-  printf("\nsyn===========\n");
-  r = vx(f, s);
-  //h=ogcd(f,s);
-
-  if (odeg((r)) == 0)
-  {
-    printf("baka12\n");
-    exit(1);
-  }
-  k = 0;
-  // exit(1);
-  x = chen(r);
-  // exit(1);
-
-  for (i = 0; i < T; i++)
-  {
-    // printf ("x[%d]=1\n", x.x[i]);
-    if (x.x[i] == 0)
-      k++;
-    if (k > 1)
-    {
-      printf("baka0\n");
-      printvec(o2v(f));
-      for (i = 0; i < N; i++)
-        printf("%d,", zz[i]);
-      exit(1);
-      //return f;
-    }
-  }
-  //exit(1);
-
-  //  printf("\n");
-
-  printf("あっ、でる！\n");
-  //  exit(1);
-
-  if (odeg((r)) < T)
-  {
-    //printpol (o2v (r));
-    printf("baka5 deg(r)<T\n");
-    exit(1);
-  }
-
-  w = bibun(x);
-  //exit(1);
-  //  w=oterml(w,d1);
-  //printpol (o2v (w));
-  printf("@@@@@@@@@\n");
-  //exit(1);
-
-  hh = xgcd(f, s);
-  h=ogcd(f,s);
-  //printpol (o2v (hh.d));
-  //wait();
-
-  //  exit(1);
-  t1 = LT(r);
-
-  t2.a = t1.a;
-  t2.n = 0;
-
-  if (odeg((w)) == 0)
-  {
-    //printpol (o2v (w));
-  }
-  l = oterml(w, t2);
-
-  j = deg(x) + 1;
-  printf("%d\n", j);
-
-  //    exit(1);
-
-  for (i = 0; i < j; i++)
-  {
-    if (x.x[i] > 0)
-    {
-      //e.t[i].a = gf[mlt(fg[trace(hh.d, x.x[i])], oinv(trace(l, x.x[i])))];
-      e.t[i].a = gf[mlt (fg[trace (h, x.x[i])], oinv (trace (l, x.x[i])))];
-      e.t[i].n = x.x[i];
-    }
-  }
-  //printpol (o2v (f));
-  printf(" f============\n");
-  //printpol (o2v (l));
-  printf(" l============\n");
-  //  exit(1);
-
-  for (i = 0; i < T; i++)
-    if (gf[trace(h, x.x[i])] == 0)
-      printf("h=0");
-  //printf("\n");
-  for (i = 0; i < T; i++)
-    if (gf[oinv(trace(l, x.x[i]))] == 0)
-      printf("l=0\n");
-  //  printf("\n");
-
-  return e;
-}
-*/
-
-
 
 //配列の値を係数として多項式に設定する
 OP setpol(unsigned short f[], int n)
@@ -2099,195 +1984,7 @@ OP setpol(unsigned short f[], int n)
   return g;
 }
 
-unsigned short tr[N] = {0};
-unsigned short ta[N] = {0};
 
-void det2(int i, unsigned short g[])
-{
-  OP f[16] = {0}, h[16] = {0}, w, u[16] = {0};
-  unsigned short cc[K + 1] = {0}, d[2] = {
-                                      0};
-  int j, a, b, k, t1, l = 0, flg = 0, id;
-  oterm t[16] = {0};
-  vec e[16] = {0};
-  OP ww[16] = {0};
-
-  memcpy(cc, g, sizeof(cc));
-
-  k = cc[K];
-  w = setpol(g, K + 1);
-
-  //  omp_set_num_threads(8);
-  id = omp_get_thread_num();
-
-  // h[id] = x+i
-  if (i == 0)
-  {
-    h[id].t[0].a = 1;
-    h[id].t[0].n = 1;
-  }
-  else
-  {
-    h[id].t[0].a = i;
-    h[id].t[1].a = 1;
-    h[id].t[1].n = 1;
-  }
-
-  t[id].n = 0;
-
-  f[id] = setpol(cc, K + 1);
-
-  cc[K] = k ^ ta[i];
-  //tr[i];
-  f[id] = setpol(cc, K + 1);
-
-  //f.t[0].a=k^ta[i]; //cc[K];
-
-  ww[id] = odiv(f[id], h[id]);
-
-  //b = oinv (a);
-  t[id].a = gf[tr[i]];
-  u[id] = oterml(ww[id], t[id]);
-  e[id] = o2v(u[id]);
-
-  memcpy(mat[i], e[id].x, sizeof(mat[i]));
-}
-
-//パリティチェック行列を生成する
-int deta(unsigned short g[])
-{
-  int i, j, a, b, k, t1, l = 0, flg = 0, id;
-
-  //
-  //
-#pragma omp parallel num_threads(8)
-  {
-#pragma omp for schedule(static)
-    for (i = 0; i < D; i++)
-    {
-      det2(i, g);
-    }
-  }
-  for (j = 0; j < D; j++)
-  {
-    flg = 0;
-    for (i = 0; i < K; i++)
-    {
-      printf("%d,", mat[i][j]);
-      if (mat[j][i] > 0)
-        flg = 1;
-    }
-    printf("\n");
-    if (flg == 0)
-    {
-      printf("0 is %d\n", j);
-      //exit(1);
-      return -1;
-    }
-  }
-  printf("end2\n");
-  // exit(1);
-  return 0;
-}
-
-unsigned short *base;
-
-//パリティチェック行列を生成する
-void det(unsigned short g[])
-{
-  OP f, h = {0}, w, u;
-  unsigned short cc[K + 1] = {0}, d[2] = {0}, pp[20][K] = {0};
-  int i, j, a, b, k, t1, l = 0, flg = 0, count = 0;
-  oterm t = {0};
-  vec e;
-
-  memcpy(cc, g, sizeof(cc));
-  /*
-     for (i = 0; i < K + 1; i++)
-     {
-     cc[i] = g[i];
-     printf ("%d,", g[i]);
-     }
-   */
-  //printf ("\n");
-  //  exit(1);
-  //    cc[i]=g[i];
-  k = cc[K];
-  w = setpol(g, K + 1);
-
-  OP ww = {0};
-
-  h.t[0].n = 0;
-  h.t[1].a = 1;
-  h.t[1].n = 1;
-  t.n = 0;
-  t1 = 2 * T;
-  // #pragma omp parallel for
-  /*
-     unsigned short tr[N];
-     unsigned short ta[N];
-     for(i=0;i<N;i++){
-     ta[i] = trace (w, i);
-     if(ta[i]==0){
-     printf("%d %d\n",i,ta[i]);
-     exit(1);
-     }   
-     tr[i] = oinv (ta[i]);    
-     }
-   */
-
-  //
-  f = setpol(cc, K + 1);
-
-  for (i = 0; i < D; i++)
-  {
-
-    a = trace(w, i);
-    // cc[K] = k;
-
-    cc[K] = k ^ a;
-    //tr[i];
-    f = setpol(cc, K + 1);
-
-    //f.t[0].a=k^ta[i]; //cc[K];
-    h.t[0].a = i;
-
-    ww = odiv(f, h);
-
-    b = oinv(a);
-    t.a = gf[b];
-
-    u = oterml(ww, t);
-    e = o2v(u);
-
-    // #pragma omp parallel for
-    //for (j = 0; j < K; j++)
-    //mat[i][j]= e.x[j];
-    memcpy(mat[i], e.x, sizeof(mat[i]));
-  }
-
-  for (j = 0; j < D; j++)
-  {
-    flg = 0;
-    for (i = 0; i < K; i++)
-    {
-      printf("%d,", mat[i][j]);
-      if (mat[j][i] > 0)
-        flg = 1;
-    }
-    printf("\n");
-    if (flg == 0)
-    {
-      printf("0 is %d\n", j);
-      //exit(1);
-    }
-  }
-  //exit(1);
-}
-
-void detc(unsigned short g[])
-{
-}
 
 //バイナリ型パリティチェック行列を生成する
 void bdet()
@@ -2396,50 +2093,6 @@ void Pgen()
   fclose(fp);
 }
 
-//鍵生成
-void key2(unsigned short g[])
-{
-  FILE *fp;
-  unsigned short dd[K] = {0};
-  int i, j, k;
-
-  printf("鍵を生成中です。４分程かかります。\n");
-  fp = fopen("H.key", "wb");
-  i = 0;
-  do
-  {
-    i = deta(g);
-  } while (i == -1);
-
-  //exit(1);
-  for (i = 0; i < N; i++)
-  {
-    for (j = 0; j < K; j++)
-      dd[j] = mat[i][j];
-    fwrite(dd, 2, K, fp);
-  }
-  fclose(fp);
-  fp = fopen("sk.key", "wb");
-  fwrite(g, 2, K + 1, fp);
-  fclose(fp);
-}
-
-//すべての鍵を生成する
-void keygen(unsigned short *g)
-{
-  int i;
-  FILE *fp;
-
-  key2(g);
-  printf("end of ky2\n");
-  makeS();
-  printf("end of S\n");
-  bdet();
-  printf("end of bdet\n");
-  Pgen();
-  printf("end of Pgen\n");
-  pubkeygen();
-}
 
 //ハッシュ１６進表示
 static void
@@ -3028,6 +2681,7 @@ void decrypt(OP w)
   return;
 }
 
+
 OP synd(unsigned short zz[])
 {
   unsigned short syn[K] = {0}, s = 0;
@@ -3035,44 +2689,6 @@ OP synd(unsigned short zz[])
   OP f = {0};
 
   printf("in synd\n");
-
-  //  #pragma omp parallel for        //num_threads(8)
-  for (i = 0; i < K; i++)
-  {
-    syn[i] = 0;
-    s = 0;
-    //#pragma omp parallel num_threads(8)
-    for (j = 0; j < M; j++)
-    {
-      syn[i] ^= gf[mlt(fg[zz[j]], fg[mat[j][i]])];
-    }
-    sy[i] = syn[i]; //=s;
-    //printf ("syn%d,", syn[i]);
-  }
-  //printf ("\n");
-
-  for (int j = 0; j < K / 2; j++)
-  {
-    t1 = syn[j];
-    syn[j] = syn[K - j - 1];
-    syn[K - j - 1] = t1;
-  }
-
-  f = setpol(syn, K);
-  //printpol (o2v (f));
-  //printf (" syn=============\n");
-  //  exit(1);
-
-  return f;
-}
-
-OP synd2(unsigned short zz[])
-{
-  unsigned short syn[K] = {0}, s = 0;
-  int i, j, t1;
-  OP f = {0};
-
-  printf("in synd2\n");
 
   //  #pragma omp parallel for        //num_threads(8)
   for (i = 0; i < K; i++)
@@ -3108,7 +2724,7 @@ void test(OP w, unsigned short zz[])
   OP f = {0};
   FILE *fp;
 
-  fp = fopen("aes.key", "rb");
+  //fp = fopen("aes.key", "rb");
   /*
      static char base64[] = {
      'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
@@ -3161,6 +2777,7 @@ void test(OP w, unsigned short zz[])
   sha3_Update(&c, (char *)buf, strlen(buf));
   hash = sha3_Finalize(&c);
 }
+
 
 /*
 void trap(OP w,OP f){
@@ -3310,6 +2927,8 @@ int isquad(OP w)
   return -1;
 }
 
+unsigned short ta[N]={0};
+unsigned short tr[N]={0};
 unsigned short dd[N][N] = {0};
 
 OP mkg()
@@ -3318,7 +2937,7 @@ OP mkg()
   OP w = {0};
 
 aa:
-  /*
+  
   do
   {
     fail = 0;
@@ -3378,9 +2997,10 @@ aa:
     }
 
   } while (fail || j == 0);
-*/
 
-  //多項式を固定したい場合コメントアウトする。
+
+  //多項式を固定したい場合、有効にする。
+  /*
   memset(ta, 0, sizeof(ta));
   w = setpol(g, K + 1);
   printpol(o2v(w));
@@ -3396,6 +3016,7 @@ aa:
       break;
     }
   }
+*/
 
   ogt();
   memset(mat, 0, sizeof(mat));
@@ -3460,22 +3081,61 @@ aa:
     printf("\n");
   }
   printf("\n");
-  wait();
+  //wait();
 
-  /*
-  //パリティチェックを生成する。
-  //パリティチェックに0の列があったら、なくなるまでやり直す。
-        //w=mkg();
-      i = deta (g);
-  
-if (i < 0);{
-printf("i=%d\n",i);
-wait();
-}
-*/
 
   return w;
 }
+
+
+
+//鍵生成
+void key2(unsigned short g[])
+{
+  FILE *fp;
+  unsigned short dd[K] = {0};
+  int i, j, k;
+
+  printf("鍵を生成中です。４分程かかります。\n");
+  fp = fopen("H.key", "wb");
+  i = 0;
+
+     mkg();
+
+
+  //exit(1);
+  for (i = 0; i < N; i++)
+  {
+    for (j = 0; j < K; j++)
+      dd[j] = mat[i][j];
+    fwrite(dd, 2, K, fp);
+  }
+  fclose(fp);
+  fp = fopen("sk.key", "wb");
+  fwrite(g, 2, K + 1, fp);
+  fclose(fp);
+}
+
+
+//すべての鍵を生成する
+void keygen(unsigned short *g)
+{
+  int i;
+  FILE *fp;
+
+  key2(g);
+  printf("end of ky2\n");
+  makeS();
+  printf("end of S\n");
+  bdet();
+  printf("end of bdet\n");
+  Pgen();
+  printf("end of Pgen\n");
+  pubkeygen();
+}
+
+
+
 
 int elo(OP r)
 {
@@ -3836,7 +3496,7 @@ label:
   printf("sagemath で既約性を検査してください！\n");
   //exit(1);
   //wait();
-
+/*
   //#pragma omp parallel for
   for (i = 0; i < N; i++)
   {
@@ -3846,7 +3506,7 @@ label:
   printf("a@");
   //wait();
   //exit(1);
-
+*/
   //keygen(g);
   /*
 OP qq={0};
@@ -3959,7 +3619,7 @@ lab:
     //for(i=1;i<4;i++)
     //zz[i]=i;
 
-    zz[0] = 1;
+    zz[0] = 9;
     zz[2] = 2;
     zz[4] = 4;
     zz[8] = 8;
@@ -3986,7 +3646,7 @@ lab:
         printf("l=%d %d\n", i, zz[i]);
     }
 
-    f = synd2(zz);
+    f = synd(zz);
     //exit(1);
     /*      
          f=conv(f);
@@ -4083,7 +3743,7 @@ lab:
     printf("err=%dっ！！\n", count);
 
     //wait();
-    exit(1);
+    //exit(1);
     //goto lab;
 
   patta:
@@ -4099,7 +3759,7 @@ lab:
     {
       l = xor128() % D;
       //printf ("l=%d\n", l);
-      if (0 == z1[l])
+      if (0 == z1[l] && l>0)
       {
         z1[l] = 1;
         printf("l=%d\n", l);
@@ -4112,9 +3772,10 @@ lab:
     //z1[i]=1;
 
     //encryotion
-    //test (w, z1);
+    test (w, z1);
+  //exit(1);
 
-    f = synd2(z1);
+    f = synd(z1);
 
     //バグトラップのためのコード（省略）
     //trap(w,f);
@@ -4237,10 +3898,10 @@ lab:
 
     //wait();
     //exit(1);
-    //goto patta;
+    goto label;
     //wait();
 
-    //break;
+    break;
   }
 
   return 0;
