@@ -1840,6 +1840,7 @@ int ben_or(OP f)
   return 0;
 }
 
+
 //ユークリッドアルゴリズムによる復号関数
 OP decode(OP f, OP s)
 {
@@ -1904,6 +1905,7 @@ OP decode(OP f, OP s)
   //exit(1);
 
   hh = xgcd(f, s);
+  h=ogcd(f,s);
   //printpol (o2v (hh.d));
   //wait();
 
@@ -1928,9 +1930,9 @@ OP decode(OP f, OP s)
   {
     if (x.x[i] > 0)
     {
-      e.t[i].a =
-          gf[mlt(fg[trace(hh.d, x.x[i])], oinv(trace(l, x.x[i])))];
-      //e.t[i].a = gf[mlt (fg[trace (h, x.x[i])], oinv (trace (l, x.x[i])))];
+      //e.t[i].a =
+          //gf[mlt(fg[trace(hh.d, x.x[i])], oinv(trace(l, x.x[i])))];
+      e.t[i].a = gf[mlt (fg[trace (h, x.x[i])], oinv (trace (l, x.x[i])))];
       e.t[i].n = x.x[i];
     }
   }
@@ -1952,131 +1954,8 @@ OP decode(OP f, OP s)
   return e;
 }
 
-/*
-//ユークリッドアルゴリズムによる復号関数
-OP decode(OP f, OP s)
-{
-  int i, j, k, count = 0;
-  OP r = {0}, w = {0}, e = {0}, l = {0};
-  oterm t1, t2, d1, a, b;
-  vec x = {0};
-  unsigned short d = 0;
-  OP h = {0};
-  EX hh = {0};
 
-  printf("in decode\n");
-  //printpol (o2v (s));
-  printf("\nsyn===========\n");
-  r = vx(f, s);
-  //h=ogcd(f,s);
-  //  exit(1);
 
-  if (odeg((r)) == 0)
-  {
-    printf("baka12\n");
-    exit(1);
-  }
-  k = 0;
-  //exit(1);
-  x = chen(r);
-  //exit(1);
-
-  for (i = 0; i < T; i++)
-  {
-    printf("x[%d]=1\n", x.x[i]);
-    if (x.x[i] == 0)
-      k++;
-    if (k > 1)
-    {
-      printf("baka0\n");
-
-      printvec(o2v(f));
-      for (i = 0; i < M; i++)
-        printf("%d,", zz[i]);
-      exit(1);
-      //return f;
-    }
-  }
-  //exit(1);
-
-  //  printf("\n");
-
-  printf("あっ、でる！\n");
-  //  exit(1);
-  r = conv(r);
-  if (deg(o2v(r)) < T)
-  {
-    //printpol (o2v (r));
-    printf("baka5 deg(r)<T\n");
-    exit(1);
-  }
-
-  w = bibun(x);
-  //exit(1);
-  //  w=oterml(w,d1);
-  printpol(o2v(w));
-  printf("@@@@@@@@@\n");
-  //exit(1);
-
-  h = ogcd(f, s);
-  //printpol (o2v (hh.d));
-  //wait();
-
-  //  exit(1);
-  t1 = LT(r);
-
-  t2.a = t1.a;
-  t2.n = 0;
-
-  if (odeg((w)) == 0)
-  {
-    //printpol (o2v (w));
-  }
-  l = oterml(w, t2);
-
-  j = deg(x) + 1;
-  printf("%d\n", j);
-
-  //    exit(1);
-  //  for(j=1;j<T;j++){
-
-  for (i = 0; i < T; i++)
-  {
-    if (x.x[i] >= 0)
-    {
-      e.t[i].a =
-          gf[mlt(fg[trace(h, x.x[i])], oinv(trace(l, x.x[i])))];
-      e.t[i].n = x.x[i];
-    }
-    if (e.t[i].a != e.t[i].n)
-      break;
-  }
-  //}
-  printpol(o2v(h));
-  printf(" h============\n");
-  printpol(o2v(l));
-  printf(" l============\n");
-  printpol(o2v(hh.v));
-  printf(" hh.v============\n");
-  printpol(o2v(hh.u));
-  printf(" hh.u============\n");
-  printpol(o2v(hh.d));
-  printf(" hh.d============\n");
-
-  //  exit(1);
-
-  for (i = 0; i < T; i++)
-    if (gf[trace(h, x.x[i])] == 0)
-      printf("h=0");
-  //printf("\n");
-  for (i = 0; i < T; i++)
-    if (gf[oinv(trace(l, x.x[i]))] == 0)
-      printf("l=0\n");
-  //  printf("\n");
-
-  return e;
-}
-*/
 
 //配列の値を係数として多項式に設定する
 OP setpol(unsigned short f[], int n)
@@ -3954,10 +3833,10 @@ lab:
     //for(i=1;i<4;i++)
     //zz[i]=i;
 
-    zz[0] = 1;
-    zz[1] = 2;
-    zz[2] = 4;
-    zz[3] = 8;
+    zz[0] = 7;
+    zz[2] = 2;
+    zz[3] = 4;
+    zz[4] = 8;
     printf("@b\n");
     //exit(1);
 
