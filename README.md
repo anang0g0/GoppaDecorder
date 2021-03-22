@@ -51,6 +51,16 @@ Coding Theory-Based Cryptography:McEliece Cryptosystems in Sage
 Testing Irreducibility of Trinomials over GF(2) 
 https://digitalcommons.iwu.edu/cgi/viewcontent.cgi?article=1013&context=math_honproj
 
+# 20210322
+
+取り敢えず10,000回とか回しても止まらないんで安定してるのかなとは思うけどどうなんでしょう？
+１０００回回すように出来ているので、ベンチマークの代わりに使ってみてくださいｗ。
+
+ちなみに私の環境ではgcc-10が一番早くて３分１１秒位でした。
+  
+ time ./a.out |grep irreducible
+ 
+ で実行。
 
 # 20210321
 
