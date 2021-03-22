@@ -61,6 +61,8 @@ https://digitalcommons.iwu.edu/cgi/viewcontent.cgi?article=1013&context=math_hon
  time ./a.out |grep irreducible
  
 で実行。
+中身は、完全にランダムではない（予めふるいにかけてある）ものの、任意の多項式を生成して、
+それが既約かどうかを判定して出力するという動作を１０００回計算します。
 こうして部分的に出力するだけでも、止まってないのがわかりやすいのでそうしてます。
 
 すべてを出力すると、Ubuntu20.04が不安定になること（バグ？）があるので出力は控えめに。
