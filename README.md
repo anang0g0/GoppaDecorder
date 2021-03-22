@@ -51,6 +51,23 @@ Coding Theory-Based Cryptography:McEliece Cryptosystems in Sage
 Testing Irreducibility of Trinomials over GF(2) 
 https://digitalcommons.iwu.edu/cgi/viewcontent.cgi?article=1013&context=math_honproj
 
+# 20210322
+
+取り敢えず10,000回とか回しても止まらないんで安定してるのかなとは思うけどどうなんでしょう？
+１０００回回すように出来ているので、ベンチマークの代わりに使ってみてくださいｗ。
+
+ちなみに私の環境ではgcc-10が一番早くて３分１１秒位でした。（clangは４分３３秒。本当にllvmを使っているのだろうかｗ）
+  
+ time ./a.out |grep irreducible
+ 
+で実行。
+中身は、完全にランダムではない（予めふるいにかけてある）ものの、任意の多項式を生成して、
+それが既約かどうかを判定して出力するという動作を１０００回計算します。
+こうして部分的に出力するだけでも、止まってないのがわかりやすいのでそうしてます。
+
+すべてを出力すると、Ubuntu20.04が不安定になること（バグ？）があるので出力は控えめに。
+ちなみにDebianでも画面がフリーズしたようになります。
+でも出力を制限するときちんと動いているので、アルゴリズムのバグではなさそうなんですがどうなんでしょう・・・。
 
 # 20210321
 
