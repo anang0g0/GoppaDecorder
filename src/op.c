@@ -3670,61 +3670,7 @@ lab:
       exit(1);
     }
 
-    //exit(1);
-    /*
-      for (i = 0; i < T; i++)
-	{
-	  if (r.t[i].a > 0 && i > 0)	// == r.t[i].n)
-	    {
-	      printf ("e=%d %d %s\n", r.t[i].a, r.t[i].n, "お");
-	      count++;
-	    }
-	  if (i == 0)
-	    {
-	      printf ("\ne=%d %d %s\n", r.t[i].a, r.t[i].n, "う");
-	      count++;
-	    }
-	  if (r.t[i].a != r.t[i].n)
-	    {
-	      printf ("baka @ T\n");
-	      printpol (o2v (w));
-	      printf (" ==========goppa\n");
-	      printsage (o2v (w));
-	      printf (" ==========sage\n");
-	      printsage (o2v (f));
-	      printf (" =========syn\n");
-	      printpol (o2v (f));
-	      printf (" ==========synd\n");
-	      for (i = 0; i < D; i++)
-		printf ("%d %d\n", i, zz[i]);
-	      printf ("\n");
-	      int ii;
-	      for (ii = 0; ii < T; ii++)
-		printf ("e=%d %d %s\n", r.t[ii].a, r.t[ii].n, "お");
-	      A2++;
-	      //wait();
-	      //exit (1);
-	      exit (1);
-	    }
-	}
-      if (count != T)
-	{
-	  printf ("error pattarn too few %d\n", count);
-	  printpol (o2v (w));
-	  printf (" ==========goppa\n");
-	  printsage (o2v (w));
-	  printf (" ==========sage\n");
-	  printsage (o2v (f));
-	  printf (" =========syn\n");
-	  printpol (o2v (f));
-	  printf (" ==========synd\n");
-	  for (i = 0; i < D; i++)
-	    printf ("%d,", zz[i]);
-	  printf ("\n");
-	  exit (1);
-	}
-*/
-    printf("err=%dっ！！\n", count);
+        printf("err=%dっ！！\n", count);
 
     //wait();
     //exit(1);
