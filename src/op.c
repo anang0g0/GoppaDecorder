@@ -1297,7 +1297,6 @@ EX xgcd(OP f, OP g)
   //for (i = 0; i < T * 2; i++)
   {
 
-
     if ((odeg((g)) == 0 && LT(g).a == 0) || odeg((f)) == 0)
     {
       flg = 1;
@@ -1904,7 +1903,7 @@ OP decode(OP f, OP s)
   //exit(1);
 
   //hh = xgcd(f, s);
-  h=ogcd(f,s);
+  h = ogcd(f, s);
   //printpol(o2v(hh.d));
   printpol(o2v(h));
   //wait();
@@ -1931,8 +1930,8 @@ OP decode(OP f, OP s)
     //if (x.x[i] > 0)
     {
       //e.t[i].a =
-        //  gf[mlt(fg[trace(hh.d, x.x[i])], oinv(trace(l, x.x[i])))];
-      e.t[i].a = gf[mlt (fg[trace (h, x.x[i])], oinv (trace (l, x.x[i])))];
+      //  gf[mlt(fg[trace(hh.d, x.x[i])], oinv(trace(l, x.x[i])))];
+      e.t[i].a = gf[mlt(fg[trace(h, x.x[i])], oinv(trace(l, x.x[i])))];
       e.t[i].n = x.x[i];
     }
   }
@@ -3031,7 +3030,7 @@ OP mkpol()
       printf("erro=%d\n", ii);
       exit(1);
     }
-    
+
     for (i = 0; i < K; i++)
     {
       if (g[K - 1] > 0)
@@ -3039,7 +3038,7 @@ OP mkpol()
       if (i % 2 == 1 && g[i] > 0 && i < K)
         k++;
     }
-    
+
     //偶数項だけにならないようにする
     if ((k > 0 && flg == 0) || (k > 1 && flg == 1))
     //if(k>0)
@@ -3085,7 +3084,7 @@ aa:
     w = mkpol();
     l = ben_or(w);
     printf("irr=%d\n", l);
-    if (ii > 100)
+    if (ii > 300)
     {
       printf("too many error\n");
       exit(1);
@@ -3252,13 +3251,14 @@ int elo(OP r)
 
   for (i = 0; i < T; i++)
   {
-    
-         if(i>0 && r.t[i].n==0){
-         printf("err baka-z\n");
-         //return -1;
-         exit(1);
-         }
-      
+
+    if (i > 0 && r.t[i].n == 0)
+    {
+      printf("err baka-z\n");
+      //return -1;
+      exit(1);
+    }
+
     if (r.t[i].a > 0 && i > 0) // == r.t[i].n)
     {
       printf("err=%d %d %s\n", r.t[i].a, r.t[i].n, "お");
