@@ -8,12 +8,13 @@
 //を表す。ここではDは符号長にしている。
 #define N 8192  // (^^;)?
 #define M 8192  //有限体の元の数
-#define K (256) //符号の次元
+#define K (12) //符号の次元
 #define DEG (K * 2)
 #define T (K / 2) //エラーの数
 #define E (13)    //拡大体のビット数
 #define D (8192)  //符号長（短縮符号）
 #define F E *K    //2040
+#define mm 5      //GF(16)=GF(2^m)=GF(2^4): mm=4+1
 
 unsigned char tmp[E * K][N] = {0};
 unsigned char pub[E * K][N] = {0};
