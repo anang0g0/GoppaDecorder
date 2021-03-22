@@ -60,7 +60,11 @@ https://digitalcommons.iwu.edu/cgi/viewcontent.cgi?article=1013&context=math_hon
   
  time ./a.out |grep irreducible
  
- で実行。
+で実行。
+こうして部分的に出力するだけでも、止まってないのがわかりやすいのでそうしてます。
+
+すべてを出力すると、Ubuntu20.04が不安定になること（バグ？）があるので出力は控えめに。
+ちなみにDebianでは安定してました。
 
 # 20210321
 
