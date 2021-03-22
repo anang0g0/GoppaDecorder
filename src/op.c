@@ -1297,6 +1297,7 @@ EX xgcd(OP f, OP g)
   //for (i = 0; i < T * 2; i++)
   {
 
+
     if ((odeg((g)) == 0 && LT(g).a == 0) || odeg((f)) == 0)
     {
       flg = 1;
@@ -1902,8 +1903,10 @@ OP decode(OP f, OP s)
   printf("@@@@@@@@@\n");
   //exit(1);
 
-  hh = xgcd(f, s);
-  printpol(o2v(hh.d));
+  //hh = xgcd(f, s);
+  h=ogcd(f,s);
+  //printpol(o2v(hh.d));
+  printpol(o2v(h));
   //wait();
 
   //  exit(1);
@@ -1927,9 +1930,9 @@ OP decode(OP f, OP s)
   {
     //if (x.x[i] > 0)
     {
-      e.t[i].a =
-          gf[mlt(fg[trace(hh.d, x.x[i])], oinv(trace(l, x.x[i])))];
-      //e.t[i].a = gf[mlt (fg[trace (h, x.x[i])], oinv (trace (l, x.x[i])))];
+      //e.t[i].a =
+        //  gf[mlt(fg[trace(hh.d, x.x[i])], oinv(trace(l, x.x[i])))];
+      e.t[i].a = gf[mlt (fg[trace (h, x.x[i])], oinv (trace (l, x.x[i])))];
       e.t[i].n = x.x[i];
     }
   }
@@ -2173,23 +2176,6 @@ void Pgen()
   fp = fopen("inv_P.key", "wb");
   fwrite(inv_P, 2, N, fp);
   fclose(fp);
-}
-
-//すべての鍵を生成する
-void keygen(unsigned short *g)
-{
-  int i;
-  FILE *fp;
-
-  key2(g);
-  printf("end of ky2\n");
-  makeS();
-  printf("end of S\n");
-  bdet();
-  printf("end of bdet\n");
-  Pgen();
-  printf("end of Pgen\n");
-  pubkeygen();
 }
 
 //ハッシュ１６進表示
@@ -3040,11 +3026,12 @@ OP mkpol()
     memset(w.t, 0, sizeof(w));
     ginit();
     ii++;
-    if (ii > 1000)
+    if (ii > 100)
     {
       printf("erro=%d\n", ii);
       exit(1);
     }
+    
     for (i = 0; i < K; i++)
     {
       if (g[K - 1] > 0)
@@ -3052,6 +3039,7 @@ OP mkpol()
       if (i % 2 == 1 && g[i] > 0 && i < K)
         k++;
     }
+    
     //偶数項だけにならないようにする
     if ((k > 0 && flg == 0) || (k > 1 && flg == 1))
     //if(k>0)
@@ -3083,7 +3071,7 @@ unsigned short dd[N][N] = {0};
 
 OP mkg()
 {
-  int i, j, k, fail, flg, l, ii = 0;
+  int i, j, k, l, ii = 0;
   OP w = {0};
 
 aa:
@@ -3097,7 +3085,7 @@ aa:
     w = mkpol();
     l = ben_or(w);
     printf("irr=%d\n", l);
-    if (ii > 1000)
+    if (ii > 100)
     {
       printf("too many error\n");
       exit(1);
@@ -3239,6 +3227,23 @@ void key2(unsigned short g[])
   fclose(fp);
 }
 
+//すべての鍵を生成する
+void keygen(unsigned short *g)
+{
+  int i;
+  FILE *fp;
+
+  key2(g);
+  printf("end of ky2\n");
+  makeS();
+  printf("end of S\n");
+  bdet();
+  printf("end of bdet\n");
+  Pgen();
+  printf("end of Pgen\n");
+  pubkeygen();
+}
+
 int elo(OP r)
 {
   int count, i, j, k;
@@ -3247,21 +3252,21 @@ int elo(OP r)
 
   for (i = 0; i < T; i++)
   {
-    /*
+    
          if(i>0 && r.t[i].n==0){
-         printf("baka-z\n");
-         return -1;
-         //exit(1);
+         printf("err baka-z\n");
+         //return -1;
+         exit(1);
          }
-      */
+      
     if (r.t[i].a > 0 && i > 0) // == r.t[i].n)
     {
-      printf("e=%d %d %s\n", r.t[i].a, r.t[i].n, "お");
+      printf("err=%d %d %s\n", r.t[i].a, r.t[i].n, "お");
       count++;
     }
     if (i == 0)
     {
-      printf("\ne=%d %d %s\n", r.t[i].a, r.t[i].n, "う");
+      printf("\nerr=%d %d %s\n", r.t[i].a, r.t[i].n, "う");
       count++;
     }
     //zz[r.t[i].n]=r.t[i].a;
