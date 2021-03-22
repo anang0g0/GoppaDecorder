@@ -3088,25 +3088,24 @@ OP mkg()
 
 aa:
 
-  l = 0;
-  w = mkpol();
-  l = ben_or(w);
-  if (l == -1)
-    goto aa;
-
   //既約性判定のためのBen-Orアルゴリズム。拡大体にも対応している。デフォルトでGF(8192)
   //既約多項式しか使わない。
-  /*
   l = -1;
-
+  ii = 0;
   while (l == -1)
   {
     w = mkpol();
     l = ben_or(w);
     printf("irr=%d\n", l);
+    if (ii > 1000)
+    {
+      printf("too many error\n");
+      exit(1);
+    }
+    ii++;
     //
   }
-  */
+
   //else
   {
     printpol(o2v(w));
