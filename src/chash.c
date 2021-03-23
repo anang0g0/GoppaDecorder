@@ -4,8 +4,6 @@
 #include <ctype.h>
 #include <string.h>
 
-//#define M 256
-
 //nomal bases
 //unsigned short gf[M]={0,1,2,4,8,9,11,15,7,14,5,10,13,3,6,12};
 //unsigned short fg[M]={0,1,2,13,3,10,14,8,4,5,11,6,15,12,9,7};
