@@ -3479,7 +3479,7 @@ label:
   printsage(o2v(w));
   printf("\n");
   printf("sagemath で既約性を検査してください！\n");
-  //exit(1);
+  exit(1);
   //wait();
 
   //#pragma omp parallel for
@@ -3493,7 +3493,7 @@ label:
   //exit(1);
 
   //keygen(g);
-  /*
+/*
 OP qq={0};
 for(i=0b10000000000000001;i<0b11111111111111111+1;i++){
     qq=v2o(i2v(i));
