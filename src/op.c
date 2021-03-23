@@ -3381,24 +3381,6 @@ lab:
          f=conv(f);
          //exit(1);
        */
-    count = 0;
-    /*
-         count = 0;
-         for (i = 0; i < N; i++)
-         {
-         if (zz[i] > 0)
-         count++;
-         }
-         printf ("%d\n", count);
-       */
-    printpol(o2v(w));
-    printf(" ==========goppa\n");
-    printsage(o2v(w));
-    printf(" ==========sage\n");
-    printsage(o2v(f));
-    printf(" ==========synd\n");
-    printpol(o2v(f));
-    printf(" ==========synd\n");
 
     r = decode(w, f);
     count = elo(r);
