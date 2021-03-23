@@ -3211,7 +3211,6 @@ int main(void)
   OP f = {0}, r = {0}, w = {0}, ff = {0}, tt = {0};
   EX hh = {0};
   vec v;
-  //  unsigned short dd[K*N] = {0},gg[K+1]={0};
   time_t t;
   OP r1 = {0}, r2 = {0}, r3 = {0}, r4 = {0};
   OP g1 = {0}, tmp = {
@@ -3248,15 +3247,6 @@ label:
   //exit(1);
   //wait();
 
-  //#pragma omp parallel for
-  for (i = 0; i < N; i++)
-  {
-    tr[i] = oinv(ta[i]);
-  }
-
-  printf("a@");
-  //wait();
-  //exit(1);
 
   //keygen(g);
 
@@ -3343,10 +3333,6 @@ lab:
   k = 0;
   while (1)
   {
-
-    o1 = 0;
-
-    count = 0;
 
     memset(zz, 0, sizeof(zz));
     //for(i=1;i<4;i++)
