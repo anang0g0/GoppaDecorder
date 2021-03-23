@@ -923,10 +923,12 @@ v2a(oterm a)
   if (a.a == 0)
     return 0;
 
+//printf("aa=%d\n",a.a);
   for (j = 0; j < M; j++)
   {
-    if (gf[j] == a.a && a.a > 1)
+    if (gf[j] == a.a && a.a > 0)
     {
+      //printf("j==%d\n",j);
       return j - 1;
     }
   }
@@ -945,6 +947,7 @@ void printsage(vec a)
       b.a = a.x[i];
       b.n = i;
       j = v2a(b);
+      //printf("%d,==ba\n",b.a);
       //printf ("X**%d+", i); //for GF2
       printf("B('a^%d')*X**%d+", j, i); //for GF(2^m)
     }
@@ -1396,7 +1399,7 @@ ginit(void)
   printf("in ginit\n");
 
   g[K] = 1;          //xor128();
-  g[0] = rand() % 2; //or N
+  g[0] = rand() % N; //or N
   k = rand() % (K - 2);
   if (k > 0)
   {
@@ -1406,7 +1409,7 @@ ginit(void)
       j = rand() % (K);
       if (j < K && j > 0 && g[j] == 0)
       {
-        g[j] = rand() % 2; //or N;
+        g[j] = rand() % N; //or N;
         count++;
       }
     }
