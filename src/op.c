@@ -12,32 +12,11 @@
 //code name : OVP - One Variable Polynomial library with OpenMP friendly
 //status    : now in debugging (ver 0.1)
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
-#include <stdint.h>
-#include <stdbool.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <stdlib.h>
-#include <sys/mman.h>
-#include <assert.h>
-#include <execinfo.h>
-
-//#include "omp.h" //clang-12
-#include <omp.h> //clang-10
-
-#include "debug.c"
 #include "8192.h"
 //#include "4096.h"
 #include "global.h"
 #include "struct.h"
-
+#include "debug.c"
 #include "chash.c"
 #include "lu.c"
 #include "sha3.c"
@@ -1785,9 +1764,8 @@ int ben_or(OP f)
   // m=12 as a for GF(4096)=2^12 defined @ gloal.h or here,for example m=4 and GF(16)
 
   v.x[1] = 1;
-  x.x[1] = 1;
-  s = v2o(x);
-  r = v2o(v);
+  s = v2o(v);
+  r = s;
   n = deg(o2v(f));
 
   if (n == 0)
@@ -1799,14 +1777,10 @@ int ben_or(OP f)
   while (i < n / 2 + 1)
   {
     flg = 1;
-    //over GH(8192) 2^14
-    //r=opowmod(r,f,mm);
+    // irreducible over GH(8192) 2^13
     r = opowmod(r, f, m);
 
-    //over GF(4096)
-    //r=opowmod(r,f,13);
-
-    //over GF2
+    // irreducible over GF2
     //r=omod(opow(r,2),f);
 
     u = oadd(r, s);
@@ -1943,104 +1917,6 @@ OP decode(OP f, OP s)
 
   return e;
 }
-
-/*
-//ユークリッドアルゴリズムによる復号関数
-OP decode(OP f, OP s)
-{
-  int i, j, k, count = 0;
-  OP r = {0}, w = {0}, e = {0}, l = {0};
-  oterm t1, t2, d1, a, b;
-  vec x = {0};
-  unsigned short d = 0;
-  OP h = {0};
-  EX hh = {0};
-  printf("in decode\n");
-  //printpol (o2v (s));
-  printf("\nsyn===========\n");
-  r = vx(f, s);
-  //h=ogcd(f,s);
-  if (odeg((r)) == 0)
-  {
-    printf("baka12\n");
-    exit(1);
-  }
-  k = 0;
-  // exit(1);
-  x = chen(r);
-  // exit(1);
-  for (i = 0; i < T; i++)
-  {
-    // printf ("x[%d]=1\n", x.x[i]);
-    if (x.x[i] == 0)
-      k++;
-    if (k > 1)
-    {
-      printf("baka0\n");
-      printvec(o2v(f));
-      for (i = 0; i < N; i++)
-        printf("%d,", zz[i]);
-      exit(1);
-      //return f;
-    }
-  }
-  //exit(1);
-  //  printf("\n");
-  printf("あっ、でる！\n");
-  //  exit(1);
-  if (odeg((r)) < T)
-  {
-    //printpol (o2v (r));
-    printf("baka5 deg(r)<T\n");
-    exit(1);
-  }
-  w = bibun(x);
-  //exit(1);
-  //  w=oterml(w,d1);
-  //printpol (o2v (w));
-  printf("@@@@@@@@@\n");
-  //exit(1);
-  hh = xgcd(f, s);
-  h=ogcd(f,s);
-  //printpol (o2v (hh.d));
-  //wait();
-  //  exit(1);
-  t1 = LT(r);
-  t2.a = t1.a;
-  t2.n = 0;
-  if (odeg((w)) == 0)
-  {
-    //printpol (o2v (w));
-  }
-  l = oterml(w, t2);
-  j = deg(x) + 1;
-  printf("%d\n", j);
-  //    exit(1);
-  for (i = 0; i < j; i++)
-  {
-    if (x.x[i] > 0)
-    {
-      //e.t[i].a = gf[mlt(fg[trace(hh.d, x.x[i])], oinv(trace(l, x.x[i])))];
-      e.t[i].a = gf[mlt (fg[trace (h, x.x[i])], oinv (trace (l, x.x[i])))];
-      e.t[i].n = x.x[i];
-    }
-  }
-  //printpol (o2v (f));
-  printf(" f============\n");
-  //printpol (o2v (l));
-  printf(" l============\n");
-  //  exit(1);
-  for (i = 0; i < T; i++)
-    if (gf[trace(h, x.x[i])] == 0)
-      printf("h=0");
-  //printf("\n");
-  for (i = 0; i < T; i++)
-    if (gf[oinv(trace(l, x.x[i]))] == 0)
-      printf("l=0\n");
-  //  printf("\n");
-  return e;
-}
-*/
 
 //配列の値を係数として多項式に設定する
 OP setpol(unsigned short f[], int n)
@@ -2450,7 +2326,7 @@ EX extgcd(OP a, OP b)
 }
 
 //パターソンアルゴリズムでバイナリGoppa符号を復号する
-OP pattarson(OP w, OP f)
+vec pattarson(OP w, OP f)
 {
   OP g1 = {0}, ll = {0}, op = {0};
   int i, j, k, l, c, n, count = 0, flg2 = 0;
@@ -2574,7 +2450,7 @@ OP pattarson(OP w, OP f)
   if (v.x[K - 1] > 0)
   {
     //wait ();
-    return v2o(v);
+    return v;
   }
 
   ppo = zgcd(w, g1);
@@ -2594,7 +2470,7 @@ OP pattarson(OP w, OP f)
     if (v.x[K - 1] > 0)
     {
       wait();
-      return v2o(v);
+      return v;
     }
   }
 
@@ -2615,12 +2491,13 @@ OP pattarson(OP w, OP f)
 
   if (v.x[K - 1] > 0)
   {
-    return v2o(v);
+    return v;
   }
 
   printf("flg2=%d\n", flg2);
   //exit(1);
-  return v2o(v);
+
+  return v;
 }
 
 //512bitの秘密鍵を暗号化
@@ -2692,8 +2569,8 @@ void decrypt(OP w)
 
   printf("in decrypt\n");
   f = setpol(buf, K);
-  r = pattarson(w, f);
-  v = o2v(r);
+  v = pattarson(w, f);
+
   // elo(r);
   //exit(1);
   //v=o2v(r);
@@ -2763,17 +2640,17 @@ OP synd(unsigned short zz[])
 
   printf("in synd2\n");
 
-  //  #pragma omp parallel for        //num_threads(8)
+  //#pragma omp parallel for num_threads(8) private(i,j)
   for (i = 0; i < K; i++)
   {
     syn[i] = 0;
     s = 0;
-    //#pragma omp parallel num_threads(8)
+    //#pragma omp parallel num_threads(16)
     for (j = 0; j < M; j++)
     {
-      syn[i] ^= gf[mlt(fg[zz[j]], fg[mat[j][i]])];
+      s ^= gf[mlt(fg[zz[j]], fg[mat[j][i]])];
     }
-
+    syn[i] = s;
     //printf ("syn%d,", syn[i]);
   }
   //printf ("\n");
@@ -2851,102 +2728,27 @@ void test(OP w, unsigned short zz[])
   hash = sha3_Finalize(&c);
 }
 
-/*
-void trap(OP w,OP f){
-  OP hh={0},d,tt,ff,tmp,r2;
-  
-  hh = gcd (w, f);
-      if (odeg ((hh.d)) > 0)
-	{
-	  printf (" s,wは互いに素じゃありません。\n");
-	  wait ();
-	  goto label;
-	}
-      tt.t[0].n = 1;
-      tt.t[0].a = 1;
-      ff = inv (f, w);
-      tmp = omod (omul (ff, f), w);
-      if (odeg ((tmp)) > 0)
-	{
-	  //printpol (o2v (tmp));
-	  printf (" inv(h+x)============\n");
-	  //printpol (o2v (w));
-	  printf (" w============\n");
-	  printf ("この多項式では逆元計算ができません。");
-	  printf ("count=%d\n", k);
-	  wait ();
-	  //  goto label;
-	}
-      r2 = oadd (ff, tt);
-      //printpol (o2v (r2));
-      printf (" h+x==============\n");
-      //  exit(1);
-      g1 = osqrt (r2, w);
-      //printpol (o2v (g1));
-      printf (" g1!=========\n");
-      r1 = omod (omul (g1, g1), w);
-      //printpol (o2v (r1));
-      printf (" g1^2 mod w===========\n");
-      //printpol (o2v (r2));
-      printf (" r2===========same?\n");
-      //scanf("%d",&n);
-      if (odeg ((r1)) != odeg ((r2)) && odeg ((g1)) > 0)
-	{
-	  //printpol (o2v (w));
-	  printf (" w===========\n");
-	  //printpol (o2v (r2));
-	  printf (" r2===========\n");
-	  printf ("平方根の計算に失敗しました。\n");
-	  printf ("count=%d\n", k);
-	  wait ();
-	  goto label;
-	  //exit(1);
-	}
-      if (odeg ((g1)) == 0)
-	{
-	  //printpol (o2v (g1));
-	  printf (" sqrt(h+x)==============\n");
-	  //printpol (o2v (w));
-	  printf (" badkey=========\n");
-	  printf ("平方根が０になりました。\n");
-	  printf ("count=%d\n", k);
-	  wait ();
-	  //exit(1);
-	  goto label;
-	}
-      hh = zgcd (w, g1);
-      ff = omod (omul (ppo, g1), w);
-      //printpol (o2v (ff));
-      printf (" beta!=========\n");
-      if (odeg ((ff)) != K / 2)
-	{
-	  printf ("deg(l)!=K/2=%d %d %d\n", odeg ((ff)), K, k);
-	  //exit(1);
-	  goto label;
-	}
-}
-*/
-
 void readkey()
 {
+  FILE *fp, *fq;
+  unsigned short dd[K * N] = {0};
+  int i, j;
 
-  /*
-     //鍵をファイルに書き込むためにはkey2を有効にしてください。
-     key2 (g);
-     fp=fopen("sk.key","rb");
-     fread(g,2,K+1,fp);
-     fclose(fp);
-     //固定した鍵を使いたい場合はファイルから読み込むようにしてください。  
-     fq = fopen ("H.key", "rb");
-     fread (dd, 2, K * N, fq);
-     //#pragma omp parallel for
-     for (i = 0; i < N; i++)
-     {
-     for (j = 0; j < K; j++)
-     mat[i][j] = dd[K * i + j];
-     }
-     fclose (fq);
-   */
+  //鍵をファイルに書き込むためにはkey2を有効にしてください。
+  key2(g);
+  fp = fopen("sk.key", "rb");
+  fread(g, 2, K + 1, fp);
+  fclose(fp);
+  //固定した鍵を使いたい場合はファイルから読み込むようにしてください。
+  fq = fopen("H.key", "rb");
+  fread(dd, 2, K * N, fq);
+  //#pragma omp parallel for
+  for (i = 0; i < N; i++)
+  {
+    for (j = 0; j < K; j++)
+      mat[i][j] = dd[K * i + j];
+  }
+  fclose(fq);
 }
 
 //OP sx={0},ty={0};
@@ -3176,18 +2978,6 @@ aa:
   printf("\n");
   //wait();
 
-  /*
-  //パリティチェックを生成する。
-  //パリティチェックに0の列があったら、なくなるまでやり直す。
-        //w=mkg();
-      i = deta (g);
-  
-if (i < 0);{
-printf("i=%d\n",i);
-wait();
-}
-*/
-
   return w;
 }
 
@@ -3266,23 +3056,146 @@ int elo(OP r)
   {
     printf("error pattarn too few %d\n", count);
     return -1;
-    /*
-         printpol (o2v (w));
-         printf (" ==========goppa\n");
-         printsage (o2v (w));
-         printf (" ==========sage\n");
-         printsage (o2v (f));
-         printf (" =========syn\n");
-         printpol (o2v (f));
-         printf (" ==========synd\n");
-       */
-    //goto nn;
-
-    // exit (1);
   }
   //exit(1);
 
   return count;
+}
+
+int ero(vec v)
+{
+  int i, j, count = 0;
+
+  for (i = 0; i < T * 2; i++)
+  {
+    if (i == 0)
+    {
+      printf("error position=%d %d う\n", i, v.x[i]);
+      count++;
+    }
+    if (i > 0 && v.x[i] > 0)
+    {
+      printf("error position=%d %d お\n", i, v.x[i]);
+      count++;
+    }
+    if (i > 0 && v.x[i] == 0)
+    {
+      printf("baka %d %d\n", i, v.x[i]);
+      printf("v.x[K-1]=%d\n", v.x[K - 1]);
+      /*
+        printpol(o2v(w));
+        printf(" ============goppa\n");
+        printsage(o2v(w));
+        printf(" ============sage\n");
+        printsage(o2v(f));
+        printf(" ============syn\n");
+        printpol(o2v(f));
+        printf(" ==========synd\n");
+
+        printf("{");
+        for (k = 0; k < N; k++)
+        {
+          if (z1[k] > 0)
+            printf("%d,", z1[k]);
+        }
+        printf("};\n");
+        //AA++;
+        //wait();
+        */
+      break;
+      //
+      //exit (1);
+    }
+    int cnt = 0;
+    /*
+      for (k = 0; k < N; k++)
+      {
+        if (z1[k] > 0)
+        {
+          if (k != v.x[cnt])
+          {
+            printf("%d,%d\n", k, v.x[cnt]);
+            printsage(o2v(w));
+            printf(" ========w\n");
+            AA++;
+            break;
+            //exit(1);
+          }
+          cnt++;
+        }
+      }
+*/
+  }
+
+  if (count == T * 2)
+  {
+    printf("err=%dっ!! \n", count);
+    B++;
+  }
+  if (count < T * 2)
+  {
+    printf("error is too few\n");
+
+    AA++;
+    //memcpy (zz, z1, sizeof (zz));
+    /*
+      printf("{");
+      for (i = 0; i < D; i++)
+        printf("%d,", z1[i]);
+      printf("};\n");
+      printpol(o2v(w));
+      printf(" =========goppa\n");
+      printsage(o2v(w));
+      printf(" =========sage\n");
+      printsage(o2v(f));
+      printf(" =========syn\n");
+      printpol(o2v(f));
+      printf(" ==========synd\n");
+      */
+    printf("へげえええーっ\n");
+    //exit(1);
+    exit(1);
+  }
+
+  return count;
+}
+
+void mkerr(unsigned short *z1, int num)
+{
+  int j, l;
+
+  j = 0;
+
+  memset(z1, 0, sizeof(z1));
+
+  while (j < num)
+  {
+    l = xor128() % N;
+    //printf ("l=%d\n", l);
+    if (0 == z1[l])
+    {
+      z1[l] = 1;
+      printf("l=%d\n", l);
+      j++;
+    }
+  }
+}
+
+void fun()
+{
+  unsigned int i, k;
+
+  OP qq = {0};
+  for (i = 0b10000000000000001; i < 0b11111111111111111 + 1; i++)
+  {
+    qq = v2o(i2v(i));
+    k = ben_or(qq);
+    if (k == 0)
+    {
+      printpol(o2v(qq));
+      printf(" =irreducible\n");
+    }
+  }
 }
 
 //言わずもがな
@@ -3324,8 +3237,9 @@ label:
 
   printf("\nすげ、オレもうイキそ・・・\n");
 
+  //パリティチェックを生成する。
   w = mkg();
-  //w=setpol(g,K+1);
+
   oprintpol(w);
   printf("\n");
   printsage(o2v(w));
@@ -3345,21 +3259,12 @@ label:
   //exit(1);
 
   //keygen(g);
-  /*
-OP qq={0};
-for(i=0b10000000000000001;i<0b11111111111111111+1;i++){
-    qq=v2o(i2v(i));
-      k=ben_or(qq);
-if(k==0){
-printpol(o2v(qq));
-printf(" =irreducible\n");
-}
-}
-exit(1);
-*/
-  //パリティチェックを生成する。
-  //パリティチェックに0の列があったら、なくなるまでやり直す。
 
+  // 16次のバイナリ既約多項式の生成
+  //fun();
+  //exit(1);
+
+  //print parity check
   /*
 for(i=0;i<N;i++){
   for(j=0;j<K;j++)
@@ -3453,7 +3358,7 @@ lab:
     //zz[8] = 8;
     printf("@b\n");
     //exit(1);
-
+/*
     j = 0;
     while (j < T)
     {
@@ -3466,6 +3371,8 @@ lab:
         j++;
       }
     }
+*/
+    mkerr(zz,T);
 
     for (i = 0; i < N; i++)
     {
@@ -3528,123 +3435,19 @@ lab:
 
     j = 0;
 
-    while (j < T * 2)
-    {
-      l = xor128() % D;
-      //printf ("l=%d\n", l);
-      if (0 == z1[l])
-      {
-        z1[l] = 1;
-        printf("l=%d\n", l);
-        j++;
-      }
-    }
-    //wait();
 
-    //for(i=0;i<8;i++)
-    //z1[i]=1;
+    mkerr(z1, T * 2);
 
     //encryotion
     //test (w, z1);
 
     f = synd(z1);
 
-    //バグトラップのためのコード（省略）
-    //trap(w,f);
-    //バグトラップ（ここまで）
-
     count = 0;
     //復号化の本体
-    r = pattarson(w, f);
+    v = pattarson(w, f);
     //エラー表示
-    //elo(r);
-    //  exit(1);
-    v = o2v(r);
-
-    for (i = 0; i < T * 2; i++)
-    {
-      if (i == 0)
-      {
-        printf("error position=%d %d う\n", i, v.x[i]);
-        count++;
-      }
-      if (i > 0 && v.x[i] > 0)
-      {
-        printf("error position=%d %d お\n", i, v.x[i]);
-        count++;
-      }
-      if (i > 0 && v.x[i] == 0)
-      {
-        printf("baka %d %d\n", i, v.x[i]);
-        printf("v.x[K-1]=%d\n", v.x[K - 1]);
-        printpol(o2v(w));
-        printf(" ============goppa\n");
-        printsage(o2v(w));
-        printf(" ============sage\n");
-        printsage(o2v(f));
-        printf(" ============syn\n");
-        printpol(o2v(f));
-        printf(" ==========synd\n");
-
-        printf("{");
-        for (k = 0; k < N; k++)
-        {
-          if (z1[k] > 0)
-            printf("%d,", z1[k]);
-        }
-        printf("};\n");
-        //AA++;
-        //wait();
-        break;
-        //
-        //exit (1);
-      }
-      int cnt = 0;
-      for (k = 0; k < N; k++)
-      {
-        if (z1[k] > 0)
-        {
-          if (k != v.x[cnt])
-          {
-            printf("%d,%d\n", k, v.x[cnt]);
-            printsage(o2v(w));
-            printf(" ========w\n");
-            AA++;
-            break;
-            //exit(1);
-          }
-          cnt++;
-        }
-      }
-    }
-
-    if (count == T * 2)
-    {
-      printf("err=%dっ!! \n", count);
-      B++;
-    }
-    if (count < T * 2)
-    {
-      printf("error is too few\n");
-
-      AA++;
-      //memcpy (zz, z1, sizeof (zz));
-      printf("{");
-      for (i = 0; i < D; i++)
-        printf("%d,", z1[i]);
-      printf("};\n");
-      printpol(o2v(w));
-      printf(" =========goppa\n");
-      printsage(o2v(w));
-      printf(" =========sage\n");
-      printsage(o2v(f));
-      printf(" =========syn\n");
-      printpol(o2v(f));
-      printf(" ==========synd\n");
-      printf("へげえええーっ\n");
-      //exit(1);
-      exit(1);
-    }
+    ero(v);
 
     if (AA == 10)
     {
@@ -3652,6 +3455,7 @@ lab:
       exit(1);
     }
 
+    //復号失敗率のカウント
     if (B > 1000)
     {
       count = 0;
