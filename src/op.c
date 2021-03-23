@@ -3358,20 +3358,8 @@ lab:
     //zz[8] = 8;
     printf("@b\n");
     //exit(1);
-/*
-    j = 0;
-    while (j < T)
-    {
-      l = xor128() % N;
-      //k=rand()%D;
-      //printf("l=%d\n",l);
-      if (0 == zz[l] && l > 0)
-      {
-        zz[l] = l;
-        j++;
-      }
-    }
-*/
+
+
     mkerr(zz,T);
 
     for (i = 0; i < N; i++)
