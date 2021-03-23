@@ -12,7 +12,6 @@
 //code name : OVP - One Variable Polynomial library with OpenMP friendly
 //status    : now in debugging (ver 0.1)
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -52,18 +51,10 @@ extern void makeS();
 //シンドロームのコピー
 unsigned short sy[K] = {0};
 
-//1x^6+14x^3+13x^1+14x^0+ =irreducible
 
 //Goppa多項式
-static unsigned short g[K + 1] = {1, 0, 7, 13, 6, 2, 0, 12, 10};
-//{1, 0, 0, 0, 0, 10, 8, 10, 1};
-//1,0,0,14,12,3,0,15,3
-//{ 1, 0, 0, 0, 1, 0, 1 };
+static unsigned short g[K + 1] = { 1, 0, 0, 0, 1, 0, 1 };
 
-//{ 1,0,11,14,7,0,6 };
-//{1,0,13,14,13,0,11};
-
-unsigned short zz[N] = {0};
 
 unsigned int AA = 0, B = 0; //, C = 0, A2 = 0;
 
@@ -923,7 +914,7 @@ v2a(oterm a)
   if (a.a == 0)
     return 0;
 
-//printf("aa=%d\n",a.a);
+  //printf("aa=%d\n",a.a);
   for (j = 0; j < M; j++)
   {
     if (gf[j] == a.a && a.a > 0)
@@ -1219,6 +1210,9 @@ int odeg(OP f)
 {
   int i, j = 0, k;
 
+  if (f.t[0].a == 0)
+    return 0;
+
   //k=terms(f);
   for (i = 0; i < DEG; i++)
   {
@@ -1469,14 +1463,19 @@ b2B(unsigned short b[E])
 //多項式の次数(default)
 int deg(vec a)
 {
-  int i, n = 0;
+  int i, n = 0, flg = 0;
 
   //#pragma omp parallel for
   for (i = 0; i < DEG; i++)
   {
     if (a.x[i] > 0)
+    {
       n = i;
+      flg = 1;
+    }
   }
+  if (flg == 0)
+    return 0;
 
   return n;
 }
@@ -2785,7 +2784,7 @@ void van()
 
   for (i = 0; i < N; i++)
     vb[0][i] = 1;
-#pragma omp parallel for private(i, j)
+//#pragma omp parallel for private(i, j)
   for (i = 1; i < K; i++)
   {
     for (j = 0; j < N; j++)
@@ -2875,7 +2874,17 @@ OP mkpol()
         break;
       }
     }
-  } while (fail || j == 0);
+  } 
+  
+  while (fail || j == 0);
+  for (i = 0; i < N; i++)
+  {
+    tr[i] = oinv(ta[i]);
+    printf("%d,", tr[i]);
+  }
+  printf("\n");
+
+
 
   return w;
 }
@@ -2907,14 +2916,12 @@ aa:
     //
   }
 
-  //else
-  {
     printpol(o2v(w));
     printf(" =irreducible\n");
     printsage(o2v(w));
     printf("\n");
     //wait();
-  }
+
 
   //多項式を固定したい場合コメントアウトする。
   /*
@@ -2931,39 +2938,28 @@ aa:
       break;
     }
   }
-*/
-
-  ogt();
-  memset(mat, 0, sizeof(mat));
-
   oprintpol(w);
   printf("\n");
   printsage(o2v(w));
   printf("\n");
   printf("sagemath で既約性を検査してください！\n");
+  */
+
+
+  van();
+  ogt();
+  memset(mat, 0, sizeof(mat));
+
   //wait();
 
-#pragma omp parallel for
-  for (i = 0; i < N; i++)
-  {
-    tr[i] = oinv(ta[i]);
-    printf("%d,", tr[i]);
-  }
-  printf("\n");
-  //wait();
-  //van();
-  //ogt();
-  memset(dd, 0, sizeof(dd));
-
-  for (i = 0; i < N; i++)
-    dd[i][i] = gf[tr[i]];
+//#pragma omp parallel for
+ 
 
   printf("\nすげ、オレもうイキそ・・・\n");
   //keygen(g);
   //exit(1);
 
-  unsigned short s, ms[K] = {0};
-  //#pragma omp parallel for private(i,j) shared(vv,tr,fg,gf,ma)
+
   for (j = 0; j < N; j++)
   {
     for (i = 0; i < K; i++)
@@ -2973,13 +2969,14 @@ aa:
     //printf("tr[%d]=%d\n",j,tr[j]);
   }
 
+unsigned short s;
 #pragma omp parallel for default(none) private(i, j, k, s) shared(mat, gt, ma, gf, fg)
   for (i = 0; i < K; i++)
   {
     for (j = 0; j < N; j++)
     {
       s = 0;
-      //#pragma omp parallel for reduction(^:s)
+
       for (k = 0; k < K; k++)
         s ^= gf[mlt(fg[gt[k][i]], fg[ma[j][k]])];
       //printf("%d,",s);
@@ -3249,10 +3246,6 @@ int main(void)
 
 label:
 
-  van();
-
-  memset(mat, 0, sizeof(mat));
-
   printf("\nすげ、オレもうイキそ・・・\n");
 
   //パリティチェックを生成する。
@@ -3263,9 +3256,8 @@ label:
   printsage(o2v(w));
   printf("\n");
   printf("sagemath で既約性を検査してください！\n");
-  exit(1);
+  //exit(1);
   //wait();
-
 
   //keygen(g);
 
@@ -3364,8 +3356,7 @@ lab:
     printf("@b\n");
     //exit(1);
 
-
-    mkerr(zz,T);
+    mkerr(zz, T);
 
     for (i = 0; i < N; i++)
     {
@@ -3409,7 +3400,6 @@ lab:
     memset(z1, 0, sizeof(z1));
 
     j = 0;
-
 
     mkerr(z1, T * 2);
 
