@@ -51,6 +51,13 @@ Coding Theory-Based Cryptography:McEliece Cryptosystems in Sage
 Testing Irreducibility of Trinomials over GF(2) 
 https://digitalcommons.iwu.edu/cgi/viewcontent.cgi?article=1013&context=math_honproj
 
+# 20210323
+
+なんだかシステムを再起動したら、勝手にブートイメージが書き換わってカーネルが合わなくてXが起動しないのでUbuntuから起動してる。
+陰謀？
+
+で、なぜだかGF(2)のバイナリ多項式しか既約性が検証できなくなって、多分sagemath用のコードジェネレータのバグだと思うのだが、1がGF(a^12)とかわけわからん。
+
 # 20210322
 
 取り敢えず10,000回とか回しても止まらないんで安定してるのかなとは思うけどどうなんでしょう？
