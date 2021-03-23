@@ -1860,8 +1860,8 @@ OP decode(OP f, OP s)
     {
       printf("baka0\n");
       printvec(o2v(f));
-      for (i = 0; i < N; i++)
-        printf("%d,", zz[i]);
+      //for (i = 0; i < N; i++)
+        //printf("%d,", zz[i]);
       exit(1);
       //return f;
     }
@@ -3221,6 +3221,8 @@ int main(void)
   int count = 0;
   FILE *fp, *fq;
   unsigned short z1[N] = {0}; //{1,0,1,1,1,0,0,0,0,0,1,1,1,0,0,1};
+  unsigned short zz[N];
+
   //  {0};
 
   int flg, o1 = 0;
@@ -3339,6 +3341,7 @@ lab:
      }
      //exit(1);
    */
+
 
   //decode開始
   k = 0;
