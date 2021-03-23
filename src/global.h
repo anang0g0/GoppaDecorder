@@ -1,13 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+//#include "8192.h"
 
 //符号のパラーメータの指定。通常[N,K,T]として、
 //Nは符号の長さ、Kが符号の次元、Tは訂正エラー数
 //を表す。ここではDは符号長にしている。
 #define N 8192  // (^^;)?
 #define M 8192  //有限体の元の数
-#define K (12) //符号の次元
+#define K (128) //符号の次元
 #define DEG (K * 2)
 #define T (K / 2) //エラーの数
 #define E (13)    //拡大体のビット数
