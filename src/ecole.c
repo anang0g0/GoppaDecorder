@@ -42,7 +42,7 @@ for(i=0;i<n;i++){
       fg[j]=i;
   }
 }
-  printf("unsigned int fg[%d]={",O);
+  printf("static const unsigned short fg[%d]={",O);
   for(i=0;i<O;i++)
   printf("%d,",fg[i]);
 printf("};\n");
@@ -147,7 +147,7 @@ printf("%d\n",n);
     gf[i]=bit;
     bit=(bit<<1);
   }
-  printf("unsigned int gf[%d]={",O);
+  printf("static const unsigned short gf[%d]={",O);
   for(i=0;i<L;i++)
     printf("%u,",gf[i]);
   
