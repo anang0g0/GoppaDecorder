@@ -51,10 +51,8 @@ extern void makeS();
 //シンドロームのコピー
 unsigned short sy[K] = {0};
 
-
 //Goppa多項式
-static unsigned short g[K + 1] = { 1, 0, 0, 0, 1, 0, 1 };
-
+static unsigned short g[K + 1] = {1, 0, 0, 0, 1, 0, 1};
 
 unsigned int AA = 0, B = 0; //, C = 0, A2 = 0;
 
@@ -1861,7 +1859,7 @@ OP decode(OP f, OP s)
       printf("baka0\n");
       printvec(o2v(f));
       //for (i = 0; i < N; i++)
-        //printf("%d,", zz[i]);
+      //printf("%d,", zz[i]);
       exit(1);
       //return f;
     }
@@ -2784,7 +2782,7 @@ void van()
 
   for (i = 0; i < N; i++)
     vb[0][i] = 1;
-//#pragma omp parallel for private(i, j)
+  //#pragma omp parallel for private(i, j)
   for (i = 1; i < K; i++)
   {
     for (j = 0; j < N; j++)
@@ -2874,8 +2872,8 @@ OP mkpol()
         break;
       }
     }
-  } 
-  
+  }
+
   while (fail || j == 0);
   for (i = 0; i < N; i++)
   {
@@ -2883,8 +2881,6 @@ OP mkpol()
     printf("%d,", tr[i]);
   }
   printf("\n");
-
-
 
   return w;
 }
@@ -2916,12 +2912,11 @@ aa:
     //
   }
 
-    printpol(o2v(w));
-    printf(" =irreducible\n");
-    printsage(o2v(w));
-    printf("\n");
-    //wait();
-
+  printpol(o2v(w));
+  printf(" =irreducible\n");
+  printsage(o2v(w));
+  printf("\n");
+  //wait();
 
   //多項式を固定したい場合コメントアウトする。
   /*
@@ -2945,20 +2940,17 @@ aa:
   printf("sagemath で既約性を検査してください！\n");
   */
 
-
   van();
   ogt();
   memset(mat, 0, sizeof(mat));
 
   //wait();
 
-//#pragma omp parallel for
- 
+  //#pragma omp parallel for
 
   printf("\nすげ、オレもうイキそ・・・\n");
   //keygen(g);
   //exit(1);
-
 
   for (j = 0; j < N; j++)
   {
@@ -2969,7 +2961,7 @@ aa:
     //printf("tr[%d]=%d\n",j,tr[j]);
   }
 
-unsigned short s;
+  unsigned short s;
 #pragma omp parallel for default(none) private(i, j, k, s) shared(mat, gt, ma, gf, fg)
   for (i = 0; i < K; i++)
   {
@@ -3342,13 +3334,11 @@ lab:
      //exit(1);
    */
 
-
   //decode開始
   k = 0;
   while (1)
   {
 
-    memset(zz, 0, sizeof(zz));
     //for(i=1;i<4;i++)
     //zz[i]=i;
 
@@ -3400,7 +3390,6 @@ lab:
     //printf("パターソンアルゴリズムを実行します。何か数字を入れてください。\n");
     //wait();
     count = 0;
-    memset(z1, 0, sizeof(z1));
 
     j = 0;
 
