@@ -3291,6 +3291,7 @@ printf("b=%d\n",b);
 //fun();
 //exit(1);
 MAT I={0};
+MAT G={0};
 
 label:
 
@@ -3307,11 +3308,15 @@ label:
   bdet();
   toByte(BB);
   Pgen();
-  P2Mat(P);
+  //P2Mat(P);
   makeS();
 //  exit(1);
   H=mulmat(S,BB,1);
-  I=mulmat(H,AH,2);
+  for(i=0;i<K*E;i++){
+    for(j=0;j<N;j++)
+    I.z[j][i]=H.z[P[j]][i];
+  }
+  //I=mulmat(G,AH,2);
   toByte(I);
 /*
   for(i=0;i<K*E;i++){
