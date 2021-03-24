@@ -1964,14 +1964,14 @@ void bdet()
   unsigned char dd[E * K] = {0};
   FILE *ff;
 
-  ff = fopen("Hb.key", "wb");
+  //ff = fopen("Hb.key", "wb");
 
   for (i = 0; i < N; i++)
   {
     for (j = 0; j < K; j++)
     {
       l = mat[i][j];
-#pragma omp parallel for
+//#pragma omp parallel for
       for (k = 0; k < E; k++)
       {
         BH[j * E + k][i] = l % 2;
@@ -1981,18 +1981,43 @@ void bdet()
   }
   for (i = 0; i < N; i++)
   {
-#pragma omp parallel for
+//#pragma omp parallel for
     for (j = 0; j < E * K; j++)
     {
-      //  printf("%d,",BH[j][i]);
-      dd[j] = BH[j][i];
+       printf("%d,",BH[j][i]);
+      //dd[j] = BH[j][i];
     }
-    fwrite(dd, 1, E * K, ff);
-    //printf("\n");
+    //fwrite(dd, 1, E * K, ff);
+    printf("\n");
   }
-  fclose(ff);
+  //fclose(ff);
 }
 
+unsigned short HH[N][K];
+
+void toByte(){
+  vec v={0};
+  int i,j,k,cnt;
+
+
+  for (i = 0; i < N; i++)
+  {
+//#pragma omp parallel for
+    for (j = 0; j <  K; j++)
+    {
+      cnt=0;
+      for(k=j*E;k<j*E+E;k++)
+        v.x[cnt++]=BH[k][i];
+
+        HH[i][j]=v2i(v);
+       printf("%d,",HH[i][j]);
+      //dd[j] = BH[j][i];
+    }
+    //fwrite(dd, 1, E * K, ff);
+    printf("\n");
+  }
+
+}
 //Niederreiter暗号の公開鍵を作る
 void pubkeygen()
 {
@@ -2986,10 +3011,11 @@ unsigned short s;
   }
   printf("\n");
   //exit(1);
-  for (i = 0; i < K; i++)
+
+for (j = 0; j < N; j++)
   {
-    for (j = 0; j < N; j++)
-      printf("%d,", mat[j][i]);
+  for (i = 0; i < K; i++)
+    printf("%d,", mat[j][i]);
     printf("\n");
   }
   printf("\n");
@@ -3254,7 +3280,7 @@ printvec(v);
 b=v2i(v);
 printf("b=%d\n",b);
 fun();
-exit(1);
+//exit(1);
 
 
 label:
@@ -3269,7 +3295,9 @@ label:
   printsage(o2v(w));
   printf("\n");
   printf("sagemath で既約性を検査してください！\n");
-  //exit(1);
+  bdet();
+  toByte();
+  exit(1);
   //wait();
 
   //keygen(g);
