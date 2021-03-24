@@ -75,9 +75,8 @@ typedef struct pub
 
 
 typedef struct {
-  unsigned short x[N][N];
-  unsigned short z[N][K*E];
-  unsigned short w[K*E][K*E];
+  unsigned char z[N][K*E];
+  unsigned char w[K*E][K*E];
   int i;
   int rank;
 } MAT;
