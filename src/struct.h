@@ -5,8 +5,8 @@
 //monomial
 typedef struct
 {
-  unsigned int n; //単項式の次数
-  unsigned int a; //単項式の係数
+  unsigned short n; //単項式の次数
+  unsigned short a; //単項式の係数
 } oterm;
 
 //polynomial
@@ -72,3 +72,19 @@ typedef struct pub
   unsigned char a[8192];
   unsigned char b[8192];
 } set;
+
+
+typedef struct {
+  unsigned short x[N][N];
+  unsigned short z[N][K*E];
+  unsigned short w[K*E][K*E];
+  int i;
+  int rank;
+} MAT;
+
+
+typedef struct {
+  unsigned short x[E*K][N];
+  int row; //行
+  int col; //列
+} MTX;
