@@ -16,18 +16,12 @@
 #define F E *K    //2040
 
 unsigned char tmp[E * K][N] = {0};
-unsigned char pub[E * K][N] = {0};
-unsigned char BH[E * K][N] = {0};
+//unsigned char pub[E * K][N] = {0};
+//unsigned char BH[E * K][N] = {0};
 static unsigned short c[2 * K + 1] = {0};
 unsigned short mat[N][K] = {0};
 unsigned short ma[N][K] = {0};
 
-/*
-unsigned char a[F][F]={0};
-unsigned char cc[F][F]={0};
-unsigned char bb[F][F]={0};
-unsigned char cl[F][F]={0};
-*/
 
 //unsigned short syn[K]={0};
 unsigned short P[N] = {0};
