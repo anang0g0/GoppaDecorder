@@ -54,6 +54,9 @@ unsigned short sy[K] = {0};
 
 //Goppa多項式
 static unsigned short g[K + 1] = { 1, 0, 0, 0, 1, 0, 1 };
+MAT BB={0};
+MAT H={0};
+MAT AH = {0};
 
 
 unsigned int AA = 0, B = 0; //, C = 0, A2 = 0;
@@ -1445,7 +1448,7 @@ void P2Mat(unsigned short P[N])
   int i;
 
   for (i = 0; i < N; i++)
-    A[i][P[i]] = 1;
+    AH.x[i][P[i]] = 1;
 }
 
 unsigned short
@@ -1991,11 +1994,16 @@ void bdet()
     printf("\n");
   }
   //fclose(ff);
+
+for(i=0;i<N;i++){
+  for(j=0;j<K*E;j++)
+  BB.z[i][j]=BH[j][i];
+}
 }
 
 unsigned short HH[N][K];
 
-void toByte(){
+void toByte(MAT SH){
   vec v={0};
   int i,j,k,cnt;
 
@@ -2007,7 +2015,7 @@ void toByte(){
     {
       cnt=0;
       for(k=j*E;k<j*E+E;k++)
-        v.x[cnt++]=BH[k][i];
+        v.x[cnt++]=SH.z[i][k];
 
         HH[i][j]=v2i(v);
        printf("%d,",HH[i][j]);
@@ -2017,6 +2025,7 @@ void toByte(){
     printf("\n");
   }
 
+//exit(1);
 }
 //Niederreiter暗号の公開鍵を作る
 void pubkeygen()
@@ -2073,20 +2082,20 @@ void Pgen()
   unsigned int i, j;
   FILE *fp;
 
-  fp = fopen("P.key", "wb");
+  //fp = fopen("P.key", "wb");
   random_permutation(P);
   for (i = 0; i < N; i++)
     inv_P[P[i]] = i;
-  fwrite(P, 2, N, fp);
-  fclose(fp);
+  //fwrite(P, 2, N, fp);
+  //fclose(fp);
 
   //for (i = 0; i < N; i++)
   //printf ("%d,", inv_P[i]);
   //printf ("\n");
 
-  fp = fopen("inv_P.key", "wb");
-  fwrite(inv_P, 2, N, fp);
-  fclose(fp);
+  //fp = fopen("inv_P.key", "wb");
+  //fwrite(inv_P, 2, N, fp);
+  //fclose(fp);
 }
 
 //ハッシュ１６進表示
@@ -2685,7 +2694,7 @@ OP synd(unsigned short zz[])
 
   printf("in synd2\n");
 
-  //#pragma omp parallel for num_threads(8) private(i,j)
+
   for (i = 0; i < K; i++)
   {
     syn[i] = 0;
@@ -3279,9 +3288,9 @@ v=i2v(a);
 printvec(v);
 b=v2i(v);
 printf("b=%d\n",b);
-fun();
+//fun();
 //exit(1);
-
+MAT I={0};
 
 label:
 
@@ -3296,7 +3305,22 @@ label:
   printf("\n");
   printf("sagemath で既約性を検査してください！\n");
   bdet();
-  toByte();
+  toByte(BB);
+  Pgen();
+  P2Mat(P);
+  makeS();
+//  exit(1);
+  H=mulmat(S,BB,1);
+  I=mulmat(H,AH,2);
+  toByte(I);
+/*
+  for(i=0;i<K*E;i++){
+    for(j=0;j<N;j++)
+    printf("%d,",I.z[j][i]);
+    printf("  i=====%d\n",i);
+  }
+  printf("\n");
+  */
   exit(1);
   //wait();
 
