@@ -1481,14 +1481,14 @@ int deg(vec a)
 }
 
 //整数からベクトル型への変換
-vec i2v(unsigned short n)
+vec i2v(unsigned int n)
 {
   vec v={0};
   int i;
 
-  for (i = 0; i < 16; i++)
+  while(n>0)
   {
-    v.x[i] = n % 2;
+    v.x[i++] = n % 2;
     n = (n >> 1);
   }
 
@@ -1496,12 +1496,12 @@ vec i2v(unsigned short n)
 }
 
 //ベクトル型から整数への変換
-unsigned short
+unsigned int
 v2i(vec v)
 {
   unsigned int d = 0, i,e=0;
 
-  for (i = 0; i < 16; i++)
+  for (i = 0; i < deg(v)+1; i++)
   {
     e=v.x[i];
     d ^= (e<<i);
@@ -3247,7 +3247,7 @@ int main(void)
 #endif
 unsigned short a,b;
 
-a=1234;
+a=65535;
 printf("b=%d\n",a);
 v=i2v(a);
 printvec(v);
