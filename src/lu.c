@@ -11,10 +11,10 @@
 
 MAT inv_S = {0};
 MAT S={0};
-unsigned char cc[F][F] = {0};
-unsigned char bb[F][F] = {0};
-unsigned char cl[F][F];
-unsigned char s[F] = {0};
+
+
+
+//unsigned char s[F] = {0};
 
 //{{0,1,0,1},{1,0,0,1},{0,0,1,0},{0,0,1,1}};
 //{{0,1,1,1},{1,0,1,1},{0,0,1,1},{1,0,0,1}}; //{{1,2,0,-1},{-1,1,2,0},{2,0,1,1},{1,-2,-1,1}}; //入力用の配列
@@ -22,61 +22,6 @@ unsigned char s[F] = {0};
 //extern unsigned long xor128();
 //extern void makeS();
 
-void g2()
-{
-  int i, j, k, flg, count = 0;
-
-  /*
-//memset(a,0,sizeof(a));
-//memset(cc,0,sizeof(cc));
-#pragma omp parallel for    
-  for(i=0;i<F;i++){
-    a[i][i]=1;
-    bb[i][i]=1;
-  }
-  
-#pragma omp parallel for private(j)
-  for(i=0;i<F;i++){
-    for(j=i+1;j<F;j++){
-      a[i][j]=xor128()%2;
-      
-    }  
-  }
-  
-#pragma omp parallel for private(j)
-  for(i=0;i<F;i++){
-    for(j=i+1;j<F;j++){
-      bb[j][i]=xor128()%2;
-    }
-  }
-  */
-  //a[1][1]=0;
-  int l;
-
-  for (i = 0; i < F; i++)
-  {
-    for (j = 0; j < F; j++)
-      cc[i][j] = rand() % 2;
-  }
-
-  /*
-#pragma omp parallel for private(j,k)
-  for(i=0;i<F;i++){
-#pragma omp parallel num_threads(8)
-    {
-    for(j=0;j<F;j++){
-      l=0;
-      for(k=0;k<F;k++){
-	cc[i][j]^=bb[i][k]&a[k][j];
-	//l^=bb[i][k]&a[k][j];
-      }
-      //cc[i][j]=l;
-    }
-    }
-  }
-cc[0][0]=rand()%2;
-*/
-}
 
 void makeS()
 {
@@ -84,15 +29,14 @@ void makeS()
   unsigned char b[F][F] = {0};
   unsigned char dd[F] = {0};
   unsigned int flg = 0, count = 0;
+  unsigned char cc[F][F] = {0};
+  unsigned char cl[F][F];
   time_t t;
   FILE *fq;
   unsigned char inv_a[F][F] = {0}; //ここに逆行列が入る
   unsigned char buf;               //一時的なデータを蓄える
   int n = K*E;                       //配列の次数
 
-  //  b=malloc(F*sizeof(unsigned char *));
-  // for(i=0;i<F;i++)
-  //   b[i]=malloc(F*sizeof(unsigned char *));
 
   //while(flg!=F || count!=F*F-F)
   //while(count!=F*F-F)
@@ -105,6 +49,7 @@ void makeS()
     srand(clock() + time(&t));
 
     //g2();
+    
     for (i = 0; i < F; i++)
     {
       for (j = 0; j < F; j++)
