@@ -7,9 +7,10 @@
 //#include "chash.c"
 
 //#define D 4096
-#define F 2040
+#define F K*E
 
-unsigned char a[F][F] = {0};
+MAT inv_S = {0};
+MAT S={0};
 unsigned char cc[F][F] = {0};
 unsigned char bb[F][F] = {0};
 unsigned char cl[F][F];
@@ -87,7 +88,7 @@ void makeS()
   FILE *fq;
   unsigned char inv_a[F][F] = {0}; //ここに逆行列が入る
   unsigned char buf;               //一時的なデータを蓄える
-  int n = F;                       //配列の次数
+  int n = K*E;                       //配列の次数
 
   //  b=malloc(F*sizeof(unsigned char *));
   // for(i=0;i<F;i++)
@@ -228,8 +229,8 @@ void makeS()
     }
 
     // exit(1);
-    //検算
 
+  //検算
 #pragma omp parallel for private(j, k)
     for (i = 0; i < F; i++)
     {
@@ -283,56 +284,30 @@ void makeS()
         printf("{");
         for (j = 0; j < F; j++)
         {
-          printf("%d,", cl[i][j]);
+          //
           dd[j] = cl[i][j];
+          S.w[i][j]=cl[i][j];
+          printf("%d,", S.w[i][j]);
         }
 
         printf("},\n");
       }
       printf("};\n");
 
-      printf("Sa[K][K]=\n{\n");
-      if (flg == F && count == F * F - F)
-      {
-        for (i = 0; i < F; i++)
-        {
-          printf("0b");
-          for (j = 0; j < F; j++)
-          {
-            printf("%d", cl[i][j]);
-            dd[j] = cl[i][j];
-          }
-
-          printf(",\n");
-        }
-        printf("};\n");
-      }
-      //exit(1);
       printf("inv_S[K][K]=\n{\n");
       for (i = 0; i < F; i++)
       {
         printf("{");
         for (j = 0; j < F; j++)
         {
-          printf("%d,", inv_a[i][j]);
           dd[j] = inv_a[i][j];
+          inv_S.w[i][j]=inv_a[i][j];
+          printf("%d,", inv_S.w[i][j]);
         }
         printf("},\n");
       }
       printf("};\n");
 
-      printf("inv_Sa[K][K]=\n{\n");
-      for (i = 0; i < F; i++)
-      {
-        printf("0b");
-        for (j = 0; j < F; j++)
-        {
-          printf("%d", inv_a[i][j]);
-          dd[j] = inv_a[i][j];
-        }
-        printf(",\n");
-      }
-      printf("};\n");
 
       for (i = 0; i < F; i++)
       {
