@@ -51,8 +51,10 @@ extern void makeS();
 //シンドロームのコピー
 unsigned short sy[K] = {0};
 
+
 //Goppa多項式
-static unsigned short g[K + 1] = {1, 0, 0, 0, 1, 0, 1};
+static unsigned short g[K + 1] = { 1, 0, 0, 0, 1, 0, 1 };
+
 
 unsigned int AA = 0, B = 0; //, C = 0, A2 = 0;
 
@@ -80,9 +82,6 @@ unsigned short
 equ(unsigned short a, unsigned short b)
 {
   int i;
-
-  if(a==0)
-  return 0;
 
   for (i = 0; i < N; i++)
   {
@@ -1449,7 +1448,6 @@ void P2Mat(unsigned short P[N])
     A[i][P[i]] = 1;
 }
 
-//バイナリからunsigned shortに変換
 unsigned short
 b2B(unsigned short b[E])
 {
@@ -1462,12 +1460,10 @@ b2B(unsigned short b[E])
   return a;
 }
 
-
 //多項式の次数(default)
 int deg(vec a)
 {
   int i, n = 0, flg = 0;
-
 
   //#pragma omp parallel for
   for (i = 0; i < DEG; i++)
@@ -1490,9 +1486,9 @@ vec i2v(unsigned short n)
   vec v={0};
   int i;
 
-  while (n>0)
+  for (i = 0; i < 16; i++)
   {
-    v.x[i++] = n % 2;
+    v.x[i] = n % 2;
     n = (n >> 1);
   }
 
@@ -1503,7 +1499,7 @@ vec i2v(unsigned short n)
 unsigned short
 v2i(vec v)
 {
-  unsigned short d = 0, i,e=0;
+  unsigned int d = 0, i,e=0;
 
   for (i = 0; i < 16; i++)
   {
@@ -1537,7 +1533,6 @@ void printvec(vec v)
     //if (v.x[i] > 0)
       printf("%d:%d\n", i, v.x[i]);
   }
-//  printf("\n");
 }
 
 vec vadd(vec a, vec b)
@@ -1598,10 +1593,8 @@ ipow(unsigned int q, unsigned int u)
   return m;
 }
 
-
 OP ww[T] = {0};
 
-//bibunの2重ループの並列化
 OP bib(int i, OP d)
 {
   int id, j;
@@ -1623,7 +1616,6 @@ OP bib(int i, OP d)
 
   return t[id];
 }
-
 
 //多項式の形式的微分
 OP bibun(vec a)
@@ -1670,6 +1662,64 @@ OP bibun(vec a)
 
   for (i = 0; i < T; i++)
     l = oadd(l, t[i]);
+
+  return l;
+}
+
+//多項式の形式的微分
+OP bibun_old(vec a)
+{
+  OP w[T * 2] = {0};
+  OP l = {0}, t = {
+                  0};
+  int i, j, n, id;
+  vec tmp = {0};
+
+  n = deg(a);
+  printf("n=%d\n", n);
+  if (n == 0)
+  {
+    printf("baka8\n");
+    //  exit(1);
+  }
+
+  //
+  for (i = 0; i < T; i++)
+  {
+    w[i].t[0].a = a.x[i];
+    w[i].t[0].n = 0;
+    w[i].t[1].a = 1;
+    w[i].t[1].n = 1;
+    ////printpol(o2v(w[i]));
+  }
+  //exit(1);
+
+  tmp.x[0] = 1;
+  //
+
+  //#pragma omp parallel for private(i,j)
+  for (i = 0; i < T; i++)
+  {
+    t = v2o(tmp);
+    //
+    for (j = 0; j < T; j++)
+    {
+      // #pragma omp critical
+      if (i != j)
+      {
+        t = omul(t, w[j]);
+      }
+    }
+
+    //printpol(o2v(t));
+    //
+    if (deg(o2v(t)) == 0)
+    {
+      printf("baka9\n");
+      // exit(1);
+    }
+    l = oadd(l, t);
+  }
 
   return l;
 }
@@ -1811,7 +1861,7 @@ OP decode(OP f, OP s)
       printf("baka0\n");
       printvec(o2v(f));
       //for (i = 0; i < N; i++)
-      //printf("%d,", zz[i]);
+        //printf("%d,", zz[i]);
       exit(1);
       //return f;
     }
@@ -1921,7 +1971,7 @@ void bdet()
     for (j = 0; j < K; j++)
     {
       l = mat[i][j];
-//#pragma omp parallel for
+#pragma omp parallel for
       for (k = 0; k < E; k++)
       {
         BH[j * E + k][i] = l % 2;
@@ -1931,26 +1981,26 @@ void bdet()
   }
   for (i = 0; i < N; i++)
   {
-//#pragma omp parallel for
+#pragma omp parallel for
     for (j = 0; j < E * K; j++)
     {
       //  printf("%d,",BH[j][i]);
       dd[j] = BH[j][i];
     }
-  //  fwrite(dd, 1, E * K, ff);
+    fwrite(dd, 1, E * K, ff);
     //printf("\n");
   }
   fclose(ff);
 }
 
 //Niederreiter暗号の公開鍵を作る
-void pkgen()
+void pubkeygen()
 {
   int i, j, k, l;
   FILE *fp;
   unsigned char dd[E * K] = {0};
 
-//  fp = fopen("pub.key", "wb");
+  fp = fopen("pub.key", "wb");
 #pragma omp parallel for private(j, k)
   for (i = 0; i < E * K; i++)
   {
@@ -1970,26 +2020,26 @@ void pkgen()
   }
   P2Mat(P);
 
-//#pragma omp parallel for
+#pragma omp parallel for
   for (i = 0; i < E * K; i++)
   {
     //  for(j=0;j<N;j++){
-//#pragma omp parallel for
+#pragma omp parallel for
     for (k = 0; k < N; k++)
       pub[i][k] = tmp[i][P[k]]; //&A[k][j];
                                 //    }
   }
 
-//#pragma omp parallel for private(j)
+#pragma omp parallel for private(j)
   for (i = 0; i < N; i++)
   {
     for (j = 0; j < E * K; j++)
     {
       dd[j] = pub[j][i];
     }
-//    fwrite(dd, 1, E * K, fp);
+    fwrite(dd, 1, E * K, fp);
   }
-  //fclose(fp);
+  fclose(fp);
 }
 
 //秘密置換を生成する
@@ -1998,20 +2048,20 @@ void Pgen()
   unsigned int i, j;
   FILE *fp;
 
-//  fp = fopen("P.key", "wb");
+  fp = fopen("P.key", "wb");
   random_permutation(P);
   for (i = 0; i < N; i++)
     inv_P[P[i]] = i;
-//  fwrite(P, 2, N, fp);
-//  fclose(fp);
+  fwrite(P, 2, N, fp);
+  fclose(fp);
 
   //for (i = 0; i < N; i++)
   //printf ("%d,", inv_P[i]);
   //printf ("\n");
 
-//  fp = fopen("inv_P.key", "wb");
-//  fwrite(inv_P, 2, N, fp);
-//  fclose(fp);
+  fp = fopen("inv_P.key", "wb");
+  fwrite(inv_P, 2, N, fp);
+  fclose(fp);
 }
 
 //ハッシュ１６進表示
@@ -2041,10 +2091,6 @@ byte_to_hex(uint8_t b, char s[23])
 int isqrt(unsigned short u)
 {
   int i, j, k;
-
-
-  if(u==0)
-  return 0;
 
   for (i = 0; i < N; i++)
   {
@@ -2223,6 +2269,9 @@ OP osqrt(OP f, OP w)
   exit(1);
 }
 
+vec p2()
+{
+}
 
 EX extgcd(OP a, OP b)
 {
@@ -2735,7 +2784,7 @@ void van()
 
   for (i = 0; i < N; i++)
     vb[0][i] = 1;
-  //#pragma omp parallel for private(i, j)
+//#pragma omp parallel for private(i, j)
   for (i = 1; i < K; i++)
   {
     for (j = 0; j < N; j++)
@@ -2825,8 +2874,8 @@ OP mkpol()
         break;
       }
     }
-  }
-
+  } 
+  
   while (fail || j == 0);
   for (i = 0; i < N; i++)
   {
@@ -2834,6 +2883,8 @@ OP mkpol()
     printf("%d,", tr[i]);
   }
   printf("\n");
+
+
 
   return w;
 }
@@ -2865,11 +2916,12 @@ aa:
     //
   }
 
-  printpol(o2v(w));
-  printf(" =irreducible\n");
-  printsage(o2v(w));
-  printf("\n");
-  //wait();
+    printpol(o2v(w));
+    printf(" =irreducible\n");
+    printsage(o2v(w));
+    printf("\n");
+    //wait();
+
 
   //多項式を固定したい場合コメントアウトする。
   /*
@@ -2893,17 +2945,20 @@ aa:
   printf("sagemath で既約性を検査してください！\n");
   */
 
+
   van();
   ogt();
   memset(mat, 0, sizeof(mat));
 
   //wait();
 
-  //#pragma omp parallel for
+//#pragma omp parallel for
+ 
 
   printf("\nすげ、オレもうイキそ・・・\n");
   //keygen(g);
   //exit(1);
+
 
   for (j = 0; j < N; j++)
   {
@@ -2914,7 +2969,7 @@ aa:
     //printf("tr[%d]=%d\n",j,tr[j]);
   }
 
-  unsigned short s;
+unsigned short s;
 #pragma omp parallel for default(none) private(i, j, k, s) shared(mat, gt, ma, gf, fg)
   for (i = 0; i < K; i++)
   {
@@ -2983,7 +3038,7 @@ void keygen(unsigned short *g)
   printf("end of bdet\n");
   Pgen();
   printf("end of Pgen\n");
-  //pubkeygen();
+  pubkeygen();
 }
 
 int elo(OP r)
@@ -3144,10 +3199,10 @@ void mkerr(unsigned short *z1, int num)
 
 void fun()
 {
-  unsigned int i, k;
+  unsigned short i, k;
 
   OP qq = {0};
-  for (i = 0b10000000000000001; i < 0b11111111111111111 + 1; i++)
+  for (i = 0b1000000000001; i < 0b1111111111111 + 1; i++)
   {
     qq = v2o(i2v(i));
     k = ben_or(qq);
@@ -3176,9 +3231,9 @@ int main(void)
   vec v;
   time_t t;
   OP r1 = {0}, r2 = {0}, r3 = {0}, r4 = {0};
-  OP g1 = {0}, tmp = {0};
+  OP g1 = {0}, tmp = {
+                   0};
   int fail = 0;
-  unsigned short a,b;
 
   if (K > N)
     printf("configuration error! K is too big K\n");
@@ -3190,11 +3245,11 @@ int main(void)
   printf("srand(%u)\n", seed);
   srand(seed);
 #endif
+unsigned short a,b;
 
 a=1234;
-printf("a=%d\n",a);
+printf("b=%d\n",a);
 v=i2v(a);
-
 printvec(v);
 b=v2i(v);
 printf("b=%d\n",b);
@@ -3297,11 +3352,22 @@ lab:
      //exit(1);
    */
 
+
   //decode開始
   k = 0;
   while (1)
   {
 
+    //for(i=1;i<4;i++)
+    //zz[i]=i;
+
+    //zz[0] = 1;
+    //zz[2] = 2;
+    //zz[4] = 4;
+    //zz[8] = 8;
+    printf("@b\n");
+    //exit(1);
+memset(zz,0,sizeof(zz));
     mkerr(zz, T);
 
     for (i = 0; i < N; i++)
@@ -3309,7 +3375,7 @@ lab:
       if (zz[i] > 0)
         printf("l=%d %d\n", i, zz[i]);
     }
-
+//exit(1);
     f = synd(zz);
     //exit(1);
     /*      
@@ -3343,6 +3409,7 @@ lab:
     //printf("パターソンアルゴリズムを実行します。何か数字を入れてください。\n");
     //wait();
     count = 0;
+    memset(z1, 0, sizeof(z1));
 
     j = 0;
 
