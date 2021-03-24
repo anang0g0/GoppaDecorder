@@ -3305,6 +3305,7 @@ label:
   printsage(o2v(w));
   printf("\n");
   printf("sagemath で既約性を検査してください！\n");
+  
   bdet();
   toByte(BB);
   Pgen();
@@ -3316,17 +3317,9 @@ label:
     for(j=0;j<N;j++)
     I.z[j][i]=H.z[P[j]][i];
   }
-  //I=mulmat(G,AH,2);
-  toByte(I);
-/*
-  for(i=0;i<K*E;i++){
-    for(j=0;j<N;j++)
-    printf("%d,",I.z[j][i]);
-    printf("  i=====%d\n",i);
-  }
-  printf("\n");
-  */
+  toByte(I);  
   exit(1);
+
   //wait();
 
   //keygen(g);
@@ -3505,10 +3498,10 @@ memset(zz,0,sizeof(zz));
 
     //wait();
     //exit(1);
-    goto label;
+    //goto label;
     //wait();
 
-    //break;
+    break;
   }
 
   return 0;
