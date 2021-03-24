@@ -359,6 +359,7 @@ if(flg==0){
   }
 }
 if(flg==1){
+   #pragma omp parallel for num_threads(omp_get_max_threads()) //private(i,j,k)
   for (i = 0; i < K*E; i++)
   {
     for (j = 0; j < N; j++)
@@ -368,11 +369,11 @@ if(flg==1){
         tmp.z[j][i] ^= gf[mlt(fg[A.w[i][k]], fg[B.z[j][k]])];
         
       }
-      printf("%d,",tmp.z[j][i]);
+      //printf("%d,",tmp.z[j][i]);
     }
-    printf("\n");
+    //printf("\n");
   }
-  printf(" =====tmp.z\n");
+  //printf(" =====tmp.z\n");
   //exit(1);
 }
 if(flg==2){
