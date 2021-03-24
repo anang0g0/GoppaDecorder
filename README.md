@@ -51,6 +51,12 @@ Coding Theory-Based Cryptography:McEliece Cryptosystems in Sage
 Testing Irreducibility of Trinomials over GF(2) 
 https://digitalcommons.iwu.edu/cgi/viewcontent.cgi?article=1013&context=math_honproj
 
+# 20210324
+
+Niederreiterのバイナリ公開鍵を生成し、それをさらにshort int型にパッキングすることに成功した。
+
+あとはこの鍵で暗号化復号化できれば完成！
+
 # 20210323
 
 なんだかシステムを再起動したら、勝手にブートイメージが書き換わってカーネルが合わなくてXが起動しないのでUbuntuから起動してる。
