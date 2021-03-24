@@ -345,19 +345,6 @@ MAT mulmat(MAT A,MAT B,int flg){
 int i,j,k;
 MAT tmp={0};
 
-
-if(flg==0){
-  for (i = 0; i < N; i++)
-  {
-    for (j = 0; j < N; j++)
-    {
-      for (k = 0; k < N; k++)
-      {
-        tmp.x[i][j] ^= gf[mlt(fg[A.x[i][k]], fg[B.x[k][j]])];
-      }
-    }
-  }
-}
 if(flg==1){
    #pragma omp parallel for num_threads(omp_get_max_threads()) //private(i,j,k)
   for (i = 0; i < K*E; i++)
@@ -374,23 +361,6 @@ if(flg==1){
     //printf("\n");
   }
   //printf(" =====tmp.z\n");
-  //exit(1);
-}
-if(flg==2){
- #pragma omp parallel for num_threads(omp_get_max_threads()) //private(i,j,k)
-  for (i = 0; i < K*E; i++)
-  {
-    for (j = 0; j < N; j++)
-    {
-      for (k = 0; k < N; k++)
-      {
-        tmp.z[j][i] ^= gf[mlt(fg[A.z[k][i]], fg[B.x[k][j]])];
-      }
-    //printf("%d,",tmp.z[j][i]);
-    }
-    //printf("  i====%d\n",i);
-  }
-  //printf(" ===H\n");
   //exit(1);
 }
 if(flg==3){
