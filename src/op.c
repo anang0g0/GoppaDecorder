@@ -54,8 +54,8 @@ unsigned short sy[K] = {0};
 //Goppa多項式
 static unsigned short g[K + 1] = {1, 0, 0, 0, 1, 0, 1};
 MAT BB = {0};
-MAT H = {0};
-MAT AH = {0};
+
+
 
 unsigned int AA = 0, B = 0; //, C = 0, A2 = 0;
 
@@ -1440,6 +1440,7 @@ void random_permutation(unsigned short *a)
   }
 }
 
+/*
 //配列から置換行列への変換
 void P2Mat(unsigned short P[N])
 {
@@ -1448,6 +1449,7 @@ void P2Mat(unsigned short P[N])
   for (i = 0; i < N; i++)
     AH.x[i][P[i]] = 1;
 }
+*/
 
 unsigned short
 b2B(unsigned short b[E])
@@ -1955,8 +1957,6 @@ OP setpol(unsigned short f[], int n)
   return g;
 }
 
-unsigned short tr[N] = {0};
-unsigned short ta[N] = {0};
 
 //バイナリ型パリティチェック行列を生成する
 void bdet()
@@ -1975,7 +1975,7 @@ void bdet()
       //#pragma omp parallel for
       for (k = 0; k < E; k++)
       {
-        BH[j * E + k][i] = l % 2;
+        BB.z[i][j * E + k] = l % 2;
         l = (l >> 1);
       }
     }
@@ -1985,19 +1985,13 @@ void bdet()
     //#pragma omp parallel for
     for (j = 0; j < E * K; j++)
     {
-      printf("%d,", BH[j][i]);
+      printf("%d,", BB.z[i][j]);
       //dd[j] = BH[j][i];
     }
     //fwrite(dd, 1, E * K, ff);
     printf("\n");
   }
   //fclose(ff);
-
-  for (i = 0; i < N; i++)
-  {
-    for (j = 0; j < K * E; j++)
-      BB.z[i][j] = BH[j][i];
-  }
 }
 
 unsigned short HH[N][K];
@@ -2818,7 +2812,7 @@ OP mkpol()
     flg = 0;
     l = 0;
     memset(g, 0, sizeof(g));
-    memset(ta, 0, sizeof(ta));
+    //memset(ta, 0, sizeof(ta));
     memset(w.t, 0, sizeof(w));
     ginit();
     ii++;
@@ -2847,9 +2841,7 @@ OP mkpol()
     }
     // exit(1);
 
-  }
-  while ( j == 0);
-
+  } while (j == 0);
 
   return w;
 }
@@ -2860,9 +2852,10 @@ OP mkg()
 {
   int i, j, k, l, ii = 0;
   OP w = {0};
+unsigned short tr[N] = {0};
+unsigned short ta[N] = {0};
 
 aa:
-
 
   //printf("\n");
 
@@ -2884,17 +2877,17 @@ aa:
     //
   }
 
-    //多項式の値が0でないことを確認
-    for (i = 0; i < N; i++)
+  //多項式の値が0でないことを確認
+  for (i = 0; i < N; i++)
+  {
+    ta[i] = trace(w, i);
+    if (ta[i] == 0)
     {
-      ta[i] = trace(w, i);
-      if (ta[i] == 0)
-      {
-        printf("trace 0 @ %d\n", i);
-        //fail = 1;
-        exit(1);
-      }
+      printf("trace 0 @ %d\n", i);
+      //fail = 1;
+      exit(1);
     }
+  }
   for (i = 0; i < N; i++)
   {
     tr[i] = oinv(ta[i]);
@@ -2981,13 +2974,13 @@ aa:
 }
 
 //Niederreiter暗号の公開鍵を作る
-void pubkeygen()
+OP pubkeygen()
 {
   int i, j, k, l;
   FILE *fp;
   unsigned char dd[E * K] = {0};
   OP w = {0};
-  MAT I = {0};
+
 
   w = mkg();
 
@@ -3000,17 +2993,20 @@ void pubkeygen()
   bdet();
   toByte(BB);
   Pgen();
-  //P2Mat(P);
   makeS();
   //  exit(1);
-  H = mulmat(S, BB, 1);
+  BB = mulmat(S, BB, 1);
   for (i = 0; i < K * E; i++)
   {
     for (j = 0; j < N; j++)
-      I.z[j][i] = H.z[P[j]][i];
+      S.z[j][i] = BB.z[P[j]][i];
   }
-  toByte(I);
+  toByte(S);
+
+
+return w;
 }
+
 
 //鍵生成
 void key2(unsigned short g[])
@@ -3038,22 +3034,7 @@ void key2(unsigned short g[])
   fclose(fp);
 }
 
-//すべての鍵を生成する
-void keygen(unsigned short *g)
-{
-  int i;
-  FILE *fp;
 
-  key2(g);
-  printf("end of ky2\n");
-  makeS();
-  printf("end of S\n");
-  bdet();
-  printf("end of bdet\n");
-  Pgen();
-  printf("end of Pgen\n");
-  pubkeygen();
-}
 
 int elo(OP r)
 {
@@ -3269,8 +3250,6 @@ int main(void)
   printf("b=%d\n", b);
   //fun();
   //exit(1);
-  MAT I = {0};
-  MAT G = {0};
 
 label:
 
@@ -3279,8 +3258,8 @@ label:
   printf("\nすげ、オレもうイキそ・・・\n");
 
   //公開鍵を生成する
-  pubkeygen();
-  exit(1);
+  w=pubkeygen();
+  //exit(1);
 
   //wait();
 
