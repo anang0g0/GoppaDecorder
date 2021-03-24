@@ -584,7 +584,7 @@ OP omod(OP f, OP g)
     f = oadd(f, h);
     if (odeg((f)) == 0 || odeg((g)) == 0)
     {
-      printf("blake1\n");
+//      printf("blake1\n");
       break;
     }
 
@@ -958,12 +958,12 @@ OP gcd(OP a, OP b)
     a = b;
     b = tmp;
   }
-
+/*
   printpol(o2v(a));
   printf(" ========f\n");
   printpol(o2v(b));
   printf(" ========g\n");
-
+*/
   /* 自然数 a > b を確認・入替 */
   if (odeg(a) < odeg(b))
   {
@@ -3253,6 +3253,7 @@ v=i2v(a);
 printvec(v);
 b=v2i(v);
 printf("b=%d\n",b);
+fun();
 exit(1);
 
 
