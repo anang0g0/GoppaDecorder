@@ -2990,7 +2990,6 @@ aa:
       //printf("%d,",s);
       mat[j][i] = s;
     }
-  
   }
   //printf("\n");
   //exit(1);
@@ -2999,9 +2998,9 @@ aa:
   {
     for (i = 0; i < K; i++)
       printf("%d,", mat[j][i]);
-  printf("\n");  
+    printf("\n");
   }
-  
+
   //wait();
 
   return w;
@@ -3048,8 +3047,51 @@ void enc()
   pubkeygen();
 }
 
-void dec()
+OP dec(unsigned short ss[])
 {
+int i,j,k;
+vec v={0};
+OP s={0};
+  unsigned ch[K * E] = {0};
+  unsigned char h2o[K * E] = {0};
+
+
+  for (i = 0; i < K; i++)
+  {
+    v = i2v(ss[i]);
+    for (j = 0; j < E; j++)
+      ch[i * E + j] = v.x[j];
+  }
+  //for (i = 0; i < K * E; i++)
+  //printf("%d", ch[i]);
+  //printf("\n");
+
+  unsigned short uk[K] = {0};
+
+  for (i = 0; i < K * E; i++)
+  {
+    for (j = 0; j < K * E; j++)
+      h2o[i] ^= (ch[j] & inv_S.w[i][j]);
+  }
+  //for (i = 0; i < K * E; i++)
+  //printf("%d,", h2o[i]);
+  //printf("\n");
+
+  for (i = 0; i < K; i++)
+  {
+    memset(v.x, 0, sizeof(v.x));
+    for (j = 0; j < E; j++)
+      v.x[j] = h2o[i * E + j];
+    uk[i] = v2i(v);
+  }
+  for (i = 0; i < K; i++)
+    printf("%d,", uk[i]);
+  printf("\n");
+  //    exit(1);
+  s = setpol(uk, K);
+
+  return s;
+
 }
 
 //鍵生成
@@ -3116,15 +3158,14 @@ int elo(OP r)
   return count;
 }
 
-
 int elo2(OP r)
 {
   int count, i, j, k;
 
   count = 0;
 
-  unsigned char x[N]={0},yy[N]={0};
-   for (i = 0; i < T; i++)
+  unsigned char x[N] = {0}, yy[N] = {0};
+  for (i = 0; i < T; i++)
   {
 
     if (i > 0 && r.t[i].n == 0)
@@ -3136,29 +3177,29 @@ int elo2(OP r)
 
     if (r.t[i].a > 0 && i > 0) // == r.t[i].n)
     {
-      x[r.t[i].n]=r.t[i].a;
+      x[r.t[i].n] = r.t[i].a;
       //printf("err=%d %d %s\n", r.t[i].a, r.t[i].n, "お");
       count++;
     }
     if (i == 0)
     {
-      x[r.t[i].n]=r.t[i].a;
+      x[r.t[i].n] = r.t[i].a;
       //printf("\nerr=%d %d %s\n", r.t[i].a, r.t[i].n, "う");
       count++;
     }
     //zz[r.t[i].n]=r.t[i].a;
   }
- 
-  for(i=0;i<N;i++)
-    yy[i]=x[P[i]];
-  for(i=0;i<N;i++){
-    if(yy[i]>0)
-    printf("err= %d\n",i);
+
+  for (i = 0; i < N; i++)
+    yy[i] = x[P[i]];
+  for (i = 0; i < N; i++)
+  {
+    if (yy[i] > 0)
+      printf("err= %d\n", i);
   }
 
   return count;
 }
-
 
 int ero(vec v)
 {
@@ -3257,23 +3298,22 @@ int ero(vec v)
   return count;
 }
 
-
 int ero2(vec v)
 {
   int i, j, count = 0;
-unsigned short ya[N]={0},xa[N]={0};
+  unsigned short ya[N] = {0}, xa[N] = {0};
 
   for (i = 0; i < T * 2; i++)
   {
     if (i == 0)
     {
-      xa[v.x[i]]=1;
+      xa[v.x[i]] = 1;
       //printf("error position=%d %d う\n", i, v.x[i]);
       count++;
     }
     if (i > 0 && v.x[i] > 0)
     {
-      xa[v.x[i]]=1;
+      xa[v.x[i]] = 1;
       //printf("error position=%d %d お\n", i, v.x[i]);
       count++;
     }
@@ -3324,16 +3364,20 @@ unsigned short ya[N]={0},xa[N]={0};
       }
 */
   }
-  for(i=0;i<N;i++)
-    ya[i]=xa[P[i]];
-    for(i=0;i<N;i++){
-      if(ya[i]>0 && i==0){
-      printf("error position=%d う\n",i);
-      }else if(ya[i]>0){
-      printf("error position=%d お\n",i);
+  for (i = 0; i < N; i++)
+    ya[i] = xa[P[i]];
+  for (i = 0; i < N; i++)
+  {
+    if (ya[i] > 0 && i == 0)
+    {
+      printf("error position=%d う\n", i);
     }
+    else if (ya[i] > 0)
+    {
+      printf("error position=%d お\n", i);
     }
-    //exit(1);
+  }
+  //exit(1);
 
   if (count == T * 2)
   {
@@ -3406,13 +3450,13 @@ void fun()
   }
 }
 
-OP sin(unsigned short zz[]){
-int i,j;
-OP s={0};
-vec v={0};
-unsigned ch[K*E]={0};
-unsigned short ss[K]={0};
+OP sin(unsigned short zz[])
+{
+  int i, j;
+  OP s = {0};
+  vec v = {0};
 
+  unsigned short ss[K] = {0};
 
   for (i = 0; i < N; i++)
   {
@@ -3425,7 +3469,6 @@ unsigned short ss[K]={0};
       }
       printf("\n");
     }
-     
   }
 
   for (j = 0; j < K; j++)
@@ -3433,40 +3476,7 @@ unsigned short ss[K]={0};
   printf("\n");
   printf(" ==ss\n");
   //exit(1);
-
-  unsigned char h2o[K * E] = {0};
-  for (i = 0; i < K; i++)
-  {
-    v = i2v(ss[i]);
-    for (j = 0; j < E; j++)
-      ch[i * E + j] = v.x[j];
-  }
-  //for (i = 0; i < K * E; i++)
-    //printf("%d", ch[i]);
-  //printf("\n");
-
-unsigned short uk[K]={0};
-
-  for (i = 0; i < K * E; i++)
-  {
-    for (j = 0; j < K * E; j++)
-      h2o[i] ^= (ch[j] & inv_S.w[i][j]);
-  }
-  //for (i = 0; i < K * E; i++)
-    //printf("%d,", h2o[i]);
-  //printf("\n");
-
-  for(i=0;i<K;i++){
-    memset(v.x,0,sizeof(v.x)); 
-    for(j=0;j<E;j++)
-    v.x[j]=h2o[i*E+j];
-    uk[i]=v2i(v);
-  }
-  for(i=0;i<K;i++)
-  printf("%d,",uk[i]);
-  printf("\n");
-//    exit(1);
-  s=setpol(uk,K);
+s=dec(ss);
 
 return s;
 }
@@ -3518,33 +3528,32 @@ label:
   //パリティチェックを生成する。
   //w=mkg();
   printf("\nすげ、オレもうイキそ・・・\n");
-  
+
   unsigned short ss[K] = {0};
-  
+
   //公開鍵を生成する
   w = pubkeygen();
   //memcpy(mat,S.z,sizeof(mat));
-  
 
-memset(zz,0,sizeof(zz));
-memset(ss,0,sizeof(ss));
-  
-mkerr(zz, T);
-//exit(1);
+  memset(zz, 0, sizeof(zz));
+  memset(ss, 0, sizeof(ss));
 
-  g1=synd(zz);
+  mkerr(zz, T);
+  //exit(1);
+
+  g1 = synd(zz);
   printpol(o2v(g1));
   printf(" =mat's\n");
-//  exit(1);
+  //  exit(1);
 
-  f=sin(zz);
+  f = sin(zz);
   printpol(o2v(f));
   printf(" ==sin\n");
   r = decode(w, f);
   elo2(r);
-//  exit(1);
+  //  exit(1);
 
-//exit(1);  
+  //exit(1);
   r = decode(w, g1);
   elo(r);
   //exit(1);
@@ -3552,26 +3561,25 @@ mkerr(zz, T);
   count = 0;
   memset(z1, 0, sizeof(z1));
 
-    j = 0;
+  j = 0;
 
-    mkerr(z1, T * 2);
+  mkerr(z1, T * 2);
 
-    //encryotion
-    //test (w, z1);
+  //encryotion
+  //test (w, z1);
 
-    f = sin(z1);
-    g1=synd(z1);
-    count = 0;
-    //復号化の本体
-    v = pattarson(w, f);
-    //エラー表示
-    ero2(v);
-    //復号化の本体
-    v = pattarson(w, g1);
-    //エラー表示
-    ero(v);    
-    //exit(1);
-
+  f = sin(z1);
+  g1 = synd(z1);
+  count = 0;
+  //復号化の本体
+  v = pattarson(w, f);
+  //エラー表示
+  ero2(v);
+  //復号化の本体
+  v = pattarson(w, g1);
+  //エラー表示
+  ero(v);
+  //exit(1);
 
   return 0;
 }
