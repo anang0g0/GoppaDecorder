@@ -3450,13 +3450,13 @@ void fun()
   }
 }
 
-vec sin(unsigned short zz[])
+void sin(unsigned short zz[],unsigned short *ss)
 {
   int i, j;
   OP s = {0};
   vec v = {0};
 
-  unsigned short ss[K] = {0};
+  //unsigned short ss[K] = {0};
 
   for (i = 0; i < N; i++)
   {
@@ -3464,7 +3464,7 @@ vec sin(unsigned short zz[])
     {
       for (j = 0; j < K; j++)
       {
-        v.x[j] ^= HH[i][j];
+        ss[j] ^= HH[i][j];
         printf("%d,", HH[i][j]);
       }
       printf("\n");
@@ -3472,13 +3472,13 @@ vec sin(unsigned short zz[])
   }
 
   for (j = 0; j < K; j++)
-    printf("%d,", v.x[j]);
+    printf("%d,", ss[j]);
   printf("\n");
   printf(" ==ss\n");
   //exit(1);
   
 
-return v;
+//return v;
 }
 
 //言わずもがな
@@ -3546,8 +3546,8 @@ label:
   printf(" =mat's\n");
   //  exit(1);
 
-  v = sin(zz);
-  f=dec(v.x);
+  sin(zz,ss);
+  f=dec(ss);
   printpol(o2v(f));
   printf(" ==sin\n");
   r = decode(w, f);
@@ -3568,9 +3568,9 @@ label:
 
   //encryotion
   //test (w, z1);
-
-  v = sin(z1);
-  f=dec(v.x);
+  memset(ss,0,sizeof(ss));
+  sin(z1,ss);
+  f=dec(ss);
 
   g1 = synd(z1);
   count = 0;
