@@ -1,16 +1,9 @@
-//date 20200331:xgcdの終了条件が２つになってしまう。ogcdとxgcdで使い分ける。
-//date : 20200326 鍵生成が det と deta で高い確率で一致する。detaは並列処理。
-//date 20200229 : pattarson algorithm implementation ver 1.0
-// xgcd & osqrtを追加した
+//date : 20210325（ver.1.0）
 //date      :  20160310,20191218,20191220,20191221,20191223,20191224,20191225,20191229,20191230
 //auther    : the queer who thinking about cryptographic future
 //code name :  一変数多項式演算ライブラリのつもり
-//status    : now in debugging (ver 0.8)
-// 0ベクトルが出ないように生成多項式のトレースチェックを入れた。
-//date      :  20160310
-//auther    : the queer who thinking about cryptographic future
 //code name : OVP - One Variable Polynomial library with OpenMP friendly
-//status    : now in debugging (ver 0.1)
+//status    : majer release (ver 1.0)
 
 #include <stdio.h>
 #include <stdlib.h>
