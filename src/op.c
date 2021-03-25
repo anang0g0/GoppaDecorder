@@ -54,8 +54,7 @@ unsigned short sy[K] = {0};
 //Goppa多項式
 static unsigned short g[K + 1] = {1, 0, 0, 0, 1, 0, 1};
 MAT BB = {0};
-
-
+MAT H = {0};
 
 unsigned int AA = 0, B = 0; //, C = 0, A2 = 0;
 
@@ -1957,7 +1956,6 @@ OP setpol(unsigned short f[], int n)
   return g;
 }
 
-
 //バイナリ型パリティチェック行列を生成する
 void bdet()
 {
@@ -1980,6 +1978,7 @@ void bdet()
       }
     }
   }
+
   for (i = 0; i < N; i++)
   {
     //#pragma omp parallel for
@@ -1991,6 +1990,48 @@ void bdet()
     //fwrite(dd, 1, E * K, ff);
     printf("\n");
   }
+
+  //fclose(ff);
+}
+
+//バイナリ型パリティチェック行列を生成する
+void toBit(MAT L)
+{
+  int i, j, k, l;
+  unsigned char dd[E * K] = {0};
+  FILE *ff;
+
+  //ff = fopen("Hb.key", "wb");
+
+  for (i = 0; i < N; i++)
+  {
+    for (j = 0; j < K; j++)
+    {
+      l = L.x[i][j];
+      printf("l=%d,", l);
+      //#pragma omp parallel for
+      for (k = 0; k < E; k++)
+      {
+        BB.z[i][j * E + k] = l % 2;
+        l = (l >> 1);
+      }
+    }
+    printf("\n");
+  }
+  //exit(1);
+
+  for (i = 0; i < N; i++)
+  {
+    //#pragma omp parallel for
+    for (j = 0; j < E * K; j++)
+    {
+      printf("%d,", BB.z[i][j]);
+      //dd[j] = BH[j][i];
+    }
+    //fwrite(dd, 1, E * K, ff);
+    printf("\n");
+  }
+
   //fclose(ff);
 }
 
@@ -2012,12 +2053,12 @@ void toByte(MAT SH)
 
       HH[i][j] = v2i(v);
       printf("%d,", HH[i][j]);
-      //dd[j] = BH[j][i];
+      //= BH[j][i];
     }
     //fwrite(dd, 1, E * K, ff);
     printf("\n");
   }
-
+  printf("end of byte\n");
   //exit(1);
 }
 
@@ -2852,8 +2893,8 @@ OP mkg()
 {
   int i, j, k, l, ii = 0;
   OP w = {0};
-unsigned short tr[N] = {0};
-unsigned short ta[N] = {0};
+  unsigned short tr[N] = {0};
+  unsigned short ta[N] = {0};
 
 aa:
 
@@ -2981,7 +3022,6 @@ OP pubkeygen()
   unsigned char dd[E * K] = {0};
   OP w = {0};
 
-
   w = mkg();
 
   oprintpol(w);
@@ -2992,21 +3032,32 @@ OP pubkeygen()
 
   bdet();
   toByte(BB);
+  //exit(1);
+
   Pgen();
   makeS();
   //  exit(1);
-  BB = mulmat(S, BB, 1);
+  H = mulmat(S, BB, 1);
   for (i = 0; i < K * E; i++)
   {
     for (j = 0; j < N; j++)
-      S.z[j][i] = BB.z[P[j]][i];
+      S.z[j][i] = H.z[P[j]][i];
   }
   toByte(S);
 
-
-return w;
+  return w;
 }
 
+void enc()
+{
+  int i, j, k;
+
+  pubkeygen();
+}
+
+void dec()
+{
+}
 
 //鍵生成
 void key2(unsigned short g[])
@@ -3033,8 +3084,6 @@ void key2(unsigned short g[])
   fwrite(g, 2, K + 1, fp);
   fclose(fp);
 }
-
-
 
 int elo(OP r)
 {
@@ -3250,7 +3299,7 @@ int main(void)
   printf("b=%d\n", b);
   //fun();
   //exit(1);
-
+  unsigned char ch[E * K] = {0};
 label:
 
   //パリティチェックを生成する。
@@ -3258,9 +3307,110 @@ label:
   printf("\nすげ、オレもうイキそ・・・\n");
 
   //公開鍵を生成する
-  w=pubkeygen();
+  w = pubkeygen();
+  //memcpy(mat,S.z,sizeof(mat));
+  for (i = 0; i < N; i++)
+  {
+    for (j = 0; j < K * E; j++)
+    {
+      printf("%d,", S.z[i][j]);
+    }
+    printf("\n");
+  }
+  
+  memset(H.z,0,sizeof(H.z));
+  //toByte(S);
+  for(i=0;i<N;i++){
+    for(j=0;j<K;j++){ 
+       H.x[i][j]=HH[i][j];
+       printf("H=%d,",H.x[i][j]);
+    }
+    printf("\n");
+  }
+  //exit(1);
+  toBit(H);
+  printf("end of world\n");
+  for(i=0;i<N;i++){
+    for(j=0;j<K*E;j++){
+  H.z[i][j]=BB.z[inv_P[i]][j];
+  printf("hh=%d,",H.z[i][j]);
+    }
+    printf("\n");
+  }
+  printf("\n");
   //exit(1);
 
+  BB=mulmat(inv_S,H,1);
+  toByte(BB);
+   exit(1);
+   
+  unsigned short ss[K] = {0};
+  mkerr(zz, T);
+  for (i = 0; i < N; i++)
+  {
+    if (zz[i] > 0)
+    {
+      for (j = 0; j < K; j++)
+      {
+        ss[j] ^= HH[i][j];
+        //printf("HH=%d,", HH[i][j]);
+      }
+    }
+  }
+
+  for (j = 0; j < K; j++)
+    printf("%d,", ss[j]);
+  printf("\n");
+  printf(" ==ss\n");
+  //exit(1);
+
+  unsigned char h2o[K * E] = {0};
+  for (i = 0; i < K; i++)
+  {
+    v = i2v(ss[i]);
+    for (j = 0; j < E; j++)
+      ch[i * E + j] = v.x[j];
+  }
+  for (i = 0; i < K * E; i++)
+    printf("%d", ch[i]);
+  printf("\n");
+
+unsigned short uk[K]={0};
+  for(i=0;i<K;i++){
+    memset(v.x,0,sizeof(v.x)); 
+    for(j=0;j<E;j++)
+    v.x[j]=ch[i*E+j];
+    uk[i]=v2i(v);
+  }
+  for(i=0;i<K;i++)
+  printf("%d,",uk[i]);
+  printf("\n");
+
+
+  for (i = 0; i < K * E; i++)
+  {
+    for (j = 0; j < K * E; j++)
+      h2o[i] ^= (ch[j] & inv_S.w[j][i]);
+  }
+  for (i = 0; i < K * E; i++)
+    printf("%d,", h2o[i]);
+  printf("\n");
+
+  for(i=0;i<K;i++){
+    memset(v.x,0,sizeof(v.x)); 
+    for(j=0;j<E;j++)
+    v.x[j]=h2o[i*E+j];
+    uk[i]=v2i(v);
+  }
+  for(i=0;i<K;i++)
+  printf("%d,",uk[i]);
+  printf("\n");
+//    exit(1);
+
+  f = setpol(uk, K);
+  r = decode(w, f);
+  elo(r);
+  exit(1);
   //wait();
 
   //keygen(g);
