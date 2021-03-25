@@ -3305,10 +3305,11 @@ label:
   //パリティチェックを生成する。
   //w=mkg();
   printf("\nすげ、オレもうイキそ・・・\n");
-
+  unsigned short ss[K] = {0};
   //公開鍵を生成する
   w = pubkeygen();
   //memcpy(mat,S.z,sizeof(mat));
+  
   for (i = 0; i < N; i++)
   {
     for (j = 0; j < K * E; j++)
@@ -3328,6 +3329,7 @@ label:
     printf("\n");
   }
   //exit(1);
+  /*
   toBit(H);
   printf("end of world\n");
   for(i=0;i<N;i++){
@@ -3342,9 +3344,11 @@ label:
 
   BB=mulmat(inv_S,H,1);
   toByte(BB);
-   exit(1);
-   
-  unsigned short ss[K] = {0};
+//  memcpy(mat,HH,sizeof(mat));
+   //exit(1);
+   */
+
+memset(zz,0,sizeof(zz));
   mkerr(zz, T);
   for (i = 0; i < N; i++)
   {
@@ -3353,16 +3357,20 @@ label:
       for (j = 0; j < K; j++)
       {
         ss[j] ^= HH[i][j];
-        //printf("HH=%d,", HH[i][j]);
+        printf("%d,", HH[i][j]);
       }
     }
+     printf("\n");
   }
+//exit(1);
+
 
   for (j = 0; j < K; j++)
     printf("%d,", ss[j]);
   printf("\n");
   printf(" ==ss\n");
   //exit(1);
+  
 
   unsigned char h2o[K * E] = {0};
   for (i = 0; i < K; i++)
@@ -3376,21 +3384,11 @@ label:
   printf("\n");
 
 unsigned short uk[K]={0};
-  for(i=0;i<K;i++){
-    memset(v.x,0,sizeof(v.x)); 
-    for(j=0;j<E;j++)
-    v.x[j]=ch[i*E+j];
-    uk[i]=v2i(v);
-  }
-  for(i=0;i<K;i++)
-  printf("%d,",uk[i]);
-  printf("\n");
-
 
   for (i = 0; i < K * E; i++)
   {
     for (j = 0; j < K * E; j++)
-      h2o[i] ^= (ch[j] & inv_S.w[j][i]);
+      h2o[i] ^= (ch[j] & inv_S.w[i][j]);
   }
   for (i = 0; i < K * E; i++)
     printf("%d,", h2o[i]);
@@ -3407,8 +3405,16 @@ unsigned short uk[K]={0};
   printf("\n");
 //    exit(1);
 
+
+  g1=synd(zz);
+  printpol(o2v(g1));
+  printf(" =mat's\n");
   f = setpol(uk, K);
+  printpol(o2v(f));
+  printf(" ==sin\n");
   r = decode(w, f);
+  elo(r);
+  r = decode(w, g1);
   elo(r);
   exit(1);
   //wait();
