@@ -16,6 +16,9 @@ ulimit -s unlimited
 自分の中で何か終わらなかったものがようやく終わった。
 
 暗号の方は「Niederreiter.c」に純粋なGoppa符号の復号は「op.c」に分けた。
+20191218から開発を重ねてきて、今日やっと完成しました。
+
+おめでとう私！
 
 これからやっとテキストを書き始めて、それど同時に可読性を上げていく。
 警告の修正作業も進めるし、習慣的にそうしているとしか思えないような分割コンパイルとかもやる予定。
@@ -53,11 +56,7 @@ Coding Theory-Based Cryptography:McEliece Cryptosystems in Sage
 Testing Irreducibility of Trinomials over GF(2) 
 https://digitalcommons.iwu.edu/cgi/viewcontent.cgi?article=1013&context=math_honproj
 
-# 20210325
 
-20191218から開発を重ねてきて、今日やっと完成しました。
-
-おめでとう私！
 
 # 20210324
 
