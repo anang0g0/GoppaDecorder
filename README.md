@@ -10,15 +10,17 @@ ulimit -s unlimited
 
 キーロガーが不安な方は、シングルタスクでネットに接続できないパソコンでビルドしてください。
 
+# 20210325：追記（完成記念は特にないです）
 
-https://apt.llvm.org/
+やっと終わった。
+自分の中で何か終わらなかったものがようやく終わった。
 
-https://openmp.llvm.org/
+暗号の方は「Niederreiter.c」に純粋なGoppa符号の復号は「op.c」に分けた。
 
-これらを読んで実行環境を作ってください。
+これからやっとテキストを書き始めて、それど同時に可読性を上げていく。
+警告の修正作業も進めるし、習慣的にそうしているとしか思えないような分割コンパイルとかもやる予定。
 
-clang-10推奨。
-gccでも動くようになりました。(20210319)
+# gccでも動くようになりました。(20210319)
 
 cd src/
 
@@ -50,6 +52,12 @@ Coding Theory-Based Cryptography:McEliece Cryptosystems in Sage
 
 Testing Irreducibility of Trinomials over GF(2) 
 https://digitalcommons.iwu.edu/cgi/viewcontent.cgi?article=1013&context=math_honproj
+
+# 20210325
+
+20191218から開発を重ねてきて、今日やっと完成しました。
+
+おめでとう私！
 
 # 20210324
 
