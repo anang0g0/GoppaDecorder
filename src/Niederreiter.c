@@ -3450,7 +3450,7 @@ void fun()
   }
 }
 
-OP sin(unsigned short zz[])
+vec sin(unsigned short zz[])
 {
   int i, j;
   OP s = {0};
@@ -3476,9 +3476,11 @@ OP sin(unsigned short zz[])
   printf("\n");
   printf(" ==ss\n");
   //exit(1);
-s=dec(ss);
+  for(i=0;i<K;i++)
+    v.x[i]=ss[i];
+  
 
-return s;
+return v;
 }
 
 //言わずもがな
@@ -3546,7 +3548,8 @@ label:
   printf(" =mat's\n");
   //  exit(1);
 
-  f = sin(zz);
+  v = sin(zz);
+  f=dec(v.x);
   printpol(o2v(f));
   printf(" ==sin\n");
   r = decode(w, f);
@@ -3568,7 +3571,9 @@ label:
   //encryotion
   //test (w, z1);
 
-  f = sin(z1);
+  v = sin(z1);
+  f=dec(v.x);
+
   g1 = synd(z1);
   count = 0;
   //復号化の本体
