@@ -3525,176 +3525,17 @@ label:
   //w=mkg();
   printf("\nすげ、オレもうイキそ・・・\n");
   
-  unsigned short ss[K] = {0};
-  
-  //公開鍵を生成する
-  w = pubkeygen();
-  //memcpy(mat,S.z,sizeof(mat));
-  
-  for (i = 0; i < N; i++)
-  {
-    for (j = 0; j < K * E; j++)
-    {
-      printf("%d,", S.z[i][j]);
-    }
-    printf("\n");
-  }
-  
-  memset(H.z,0,sizeof(H.z));
-  //toByte(S);
-  for(i=0;i<N;i++){
-    for(j=0;j<K;j++){ 
-       H.x[i][j]=HH[i][j];
-       printf("H=%d,",H.x[i][j]);
-    }
-    printf("\n");
-  }
-  //exit(1);
-  /*
-  toBit(H);
-  printf("end of world\n");
-  for(i=0;i<N;i++){
-    for(j=0;j<K*E;j++){
-  H.z[i][j]=BB.z[inv_P[i]][j];
-  printf("hh=%d,",H.z[i][j]);
-    }
-    printf("\n");
-  }
-  printf("\n");
-  //exit(1);
-
-  BB=mulmat(inv_S,H,1);
-  toByte(BB);
-//  memcpy(mat,HH,sizeof(mat));
-   //exit(1);
-   */
-
-//unsigned short ss[K]={0};
-memset(zz,0,sizeof(zz));
-memset(ss,0,sizeof(ss));
-  mkerr(zz, T);
-//exit(1);
-
-  g1=synd(zz);
-  printpol(o2v(g1));
-  printf(" =mat's\n");
-  f=sin(zz);
-  printpol(o2v(f));
-  printf(" ==sin\n");
-  r = decode(w, f);
-  elo2(r);
-  //exit(1);
-
-//exit(1);  
-  r = decode(w, g1);
-  elo(r);
-  //exit(1);
-
-  count = 0;
-  memset(z1, 0, sizeof(z1));
-
-    j = 0;
-
-    mkerr(z1, T * 2);
-
-    //encryotion
-    //test (w, z1);
-
-    f = sin(z1);
-    g1=synd(z1);
-    count = 0;
-    //復号化の本体
-    v = pattarson(w, f);
-    //エラー表示
-    ero2(v);
-    //復号化の本体
-    v = pattarson(w, g1);
-    //エラー表示
-    ero(v);    
-    //exit(1);
-
-  //wait();
+  w=mkg();
 
   //keygen(g);
 
   // 16次のバイナリ既約多項式の生成
-  //fun();
+  fun();
   //exit(1);
 
-  //print parity check
-  /*
-for(i=0;i<N;i++){
-  for(j=0;j<K;j++)
-printf("%d,",mat[i][j]);
-printf("\n");
-}
-printf("\n");
-//exit(1);
-*/
 
 lab:
 
-  //matmul ();
-  //matinv ();
-  // makeS();
-  //exit(1);
-
-  /*
-     printf("gen\n");
-     for(i=0;i<K;i++){
-     for(j=0;j<M;j++){
-     for(k=0;k<M;k++)
-     gen[j][i]^=gf[mlt(fg[mat[k][i]],fg[P[k][j]])];
-     printf("%2d,",gen[j][i]);
-     }
-     printf("\n");
-     }
-     printf("\n");
-     printf("mat\n");
-     for(i=0;i<K;i++){
-     for(j=0;j<N;j++)
-     printf("%2d,",mat[j][i]);
-     printf("\n");
-     }
-     printf("\n");
-   */
-
-  /*
-     for(i=0;i<K;i++){
-     for(j=0;j<N;j++)
-     mat[j][i]=0;
-     }
-     for(i=0;i<K;i++){
-     for(j=0;j<N;j++){
-     for(k=0;k<N;k++)
-     mat[j][i]^=gf[mlt(fg[gen[i][k]],invP[k][j])];
-     }
-     }
-     for(j=0;j<K;j++){
-     for(i=0;i<N;i++)
-     printf("%d,",mat[i][k]);
-     printf("\n");
-     }
-     printf("\n");
-     exit(1);
-   */
-
-  //vec ef={0},gh={0};
-
-  //memcpy(mat,gen,sizeof(mat));
-  /*  
-     for(i=0;i<8;i++){
-     for(j=0;j<M;j++)
-     mat[j][i]=gen[i][j];
-     }
-     printf("gen2mat\n");
-     for(i=0;i<8;i++){
-     for(j=0;j<M;j++)
-     printf("%2d,",mat[j][i]);
-     printf("\n");
-     }
-     //exit(1);
-   */
 
   //decode開始
   k = 0;
