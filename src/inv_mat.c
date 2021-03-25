@@ -132,79 +132,9 @@ printf("%f\n",det); // -> 120.000000
 }
 */
 
-void g3()
-{
-  int i, j, k;
-  unsigned short bb[F][F] = {0};
-  unsigned short c[N][N] = {0};
-
-  unsigned short a[N][N] = {0}; //{{0,3,0,0,},{0,0,4,0},{0,0,0,5},{6,0,0,0}};
-  //{{0,1,0,0},{0,0,1,0},{0,0,0,1},{1,0,0,0}};
-  unsigned short inv_a[N][N] = {0};
-  //{{0,0,0,1},{1,0,0,0},{0,1,0,0},{0,0,1,0}};
-  //={{1,2,0,1},{1,1,2,0},{2,0,1,1},{1,2,1,1}}; //入力用の配列
-  unsigned short cc[N][N] = {0};
-
-#pragma omp parallel for
-  for (i = 0; i < F; i++)
-  {
-    a[i][i] = rand() % N;
-    bb[i][i] = 1;
-  }
-  for (i = 0; i < F; i++)
-  {
-    //#pragma omp parallel for
-    for (j = i + 1; j < F; j++)
-    {
-      a[i][j] = rand() % 256;
-      // printf("%d,",a[i][j]);
-    }
-    //printf("\n");
-  }
-  for (i = 0; i < F; i++)
-  {
-    for (j = 0; j < F; j++)
-      printf("%d,", a[i][j]);
-    printf("\n");
-  }
-
-  for (i = 0; i < F; i++)
-  {
-    //#pragma omp parallel for
-    for (j = i + 1; j < F; j++)
-    {
-      bb[j][i] = rand() % N;
-    }
-  }
-  for (i = 0; i < F; i++)
-  {
-    for (j = 0; j < F; j++)
-      printf("%d,", bb[i][j]);
-    printf("\n");
-  }
-  //exit(1);
-  for (i = 0; i < F; i++)
-  {
-    for (j = 0; j < F; j++)
-    {
-      //#pragma omp parallel for
-      for (k = 0; k < F; k++)
-      {
-        cc[i][j] ^= bb[i][k] & a[k][j];
-      }
-    }
-  }
-  for (i = 0; i < F; i++)
-  {
-    for (j = 0; j < F; j++)
-      printf("%d,", cc[i][j]);
-    printf("\n");
-  }
-  //exit(1);
-}
 
 //inverse matrix
-MAT matinv(MAT a,int n)
+MAT matinv(MAT a, int n)
 {
 
   //unsigned short a[F][F];     //={{1,2,0,1},{1,1,2,0},{2,0,1,1},{1,2,1,1}}; //入力用の配列
@@ -212,13 +142,13 @@ MAT matinv(MAT a,int n)
   unsigned short buf;         //一時的なデータを蓄える
   unsigned short b[N][N] = {0}, dd[N][N] = {0};
   int i, j, k, count; //カウンタ
-  
+
   unsigned short c[N][N] = {0};
-  MAT z={0};
+  MAT z = {0};
   unsigned short cc[N][N] = {0};
 
 lab:
-/*
+  /*
   for (i = 0; i < F; i++)
   {
     for (j = 0; j < F; j++)
@@ -280,11 +210,10 @@ lab:
         goto lab;
       }
       //printf(" %d",inv_a[i][j]);
-      z.w[i][j]=inv_a[i][j];
+      z.w[i][j] = inv_a[i][j];
     }
     //printf("\n");
   }
-
 
   printf("行列を出力\n ={\n");
   for (i = 0; i < n; i++)
@@ -335,48 +264,47 @@ lab:
   }
   //exit(1);
 
-
-
   return z;
 }
 
+MAT mulmat(MAT A, MAT B, int flg)
+{
+  int i, j, k;
+  MAT tmp = {0};
 
-MAT mulmat(MAT A,MAT B,int flg){
-int i,j,k;
-MAT tmp={0};
-
-if(flg==1){
-   #pragma omp parallel for num_threads(omp_get_max_threads()) //private(i,j,k)
-  for (i = 0; i < K*E; i++)
+  if (flg == 1)
   {
-    for (j = 0; j < N; j++)
+#pragma omp parallel for num_threads(omp_get_max_threads()) //private(i,j,k)
+    for (i = 0; i < K * E; i++)
     {
-      for (k = 0; k < K*E; k++)
+      for (j = 0; j < N; j++)
       {
-        tmp.z[j][i] ^= gf[mlt(fg[A.w[i][k]], fg[B.z[j][k]])];
-        
+        for (k = 0; k < K * E; k++)
+        {
+          tmp.z[j][i] ^= gf[mlt(fg[A.w[i][k]], fg[B.z[j][k]])];
+        }
+        //printf("%d,",tmp.z[j][i]);
       }
-      //printf("%d,",tmp.z[j][i]);
+      //printf("\n");
     }
-    //printf("\n");
+    //printf(" =====tmp.z\n");
+    //exit(1);
   }
-  //printf(" =====tmp.z\n");
-  //exit(1);
-}
-if(flg==3){
-  for (i = 0; i < K; i++)
+  if (flg == 3)
   {
-    for (j = 0; j < K; j++)
+    for (i = 0; i < K; i++)
     {
-      for (k = 0; k < K; k++)
+      for (j = 0; j < K; j++)
       {
-        tmp.w[i][j] ^= gf[mlt(fg[A.w[i][k]], fg[B.z[k][j]])];
+        for (k = 0; k < K; k++)
+        {
+          tmp.w[i][j] ^= gf[mlt(fg[A.w[i][k]], fg[B.z[k][j]])];
+        }
       }
     }
   }
-}
 
-return tmp;
+  return tmp;
 }
 
 //Q-matrix
