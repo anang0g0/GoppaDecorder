@@ -3464,7 +3464,7 @@ vec sin(unsigned short zz[])
     {
       for (j = 0; j < K; j++)
       {
-        ss[j] ^= HH[i][j];
+        v.x[j] ^= HH[i][j];
         printf("%d,", HH[i][j]);
       }
       printf("\n");
@@ -3472,12 +3472,10 @@ vec sin(unsigned short zz[])
   }
 
   for (j = 0; j < K; j++)
-    printf("%d,", ss[j]);
+    printf("%d,", v.x[j]);
   printf("\n");
   printf(" ==ss\n");
   //exit(1);
-  for(i=0;i<K;i++)
-    v.x[i]=ss[i];
   
 
 return v;
