@@ -2767,7 +2767,7 @@ void readkey()
   int i, j;
   unsigned char r[K*E]={0};
   vec v={0};
-
+unsigned short o[K]={0};
 
   //鍵をファイルに書き込むためにはkey2を有効にしてください。
   
@@ -2795,22 +2795,30 @@ fread(P,2,N,fp);
 fclose(fq);
 
 fq=fopen("inv_S.key","rb");
+/*
 for(i=0;i<K*E;i++){
   fread(r,1,K*E,fq);
   for(j=0;j<K*E;j++)
   inv_S.w[i][j]=r[j];
 }
-
   fclose(fq);
-/*
+*/
+memset(inv_S.w,0,sizeof(inv_S.w));
   for(i=0;i<K*E;i++){
+      fread(o,2,K,fq);
     for(j=0;j<K;j++){
-    v=i2v(r[i*K+j]);
-    for(int k=0;k<E;k++)
+    v=i2v(o[j]);
+    printf("%d,",o[j]);
+    for(int k=0;k<E;k++){
     inv_S.w[i][j*E+k]=v.x[k];
+    //printf("%d,",inv_S.w[i][j]);
     }
+    }
+    printf("\n");
   }
-  */
+  fclose(fq);
+//exit(1);
+
 for(i=0;i<K*E;i++){
   for(j=0;j<K*E;j++)
   printf("%d,",inv_S.w[i][j]);
@@ -3047,7 +3055,7 @@ aa:
 OP pubkeygen()
 {
   int i, j, k, l;
-  unsigned char n[K*E] = {0};
+  unsigned short n[K] = {0};
   FILE *fp;
   unsigned short dd[K] = {0};
   OP w = {0};
@@ -3074,25 +3082,32 @@ OP pubkeygen()
   fclose(fp);
   makeS();
   fp = fopen("inv_S.key", "wb");
+
+/*
 for(i=0;i<K*E;i++){
   for(j=0;j<K*E;j++)
-    n[j]=inv_S.w[i][j];
+    n[j]=inv_S.w[i][j];  
     fwrite(n,1,K*E,fp);
 } 
 fclose(fp);
-/*
+*/
+
   for (i = 0; i < K*E; i++)
   {
     for (j = 0; j < K; j++)
     {
+      memset(v.x,0,sizeof(v.x));
       for (k = 0; k < E; k++)
         v.x[k] = inv_S.w[i][j * E + k];
       n[j] = v2i(v);
+      printf("%d,",n[j]);
     }
+    printf("\n");
     fwrite(n, 2, K, fp);
   }
   fclose(fp);
-*/
+
+
   //  exit(1);
   H = mulmat(S, BB, 1);
   for (i = 0; i < K * E; i++)
@@ -3113,12 +3128,6 @@ fclose(fp);
   return w;
 }
 
-void enc()
-{
-  int i, j, k;
-
-  pubkeygen();
-}
 
 OP dec(unsigned short ss[])
 {
@@ -3605,11 +3614,11 @@ label:
   unsigned short ss[K] = {0};
 
   //公開鍵を生成する
-  //w = pubkeygen();
+  w = pubkeygen();
   //memcpy(mat,S.z,sizeof(mat));
 
-readkey();
-w=setpol(g,K+1);
+//readkey();
+//w=setpol(g,K+1);
 
 
   memset(zz, 0, sizeof(zz));
