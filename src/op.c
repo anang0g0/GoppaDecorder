@@ -1179,6 +1179,46 @@ OP vx(OP f, OP g)
   return vv;
 }
 
+
+//error locater for decode
+OP sabun(OP f, OP g)
+{
+  OP h = {0}, ww = {
+                  0};
+  OP v[K] = {0}, vv = {
+                     0};
+  oterm a, b;
+  int i, j;
+
+  v[0].t[0].a = 0;
+  v[0].t[1].n = 0;
+  v[1].t[0].a = 1;
+  v[1].t[1].n = 0;
+
+  i = 0;
+
+  while (1)
+  {
+    if (odeg((g)) == 0)
+      break;
+    h = omod(f, g);
+    if (LT(g).a == 0)
+      break;
+    ww = odiv(f, g);
+    v[i + 2] = oadd(v[i], omul(ww, v[i + 1]));
+    f = g;
+    g = h;
+
+    vv = v[i + 2];
+
+    if (odeg((vv)) == T*2)
+      break;
+    i++;
+  }
+
+  return vv;
+}
+
 //最終の項までの距離
 int distance(OP f)
 {
@@ -1840,9 +1880,10 @@ OP decode(OP f, OP s)
   printf("in decode\n");
   printpol(o2v(s));
   printf("\nsyn===========\n");
-  r = vx(f, s);
+  //r = vx(f, s);
+  hh=xgcd(f,s);
   //h=ogcd(f,s);
-
+  r=hh.u;
   if (odeg((r)) == 0)
   {
     printf("baka12\n");
@@ -3530,7 +3571,7 @@ label:
   //keygen(g);
 
   // 16次のバイナリ既約多項式の生成
-  fun();
+  //fun();
   //exit(1);
 
 
@@ -3585,7 +3626,7 @@ lab:
     printf("err=%dっ！！\n", count);
 
     //wait();
-    //exit(1);
+    exit(1);
     //goto lab;
 
   patta:
