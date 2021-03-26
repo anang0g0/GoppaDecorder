@@ -46,6 +46,7 @@ unsigned short sy[K] = {0};
 
 //Goppa多項式
 static unsigned short g[K + 1] = {1, 0, 0, 0, 1, 0, 1};
+//{1,0,1,1};
 MAT BB = {0};
 MAT H = {0};
 
@@ -1169,6 +1170,54 @@ OP vx(OP f, OP g)
     i++;
   }
 
+  return vv;
+}
+
+
+OP sabun(OP f, OP g)
+{
+  OP h = {0}, ww = {
+                  0};
+  OP v[K*2] = {0}, vv = {
+                     0};
+  oterm a, b;
+  int i, j;
+
+  v[0].t[0].a = 0;
+  v[0].t[1].n = 0;
+  v[1].t[0].a = 1;
+  v[1].t[1].n = 0;
+
+  i = 0;
+
+  while (1)
+  {
+    if (odeg((g)) == 0){
+      printf("is a\n");
+      break;
+    }
+    h = omod(f, g);
+    if (LT(g).a == 0){
+            printf("is b\n");
+      break;
+    }
+    ww = odiv(f, g);
+    v[i + 2] = oadd(v[i], omul(ww, v[i + 1]));
+    f = g;
+    g = h;
+
+    vv = v[i + 2];
+printpol(o2v(vv));
+printf(" deg%d\n",odeg(vv));
+    if (odeg((vv)) == T*2){
+      //printpol(o2v(vv));
+      break;
+      //exit(1);
+    }
+    i++;
+  }
+//printf("baka\n");
+//exit(1);
   return vv;
 }
 
@@ -2782,7 +2831,8 @@ void decrypt(OP w)
 
 OP synd(unsigned short zz[])
 {
-  unsigned short syn[K] = {0}, s = 0;
+  unsigned short syn[K] = {0};
+  unsigned short s = 0;
   int i, j, t1;
   OP f = {0};
 
@@ -3293,7 +3343,7 @@ aa:
       printf("%d,", bm2[j][i]);
     printf("\n");
   }
-
+//exit(1);
   //wait();
 
   return w;
@@ -3808,8 +3858,9 @@ void sin(unsigned short zz[], unsigned short *ss)
 
 
 
-OP cos(unsigned short zz[], unsigned short *ss)
+OP cos(unsigned short zz[])
 {
+  unsigned short ss[K*2]={0};
   int i, j;
   OP s = {0};
   vec v = {0};
@@ -3826,8 +3877,9 @@ OP cos(unsigned short zz[], unsigned short *ss)
         //printf("%d,", HH[i][j]);
       }
       //printf("\n");
-      printf("ss==%d\n", ss[j]);
+      
     }
+    printf("ss==%d\n", ss[i]);
   }
 
   for (j = 0; j < K; j++)
@@ -3912,22 +3964,62 @@ label:
   memset(ss, 0, sizeof(ss));
 
   
-  mkerr(zz, T*2);
+  //mkerr(zz, T*2);
+  for(i=0;i<T*2;i++)
+  zz[i]=1;
   //exit(1);
-
+unsigned short tarin[N]={0};
   //sin(zz, ss);
   //f = dec(ss);
+  //v.x[128]=1;
   f=synd(zz);
+  //r2=v2o(v);
+  //f=omul(r2,f);
   printpol(o2v(f));
   printf(" ==sin\n");
+  //exit(1);
   v=o2v(f);
-  f=cos(v.x,ss);
+  j=deg(v);
+  k=8192-128;
+  for(i=0;i<j+1;i++)
+  tarin[i+k]=v.x[i];
+  for(i=0;i<N;i++){
+    for(j=0;j<K*2;j++)
+    printf("%d,",bm2[i][j]);
+    printf("\n");
+  }
+  printf("  ==bm2\n");
+  //exit(1);
+  f=cos(zz);
   printpol(o2v(f));
   printf(" ==s2\n");
-  exit(1);
+  printpol(o2v(r1));
+  printf(" =r1\n");
+  //exit(1);
 
-  r = sendrier(w, f);
-  elo2(r);
+  r = sabun(r1, f);
+  //r=hh.d;
+  printpol(o2v(r));
+  printf(" =sabun\n");
+  v=chen(r);
+  for (i = 0; i < T*2; i++)
+  {
+    printf("x[%d]=1\n", v.x[i]);
+    if (v.x[i] == 0)
+      k++;
+    if (k > 1)
+    {
+      printf("baka0\n");
+      printvec(o2v(f));
+      //for (i = 0; i < N; i++)
+      //printf("%d,", zz[i]);
+      exit(1);
+      //return f;
+    }
+  }
+  //exit(1);
+
+//  elo2(r);
     exit(1);
 */
 
