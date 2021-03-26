@@ -2765,12 +2765,12 @@ void readkey()
   FILE *fp, *fq;
   unsigned short dd[K * N] = {0};
   int i, j;
-  unsigned char r[K*E]={0};
-  vec v={0};
-unsigned short o[K]={0};
+  unsigned char r[K * E] = {0};
+  vec v = {0};
+  unsigned short o[K] = {0};
 
   //鍵をファイルに書き込むためにはkey2を有効にしてください。
-  
+
   fp = fopen("sk.key", "rb");
   fread(g, 2, K + 1, fp);
   fclose(fp);
@@ -2780,22 +2780,23 @@ unsigned short o[K]={0};
   //#pragma omp parallel for
   for (i = 0; i < N; i++)
   {
-    for (j = 0; j < K; j++){
+    for (j = 0; j < K; j++)
+    {
       HH[i][j] = dd[K * i + j];
-      printf("%d,",HH[i][j]);
+      //printf("%d,", HH[i][j]);
     }
-    printf(" ===HH\n");
+    //printf(" ===HH\n");
   }
   printf("\n");
   fclose(fq);
   //exit(1);
 
-fq=fopen("P.key","rb");
-fread(P,2,N,fp);
-fclose(fq);
+  fq = fopen("P.key", "rb");
+  fread(P, 2, N, fp);
+  fclose(fq);
 
-fq=fopen("inv_S.key","rb");
-/*
+  fq = fopen("inv_S.key", "rb");
+  /*
 for(i=0;i<K*E;i++){
   fread(r,1,K*E,fq);
   for(j=0;j<K*E;j++)
@@ -2803,29 +2804,32 @@ for(i=0;i<K*E;i++){
 }
   fclose(fq);
 */
-memset(inv_S.w,0,sizeof(inv_S.w));
-  for(i=0;i<K*E;i++){
-      fread(o,2,K,fq);
-    for(j=0;j<K;j++){
-    v=i2v(o[j]);
-    printf("%d,",o[j]);
-    for(int k=0;k<E;k++){
-    inv_S.w[i][j*E+k]=v.x[k];
-    //printf("%d,",inv_S.w[i][j]);
+  memset(inv_S.w, 0, sizeof(inv_S.w));
+  for (i = 0; i < K * E; i++)
+  {
+    fread(o, 2, K, fq);
+    for (j = 0; j < K; j++)
+    {
+      v = i2v(o[j]);
+      //printf("%d,", o[j]);
+      for (int k = 0; k < E; k++)
+      {
+        inv_S.w[i][j * E + k] = v.x[k];
+        //printf("%d,",inv_S.w[i][j]);
+      }
     }
-    }
-    printf("\n");
+    //printf("\n");
   }
   fclose(fq);
-//exit(1);
+  //exit(1);
 
-for(i=0;i<K*E;i++){
-  for(j=0;j<K*E;j++)
-  printf("%d,",inv_S.w[i][j]);
-  printf("\n");
-}
-//exit(1);
-
+  for (i = 0; i < K * E; i++)
+  {
+    for (j = 0; j < K * E; j++)
+      printf("%d,", inv_S.w[i][j]);
+    printf("\n");
+  }
+  //exit(1);
 }
 
 //OP sx={0},ty={0};
@@ -2949,7 +2953,7 @@ aa:
     printf("irr=%d\n", l);
     if (ii > 300)
     {
-      printf("too many error\n");
+      printf("too many tryal\n");
       exit(1);
     }
     ii++;
@@ -3083,7 +3087,7 @@ OP pubkeygen()
   makeS();
   fp = fopen("inv_S.key", "wb");
 
-/*
+  /*
 for(i=0;i<K*E;i++){
   for(j=0;j<K*E;j++)
     n[j]=inv_S.w[i][j];  
@@ -3092,21 +3096,20 @@ for(i=0;i<K*E;i++){
 fclose(fp);
 */
 
-  for (i = 0; i < K*E; i++)
+  for (i = 0; i < K * E; i++)
   {
     for (j = 0; j < K; j++)
     {
-      memset(v.x,0,sizeof(v.x));
+      memset(v.x, 0, sizeof(v.x));
       for (k = 0; k < E; k++)
         v.x[k] = inv_S.w[i][j * E + k];
       n[j] = v2i(v);
-      printf("%d,",n[j]);
+      //printf("%d,", n[j]);
     }
-    printf("\n");
+    //printf("\n");
     fwrite(n, 2, K, fp);
   }
   fclose(fp);
-
 
   //  exit(1);
   H = mulmat(S, BB, 1);
@@ -3128,7 +3131,6 @@ fclose(fp);
   return w;
 }
 
-
 OP dec(unsigned short ss[])
 {
   int i, j, k;
@@ -3144,7 +3146,7 @@ OP dec(unsigned short ss[])
       ch[i * E + j] = v.x[j];
   }
   for (i = 0; i < K * E; i++)
-  printf("%d", ch[i]);
+    printf("%d", ch[i]);
   printf("\n");
 
   unsigned short uk[K] = {0};
@@ -3498,7 +3500,7 @@ void mkerr(unsigned short *z1, int num)
 
   j = 0;
 
-//  memset(z1, 0, sizeof(z1));
+  //  memset(z1, 0, sizeof(z1));
 
   while (j < num)
   {
@@ -3507,7 +3509,7 @@ void mkerr(unsigned short *z1, int num)
     if (0 == z1[l])
     {
       z1[l] = 1;
-      printf("l=%d %d\n", l,j);
+      printf("l=%d %d\n", l, j);
       j++;
     }
   }
@@ -3548,7 +3550,7 @@ void sin(unsigned short zz[], unsigned short *ss)
         //printf("%d,", HH[i][j]);
       }
       //printf("\n");
-      printf("ss==%d\n",ss[j]);
+      printf("ss==%d\n", ss[j]);
     }
   }
 
@@ -3603,8 +3605,6 @@ int main(void)
   //exit(1);
   unsigned char ch[E * K] = {0};
 
-
-
 label:
 
   //パリティチェックを生成する。
@@ -3615,16 +3615,14 @@ label:
 
   //公開鍵を生成する
   w = pubkeygen();
-  //memcpy(mat,S.z,sizeof(mat));
 
-//readkey();
-//w=setpol(g,K+1);
-
+  //readkey();
+  //w=setpol(g,K+1);
 
   memset(zz, 0, sizeof(zz));
   memset(ss, 0, sizeof(ss));
 
-/*
+  /*
   mkerr(zz, T);
   //exit(1);
 
@@ -3643,12 +3641,12 @@ label:
   j = 0;
 
   mkerr(z1, T * 2);
-for(i=0;i<N;i++){
-  if(z1[i]>0)
-  printf("%d=%d\n",i,z1[i]);
-}
-//exit(1);
-
+  for (i = 0; i < N; i++)
+  {
+    if (z1[i] > 0)
+      printf("%d=%d\n", i, z1[i]);
+  }
+  //exit(1);
 
   //encryotion
   //test (w, z1);
@@ -3656,10 +3654,10 @@ for(i=0;i<N;i++){
   memset(ss, 0, sizeof(ss));
   sin(z1, ss);
   f = dec(ss);
-printpol(o2v(w));
-printf(" ==goppa\n");
-printpol(o2v(f));
-printf(" ==syn\n");
+  printpol(o2v(w));
+  printf(" ==goppa\n");
+  printpol(o2v(f));
+  printf(" ==syn\n");
 
   //復号化の本体
   v = pattarson(w, f);
