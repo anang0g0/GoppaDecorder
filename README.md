@@ -10,6 +10,22 @@ ulimit -s unlimited
 
 キーロガーが不安な方は、シングルタスクでネットに接続できないパソコンでビルドしてください。
 
+# 20210326
+
+おおっと！実装が終わったと思ったら早くも攻撃法が！ｗ
+
+タイミング攻撃という攻撃に対抗するためにバーレカンプ・マッシーアルゴリズムを実装しなければならなくなり
+
+https://eprint.iacr.org/2017/1180.pdf
+
+これを見ながら実装する予定。一体いつ終わるんでしょうね？ｗ
+
+でもバーレカンプに依存するのは嫌なのでFitzに依存しよう。
+
+https://www.researchgate.net/publication/3078818_On_key_equation
+
+https://www.emsec.ruhr-uni-bochum.de/media/attachments/files/2013/03/mastersthesis-hudde-code-based-cryptography-library.pdf
+
 # 20210325：追記（完成記念は特にないです）
 
 やっと終わった。
