@@ -24,6 +24,8 @@ https://eprint.iacr.org/2017/1180.pdf
 
 https://www.researchgate.net/publication/3078818_On_key_equation
 
+https://www.emsec.ruhr-uni-bochum.de/media/attachments/files/2013/03/mastersthesis-hudde-code-based-cryptography-library.pdf
+
 # 20210325：追記（完成記念は特にないです）
 
 やっと終わった。
