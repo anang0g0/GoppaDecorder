@@ -20,6 +20,10 @@ https://eprint.iacr.org/2017/1180.pdf
 
 これを見ながら実装する予定。一体いつ終わるんでしょうね？ｗ
 
+でもバーレカンプに依存するのは嫌なのでFitzに依存しよう。
+
+https://www.researchgate.net/publication/3078818_On_key_equation
+
 # 20210325：追記（完成記念は特にないです）
 
 やっと終わった。
