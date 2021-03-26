@@ -3894,6 +3894,7 @@ label:
   //公開鍵を生成する
   w = pubkeygen();
 
+
 /*
   w=mkg();
   r1=omul(w,w);
