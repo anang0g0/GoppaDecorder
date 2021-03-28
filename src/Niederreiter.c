@@ -3923,9 +3923,12 @@ OP bms(){
 int i,j,k,l,d[6]={0};
 OP lo[6+1]={0},b[6+1]={0},t[6+1]={0},a={0},f={0},h={0},g={0};
 vec v={0},x={0},w={0};
+//kabatiansky example
 //unsigned short s[6+1]={0,15,1,9,13,1,14};
+
+//https://www.cayrel.net/?Implementation-of-Goppa-codes 
 unsigned short s[4+1]={0,4,6,3,5};
-//
+
 
 x.x[1]=1;
 h=v2o(x);
