@@ -24,6 +24,11 @@ Niederreiterの場合McElieceみたいに受信語があるわけじゃないか
 前フェンラオでやったときみたいに、ガウスの消去法で未知のシンドロームを計算できればいいのに。
 ピーターソン法は楽勝だけど遅い。
 
+驚いたことに、ネットの情報はほとんど当てにならなかった。
+どれも曖昧にぼかされていたり、EEAとの類似ばかりを強調しすぎてよくわからない。
+私が参考にしたのは以下の本である。
+
+Error Correcting Coding and Security for Data Networks :Kabatiansky et.al 2005 WILEY
 
 # 20210326
 
