@@ -31,6 +31,11 @@ Niederreiterの場合McElieceみたいに受信語があるわけじゃないか
 
 Error Correcting Coding and Security for Data Networks :Kabatiansky et.al 2005 WILEY
 
+あとこれもいいね。
+
+https://www.cayrel.net/?Implementation-of-Goppa-codes
+
+
 # 20210326
 
 おおっと！実装が終わったと思ったら早くも攻撃法が！ｗ
