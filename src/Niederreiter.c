@@ -22,7 +22,7 @@
 #include <assert.h>
 #include <execinfo.h>
 
-#include "8192.h"
+//#include "8192.h"
 //#include "4096.h"
 #include "global.h"
 #include "struct.h"
@@ -1782,7 +1782,7 @@ vec chen(OP f)
   {
     z = 0;
     //#pragma omp parallel for reduction (^:z)
-    for (i = 0; i < n + 1; i++)
+    for (i = 0; i < n+1; i++)
     {
       if (f.t[i].a > 0)
         z ^= gf[mlt(mltn(f.t[i].n, fg[x]), fg[f.t[i].a])];
@@ -1791,7 +1791,7 @@ vec chen(OP f)
     {
       e.x[count] = x;
       count++;
-      printf("%d\n", x);
+      printf("x=%d\n", x);
     }
   }
   printpol(e);
@@ -3892,6 +3892,82 @@ OP cos(unsigned short zz[])
   return s;
 }
 
+OP kof(unsigned short c,OP f){
+int i,j,k;
+vec b={0},h={0};
+OP g={0};
+
+b=o2v(f);
+k=deg(b);
+for(i=0;i<k+1;i++){
+h.x[i]=gf[mlt(fg[c],fg[b.x[i]])];
+}
+g=v2o(h);
+
+return g;
+}
+
+unsigned short logx(unsigned short u){
+  unsigned  short i;
+
+for(i=0;i<N;i++){
+if(u==gf[i])
+return N-i;
+}
+printf("baka-von\n");
+}
+
+
+OP bms(){
+int i,j,k,l,d[6]={0};
+OP lo[6+1]={0},b[6+1]={0},t[6+1]={0},a={0},f={0},h={0},g={0};
+vec v={0},x={0},w={0};
+unsigned short s[6+1]={0,15,1,9,13,1,14};
+
+x.x[1]=1;
+h=v2o(x);
+v.x[0]=1;
+f=v2o(x);
+lo[0]=v2o(v);
+b[0]=lo[0];
+
+for(j=1;j<6;j++){
+  v=o2v(lo[j-1]);
+  k=0;
+  printpol(v);
+  printf(" ==lo\n");
+
+  l=deg(o2v(lo[j-1]));
+  for(i=1;i<l+1;i++){
+    k^=gf[mlt(fg[v.x[i]],fg[s[j-i]])];
+    printf("v[%d]=%d\n",i,v.x[i]);
+  }
+  d[j]=s[j]^k;
+  printf("d[%d]=%d\n",j,d[j]);
+  g=omul(kof(d[j],h),b[j-1]);
+  t[j]=oadd(lo[j-1],g);
+  printpol(o2v(t[j]));
+  printf("==t[%d]\n",j);
+if(odeg(lo[j])<=odeg(lo[j-1]))
+  b[j]=omul(b[j-1],h);
+  if(deg(o2v(t[j]))>odeg(t[j-1])) 
+   b[j]=kof(gf[oinv(d[j])],lo[j-1]);
+if(d[j]>0)
+  lo[j]=t[j];
+if(d[j]==0) 
+lo[j]=lo[j-1];
+
+  printpol(o2v(b[j]));
+  printf(" ==b[%d]\n",j);
+}
+printpol(o2v(lo[j-1]));
+printf("\n");
+//exit(1);
+
+return lo[j-1];
+}
+
+
 //言わずもがな
 int main(void)
 {
@@ -3906,7 +3982,7 @@ int main(void)
   int flg, o1 = 0;
   OP f = {0}, r = {0}, w = {0}, ff = {0}, tt = {0};
   EX hh = {0};
-  vec v;
+  vec v,x;
   time_t t;
   OP r1 = {0}, r2 = {0}, r3 = {0}, r4 = {0};
   OP g1 = {0}, tmp = {
@@ -3944,9 +4020,26 @@ label:
   unsigned short ss[K] = {0};
 
   //公開鍵を生成する
-  w = pubkeygen();
+  //w = pubkeygen();
 
-
+r=bms();
+x=chen(r);
+  for (i = 0; i < 3; i++)
+  {
+    printf("x[%d]=1\n", logx(x.x[i]));
+    if (v.x[i] == 0)
+      k++;
+    if (k > 1)
+    {
+      printf("baka0\n");
+      printvec(o2v(f));
+      //for (i = 0; i < N; i++)
+      //printf("%d,", zz[i]);
+      exit(1);
+      //return f;
+    }
+  }
+exit(1);
 /*
   w=mkg();
   r1=omul(w,w);
