@@ -3093,7 +3093,7 @@ OP mkpol()
     memset(w.t, 0, sizeof(w));
     ginit();
     ii++;
-    if (ii > 100)
+    if (ii > 300)
     {
       printf("erro=%d\n", ii);
       exit(1);
@@ -3945,13 +3945,18 @@ for(j=1;j<6;j++){
   d[j]=s[j]^k;
   printf("d[%d]=%d\n",j,d[j]);
   g=omul(kof(d[j],h),b[j-1]);
+//  if(2*l>j-1)
   t[j]=oadd(lo[j-1],g);
   printpol(o2v(t[j]));
   printf("==t[%d]\n",j);
-if(odeg(lo[j])<=odeg(lo[j-1]))
+if(odeg(t[j])<=odeg(t[j-1])){
   b[j]=omul(b[j-1],h);
-  if(deg(o2v(t[j]))>odeg(t[j-1])) 
+}else//(deg(o2v(t[j]))>odeg(t[j-1]))
+{
    b[j]=kof(gf[oinv(d[j])],lo[j-1]);
+   l=j-l+1;
+}
+
 if(d[j]>0)
   lo[j]=t[j];
 if(d[j]==0) 
@@ -4020,7 +4025,7 @@ label:
   unsigned short ss[K] = {0};
 
   //公開鍵を生成する
-  //w = pubkeygen();
+  w = pubkeygen();
 
 r=bms();
 x=chen(r);
@@ -4039,6 +4044,7 @@ x=chen(r);
       //return f;
     }
   }
+  
 exit(1);
 /*
   w=mkg();
