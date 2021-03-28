@@ -3912,7 +3912,8 @@ unsigned short logx(unsigned short u){
 
 for(i=0;i<N;i++){
 if(u==gf[i])
-return N-i;
+//return N-i; //
+return oinv(i);
 }
 printf("baka-von\n");
 }
@@ -3922,7 +3923,9 @@ OP bms(){
 int i,j,k,l,d[6]={0};
 OP lo[6+1]={0},b[6+1]={0},t[6+1]={0},a={0},f={0},h={0},g={0};
 vec v={0},x={0},w={0};
-unsigned short s[6+1]={0,15,1,9,13,1,14};
+//unsigned short s[6+1]={0,15,1,9,13,1,14};
+unsigned short s[4+1]={0,4,6,3,5};
+//
 
 x.x[1]=1;
 h=v2o(x);
@@ -3931,7 +3934,7 @@ f=v2o(x);
 lo[0]=v2o(v);
 b[0]=lo[0];
 
-for(j=1;j<6;j++){
+for(j=1;j<5;j++){
   v=o2v(lo[j-1]);
   k=0;
   printpol(v);
@@ -4032,6 +4035,7 @@ x=chen(r);
   for (i = 0; i < 3; i++)
   {
     printf("x[%d]=1\n", logx(x.x[i]));
+// 
     if (v.x[i] == 0)
       k++;
     if (k > 1)
