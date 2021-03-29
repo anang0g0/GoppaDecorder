@@ -3944,15 +3944,10 @@ return f;
 }
 
 
-OP bms(){
+OP bms(unsigned short s[]){
 int i,j,k,l,d[6]={0};
 OP lo[6+1]={0},b[6+1]={0},t[6+1]={0},a={0},f={0},h={0},g={0},hh={0};
 vec v={0},x={0},w={0};
-//kabatiansky example
-unsigned short s[6+1]={0,15,1,9,13,1,14};
-
-//https://www.cayrel.net/?Implementation-of-Goppa-codes 
-//unsigned short s[4+1]={0,4,6,3,5};
 
 
 x.x[1]=1;
@@ -3962,7 +3957,7 @@ f=v2o(x);
 lo[0]=v2o(v);
 b[0]=lo[0];
 
-for(j=1;j<7;j++){
+for(j=1;j<K+1;j++){
   v=o2v(lo[j-1]);
   k=0;
   printpol(v);
@@ -3987,7 +3982,7 @@ if(odeg(t[j])<=odeg(t[j-1])){
    b[j]=kof(gf[oinv(d[j])],lo[j-1]);
    l=j-l+1;
 }
-
+k=0;
 if(d[j]>0)
   lo[j]=t[j];
 if(d[j]==0) 
@@ -4001,8 +3996,31 @@ printf("\n");
 
 //hh=rev(lo[j-1]);
 //exit(1);
+//r=coeff(r,LT(r).a);
+printpol(o2v(lo[j-1]));
+printf(" ==coef\n");
+x=chen(lo[j-1]);
+  for (i = 0; i < deg(x)+1; i++)
+  {
+    if(x.x[i]>0)
+    printf("x[%d]=1\n", logx(x.x[i]));
+// 
 
-return lo[j-1];
+    if (x.x[i] == 0)
+      k++;
+    if (k > 1)
+    {
+      printf("baka0\n");
+      printvec((x));
+      //for (i = 0; i < N; i++)
+      //printf("%d,", zz[i]);
+      exit(1);
+      //return f;
+    }
+    
+  }
+
+//return lo[j-1];
 }
 
 
@@ -4052,36 +4070,42 @@ int main(void)
 label:
 
   //パリティチェックを生成する。
-  //w=mkg();
+  w=mkg();
   printf("\nすげ、オレもうイキそ・・・\n");
 
   unsigned short ss[K] = {0};
 
   //公開鍵を生成する
-//  w = pubkeygen();
+// w = pubkeygen();
+//kabatiansky example
+//unsigned short s[K+2]={0,15,1,9,13,1,14};
 
-r=bms();
-//r=coeff(r,LT(r).a);
-printpol(o2v(r));
-printf(" ==coef\n");
-x=chen(r);
-  for (i = 0; i < deg(x)+1; i++)
-  {
-    printf("x[%d]=1\n", logx(x.x[i]));
-// 
-    if (v.x[i] == 0)
-      k++;
-    if (k > 1)
-    {
-      printf("baka0\n");
-      printvec(o2v(f));
-      //for (i = 0; i < N; i++)
-      //printf("%d,", zz[i]);
-      exit(1);
-      //return f;
-    }
-  }
-  
+//https://www.cayrel.net/?Implementation-of-Goppa-codes 
+//unsigned short s[4+1]={0,4,6,3,5};
+//unsigned short s[K+1]={0,13,3,5,4,8,5};
+unsigned short s[K+1]={0,15,10,8,8,0,12};
+/*
+//memset(zz,0,sizeof(zz));
+//mkerr(zz,2);
+zz[0]=1;
+zz[1]=1;
+r1=synd(zz);
+v=o2v(r1);
+memset(s,0,K+2);
+s[0]=0;
+for(i=0;i<6+1;i++){
+s[i+1]=v.x[i];
+printf("%d,",s[i]);
+}
+printf("\n");
+*/
+bms(s);
+/*
+for(i=0;i<N;i++){
+  if(zz[i]>0)
+  printf("%d:%d\n",i,zz[i]);
+}
+*/
 exit(1);
 /*
   w=mkg();
