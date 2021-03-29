@@ -14,5 +14,5 @@ ulimit -s unlimited
 
 https://anang0g0.github.io/
 
-]# マニュアル作成中
+# マニュアル作成中
 
