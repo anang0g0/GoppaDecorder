@@ -3910,12 +3910,8 @@ return g;
 unsigned short logx(unsigned short u){
   unsigned  short i;
 
-for(i=0;i<N;i++){
-if(u==gf[i]){
-//return N-i; //
-return i;
-}
-}
+return oinv(u);
+
 printf("baka-von\n");
 }
 
@@ -4003,10 +3999,10 @@ lo[j]=lo[j-1];
 printpol(o2v(lo[j-1]));
 printf("\n");
 
-hh=rev(lo[j-1]);
+//hh=rev(lo[j-1]);
 //exit(1);
 
-return hh;
+return lo[j-1];
 }
 
 
