@@ -25,6 +25,7 @@ BCHやRSにできて、Goppa似できないことがあるのだろうか？
 アルゴリズムの中にGoppa多項式が全く出てこないのはおかしい。
 
 常識からいってありえないので、訂正できる場合の例外をどこかで見落としている可能性が強い。
+あるいはこれがNiederreiter暗号で使ってはいけない鍵の存在を意味するのかもしれない。
 
 https://doc.lagout.org/science/0_Computer%20Science/2_Algorithms/Error%20Correction%20Coding_%20Mathematical%20Methods%20and%20Algorithms%20%5BMoon%202005-06-06%5D.pdf
 
