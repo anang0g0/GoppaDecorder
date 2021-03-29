@@ -10,6 +10,15 @@ ulimit -s unlimited
 
 キーロガーが不安な方は、シングルタスクでネットに接続できないパソコンでビルドしてください。
 
+# 20210329
+
+自分で作った例はできないのに、本に乗ってる例だけはできる。
+BCHやRSにできて、Goppa似できないことがあるのだろうか？
+あるとしたら、どこにその部分があるのか？
+
+https://doc.lagout.org/science/0_Computer%20Science/2_Algorithms/Error%20Correction%20Coding_%20Mathematical%20Methods%20and%20Algorithms%20%5BMoon%202005-06-06%5D.pdf
+
+
 # 20210328
 
 BM法を実装。
