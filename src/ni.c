@@ -475,8 +475,7 @@ oterm LT2(OP f)
 //多項式を単行式で割る
 oterm LTdiv(OP f, oterm t)
 {
-  oterm tt = {0}, s = {
-                      0};
+  oterm tt = {0}, s = {0};
 
   tt = LT(f);
   if (tt.n < t.n)
@@ -564,14 +563,14 @@ OP omod(OP f, OP g)
     return f;
   }
 
-  //printf ("in omod\n");
+  printf ("in omod\n");
   //exit(1);
 
   k = LT(g).n;
   b = LT(g);
 
   assert(("double baka\n", b.a != 0 && b.n != 0));
-  while (LT(f).n > 0 && LT(g).n > 0)
+  while ((LT(f).n > 0 && LT(g).n > 0) || LT(f).n==LT(g).n)
   {
 
     c = LTdiv(f, b);
@@ -1060,7 +1059,7 @@ OP zgcd(OP a, OP n)
   x.t[0].n = 0;
   s.t[0].a = 1;
   s.t[0].n = 0;
-  while (LT(a).n > T)
+  while (LT(a).n > K)
   {
 
     r = omod(d, a);
@@ -1089,8 +1088,10 @@ OP zgcd(OP a, OP n)
   printf(" =======s\n");
   printpol(o2v(r));
   printf(" =======r\n");
+  printpol(o2v(gcd));
+  printf(" =======gcd\n");
 
-  return x;
+  return gcd;
 }
 
 // GCD for decode
@@ -1098,7 +1099,7 @@ OP ogcd(OP xx, OP yy)
 {
   OP tt;
 
-  while (odeg(yy) > T - 1)
+  while (odeg(yy) > T-1)
   {
     tt = omod(xx, yy);
     xx = yy;
@@ -1166,7 +1167,7 @@ OP vx(OP f, OP g)
 
     vv = v[i + 2];
 
-    if (odeg((vv)) == T)
+    if (odeg((vv)) == K)
       break;
     i++;
   }
@@ -1210,15 +1211,16 @@ OP sabun(OP f, OP g)
     vv = v[i + 2];
 printpol(o2v(vv));
 printf(" deg%d\n",odeg(vv));
-    if (odeg((vv)) == K){
+    if (odeg((vv)) == 3){
       //printpol(o2v(vv));
-      break;
+      return vv;
+      //break;
       //exit(1);
     }
     i++;
   }
-//printf("baka\n");
-//exit(1);
+printf("baka\n");
+exit(1);
   return vv;
 }
 
@@ -2270,6 +2272,8 @@ int isqrt(unsigned short u)
 {
   int i, j, k;
 
+if(u==0 || u<0)
+  return 0;
   for (i = 0; i < N; i++)
   {
     if (gf[mlt(i, i)] == u)
@@ -4070,26 +4074,29 @@ mkc(w);
   //mkerr(zz, T*2);
  // for(i=0;i<T*2;i++)
   zz[0]=1;
-  zz[1]=2;
-  zz[2]=4;
+  zz[1]=1;
+  zz[2]=1;
   //exit(1);
 unsigned short tarin[N]={0};
   //sin(zz, ss);
   //f = dec(ss);
   //v.x[128]=1;
   f=synd(zz);
-  //r2=v2o(v);
+  v=o2v(f);
   //f=omul(r2,f);
   printpol(o2v(f));
   printf(" ==sin\n");
   //exit(1);
-
-  f=cos(zz);
+  //r2=omul(f,f);
+//printpol(o2v(r2));
+//printf(" =f^2\n");
+  r3=cos(zz);
+  /*
   printpol(o2v(f));
   printf(" ==s2\n");
-  printpol(o2v(r1));
+  printpol(o2v(r3));
   printf(" =r1\n");
-    r=sabun(r1,f);
+    r=sabun(r1,r3);
   v=chen(r);
   for (i = 0; i < K; i++)
   {
@@ -4107,21 +4114,53 @@ unsigned short tarin[N]={0};
     }
   }
   exit(1);
-
+*/
+vec x={0};
     memset(zz, 0, sizeof(zz));
-    zz[0]=4;
-    zz[1]=14;
-    r2=cos(zz);
+    memset(v.x, 0, sizeof(v.x));
+  //
+  v.x[0]=3;
+  v.x[1]=8;
+  v.x[2]=9;
+  /*
+  v.x[3]=10;
+  v.x[4]=8;
+  v.x[5]=9;
+  */
+// r2=cos(v.x);
+  r2=v2o(v);
+  //f=osqrt(r2,r1);
+  //printpol(o2v(f));
+  //printf(" ==sqrt r1\n");
+  r4=omul(r2,r2);
+  printpol(o2v(r4));
+  printf(" ==2bai w\n");
+  //r3=osqrt(r2,w);
+  //printpol(o2v(r3));
+  //printf(" ==?\n");
+   printpol(o2v(r2));
+  printf(" ==r2\n");
+
+//  exit(1);
+
+
+  //  r2=cos(zz);
   printpol(o2v(r2));
-  printf(" =r2\n");
+  printf(" =r3\n");
+  printpol(o2v(r1));
+  printf(" =r1\n");
+//exit(1);
 
+  r = sabun(r1,r3);
 
-//  r = sabun(r1, f);
   //r=hh.d;
   printpol(o2v(r));
   printf(" =sabun\n");
+  printpol(o2v(r4));
+  printf(" =ogcd\n");
+  //exit(1);
   v=chen(r);
-  for (i = 0; i < T*2; i++)
+  for (i = 0; i < K; i++)
   {
     printf("x[%d]=1\n", v.x[i]);
     if (v.x[i] == 0)
