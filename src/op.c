@@ -29,7 +29,7 @@
 #include <assert.h>
 #include <execinfo.h>
 
-#include "8192.h"
+//#include "8192.h"
 //#include "4096.h"
 #include "global.h"
 #include "struct.h"
@@ -1880,10 +1880,9 @@ OP decode(OP f, OP s)
   printf("in decode\n");
   printpol(o2v(s));
   printf("\nsyn===========\n");
-  //r = vx(f, s);
-  hh=xgcd(f,s);
-  //h=ogcd(f,s);
-  r=hh.u;
+  r = vx(f, s);
+  //h=zgcd(f,s);
+
   if (odeg((r)) == 0)
   {
     printf("baka12\n");
@@ -1916,7 +1915,7 @@ OP decode(OP f, OP s)
   printf("あっ、でる！\n");
   //  exit(1);
 
-  if (odeg((r)) < T)
+  if (odeg((r)) < T-1)
   {
     printpol(o2v(r));
     printf("baka5 deg(r)<T\n");
@@ -3598,7 +3597,7 @@ lab:
     for (i = 0; i < N; i++)
     {
       if (zz[i] > 0)
-        printf("l=%d %d\n", i, zz[i]);
+        printf("la=%d %d\n", i, zz[i]);
     }
     //exit(1);
     f = synd(zz);
@@ -3626,7 +3625,7 @@ lab:
     printf("err=%dっ！！\n", count);
 
     //wait();
-    exit(1);
+    //exit(1);
     //goto lab;
 
   patta:
