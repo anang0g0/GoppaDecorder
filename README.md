@@ -12,3 +12,6 @@ ulimit -s unlimited
 
 Setting and so on will appear
 
+開発日記はこちらに移動しました。
+
+https://anang0g0.github.io/
