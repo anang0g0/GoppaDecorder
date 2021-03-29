@@ -11,6 +11,9 @@ clang:
 test:
 	gcc-10 -Wall -g -pg -O3 -mtune=native -march=native -ffast-math -funroll-loops  -fopenmp ni.c
 
+oo:
+	gcc-10 -Wall -g -pg -O3 -mtune=native -march=native -ffast-math -funroll-loops  -fopenmp oo.c
+
 nie:
 	gcc-10 -Wall -g -pg -O3 -mtune=native -march=native -ffast-math -funroll-loops  -fopenmp Niederreiter.c
 
