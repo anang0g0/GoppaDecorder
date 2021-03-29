@@ -537,10 +537,12 @@ void printpol(vec a)
   {
     if (a.x[i] > 0)
     {
+      //if(a.x[i]>1)
       printf("%u", a.x[i]);
-      //if (i > 0)
+      if (i > 0)
       printf("x^%d", i);
       //if (i > 0)
+      if(i>0)
       printf("+");
     }
   }
@@ -1822,7 +1824,7 @@ int ben_or(OP f)
   OP s = {0}, u = {0}, r = {0};
   vec v = {0}, x = {0};
   //if GF(8192) is 2^m and m==13 or if GF(4096) and m==12 if GF(16384) is testing
-  int m = 13;
+  int m = 3;
   // m=12 as a for GF(4096)=2^12 defined @ gloal.h or here,for example m=4 and GF(16)
 
   v.x[1] = 1;
@@ -3002,7 +3004,8 @@ aa:
   printf("\n");
   printf("sagemath で既約性を検査してください！\n");
   */
-
+memset(vb,0,sizeof(vb));
+memset(gt,0,sizeof(gt));
   van();
   ogt();
   memset(mat, 0, sizeof(mat));
@@ -3441,7 +3444,7 @@ void fun()
   unsigned short i, k;
 
   OP qq = {0};
-  for (i = 0b1000000000001; i < 0b1111111111111 + 1; i++)
+  for (i = 0b10001; i < 0b11111 + 1; i++)
   {
     qq = v2o(i2v(i));
     k = ben_or(qq);
@@ -3517,6 +3520,239 @@ unsigned short uk[K]={0};
 return s;
 }
 
+OP kof(unsigned short c,OP f){
+int i,j,k;
+vec b={0},h={0};
+OP g={0};
+
+b=o2v(f);
+k=deg(b);
+for(i=0;i<k+1;i++){
+h.x[i]=gf[mlt(fg[c],fg[b.x[i]])];
+}
+g=v2o(h);
+
+return g;
+}
+
+unsigned short logx(unsigned short u){
+  unsigned  short i;
+
+return oinv(u);
+
+printf("baka-von\n");
+}
+
+OP rev(OP f){
+int i,tmp,j=0,c[512]={0},d[512]={0},count=0;
+vec v={0};
+
+j=odeg(f)+1;
+printf("d=");
+for(i=0;i<j;i++){
+d[count]=f.t[i].n;
+c[count]=f.t[i].a;
+printf("%d,",d[count]);
+count++;
+}
+printf("\n");
+printf("c=");
+for(i=0;i<count;i++)
+printf("%d,",c[i]);
+printf("\n");
+for(i=0;i<count;i++)
+v.x[d[count-i-1]]=c[i];
+
+printpol(v);
+printf(" ==rev?\n");
+//exit(1);
+f=v2o(v);
+
+return f;
+}
+
+
+OP bms(unsigned short s[]){
+int i,j,k,l,d[6]={0};
+OP lo[6+1]={0},b[6+1]={0},t[6+1]={0},a={0},f={0},h={0},g={0},hh={0};
+vec v={0},x={0},w={0};
+
+
+x.x[1]=1;
+h=v2o(x);
+v.x[0]=1;
+f=v2o(x);
+lo[0]=v2o(v);
+b[0]=lo[0];
+
+for(j=1;j<K+1;j++){
+  v=o2v(lo[j-1]);
+  k=0;
+  printpol(v);
+  printf(" ==lo\n");
+
+  l=deg(o2v(lo[j-1]));
+  for(i=1;i<l+1;i++){
+    k^=gf[mlt(fg[v.x[i]],fg[s[j-i]])];
+    printf("v[%d]=%d\n",i,v.x[i]);
+  }
+  d[j]=s[j]^k;
+  printf("d[%d]=%d\n",j,d[j]);
+  g=omul(kof(d[j],h),b[j-1]);
+//  if(2*l>j-1)
+  t[j]=oadd(lo[j-1],g);
+  printpol(o2v(t[j]));
+  printf("==t[%d]\n",j);
+if(odeg(t[j])<=odeg(t[j-1])){
+  b[j]=omul(b[j-1],h);
+}else//(deg(o2v(t[j]))>odeg(t[j-1]))
+{
+   b[j]=kof(gf[oinv(d[j])],lo[j-1]);
+   l=j-l+1;
+}
+k=0;
+if(d[j]>0)
+  lo[j]=t[j];
+if(d[j]==0) 
+lo[j]=lo[j-1];
+
+  printpol(o2v(b[j]));
+  printf(" ==b[%d]\n",j);
+}
+printpol(o2v(lo[j-1]));
+printf("\n");
+
+//hh=rev(lo[j-1]);
+//exit(1);
+//r=coeff(r,LT(r).a);
+printpol(o2v(lo[j-1]));
+printf(" ==coef\n");
+x=chen(lo[j-1]);
+  for (i = 0; i < deg(x)+1; i++)
+  {
+    if(x.x[i]>0)
+    printf("x[%d]=1\n", (x.x[i]));
+// 
+
+    if (x.x[i] == 0)
+      k++;
+    if (k > 1)
+    {
+      printf("baka0\n");
+      printvec((x));
+      //for (i = 0; i < N; i++)
+      //printf("%d,", zz[i]);
+      exit(1);
+      //return f;
+    }
+    
+  }
+
+//return lo[j-1];
+}
+
+OP mkc(OP w)
+{
+  int i, j, k, l, ii = 0;
+  
+  unsigned short tr[N] = {0};
+  unsigned short ta[N] = {0};
+vec v={0};
+
+
+aa:
+
+  //printf("\n");
+
+  //既約性判定のためのBen-Orアルゴリズム。拡大体にも対応している。デフォルトでGF(8192)
+  //既約多項式しか使わない。
+  l = -1;
+  ii = 0;
+
+  memset(ta, 0, sizeof(ta));
+  //w = setpol(g, K + 1);
+  printpol(o2v(w));
+  //printf(" =poly\n");
+
+  //多項式の値が0でないことを確認
+  for (i = 0; i < N; i++)
+  {
+    ta[i] = trace(w, i);
+    if (ta[i] == 0)
+    {
+      printf("trace 0 @ %d\n", i);
+      //fail = 1;
+      exit(1);
+    }
+  }
+  for (i = 0; i < N; i++)
+  {
+    tr[i] = oinv(ta[i]);
+    //printf("%d,", tr[i]);
+  }
+
+
+  //多項式を固定したい場合コメントアウトする。  
+  oprintpol(w);
+  printf("\n");
+  printsage(o2v(w));
+  printf("\n");
+  printf("sagemath で既約性を検査してください！\n");
+  
+
+  van();
+  ogt();
+  memset(bm, 0, sizeof(bm));
+
+  //wait();
+
+  //#pragma omp parallel for
+
+  printf("\nすげ、オレもうイキそ・・・\n");
+  //keygen(g);
+  //exit(1);
+
+  for (j = 0; j < N; j++)
+  {
+    for (i = 0; i < K; i++)
+    {
+      ma[j][i] = gf[mlt(fg[vb[i][j]], tr[j])];
+    }
+    //printf("tr[%d]=%d\n",j,tr[j]);
+  }
+
+  unsigned short s;
+#pragma omp parallel for default(none) private(i, j, k, s) shared(mat, gt, ma, gf, fg)
+  for (i = 0; i < K; i++)
+  {
+    for (j = 0; j < N; j++)
+    {
+      s = 0;
+
+      for (k = 0; k < K; k++)
+        s ^= gf[mlt(fg[gt[k][i]], fg[ma[j][k]])];
+      //printf("%d,",s);
+      mat[j][i] = s;
+    }
+  }
+  //printf("\n");
+  //exit(1);
+
+  for (j = 0; j < N; j++)
+  {
+    for (i = 0; i < K; i++)
+      printf("%d,", mat[j][i]);
+    printf("\n");
+  }
+//exit(1);
+  //wait();
+
+  return w;
+}
+
+
+
+
 //言わずもがな
 int main(void)
 {
@@ -3524,9 +3760,7 @@ int main(void)
   int count = 0;
   FILE *fp, *fq;
   unsigned short z1[N] = {0}; //{1,0,1,1,1,0,0,0,0,0,1,1,1,0,0,1};
-  unsigned short zz[N];
-
-  //  {0};
+  unsigned short zz[N]={0};
 
   int flg, o1 = 0;
   OP f = {0}, r = {0}, w = {0}, ff = {0}, tt = {0};
@@ -3549,6 +3783,7 @@ int main(void)
   srand(seed);
 #endif
   unsigned short a, b;
+  unsigned short  hi[5]={1,5,0,0,3};
 
   a = 65535;
   printf("b=%d\n", a);
@@ -3556,16 +3791,64 @@ int main(void)
   printvec(v);
   b = v2i(v);
   printf("b=%d\n", b);
-  //fun();
+  fun();
   //exit(1);
   unsigned char ch[E * K] = {0};
+    unsigned short s[K+1]={0};
 label:
 
   //パリティチェックを生成する。
   //w=mkg();
   printf("\nすげ、オレもうイキそ・・・\n");
-  
-  w=mkg();
+
+//w=mkg();
+//unsigned short s[K+1]={0,13,3,5,4,8,5};
+//unsigned short s[K+1]={0,15,10,8,8,0,12};
+//unsigned short s[K+2]={0,15,1,9,13,1,14};
+//unsigned short s[K+1]={0,1,7,7,12,4,13};
+
+
+j=0;
+memset(zz,0,sizeof(zz));
+memset(s,0,sizeof(s));
+mkerr(zz,2);
+for(i=0;i<N;i++){
+  if(zz[i]>0){
+    printf("%d %d\n",i,zz[i]);
+  j++;
+  }
+}
+if(j<2){
+  printf("mkerr err??\n");
+  exit(1);
+}
+/*
+exit(1);
+//zz[1]=1;
+//zz[2]=1;
+//zz[5]=1;
+r=setpol(hi,3);
+w=omul(r,r);
+printpol(o2v(w));
+printf("\n");
+mkc(w);
+//exit(1);
+*/
+w=setpol(hi,5);
+mkc(w);
+r1=synd(zz);
+v=o2v(r1);
+for(i=0;i<K+1;i++)
+s[i+1]=v.x[i];
+
+bms(s);
+for(i=0;i<N;i++){
+  if(zz[i]>0)
+  printf("e=%d %d\n",i,zz[i]);
+}
+exit(1);
+
+//  w=mkg();
 
   //keygen(g);
 
