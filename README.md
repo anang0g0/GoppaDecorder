@@ -12,7 +12,7 @@ ulimit -s unlimited
 
 開発日記はこちらに移動しました。
 
-https://anang0g0.github.io/
+https://anang0g0.github.io/GoppaDecorder
 
 # マニュアル作成中
 
