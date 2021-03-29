@@ -3911,23 +3911,52 @@ unsigned short logx(unsigned short u){
   unsigned  short i;
 
 for(i=0;i<N;i++){
-if(u==gf[i])
+if(u==gf[i]){
 //return N-i; //
-return oinv(i);
+return i;
+}
 }
 printf("baka-von\n");
+}
+
+OP rev(OP f){
+int i,tmp,j=0,c[512]={0},d[512]={0},count=0;
+vec v={0};
+
+j=odeg(f)+1;
+printf("d=");
+for(i=0;i<j;i++){
+d[count]=f.t[i].n;
+c[count]=f.t[i].a;
+printf("%d,",d[count]);
+count++;
+}
+printf("\n");
+printf("c=");
+for(i=0;i<count;i++)
+printf("%d,",c[i]);
+printf("\n");
+for(i=0;i<count;i++)
+v.x[d[count-i-1]]=c[i];
+
+printpol(v);
+printf(" ==rev?\n");
+//exit(1);
+f=v2o(v);
+
+return f;
 }
 
 
 OP bms(){
 int i,j,k,l,d[6]={0};
-OP lo[6+1]={0},b[6+1]={0},t[6+1]={0},a={0},f={0},h={0},g={0};
+OP lo[6+1]={0},b[6+1]={0},t[6+1]={0},a={0},f={0},h={0},g={0},hh={0};
 vec v={0},x={0},w={0};
 //kabatiansky example
-//unsigned short s[6+1]={0,15,1,9,13,1,14};
+unsigned short s[6+1]={0,15,1,9,13,1,14};
 
 //https://www.cayrel.net/?Implementation-of-Goppa-codes 
-unsigned short s[4+1]={0,4,6,3,5};
+//unsigned short s[4+1]={0,4,6,3,5};
 
 
 x.x[1]=1;
@@ -3937,7 +3966,7 @@ f=v2o(x);
 lo[0]=v2o(v);
 b[0]=lo[0];
 
-for(j=1;j<5;j++){
+for(j=1;j<7;j++){
   v=o2v(lo[j-1]);
   k=0;
   printpol(v);
@@ -3973,9 +4002,11 @@ lo[j]=lo[j-1];
 }
 printpol(o2v(lo[j-1]));
 printf("\n");
+
+hh=rev(lo[j-1]);
 //exit(1);
 
-return lo[j-1];
+return hh;
 }
 
 
@@ -4031,11 +4062,14 @@ label:
   unsigned short ss[K] = {0};
 
   //公開鍵を生成する
-  w = pubkeygen();
+//  w = pubkeygen();
 
 r=bms();
+//r=coeff(r,LT(r).a);
+printpol(o2v(r));
+printf(" ==coef\n");
 x=chen(r);
-  for (i = 0; i < 3; i++)
+  for (i = 0; i < deg(x)+1; i++)
   {
     printf("x[%d]=1\n", logx(x.x[i]));
 // 
