@@ -10,7 +10,7 @@ ulimit -s unlimited
 
 キーロガーが不安な方は、シングルタスクでネットに接続できないパソコンでビルドしてください。
 
-Setting and so on will appear
+# マニュアル作成中
 
 開発日記はこちらに移動しました。
 
