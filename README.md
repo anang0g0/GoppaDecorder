@@ -16,6 +16,10 @@ ulimit -s unlimited
 BCHやRSにできて、Goppa似できないことがあるのだろうか？
 あるとしたら、どこにその部分があるのか？
 
+細かいバグはあるけど大体うまく動いている。
+符号を動的に生成した場合と、エラーの位置に0が入ると訂正できないバグを確認。
+まだまだ満足できない。
+
 https://doc.lagout.org/science/0_Computer%20Science/2_Algorithms/Error%20Correction%20Coding_%20Mathematical%20Methods%20and%20Algorithms%20%5BMoon%202005-06-06%5D.pdf
 
 
