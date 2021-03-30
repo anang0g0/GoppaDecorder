@@ -4002,9 +4002,7 @@ printf(" ==coef\n");
 x=chen(lo[j-1]);
   for (i = 0; i < deg(x)+1; i++)
   {
-    if(x.x[i]>0)
     printf("x[%d]=1\n", logx(x.x[i]));
-// 
 
     if (x.x[i] == 0)
       k++;
