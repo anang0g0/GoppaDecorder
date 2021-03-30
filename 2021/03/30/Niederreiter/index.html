@@ -10,6 +10,9 @@
 
     <!--Description-->
     
+        <meta name="description" content="自分で作った例はできないのに、本に乗ってる例だけはできる。 BCHやRSにできて、Goppa似できないことがあるのだろうか？ あるとしたら、どこにその部分があるのか？
+細かいバグはあるけど大体うまく動いている。 符号を動的に生成した場合と、エラーの位置に0が入ると訂正できないバグを確認。 まだまだ満">
+    
 
     <!--Author-->
     
@@ -18,7 +21,7 @@
 
     <!--Open Graph Title-->
     
-        <meta property="og:title" content="development-diary"/>
+        <meta property="og:title" content="Niederreiter"/>
     
 
     <!--Open Graph Description-->
@@ -29,7 +32,7 @@
 
     <!--Type page-->
     
-        <meta property="og:type" content="website" />
+        <meta property="og:type" content="article" />
     
 
     <!--Page Cover-->
@@ -43,7 +46,7 @@
 
     <!-- Title -->
     
-    <title>development-diary</title>
+    <title>Niederreiter - development-diary</title>
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css" integrity="sha384-y3tfxAZXuh4HwSYylfB+J125MxIs6mR5FOHamPBG064zB+AFeWH94NdvaCBm8qnd" crossorigin="anonymous">
@@ -140,17 +143,14 @@
     <div class="logo">
         <a href="/GoppaDecorder/"><i class="logo-icon fa fa-cube" aria-hidden="true"></i></a>
         
-            <h1 id="main-title" class="title">development-diary</h1>
-        
     </div>
 </header>
 
         <section class="main">
             
-                
 <div class="post">
 
-    <div class="post-header index">
+    <div class="post-header">
         <h1 class="title">
             <a href="/GoppaDecorder/2021/03/30/Niederreiter/">
                 Niederreiter
@@ -165,9 +165,13 @@
         </div>
     </div>
 
-    
-        <div class="content">
-            <p>自分で作った例はできないのに、本に乗ってる例だけはできる。 BCHやRSにできて、Goppa似できないことがあるのだろうか？ あるとしたら、どこにその部分があるのか？</p>
+    <div class="content">
+
+        <!-- Gallery -->
+        
+
+        <!-- Post Content -->
+        <p>自分で作った例はできないのに、本に乗ってる例だけはできる。 BCHやRSにできて、Goppa似できないことがあるのだろうか？ あるとしたら、どこにその部分があるのか？</p>
 <p>細かいバグはあるけど大体うまく動いている。 符号を動的に生成した場合と、エラーの位置に0が入ると訂正できないバグを確認。 まだまだ満足できない。</p>
 <p>それと謎なのは、バーレカンプの方法ではシンドロームだけで訂正可能だということ。 これがうまく行くということは、どんな符号でも訂正できるということになり、Goppa符号を使う意味がなくなってしまう。 アルゴリズムの中にGoppa多項式が全く出てこないのはおかしい。</p>
 <p>常識からいってありえないので、訂正できる場合の例外をどこかで見落としている可能性が強い。 あるいはこれがNiederreiter暗号で使ってはいけない鍵の存在を意味するのかもしれない。</p>
@@ -251,84 +255,20 @@
 <p>実装が終わったと言えばそれまでなんですが、上の論文が面白そうなのでまたやってみたくなりました。</p>
 <p>とりあえずグローバル変数は使わないようにしたいと思います。</p>
 
-        </div>
-    
-
-</div>
-            
-                
-<div class="post">
-
-    <div class="post-header index">
-        <h1 class="title">
-            <a href="/GoppaDecorder/2021/03/30/first/">
-                first
-            </a>
-        </h1>
-        <div class="post-info">
-            
-                <span class="date">2021-03-30</span>
-            
-            
-            
-        </div>
     </div>
 
     
-        <div class="content">
-            <p>message</p>
 
-        </div>
+    
+
+    <!-- Comments -->
     
 
 </div>
-            
-                
-<div class="post">
-
-    <div class="post-header index">
-        <h1 class="title">
-            <a href="/GoppaDecorder/2021/03/30/hello-world/">
-                Hello World
-            </a>
-        </h1>
-        <div class="post-info">
-            
-                <span class="date">2021-03-30</span>
-            
-            
-            
-        </div>
-    </div>
-
-    
-        <div class="content">
-            <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-
-        </div>
-    
-
-</div>
-            
         </section>
+
     </div>
 </div>
-
-
-
-
 
 
 </div>
