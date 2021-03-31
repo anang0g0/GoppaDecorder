@@ -16,6 +16,10 @@ https://anang0g0.github.io/GoppaDecorder
 
 # 20210331
 
+ちょっとした思いつきだけど、バーレカンプを直接実装するのではなく、2変数のFeng−Rao復号を法を1変数Goppaでやってみたらどうなるんだろう？
+
+他にも設計距離じゃなくて最小距離復号をする方法もあるようなのでそれにしてみるとか。
+
 https://ecse.monash.edu/staff/eviterbo/papers/elsep99.pdf
 
 # マニュアル作成中
