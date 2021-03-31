@@ -3794,15 +3794,15 @@ int main(void)
   fun();
   //exit(1);
   unsigned char ch[E * K] = {0};
-    unsigned short s[K+1]={0};
+//  unsigned short s[K+1]={0};
 label:
 
   //パリティチェックを生成する。
   //w=mkg();
   printf("\nすげ、オレもうイキそ・・・\n");
 
-//w=mkg();
-//unsigned short s[K+1]={0,13,3,5,4,8,5};
+w=mkg();
+unsigned short s[K+1]={0,13,3,5,4,8,5};
 //unsigned short s[K+1]={0,15,10,8,8,0,12};
 //unsigned short s[K+2]={0,15,1,9,13,1,14};
 //unsigned short s[K+1]={0,1,7,7,12,4,13};
@@ -3834,6 +3834,7 @@ printf("\n");
 mkc(w);
 //exit(1);
 */
+/*
 w=setpol(hi,5);
 mkc(w);
 r1=synd(zz);
@@ -3846,8 +3847,8 @@ for(i=0;i<N;i++){
   if(zz[i]>0)
   printf("e=%d %d\n",i,zz[i]);
 }
-exit(1);
-
+//exit(1);
+*/
 //  w=mkg();
 
   //keygen(g);
