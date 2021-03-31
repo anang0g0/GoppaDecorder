@@ -6,13 +6,13 @@
 //符号のパラーメータの指定。通常[N,K,T]として、
 //Nは符号の長さ、Kが符号の次元、Tは訂正エラー数
 //を表す。ここではDは符号長にしている。
-#define N 8  // (^^;)?
-#define M 8  //有限体の元の数
-#define K (4) //符号の次元
+#define N 16  // (^^;)?
+#define M 16  //有限体の元の数
+#define K (6) //符号の次元
 #define DEG (K * 2)
 #define T (K / 2) //エラーの数
 #define E (4)    //拡大体のビット数
-#define D (8)  //符号長（短縮符号）
+#define D (16)  //符号長（短縮符号）
 #define F E *K    //2040
 
 unsigned char tmp[E * K][N] = {0};
