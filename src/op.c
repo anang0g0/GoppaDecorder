@@ -3783,7 +3783,7 @@ int main(void)
   srand(seed);
 #endif
   unsigned short a, b;
-  unsigned short  hi[5]={1,5,0,0,3};
+  unsigned short  hi[5]={1,1,3};
 
   a = 65535;
   printf("b=%d\n", a);
@@ -3801,16 +3801,16 @@ label:
   //w=mkg();
   printf("\nすげ、オレもうイキそ・・・\n");
 
-w=mkg();
-unsigned short s[K+1]={0,13,3,5,4,8,5};
+//w=mkg();
+//unsigned short s[K+1]={0,13,3,5,4,8,5};
 //unsigned short s[K+1]={0,15,10,8,8,0,12};
-//unsigned short s[K+2]={0,15,1,9,13,1,14};
-//unsigned short s[K+1]={0,1,7,7,12,4,13};
+unsigned short s[K+2]={0,15,1,9,13,1,14};
+
 
 
 j=0;
 memset(zz,0,sizeof(zz));
-memset(s,0,sizeof(s));
+//memset(s,0,sizeof(s));
 mkerr(zz,2);
 for(i=0;i<N;i++){
   if(zz[i]>0){
@@ -3822,8 +3822,8 @@ if(j<2){
   printf("mkerr err??\n");
   exit(1);
 }
+//exit(1);
 /*
-exit(1);
 //zz[1]=1;
 //zz[2]=1;
 //zz[5]=1;
@@ -3841,15 +3841,15 @@ r1=synd(zz);
 v=o2v(r1);
 for(i=0;i<K+1;i++)
 s[i+1]=v.x[i];
-
+*/
 bms(s);
 for(i=0;i<N;i++){
   if(zz[i]>0)
   printf("e=%d %d\n",i,zz[i]);
 }
 //exit(1);
-*/
-//  w=mkg();
+
+  w=mkg();
 
   //keygen(g);
 
