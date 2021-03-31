@@ -14,5 +14,9 @@ ulimit -s unlimited
 
 https://anang0g0.github.io/GoppaDecorder
 
+# 20210331
+
+https://ecse.monash.edu/staff/eviterbo/papers/elsep99.pdf
+
 # マニュアル作成中
 
