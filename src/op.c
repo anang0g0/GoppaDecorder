@@ -3808,21 +3808,6 @@ unsigned short s[K+2]={0,15,1,9,13,1,14};
 
 
 
-j=0;
-memset(zz,0,sizeof(zz));
-//memset(s,0,sizeof(s));
-mkerr(zz,2);
-for(i=0;i<N;i++){
-  if(zz[i]>0){
-    printf("%d %d\n",i,zz[i]);
-  j++;
-  }
-}
-if(j<2){
-  printf("mkerr err??\n");
-  exit(1);
-}
-//exit(1);
 /*
 //zz[1]=1;
 //zz[2]=1;
@@ -3833,14 +3818,6 @@ printpol(o2v(w));
 printf("\n");
 mkc(w);
 //exit(1);
-*/
-/*
-w=setpol(hi,5);
-mkc(w);
-r1=synd(zz);
-v=o2v(r1);
-for(i=0;i<K+1;i++)
-s[i+1]=v.x[i];
 */
 bms(s);
 for(i=0;i<N;i++){
@@ -3886,18 +3863,6 @@ lab:
     //exit(1);
     f = synd(zz);
     //exit(1);
-    /*      
-         f=conv(f);
-         ef=o2v(f);
-         for(j=0;j<K;j++){
-         for(i=0;i<K;i++)
-         gh.x[j]^=gf[mlt(fg[ef.x[i]],fg[invA0[i][j]])];
-         }
-         f=v2o(gh);
-         f=conv(f);
-         //exit(1);
-       */
-
     r = decode(w, f);
     count = elo(r);
     if (count < 0)
@@ -3953,10 +3918,8 @@ lab:
       exit(1);
     }
 
-    //wait();
     //exit(1);
     //goto label;
-    //wait();
 
     break;
   }
