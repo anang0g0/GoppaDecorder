@@ -14,6 +14,15 @@ ulimit -s unlimited
 
 https://anang0g0.github.io/GoppaDecorder
 
+# 20210401
+
+http://www.kurims.kyoto-u.ac.jp/~kyodo/kokyuroku/contents/pdf/1106-5.pdf
+
+https://www.researchgate.net/publication/220538005_The_Berlekamp-Massey_Algorithm_revisited
+
+https://www.researchgate.net/publication/285233058_Grobner_Bases_for_Decoding
+
+
 # 20210331
 
 ちょっとした思いつきだけど、バーレカンプを直接実装するのではなく、2変数のFeng−Rao復号法を1変数Goppaでやってみたらどうなるんだろう？
