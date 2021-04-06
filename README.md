@@ -14,6 +14,10 @@ ulimit -s unlimited
 
 https://anang0g0.github.io/GoppaDecorder
 
+# 20210406
+
+http://210.47.10.86:8032/2015-3/2793.pdf
+
 # 20210401
 
 http://www.kurims.kyoto-u.ac.jp/~kyodo/kokyuroku/contents/pdf/1106-5.pdf
