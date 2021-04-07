@@ -22,6 +22,8 @@ https://tex2e.github.io/blog/crypto/ntt-polynomial-multiplication
 
 高速kitamasa法なるものがあるらしいので、FFTやホーナー法などの細かいテクニックを駆使しながらバーレカンプ・マッシー法を実装する予定。
 
+gprofで見る限り出現頻度の多いomulはFFTで高速化できるし、odivも高速化できそう。
+
 # 20210406
 
 http://210.47.10.86:8032/2015-3/2793.pdf
