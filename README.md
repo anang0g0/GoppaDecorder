@@ -18,6 +18,8 @@ https://anang0g0.github.io/GoppaDecorder
 
 https://misawa.github.io/others/fast_kitamasa_method.html
 
+https://tex2e.github.io/blog/crypto/ntt-polynomial-multiplication
+
 高速kitamasa法なるものがあるらしいので、FFTやホーナー法などの細かいテクニックを駆使しながらバーレカンプ・マッシー法を実装する予定。
 
 # 20210406
