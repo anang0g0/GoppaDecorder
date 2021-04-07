@@ -14,6 +14,12 @@ ulimit -s unlimited
 
 https://anang0g0.github.io/GoppaDecorder
 
+# 20210407
+
+https://misawa.github.io/others/fast_kitamasa_method.html
+
+高速kitamasa法なるものがあるらしいので、FFTやホーナー法などの細かいテクニックを駆使しながらバーレカンプ・マッシー法を実装する予定。
+
 # 20210406
 
 http://210.47.10.86:8032/2015-3/2793.pdf
