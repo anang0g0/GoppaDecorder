@@ -20,6 +20,11 @@ typedef struct
   unsigned short x[DEG]; //配列の添字を次数に、配列の値を係数に持つ多項式の表現
 } vec;
 
+typedef struct {
+  vec q;
+  vec r;
+} rem;
+
 typedef union
 {
   unsigned short v[N];
