@@ -806,7 +806,7 @@ trace(OP f, unsigned short x)
   return u;
 }
 
-vec vinv(OP f,unsigned short l){
+OP vinv(OP f,unsigned short l){
 int i,j;
 vec c={0},d={0},e={0},t={0},s={0};
 OP g={0},h={0};
@@ -817,20 +817,22 @@ g=v2o(c);
 
 printpol(o2v(f));
 printf("  ===f\n");
-for(i=1;i<3;i++){
-g=oadd(kof(2,g),omul(f,omul(g,g)));
+for(i=1;i<l+1;i++){
+g=omul(f,omul(g,g));
+//oadd(kof(2,g),
+
 g=vmod(g,2*i);
 
 printpol(o2v(g));
-printf(" ==g\n");
-printpol(o2v(vmod(g,2*i)));
-printf(" ===v\n");
+printf(" ==ggg\n");
 }
 e.x[4]=1;
 h=v2o(e);
-printpol(o2v(omod(omul(g,f),h)));
-printf(" ==vinv\n");
+  g=kof(gf[oinv(omod(omul(g,f),h).t[0].a)],g);
+  printpol(o2v(g));
+printf(" ==vinv1\n");
 
+return g;
 }
 //地域福祉権利擁護事業
 //福祉サービス
@@ -1354,7 +1356,7 @@ EX xgcd(OP f, OP g)
 {
   OP h = {0}, ww = {0}, *v, *u;
   oterm a, b;
-  int i = 0, j, k, flg = 0;
+  int i = 0, j, k, flg = 0,m=odeg(f);
   EX e = {0}, ee = {0};
 
   v = (OP *)malloc(sizeof(OP) * (DEG));
@@ -1409,9 +1411,12 @@ EX xgcd(OP f, OP g)
 
     if (LT(g).n > 0)
       h = omod(f, g);
-
+printpol(o2v(h));
+printf(" ===hh\n");
     if (LT(g).a > 0)
       ww = odiv(f, g);
+printpol(o2v(ww));
+printf(" ===ww\n");
 
     v[i + 2] = oadd(v[i], omul(ww, v[i + 1]));
     u[i + 2] = oadd(u[i], omul(ww, u[i + 1]));
@@ -1451,12 +1456,12 @@ EX xgcd(OP f, OP g)
       return e;
     }
     */
- if (odeg(v[i+2]) == 3)
+ if (odeg(v[i+2]) == m-1)
     {
       //printf("vaka\n");
       //wait();
       e.d = f;
-      e.v = v[i+2];
+      e.v = kof(gf[oinv(LT(h).a)],v[i+2]);
       e.u = u[i+2];
 
       free(v);
@@ -1480,7 +1485,7 @@ i++;
   //exit(1);
   //  if(deg(v[i])==T-1){
   e.d = f;
-  e.v = v[i+2];
+  e.v = kof(gf[oinv(LT(h).a)],v[i+2]);
   e.u = u[i+2];
 
   free(v);
@@ -1709,7 +1714,7 @@ rem vdiv(vec a, vec b){
 int i,j,k,l,m,n;
  OP q={0},p,r,s;
  rem x={0};
-
+EX hh={0};
  
  l=deg(a);
  m=deg(b);
@@ -1742,7 +1747,9 @@ d.x[l]=1;
 p=v2o(c);
 q=v2o(e);
 s=v2o(d);
-r=inv(p,s);
+//r=inv(p,s);
+//hh=xgcd(s,p);
+r=vinv(p,l);
 //printpol(o2v(r));
 //printf(" ==b3\n");
  //printpol(o2v(omod(omul(r,p),s)));
@@ -3930,7 +3937,7 @@ int main(void)
 //  {1,4,0,0,2};
   //{1,1,3};
   //
-unsigned short v1[5]={1,2,3,4,5},v2[3]={1,2,3};
+unsigned short v1[5]={1,2,3,4,5},v2[3]={1,2,4};
 
   a = 65535;
   printf("b=%d\n", a);
@@ -3958,27 +3965,39 @@ printf(" ==odiv\n");
 //}
 printpol(o2v(f));
 printf(" ==f\n");
+//exit(1);
 vec xxx={0};
 xxx.x[4]=1;
 OP ooo={0},g={0};
 ooo=v2o(xxx);
-g=inv(f,ooo);
+//for(i=0;i<100000;i++){
+g=inv(w,ooo);
 printpol(o2v(g));
 printf(" ==inv\n");
+//}
 printpol(o2v(omod(omul(g,f),ooo)));
 printf(" ===1?\n");
-hh=xgcd(ooo,f);
-printpol(o2v(hh.u));
-printf(" ==hh.u\n");
-printpol(o2v(hh.d));
-printf(" ==hh.d\n");
-printpol(o2v(kof(8,hh.v)));
-printf(" ==hh.v\n");
-
-vinv(f,2);
-printf(" ==vinv\n");
-
 //exit(1);
+//for(i=0;i<100000;i++){
+hh=xgcd(ooo,w);
+//printpol(o2v(hh.u));
+//printf(" ==hh.u\n");
+//printpol(o2v(hh.d));v
+//printf(" ==hh.d\n");
+printpol(o2v(hh.v));
+printf(" ==hh.v\n");
+//}
+printf("inv=%d\n",gf[oinv(LT(hh.u).a)]);
+//for(i=0;i<100000;i++){
+g=vinv(w,2);
+printpol(o2v(g));
+printf(" ==vinv2\n");
+printpol(o2v(omod(omul(g,w),ooo)));
+printf(" ==num?\n");
+//}
+
+
+exit(1);
 
   //パリティチェックを生成する。
 //w=mkg();
