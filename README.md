@@ -14,6 +14,10 @@ ulimit -s unlimited
 
 https://anang0g0.github.io/GoppaDecorder
 
+# 20210408
+
+下手に実装すると高速化は遅くなるのでやめた。
+
 # 20210407
 
 https://misawa.github.io/others/fast_kitamasa_method.html
