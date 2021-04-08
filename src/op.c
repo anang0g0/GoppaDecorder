@@ -3899,8 +3899,8 @@ printf("\n");
 //w=mkg();
   //printf("\nすげ、オレもうイキそ・・・\n");
 
-unsigned short s[K+1]={0,8,12,3,15};
-//unsigned short s[K+1]={0,13,3,5,4,8,5};
+//unsigned short s[K+1]={0,8,12,3,15};
+unsigned short s[K+1]={0,13,3,5,4,8,5};
 //unsigned short s[K+1]={0,15,10,8,8,0,12};
 //unsigned short s[K+1]={0,15,1,9,13,1,14};
 
@@ -4019,7 +4019,7 @@ for(i=0;i<N;i++){
   for(i=0;i<K+1;i++)
   printf("%d,",s[i]);
   printf(" ==s\n");
-//exit(1);
+  //exit(1);
 //wait();
 // 
 
