@@ -4074,15 +4074,16 @@ label:
   unsigned short ss[K] = {0};
 
   //公開鍵を生成する
- w = pubkeygen();
+ //w = pubkeygen();
 //kabatiansky example
-//unsigned short s[K+2]={0,15,1,9,13,1,14};
+unsigned short s[K+1]={0,15,1,9,13,1,14};
 
 //https://www.cayrel.net/?Implementation-of-Goppa-codes 
 //unsigned short s[4+1]={0,4,6,3,5};
+
 //unsigned short s[K+1]={0,13,3,5,4,8,5};
-unsigned short s[K+1]={0,15,10,8,8,0,12};
-//unsigned short s[K+1]={0,1,7,7,12,4,13};
+//unsigned short s[K+1]={0,15,10,8,8,0,12};
+
 /*
 //memset(zz,0,sizeof(zz));
 //mkerr(zz,2);
@@ -4098,14 +4099,15 @@ printf("%d,",s[i]);
 }
 printf("\n");
 */
-//bms(s);
+bms(s);
 /*
 for(i=0;i<N;i++){
   if(zz[i]>0)
   printf("%d:%d\n",i,zz[i]);
 }
 */
-//exit(1);
+exit(1);
+
 /*
   w=mkg();
   r1=omul(w,w);
