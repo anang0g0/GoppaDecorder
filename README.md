@@ -16,7 +16,7 @@ https://anang0g0.github.io/GoppaDecorder
 
 # 20210408
 
-高速除算アルゴリズムvdiv関数を追加した。
+下手に実装すると高速化は遅くなるのでやめた。
 
 # 20210407
 
