@@ -552,6 +552,35 @@ void printpol(vec a)
   return;
 }
 
+
+OP kof(unsigned short c,OP f){
+int i,j,k;
+vec b={0},h={0};
+OP g={0};
+
+b=o2v(f);
+k=deg(b);
+for(i=0;i<k+1;i++){
+h.x[i]=gf[mlt(fg[c],fg[b.x[i]])];
+}
+g=v2o(h);
+
+return g;
+}
+
+OP vmod(OP a,unsigned short u){
+vec v={0},w={0};
+OP t={0};
+int i;
+
+w=o2v(a);
+for(i=0;i<u;i++)
+v.x[i]=w.x[i];
+t=v2o(v);
+
+return t;
+}
+
 //多項式の剰余を取る
 OP omod(OP f, OP g)
 {
@@ -660,10 +689,10 @@ omod (OP f, OP g)
 OP odiv(OP f, OP g)
 {
 
-  f = conv(f);
-  g = conv(g);
-  assert(op_verify(f));
-  assert(op_verify(g));
+//  f = conv(f);
+//  g = conv(g);
+//  assert(op_verify(f));
+//  assert(op_verify(g));
   int i = 0, j, n, k;
   OP h = {0}, e = {0}, tt = {0};
   oterm a, b = {0}, c = {0};
@@ -777,12 +806,37 @@ trace(OP f, unsigned short x)
   return u;
 }
 
-vec vinv(vec a,vec b){
+vec vinv(OP f,unsigned short l){
 int i,j;
-vec c,d;
+vec c={0},d={0},e={0},t={0},s={0};
+OP g={0},h={0};
 
+//l=deg(a);
+c.x[0]=1;
+g=v2o(c);
+
+printpol(o2v(f));
+printf("  ===f\n");
+for(i=1;i<3;i++){
+g=oadd(kof(2,g),omul(f,omul(g,g)));
+g=vmod(g,2*i);
+
+printpol(o2v(g));
+printf(" ==g\n");
+printpol(o2v(vmod(g,2*i)));
+printf(" ===v\n");
+}
+e.x[4]=1;
+h=v2o(e);
+printpol(o2v(omod(omul(g,f),h)));
+printf(" ==vinv\n");
 
 }
+//地域福祉権利擁護事業
+//福祉サービス
+//社会福祉士
+//契約：保佐人
+
 
 // invert of polynomial
 OP inv(OP a, OP n)
@@ -1361,10 +1415,12 @@ EX xgcd(OP f, OP g)
 
     v[i + 2] = oadd(v[i], omul(ww, v[i + 1]));
     u[i + 2] = oadd(u[i], omul(ww, u[i + 1]));
-    //printf ("i+1=%d %d %d g=%d\n", i + 1, odeg ((v[i])), T - 1, odeg ((g)));
+    printf ("i+1=%d %d %d g=%d\n", i + 1, odeg ((v[i+2])), T - 1, odeg ((g)));
+    printpol(o2v(v[i+2]));
+    printf(" ==vvv\n");
     f = g;
     g = h;
-
+/*
     if (odeg(v[i]) > T - 2)
     {
       //printf("vaka\n");
@@ -1394,12 +1450,27 @@ EX xgcd(OP f, OP g)
 
       return e;
     }
+    */
+ if (odeg(v[i+2]) == 3)
+    {
+      //printf("vaka\n");
+      //wait();
+      e.d = f;
+      e.v = v[i+2];
+      e.u = u[i+2];
+
+      free(v);
+      free(u);
+      //wait();
+      return e;
+    }
+i++;
   }
 
   //printf ("i=%d\n", i);
   //wait();
   //oprintpol ((v[i]));
-  printf("deg(v)=%d\n", odeg((v[i])));
+  printf("deg(v)=%d\n", odeg((v[i+2])));
   printf(" v=============\n");
   printf("deg(u)=%d\n", odeg((u[i])));
   //printpol (o2v (u[i]));
@@ -1409,8 +1480,8 @@ EX xgcd(OP f, OP g)
   //exit(1);
   //  if(deg(v[i])==T-1){
   e.d = f;
-  e.v = v[i];
-  e.u = u[i];
+  e.v = v[i+2];
+  e.u = u[i+2];
 
   free(v);
   free(u);
@@ -1643,7 +1714,7 @@ int i,j,k,l,m,n;
  l=deg(a);
  m=deg(b);
  n=l-m;
-printf("l=%d,m=%d,n=%d\n",l,m,n);
+//printf("l=%d,m=%d,n=%d\n",l,m,n);
 
 
  if(l<m){
@@ -1652,10 +1723,10 @@ printf("l=%d,m=%d,n=%d\n",l,m,n);
 return x;
  }
  
- printpol(b);
-printf(" ==b1\n");
- printpol(a);
-printf(" ==a1\n");
+// printpol(b);
+//printf(" ==b1\n");
+// printpol(a);
+//printf(" ==a1\n");
 
 for(i=0;i<m+1;i++)
 c.x[m-i]=b.x[i];
@@ -1664,24 +1735,25 @@ e.x[l-i]=a.x[i];
 
 d.x[l]=1;
  
-printpol(c);
-printf(" ==b2\n");
-printpol(e);
-printf(" ==be\n");
+//printpol(c);
+//printf(" ==b2\n");
+//printpol(e);
+//printf(" ==be\n");
 p=v2o(c);
 q=v2o(e);
 s=v2o(d);
-r=(inv(p,s));
-printpol(o2v(r));
-printf(" ==b3\n");
- printpol(o2v(omod(omul(r,p),s)));
- printf(" ==1?\n");
+r=inv(p,s);
+//printpol(o2v(r));
+//printf(" ==b3\n");
+ //printpol(o2v(omod(omul(r,p),s)));
+ //printf(" ==1?\n");
  memset(d.x,0,sizeof(d.x));
  d.x[n+1]=1;
  s=v2o(d);
- q=omod(omul(q,r),s);
- printpol(o2v(q));
- printf(" ==q\n");
+ q=omul(q,r);
+ q=(vmod(q,n+1));
+// printpol(o2v(q));
+// printf(" ==q\n");
  for(i=0;i<n+1;i++)
  f.x[n-i]=o2v(q).x[i];
 
@@ -3607,20 +3679,6 @@ unsigned short uk[K]={0};
 return s;
 }
 
-OP kof(unsigned short c,OP f){
-int i,j,k;
-vec b={0},h={0};
-OP g={0};
-
-b=o2v(f);
-k=deg(b);
-for(i=0;i<k+1;i++){
-h.x[i]=gf[mlt(fg[c],fg[b.x[i]])];
-}
-g=v2o(h);
-
-return g;
-}
 
 unsigned short logx(unsigned short u){
   unsigned  short i;
@@ -3872,7 +3930,7 @@ int main(void)
 //  {1,4,0,0,2};
   //{1,1,3};
   //
-unsigned short v1[5]={1,2,3,2,1},v2[4]={2,2,2,5};
+unsigned short v1[5]={1,2,3,4,5},v2[3]={1,2,3};
 
   a = 65535;
   printf("b=%d\n", a);
@@ -3886,13 +3944,40 @@ unsigned short v1[5]={1,2,3,2,1},v2[4]={2,2,2,5};
   //unsigned short s[K+1]={0};
 
 memcpy(v.x,v1,5);
-memcpy(vv.x,v2,4);
+memcpy(vv.x,v2,3);
 w=setpol(v1,5);
-f=setpol(v2,4);
+f=setpol(v2,3);
+//for(i=0;i<100000;i++){
  printpol(vdiv(o2v(w),o2v(f)).q);
-printf("\n");
+printf(" ==vdiv\n");
+//}
+//exit(1);
+//for(i=0;i<100000;i++){
 printpol(o2v(odiv(w,f)));
-printf("\n");
+printf(" ==odiv\n");
+//}
+printpol(o2v(f));
+printf(" ==f\n");
+vec xxx={0};
+xxx.x[4]=1;
+OP ooo={0},g={0};
+ooo=v2o(xxx);
+g=inv(f,ooo);
+printpol(o2v(g));
+printf(" ==inv\n");
+printpol(o2v(omod(omul(g,f),ooo)));
+printf(" ===1?\n");
+hh=xgcd(ooo,f);
+printpol(o2v(hh.u));
+printf(" ==hh.u\n");
+printpol(o2v(hh.d));
+printf(" ==hh.d\n");
+printpol(o2v(kof(8,hh.v)));
+printf(" ==hh.v\n");
+
+vinv(f,2);
+printf(" ==vinv\n");
+
 //exit(1);
 
   //パリティチェックを生成する。
