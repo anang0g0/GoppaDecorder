@@ -14,6 +14,10 @@ ulimit -s unlimited
 
 https://anang0g0.github.io/GoppaDecorder
 
+# 20210408
+
+高速乗算アルゴリズムvdiv関数を追加した。
+
 # 20210407
 
 https://misawa.github.io/others/fast_kitamasa_method.html
