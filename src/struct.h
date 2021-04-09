@@ -21,8 +21,8 @@ typedef struct
 } vec;
 
 typedef struct {
-  vec q;
-  vec r;
+  OP q;
+  OP r;
 } rem;
 
 typedef union
