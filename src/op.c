@@ -568,17 +568,17 @@ g=v2o(h);
 return g;
 }
 
-OP vmod(OP a,unsigned short u){
+vec vmod(vec a,unsigned short u){
 vec v={0},w={0};
 OP t={0};
 int i;
 
-w=o2v(a);
+//w=o2v(a);
 for(i=0;i<u;i++)
-v.x[i]=w.x[i];
-t=v2o(v);
+v.x[i]=a.x[i];
+//t=v2o(v);
 
-return t;
+return v;
 }
 
 //多項式の剰余を取る
@@ -806,6 +806,27 @@ trace(OP f, unsigned short x)
   return u;
 }
 
+
+vec vmul(vec a, vec b)
+{
+  int i, j, k, l;
+  vec c = {0};
+
+  k = deg(a);
+  l = deg(b);
+
+  for (i = 0; i < k+1; i++)
+  {
+    for (j = 0; j < l+1; j++)
+      //if (a.x[i] > 0)
+      {
+        c.x[i + j] ^= gf[mlt(fg[a.x[i]], fg[b.x[j]])];
+      }
+  }
+
+  return c;
+}
+
 OP vinv(OP f,unsigned short l){
 int i,j,r=0;
 vec c={0},d={0},e={0},t={0},s={0};
@@ -813,7 +834,7 @@ OP g={0},h={0};
 
 //l=deg(a);
 c.x[0]=1;
-g=v2o(c);
+//g=v2o(c);
 if(l%2==1){
   r=(l+1)/2;
 }else{
@@ -822,15 +843,17 @@ if(l%2==1){
 printpol(o2v(f));
 printf("  ===f\n");
 for(i=1;i<r+1;i++){
-g=omul(f,omul(g,g));
+c=vmul(o2v(f),vmul(c,c));
+//g=omul(f,omul(g,g));
 //oadd(kof(2,g),
-printpol(o2v(g));
+printpol(c);
 printf(" ==ggg\n");
 
-g=vmod(g,2*i);
+c=(vmod(c,2*i));
 
 }
-g=vmod(g,l);
+//g=v2o(c);
+g=v2o(vmod((c),l));
 e.x[l]=1;
 h=v2o(e);
 
@@ -1692,25 +1715,6 @@ vec vadd(vec a, vec b)
   return c;
 }
 
-vec vmul(vec a, vec b)
-{
-  int i, j, k, l;
-  vec c = {0};
-
-  k = deg(a);
-  l = deg(b);
-
-  for (i = 0; i < k; i++)
-  {
-    for (j = 0; j < l; j++)
-      if (a.x[i] > 0)
-      {
-        c.x[i + j] ^= gf[mlt(fg[a.x[i]], fg[b.x[j]])];
-      }
-  }
-
-  return c;
-}
 
   
 
@@ -1728,8 +1732,8 @@ EX hh={0};
 
 
  if(l<m){
-   memset(x.q.x,0,sizeof(x.q.x));
-   x.r=o2v(a);
+   memset(x.q.t,0,sizeof(x.q.t));
+   x.r=a;
 return x;
  }
  
@@ -1764,14 +1768,14 @@ r=vinv(p,l);
  d.x[n+1]=1;
  s=v2o(d);
  q=omul(q,r);
- q=(vmod(q,n+1));
+ q=v2o(vmod(o2v(q),n+1));
 // printpol(o2v(q));
 // printf(" ==q\n");
  for(i=0;i<n+1;i++)
  f.x[n-i]=o2v(q).x[i];
 
- x.q=f;
- x.r=o2v(oadd(a,omul(b,v2o(f))));
+ x.q=v2o(f);
+ x.r=oadd(a,omul(b,v2o(f)));
  
 return x;
 }
@@ -3960,8 +3964,13 @@ memcpy(v.x,v1,5);
 memcpy(vv.x,v2,3);
 w=setpol(v1,5);
 f=setpol(v2,3);
+printpol(o2v(omul(f,w)));
+printf(" ===wf\n");
+printpol(vmul(o2v(w),o2v(f)));
+printf("  ==vmul\n");
+//exit(1);
 //for(i=0;i<100000;i++){
- printpol(vdiv(w,f).q);
+ printpol(o2v(vdiv(w,f).q));
 printf(" ==vdiv\n");
 //}
 //exit(1);
@@ -3995,16 +4004,20 @@ printf(" ==hh.v\n");
 //}
 printf("inv=%d\n",gf[oinv(LT(hh.u).a)]);
 //exit(1);
+k=odeg(ooo);
 //for(i=0;i<100000;i++){
-g=vinv(w,odeg(ooo));
+g=vinv(w,k);
 printpol(o2v(g));
 printf(" ==vinv2\n");
-printpol(o2v(omod(omul(g,w),ooo)));
-printf(" ==num?\n");
+//printpol(o2v(omod(omul(g,w),ooo)));
+//printf(" ==num?\n");
 //}
+memset(v.x,0,sizeof(v.x));
+v.x[0]=1;
+printpol(vmul(v,v));
+printf(" ==v\n");
 
-
-exit(1);
+//exit(1);
 
   //パリティチェックを生成する。
 //w=mkg();
