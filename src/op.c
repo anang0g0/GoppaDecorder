@@ -827,14 +827,15 @@ vec vmul(vec a, vec b)
   return c;
 }
 
-OP vinv(OP f,unsigned short l){
-int i,j,r=0;
+OP vinv(OP f,OP h){
+int i,j,r=0,l;
 vec c={0},d={0},e={0},t={0},s={0};
-OP g={0},h={0};
+OP g={0};
 
-//l=deg(a);
+
+l=odeg(h);
 c.x[0]=1;
-//g=v2o(c);
+g=v2o(c);
 if(l%2==1){
   r=(l+1)/2;
 }else{
@@ -843,21 +844,21 @@ if(l%2==1){
 printpol(o2v(f));
 printf("  ===f\n");
 for(i=1;i<r+1;i++){
-c=vmul(o2v(f),vmul(c,c));
-//g=omul(f,omul(g,g));
+//c=vmul(o2v(f),vmul(c,c));
+g=omul(f,omul(g,g));
 //oadd(kof(2,g),
-printpol(c);
+printpol(o2v(g));
 printf(" ==ggg\n");
-
-c=(vmod(c,2*i));
+//g=v2o(c);
+g=v2o(vmod(o2v(g),l));
 
 }
 //g=v2o(c);
-g=v2o(vmod((c),l));
+//g=v2o(vmod((c),l));
 e.x[l]=1;
 h=v2o(e);
 
-  g=kof(gf[oinv(omod(omul(g,f),h).t[0].a)],g);
+  //g=kof(gf[oinv(omod(omul(g,f),h).t[0].a)],g);
   printpol(o2v(g));
 printf(" ==vinv1\n");
 
@@ -1759,7 +1760,7 @@ q=v2o(e);
 s=v2o(d);
 //r=inv(p,s);
 //hh=xgcd(s,p);
-r=vinv(p,l);
+r=vinv(p,a);
 //printpol(o2v(r));
 //printf(" ==b3\n");
  //printpol(o2v(omod(omul(r,p),s)));
@@ -3986,13 +3987,18 @@ xxx.x[5]=1;
 OP ooo={0},g={0};
 ooo=v2o(xxx);
 //for(i=0;i<100000;i++){
-g=inv(w,ooo);
+g=vinv(f,ooo);
+printpol(o2v(g));
+printf(" ==vinv\n");
+printpol(o2v(omod(omul(g,f),ooo)));
+printf(" ===1?\n");
+g=inv(f,ooo);
 printpol(o2v(g));
 printf(" ==inv\n");
 //}
-printpol(o2v(omod(omul(g,w),ooo)));
+printpol(o2v(omod(omul(g,f),ooo)));
 printf(" ===1?\n");
-//exit(1);
+exit(1);
 //for(i=0;i<100000;i++){
 hh=xgcd(ooo,w);
 //printpol(o2v(hh.u));
@@ -4006,7 +4012,7 @@ printf("inv=%d\n",gf[oinv(LT(hh.u).a)]);
 //exit(1);
 k=odeg(ooo);
 //for(i=0;i<100000;i++){
-g=vinv(w,k);
+g=vinv(w,ooo);
 printpol(o2v(g));
 printf(" ==vinv2\n");
 //printpol(o2v(omod(omul(g,w),ooo)));
