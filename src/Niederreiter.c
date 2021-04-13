@@ -2695,7 +2695,7 @@ vec pattarson(OP w, OP f)
 
   printf("flg2=%d\n", flg2);
   //exit(1);
-
+  ero2(v);
   return v;
 }
 
@@ -3853,7 +3853,6 @@ OP sin(unsigned short zz[])
         //printf("%d,", HH[i][j]);
       }
       //printf("\n");
-      printf("ss==%d\n", ss[j]);
     }
   }
 
@@ -4093,7 +4092,7 @@ while(1){
   printf(" ==syndrome\n");
 
   //復号化の本体
-  v = pattarson(w, f);
+  v=pattarson(w, f);
   //エラー表示
   ero2(v);
 
