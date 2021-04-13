@@ -3856,7 +3856,8 @@ OP sin2(unsigned short zz[])
       //printf("\n");
     }
   }
-
+  
+//暗号化されたシンドロームを復元する
   s=dec(ss);
   for (j = 0; j < K; j++)
     printf("%d,", ss[j]);
