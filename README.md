@@ -14,6 +14,13 @@ ulimit -s unlimited
 
 https://anang0g0.github.io/GoppaDecorder
 
+
+# 20210413
+
+Binary Niederreiter暗号も残すところBerlekamp-Massey法の実装だけとなりました。
+
+そのままクローンしてもmake nieでデモを動かすことができるので試してみてください。
+
 # 20210411
 
 もうすぐこのテーマが終わるから次の目標を物色してたんですが、あれもやろうコレもやろうと手を出して、
