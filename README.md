@@ -14,6 +14,8 @@ ulimit -s unlimited
 
 https://anang0g0.github.io/GoppaDecorder
 
+依存関係のあるライブラリとかは一切ありません。
+単体で動きます。
 
 # 20210413
 
