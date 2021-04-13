@@ -2534,7 +2534,8 @@ vec pattarson(OP w, OP f)
   EX hh = {0}, opp = {0};
   vec v;
   oterm rr = {0};
-  OP r2 = {0}, b2 = {0};
+  OP r2 = {0}, b2 = {
+                   0};
   //unsigned short g[K+1]={2,2,12,1,2,8,4,13,5,10,8,2,15,10,7,3,5};
 
   tt.t[0].n = 1;
@@ -3408,7 +3409,7 @@ fclose(fp);
     //printf("\n");
   //  fwrite(n, 2, K, fp);
   }
-  fclose(fp);
+
 
   //  exit(1);
   H = mulmat(S, BB, 1);
@@ -3855,8 +3856,7 @@ OP sin2(unsigned short zz[])
       //printf("\n");
     }
   }
-  
-//暗号化されたシンドロームを復号する
+
   s=dec(ss);
   for (j = 0; j < K; j++)
     printf("%d,", ss[j]);
