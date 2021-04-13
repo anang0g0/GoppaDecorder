@@ -3362,6 +3362,9 @@ OP pubkeygen()
   vec v = {0};
 
   w = mkg();
+ printpol(o2v(w));
+ printf(" ==goppa polynomial\n");
+
   v = o2v(w);
   fp = fopen("sk.key", "wb");
   fwrite(g, 2, K + 1, fp);
@@ -3378,7 +3381,7 @@ OP pubkeygen()
 
   Pgen();
   fp = fopen("P.key", "w");
-  fwrite(P, 2, N, fp);
+//  fwrite(P, 2, N, fp);
   fclose(fp);
   makeS();
   fp = fopen("inv_S.key", "wb");
@@ -3403,7 +3406,7 @@ fclose(fp);
       //printf("%d,", n[j]);
     }
     //printf("\n");
-    fwrite(n, 2, K, fp);
+  //  fwrite(n, 2, K, fp);
   }
   fclose(fp);
 
@@ -3420,7 +3423,7 @@ fclose(fp);
   {
     for (j = 0; j < K; j++)
       dd[j] = HH[i][j];
-    fwrite(dd, 2, K, fp);
+    //fwrite(dd, 2, K, fp);
   }
   fclose(fp);
 
@@ -3793,10 +3796,7 @@ int ero2(vec v)
 void mkerr(unsigned short *z1, int num)
 {
   int i,j, l;
-
   j = 0;
-
-  memset(z1, 0, sizeof(z1));
 
   while (j < num)
   {
@@ -3842,6 +3842,7 @@ void sin(unsigned short zz[], unsigned short *ss)
   vec v = {0};
 
   //unsigned short ss[K] = {0};
+
 
   for (i = 0; i < N; i++)
   {
@@ -4057,9 +4058,8 @@ x=chen(lo[j-1]);
 int main(void)
 {
   unsigned short z1[N] = {0}; //{1,0,1,1,1,0,0,0,0,0,1,1,1,0,0,1};
-  OP f = {0}, r = {0}, w = {0}, ff = {0}, tt = {0};
-  vec v,x;
-  time_t t;
+  OP f = {0}, r = {0}, w = {0};
+  vec v;
   unsigned short ss[K] = {0};
 
 if (K > N){
@@ -4076,20 +4076,17 @@ bms(s);
 
   //公開鍵を生成する
  w = pubkeygen();
- printpol(o2v(w));
- printf(" ==goppa polynomial\n");
  
 while(1){
 
 //エラーベクトルを生成する
-  memset(z1,0,sizeof(z1));
+  memset(z1, 0, sizeof(z1));
   mkerr(z1, T * 2);
   //exit(1);
 
   //encryotion
   //test (w, z1);
-
-  memset(ss, 0, sizeof(ss));
+  memset(ss,0,sizeof(ss));
   sin(z1, ss);
   f = dec(ss);
   printpol(o2v(f));
@@ -4100,7 +4097,7 @@ while(1){
   //エラー表示
   ero2(v);
 
-  break;
+//  break;
 }
 
   return 0;
