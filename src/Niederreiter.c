@@ -4085,7 +4085,8 @@ while(1){
   //exit(1);
 
   //encryotion
-  //test (w, z1);
+  test (w, z1);
+  
   memset(ss,0,sizeof(ss));
   sin(z1, ss);
   f = dec(ss);
