@@ -4086,9 +4086,12 @@ while(1){
 
   //encryotion
   test (w, z1);
-  
+
+  //シンドロームを計算する
   memset(ss,0,sizeof(ss));
   sin(z1, ss);
+
+  //シンドロームを復号する
   f = dec(ss);
   printpol(o2v(f));
   printf(" ==syndrome\n");
@@ -4104,6 +4107,8 @@ while(1){
   return 0;
 }
 
+
+// My debris
 /*
 #ifdef SRAND
   srand(SRAND);
@@ -4124,7 +4129,7 @@ while(1){
   //exit(1);
   */
 
-// My debris
+
 /*
   w=mkg();
   r1=omul(w,w);
