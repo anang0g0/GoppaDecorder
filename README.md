@@ -20,6 +20,7 @@ https://anang0g0.github.io/GoppaDecorder
 # 20210413
 
 Binary Niederreiter暗号も残すところBerlekamp-Massey法の実装だけとなりました。
+main関数内をきれいにしたつもり。
 
 そのままクローンしてもmake nieでデモを動かすことができるので試してみてください。
 
