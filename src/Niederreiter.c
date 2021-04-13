@@ -2534,8 +2534,7 @@ vec pattarson(OP w, OP f)
   EX hh = {0}, opp = {0};
   vec v;
   oterm rr = {0};
-  OP r2 = {0}, b2 = {
-                   0};
+  OP r2 = {0}, b2 = {0};
   //unsigned short g[K+1]={2,2,12,1,2,8,4,13,5,10,8,2,15,10,7,3,5};
 
   tt.t[0].n = 1;
@@ -3392,8 +3391,9 @@ for(i=0;i<K*E;i++){
     n[j]=inv_S.w[i][j];  
     fwrite(n,1,K*E,fp);
 } 
-fclose(fp);
 */
+fclose(fp);
+
 
   for (i = 0; i < K * E; i++)
   {
@@ -3835,7 +3835,7 @@ void fun()
   }
 }
 
-OP sin(unsigned short zz[])
+OP sin2(unsigned short zz[])
 {
   int i, j;
   OP s = {0};
@@ -3855,7 +3855,8 @@ OP sin(unsigned short zz[])
       //printf("\n");
     }
   }
-
+  
+//暗号化されたシンドロームを復号する
   s=dec(ss);
   for (j = 0; j < K; j++)
     printf("%d,", ss[j]);
@@ -3867,7 +3868,7 @@ OP sin(unsigned short zz[])
 
 
 
-OP cos(unsigned short zz[])
+OP cos2(unsigned short zz[])
 {
   unsigned short ss[K*2]={0};
   int i, j;
@@ -4087,7 +4088,7 @@ while(1){
   test (w, z1);
 
   //シンドロームを計算する
-  f=sin(z1);
+  f=sin2(z1);
   printpol(o2v(f));
   printf(" ==syndrome\n");
 
