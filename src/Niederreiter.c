@@ -3835,13 +3835,12 @@ void fun()
   }
 }
 
-void sin(unsigned short zz[], unsigned short *ss)
+OP sin(unsigned short zz[])
 {
   int i, j;
   OP s = {0};
   vec v = {0};
-
-  //unsigned short ss[K] = {0};
+  unsigned short ss[K] = {0};
 
 
   for (i = 0; i < N; i++)
@@ -3858,12 +3857,13 @@ void sin(unsigned short zz[], unsigned short *ss)
     }
   }
 
+  s=dec(ss);
   for (j = 0; j < K; j++)
     printf("%d,", ss[j]);
   printf(" ==ss\n");
   //exit(1);
 
-  //return v;
+  return s;
 }
 
 
@@ -4088,11 +4088,7 @@ while(1){
   test (w, z1);
 
   //シンドロームを計算する
-  memset(ss,0,sizeof(ss));
-  sin(z1, ss);
-
-  //シンドロームを復号する
-  f = dec(ss);
+  f=sin(z1);
   printpol(o2v(f));
   printf(" ==syndrome\n");
 
