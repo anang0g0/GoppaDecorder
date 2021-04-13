@@ -2695,7 +2695,7 @@ vec pattarson(OP w, OP f)
 
   printf("flg2=%d\n", flg2);
   //exit(1);
-  ero2(v);
+  //ero2(v);
   return v;
 }
 
@@ -3994,7 +3994,7 @@ for(j=1;j<K+1;j++){
   printpol(v);
   printf(" ==lo\n");
 
-  l=deg(o2v(lo[j-1]));
+え  l=deg(o2v(lo[j-1]));
   for(i=1;i<l+1;i++){
     k^=gf[mlt(fg[v.x[i]],fg[s[j-i]])];
     printf("v[%d]=%d\n",i,v.x[i]);
