@@ -1528,7 +1528,7 @@ int deg(vec a)
 vec i2v(unsigned int n)
 {
   vec v = {0};
-  int i;
+  int i=0;
 
   while (n > 0)
   {
@@ -4025,23 +4025,12 @@ x=chen(lo[j-1]);
 //言わずもがな
 int main(void)
 {
-  int i, j, k, l;
-  int count = 0;
-  FILE *fp, *fq;
+  int i,j;
   unsigned short z1[N] = {0}; //{1,0,1,1,1,0,0,0,0,0,1,1,1,0,0,1};
   unsigned short zz[N];
-
-  //  {0};
-
-  int flg, o1 = 0;
   OP f = {0}, r = {0}, w = {0}, ff = {0}, tt = {0};
-  EX hh = {0};
   vec v,x;
   time_t t;
-  OP r1 = {0}, r2 = {0}, r3 = {0}, r4 = {0};
-  OP g1 = {0}, tmp = {
-                   0};
-  int fail = 0;
 
   if (K > N)
     printf("configuration error! K is too big K\n");
@@ -4109,7 +4098,7 @@ for(i=0;i<N;i++){
 */
 //exit(1);
 
-  count = 0;
+
   memset(z1, 0, sizeof(z1));
 
   j = 0;
@@ -4129,9 +4118,9 @@ for(i=0;i<N;i++){
   sin(z1, ss);
   f = dec(ss);
   printpol(o2v(w));
-  printf(" ==goppa\n");
+  printf(" ==goppa polynomial\n");
   printpol(o2v(f));
-  printf(" ==syn\n");
+  printf(" ==syndrome\n");
 
   //復号化の本体
   v = pattarson(w, f);
