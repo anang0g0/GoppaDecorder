@@ -4062,17 +4062,10 @@ int main(void)
   time_t t;
   unsigned short ss[K] = {0};
 
-  if (K > N)
-    printf("configuration error! K is too big K\n");
-
-#ifdef SRAND
-  srand(SRAND);
-#else
-  const unsigned int seed2 = clock() + time(&t);
-  printf("srand(%u)\n", seed2);
-  srand(seed2);
-#endif
-
+if (K > N){
+  printf("configuration error! K is too big K\n");
+  exit(1);
+}
 
 //kabatiansky example
 unsigned short s[K+1]={0,15,1,9,13,1,14};
@@ -4081,10 +4074,11 @@ bms(s);
 //exit(1);
 
 
-
   //公開鍵を生成する
  w = pubkeygen();
-
+ printpol(o2v(w));
+ printf(" ==goppa polynomial\n");
+ 
 while(1){
 
 //エラーベクトルを生成する
@@ -4098,8 +4092,6 @@ while(1){
   memset(ss, 0, sizeof(ss));
   sin(z1, ss);
   f = dec(ss);
-  printpol(o2v(w));
-  printf(" ==goppa polynomial\n");
   printpol(o2v(f));
   printf(" ==syndrome\n");
 
@@ -4114,7 +4106,15 @@ while(1){
   return 0;
 }
 
-
+/*
+#ifdef SRAND
+  srand(SRAND);
+#else
+  const unsigned int seed2 = clock() + time(&t);
+  printf("srand(%u)\n", seed2);
+  srand(seed2);
+#endif
+*/
 /*
   a = 65535;
   printf("b=%d\n", a);
