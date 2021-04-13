@@ -4031,6 +4031,8 @@ int main(void)
   OP f = {0}, r = {0}, w = {0}, ff = {0}, tt = {0};
   vec v,x;
   time_t t;
+  unsigned short a, b;
+
 
   if (K > N)
     printf("configuration error! K is too big K\n");
@@ -4042,7 +4044,7 @@ int main(void)
   printf("srand(%u)\n", seed);
   srand(seed);
 #endif
-  unsigned short a, b;
+
 
   a = 65535;
   printf("b=%d\n", a);
@@ -4052,7 +4054,7 @@ int main(void)
   printf("b=%d\n", b);
   //fun();
   //exit(1);
-  unsigned char ch[E * K] = {0};
+  
 
 label:
 
