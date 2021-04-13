@@ -4074,7 +4074,7 @@ label:
   unsigned short ss[K] = {0};
 
   //公開鍵を生成する
- //w = pubkeygen();
+ w = pubkeygen();
 //kabatiansky example
 unsigned short s[K+1]={0,15,1,9,13,1,14};
 
@@ -4099,6 +4099,7 @@ printf("%d,",s[i]);
 }
 printf("\n");
 */
+//Berlekamp-Massey法（テスト中）
 bms(s);
 /*
 for(i=0;i<N;i++){
@@ -4106,7 +4107,7 @@ for(i=0;i<N;i++){
   printf("%d:%d\n",i,zz[i]);
 }
 */
-exit(1);
+//exit(1);
 
 /*
   w=mkg();
