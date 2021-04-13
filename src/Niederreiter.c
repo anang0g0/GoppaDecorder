@@ -3994,7 +3994,7 @@ for(j=1;j<K+1;j++){
   printpol(v);
   printf(" ==lo\n");
 
-え  l=deg(o2v(lo[j-1]));
+ l=deg(o2v(lo[j-1]));
   for(i=1;i<l+1;i++){
     k^=gf[mlt(fg[v.x[i]],fg[s[j-i]])];
     printf("v[%d]=%d\n",i,v.x[i]);
