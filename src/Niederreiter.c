@@ -4099,7 +4099,7 @@ printf("%d,",s[i]);
 }
 printf("\n");
 */
-//Berlekamp-Massey法（テスト中）
+//Berlekamp-Massey法（UnderConstruction）
 bms(s);
 /*
 for(i=0;i<N;i++){
@@ -4109,6 +4109,39 @@ for(i=0;i<N;i++){
 */
 //exit(1);
 
+  count = 0;
+  memset(z1, 0, sizeof(z1));
+
+  j = 0;
+
+  mkerr(z1, T * 2);
+  for (i = 0; i < N; i++)
+  {
+    if (z1[i] > 0)
+      printf("%d=%d\n", i, z1[i]);
+  }
+  //exit(1);
+
+  //encryotion
+  //test (w, z1);
+
+  memset(ss, 0, sizeof(ss));
+  sin(z1, ss);
+  f = dec(ss);
+  printpol(o2v(w));
+  printf(" ==goppa\n");
+  printpol(o2v(f));
+  printf(" ==syn\n");
+
+  //復号化の本体
+  v = pattarson(w, f);
+  //エラー表示
+  ero2(v);
+
+  return 0;
+}
+
+// My debris
 /*
   w=mkg();
   r1=omul(w,w);
@@ -4185,34 +4218,3 @@ unsigned short tarin[N]={0};
     exit(1);
 */
 
-  count = 0;
-  memset(z1, 0, sizeof(z1));
-
-  j = 0;
-
-  mkerr(z1, T * 2);
-  for (i = 0; i < N; i++)
-  {
-    if (z1[i] > 0)
-      printf("%d=%d\n", i, z1[i]);
-  }
-  //exit(1);
-
-  //encryotion
-  //test (w, z1);
-
-  memset(ss, 0, sizeof(ss));
-  sin(z1, ss);
-  f = dec(ss);
-  printpol(o2v(w));
-  printf(" ==goppa\n");
-  printpol(o2v(f));
-  printf(" ==syn\n");
-
-  //復号化の本体
-  v = pattarson(w, f);
-  //エラー表示
-  ero2(v);
-
-  return 0;
-}
