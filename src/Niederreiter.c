@@ -52,6 +52,8 @@ MAT H = {0};
 
 unsigned int AA = 0, B = 0; //, C = 0, A2 = 0;
 
+
+
 //有限体の元の逆数
 unsigned short
 oinv(unsigned short a)
@@ -3790,11 +3792,11 @@ int ero2(vec v)
 
 void mkerr(unsigned short *z1, int num)
 {
-  int j, l;
+  int i,j, l;
 
   j = 0;
 
-  //  memset(z1, 0, sizeof(z1));
+  memset(z1, 0, sizeof(z1));
 
   while (j < num)
   {
@@ -3807,6 +3809,13 @@ void mkerr(unsigned short *z1, int num)
       j++;
     }
   }
+
+  for (i = 0; i < N; i++)
+  {
+    if (z1[i] > 0)
+      printf("%d=%d\n", i, z1[i]);
+  }
+
 }
 
 void fun()
@@ -3950,6 +3959,28 @@ OP lo[6+1]={0},b[6+1]={0},t[6+1]={0},a={0},f={0},h={0},g={0},hh={0};
 vec v={0},x={0},w={0};
 
 
+//https://www.cayrel.net/?Implementation-of-Goppa-codes 
+//unsigned short s[4+1]={0,4,6,3,5};
+
+//unsigned short s[K+1]={0,13,3,5,4,8,5};
+//unsigned short s[K+1]={0,15,10,8,8,0,12};
+
+/*
+//memset(zz,0,sizeof(zz));
+//mkerr(zz,2);
+zz[0]=1;
+zz[1]=1;
+r1=synd(zz);
+v=o2v(r1);
+memset(s,0,K+2);
+s[0]=0;
+for(i=0;i<6+1;i++){
+s[i+1]=v.x[i];
+printf("%d,",s[i]);
+}
+printf("\n");
+*/
+
 x.x[1]=1;
 h=v2o(x);
 v.x[0]=1;
@@ -4025,14 +4056,11 @@ x=chen(lo[j-1]);
 //言わずもがな
 int main(void)
 {
-  int i,j;
   unsigned short z1[N] = {0}; //{1,0,1,1,1,0,0,0,0,0,1,1,1,0,0,1};
-  unsigned short zz[N];
   OP f = {0}, r = {0}, w = {0}, ff = {0}, tt = {0};
   vec v,x;
   time_t t;
-  unsigned short a, b;
-
+  unsigned short ss[K] = {0};
 
   if (K > N)
     printf("configuration error! K is too big K\n");
@@ -4040,77 +4068,28 @@ int main(void)
 #ifdef SRAND
   srand(SRAND);
 #else
-  const unsigned int seed = clock() + time(&t);
-  printf("srand(%u)\n", seed);
-  srand(seed);
+  const unsigned int seed2 = clock() + time(&t);
+  printf("srand(%u)\n", seed2);
+  srand(seed2);
 #endif
 
 
-  a = 65535;
-  printf("b=%d\n", a);
-  v = i2v(a);
-  printvec(v);
-  b = v2i(v);
-  printf("b=%d\n", b);
-  //fun();
-  //exit(1);
-  
-
-label:
-
-  //パリティチェックを生成する。
-
-  printf("\nすげ、オレもうイキそ・・・\n");
-
-  unsigned short ss[K] = {0};
-
-  //公開鍵を生成する
- w = pubkeygen();
 //kabatiansky example
 unsigned short s[K+1]={0,15,1,9,13,1,14};
-
-//https://www.cayrel.net/?Implementation-of-Goppa-codes 
-//unsigned short s[4+1]={0,4,6,3,5};
-
-//unsigned short s[K+1]={0,13,3,5,4,8,5};
-//unsigned short s[K+1]={0,15,10,8,8,0,12};
-
-/*
-//memset(zz,0,sizeof(zz));
-//mkerr(zz,2);
-zz[0]=1;
-zz[1]=1;
-r1=synd(zz);
-v=o2v(r1);
-memset(s,0,K+2);
-s[0]=0;
-for(i=0;i<6+1;i++){
-s[i+1]=v.x[i];
-printf("%d,",s[i]);
-}
-printf("\n");
-*/
 //Berlekamp-Massey法（UnderConstruction）
 bms(s);
-/*
-for(i=0;i<N;i++){
-  if(zz[i]>0)
-  printf("%d:%d\n",i,zz[i]);
-}
-*/
 //exit(1);
 
 
-  memset(z1, 0, sizeof(z1));
 
-  j = 0;
+  //公開鍵を生成する
+ w = pubkeygen();
 
+while(1){
+
+//エラーベクトルを生成する
+  memset(z1,0,sizeof(z1));
   mkerr(z1, T * 2);
-  for (i = 0; i < N; i++)
-  {
-    if (z1[i] > 0)
-      printf("%d=%d\n", i, z1[i]);
-  }
   //exit(1);
 
   //encryotion
@@ -4129,8 +4108,23 @@ for(i=0;i<N;i++){
   //エラー表示
   ero2(v);
 
+  break;
+}
+
   return 0;
 }
+
+
+/*
+  a = 65535;
+  printf("b=%d\n", a);
+  v = i2v(a);
+  printvec(v);
+  b = v2i(v);
+  printf("b=%d\n", b);
+  //fun();
+  //exit(1);
+  */
 
 // My debris
 /*
