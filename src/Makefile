@@ -16,6 +16,9 @@ oo:
 nie:
 	gcc-10 -Wall -g -pg -O3 -mtune=native -march=native -ffast-math -funroll-loops  -fopenmp Niederreiter.c
 
+op:
+	gcc-10 -Wall -g -pg -O3  -mtune=znver2 -march=znver2 -ffast-math -funroll-loops  -fopenmp opp.c
+
 clean:
 	rm -f a.out
 
