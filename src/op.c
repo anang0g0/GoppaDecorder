@@ -1287,12 +1287,28 @@ chk(OP f)
   exit(1);
 }
 
+OP kof(unsigned short c,OP f){
+int i,j,k;
+vec b={0},h={0};
+OP g={0};
+
+b=o2v(f);
+k=deg(b);
+for(i=0;i<k+1;i++){
+h.x[i]=gf[mlt(fg[c],fg[b.x[i]])];
+}
+g=v2o(h);
+
+return g;
+}
+
+
 //拡張ユークリッドアルゴリズム
 EX xgcd(OP f, OP g)
 {
   OP h = {0}, ww = {0}, *v, *u;
   oterm a, b;
-  int i = 0, j, k, flg = 0;
+  int i = 0, j, k, flg = 0, m = odeg(f);
   EX e = {0}, ee = {0};
 
   v = (OP *)malloc(sizeof(OP) * (DEG));
@@ -1347,16 +1363,21 @@ EX xgcd(OP f, OP g)
 
     if (LT(g).n > 0)
       h = omod(f, g);
-
+    printpol(o2v(h));
+    printf(" ===hh\n");
     if (LT(g).a > 0)
       ww = odiv(f, g);
+    printpol(o2v(ww));
+    printf(" ===ww\n");
 
     v[i + 2] = oadd(v[i], omul(ww, v[i + 1]));
     u[i + 2] = oadd(u[i], omul(ww, u[i + 1]));
-    //printf ("i+1=%d %d %d g=%d\n", i + 1, odeg ((v[i])), T - 1, odeg ((g)));
+    printf("i+1=%d %d %d g=%d\n", i + 1, odeg((v[i + 2])), T - 1, odeg((g)));
+    printpol(o2v(v[i + 2]));
+    printf(" ==vvv\n");
     f = g;
     g = h;
-
+    /*
     if (odeg(v[i]) > T - 2)
     {
       //printf("vaka\n");
@@ -1364,12 +1385,10 @@ EX xgcd(OP f, OP g)
       e.d = f;
       e.v = v[i];
       e.u = u[i];
-
       free(v);
       free(u);
       //wait();
       return e;
-
       //exit(1);
     }
     else if (deg(o2v(f)) == T - 1)
@@ -1380,18 +1399,31 @@ EX xgcd(OP f, OP g)
       e.d = f;
       e.v = v[i];
       e.u = u[i];
+      free(v);
+      free(u);
+      return e;
+    }
+    */
+    if (odeg(v[i + 2]) == m - 1)
+    {
+      //printf("vaka\n");
+      //wait();
+      e.d = f;
+      e.v = kof(gf[oinv(LT(h).a)], v[i + 2]);
+      e.u = u[i + 2];
 
       free(v);
       free(u);
-
+      //wait();
       return e;
     }
+    i++;
   }
 
   //printf ("i=%d\n", i);
   //wait();
   //oprintpol ((v[i]));
-  printf("deg(v)=%d\n", odeg((v[i])));
+  printf("deg(v)=%d\n", odeg((v[i + 2])));
   printf(" v=============\n");
   printf("deg(u)=%d\n", odeg((u[i])));
   //printpol (o2v (u[i]));
@@ -1401,8 +1433,8 @@ EX xgcd(OP f, OP g)
   //exit(1);
   //  if(deg(v[i])==T-1){
   e.d = f;
-  e.v = v[i];
-  e.u = u[i];
+  e.v = kof(gf[oinv(LT(h).a)], v[i + 2]);
+  e.u = u[i + 2];
 
   free(v);
   free(u);
@@ -1411,6 +1443,7 @@ EX xgcd(OP f, OP g)
 
   return e;
 }
+
 
 OP init_pol(OP f)
 {
@@ -3519,20 +3552,6 @@ unsigned short uk[K]={0};
 return s;
 }
 
-OP kof(unsigned short c,OP f){
-int i,j,k;
-vec b={0},h={0};
-OP g={0};
-
-b=o2v(f);
-k=deg(b);
-for(i=0;i<k+1;i++){
-h.x[i]=gf[mlt(fg[c],fg[b.x[i]])];
-}
-g=v2o(h);
-
-return g;
-}
 
 unsigned short logx(unsigned short u){
   unsigned  short i;
