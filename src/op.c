@@ -1861,7 +1861,7 @@ int ben_or(OP f)
   OP s = {0}, u = {0}, r = {0};
   vec v = {0}, x = {0};
   //if GF(8192) is 2^m and m==13 or if GF(4096) and m==12 if GF(16384) is testing
-  int m = 3;
+  int m = 4;
   // m=12 as a for GF(4096)=2^12 defined @ gloal.h or here,for example m=4 and GF(16)
 
   v.x[1] = 1;
@@ -3590,8 +3590,8 @@ printf("baka-von\n");
 
 
 OP bms(unsigned short s[]){
-int i,j,k,l,d[6]={0};
-OP lo[6+1]={0},b[6+1]={0},t[6+1]={0},a={0},f={0},h={0},g={0},hh={0};
+int i,j,k,l,d[K+1]={0};
+OP lo[K+1]={0},b[K+1]={0},t[K+1]={0},a={0},f={0},h={0},g={0},hh={0};
 vec v={0},x={0},w={0};
 
 
@@ -3858,8 +3858,8 @@ int main(void)
   //{1,2,1};
   //{1,1,3};
   //{1,2,3,4,1};
-memset(g,0,K+1);
-g[0]=1;
+//memset(g,0,K+1);
+//g[0]=1;
 
   
 
@@ -3893,6 +3893,7 @@ memset(zz,0,sizeof(zz));
 zz[1]=1;
 zz[2]=1;
 zz[3]=1;
+zz[4]=1;
 
 for(i=0;i<N;i++){
   if(zz[i]>0){
@@ -3906,26 +3907,6 @@ if(j<2){
 }
 //exit(1);
 
-/*
-l = -1;
-int ii = 0;
-  while (l == -1)
-  {
-    w = mkpol();
-    l = ben_or(w);
-    printf("irr=%d\n", l);
-    if (ii > 300)
-    {
-      printf("too many error\n");
-      //exit(1);
-    }
-    ii++;
-    //
-  }
-  printpol(o2v(w));
-  printf("==w\n");
-  */
-//  exit(1);
   /*
   //r=rev(w);
 unsigned short c[K+1]={0};
@@ -3939,7 +3920,7 @@ printf("%d,",c[i]);
 //r=rev(w);
 */
 
-w=setpol(hi,K+1);
+//w=setpol(hi,K+1);
 //printf("%d\n",ben_or(w));
 //w=omul(r,r);
 //printpol(o2v(w));
@@ -3950,12 +3931,12 @@ memset(mat,0,sizeof(mat));
 bm:
 
 mkc();
-//memset(zz,0,sizeof(zz));
-//mkerr(zz,T);
+memset(zz,0,sizeof(zz));
+mkerr(zz,T);
 //exit(1);
 r1=synd(zz);
 v=o2v(r1);
-for(i=0;i<K+1;i++)
+for(i=0;i<K;i++)
 s[i+1]=v.x[i];
 
 //exit(1);
