@@ -1032,7 +1032,7 @@ OP gcd(OP a, OP b){
 }
 */
 
-// gcd for pattarson
+// gcd for patterson
 OP zgcd(OP a, OP n)
 {
   OP d = {0}, x = {0}, s = {0}, q = {0}, r = {0}, t = {0}, u = {0}, v = {0}, w = {0}, tt = {0}, gcd = {0}, rt = {0};
@@ -2525,7 +2525,7 @@ EX extgcd(OP a, OP b)
 }
 
 //パターソンアルゴリズムでバイナリGoppa符号を復号する
-vec pattarson(OP w, OP f)
+vec patterson(OP w, OP f)
 {
   OP g1 = {0}, ll = {0}, op = {0};
   int i, j, k, l, c, n, count = 0, flg2 = 0;
@@ -2768,7 +2768,7 @@ void decrypt(OP w)
 
   printf("in decrypt\n");
   f = setpol(buf, K);
-  v = pattarson(w, f);
+  v = patterson(w, f);
 
   // elo(r);
   //exit(1);
@@ -4071,7 +4071,7 @@ if (K > N){
 //kabatiansky example
 unsigned short s[K+1]={0,15,1,9,13,1,14};
 //Berlekamp-Massey法（UnderConstruction）
-bms(s);
+//bms(s);
 //exit(1);
 
 
@@ -4094,11 +4094,11 @@ while(1){
   printf(" ==syndrome\n");
 
   //復号化の本体
-  v=pattarson(w, f);
+  v=patterson(w, f);
   //エラー表示
   ero2(v);
 
-//  break;
+  break;
 }
 
   return 0;
