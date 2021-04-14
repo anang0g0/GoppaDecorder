@@ -17,6 +17,10 @@ https://anang0g0.github.io/GoppaDecorder
 依存関係のあるライブラリとかは一切ありません。
 単体で動きます。
 
+# 20210414
+
+BM法、いろんな符号で３エラー訂正までできるようになった。
+
 # 20210413
 
 Binary Niederreiter暗号も残すところBerlekamp-Massey法の実装だけとなりました。
