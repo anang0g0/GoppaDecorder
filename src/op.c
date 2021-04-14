@@ -1861,7 +1861,7 @@ int ben_or(OP f)
   OP s = {0}, u = {0}, r = {0};
   vec v = {0}, x = {0};
   //if GF(8192) is 2^m and m==13 or if GF(4096) and m==12 if GF(16384) is testing
-  int m = 4;
+  int m = 13;
   // m=12 as a for GF(4096)=2^12 defined @ gloal.h or here,for example m=4 and GF(16)
 
   v.x[1] = 1;
@@ -3488,7 +3488,7 @@ void mkerr(unsigned short *z1, int num)
   {
     l = rand() % N;
     //printf ("l=%d\n", l);
-    if (0 == z1[l])
+    if (0 == z1[l] && l >0)
     {
       z1[l] = 1;
       printf("l=%d\n", l);
