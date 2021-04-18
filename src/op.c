@@ -3728,7 +3728,7 @@ aa:
 
     //既約性判定のためのBen-Orアルゴリズム。拡大体にも対応している。デフォルトでGF(8192)
     //既約多項式しか使わない。
-    /*
+    
   l = -1;
   ii = 0;
   while (l == -1)
@@ -3744,7 +3744,7 @@ aa:
     ii++;
     //
   }
-*/
+
     r = w;
     //  r=omul(w,w);
     memset(ta, 0, sizeof(ta));
@@ -4050,30 +4050,30 @@ bm:
     //6x^7+10x^6+7x^5+9x^4+2x^3+6x^2+10x^1+7 syn=============
     
     //full rank matrix
-    mkc(r, 8);
+    mkc(r, K*2);
     //half size matrix of odd colomn
-    half(5);
+    half(K+1);
     memset(zz, 0, sizeof(zz));
-    //mkerr(zz,T);
+    mkerr(zz,T);
     //for(i=1;i<T+1;i++)
     //zz[13]=1;
-    zz[1] = 1;
-    zz[5] = 1;
+    //zz[1] = 1;
+    //zz[5] = 1;
     //exit(1);
     // sendrier's trick
-    r1 = sendrier(zz, 8);
+    r1 = sendrier(zz, K*2);
     v = o2v(r1);
-    for (i = 0; i < 8; i++)
+    for (i = 0; i < K*2; i++)
         printf("%d,", v.x[i]);
     //printf("\n");
     //exit(1);
     //r2=synd(v.x,K);
-    for (i = 0; i < 4; i++)
+    for (i = 0; i < K; i++)
         s[i + 1] = v.x[i];
-    for (i = 0; i < 4; i++)
+    for (i = 0; i < K; i++)
         printf("%d,", s[i]);
     printf("\n");
-    bms(s, 4);
+    bms(s, K);
     exit(1);
 
     /*
