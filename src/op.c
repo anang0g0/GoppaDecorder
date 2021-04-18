@@ -3938,9 +3938,9 @@ bm:
 
 mkc(w,K);
 memset(zz,0,sizeof(zz));
-//mkerr(zz,T);
-for(i=1;i<T+1;i++)
-zz[i]=1;
+mkerr(zz,T);
+//for(i=1;i<T+1;i++)
+//zz[i]=1;
 //zz[2]=1;
 //exit(1);
 r1=synd(zz,K);
@@ -3952,7 +3952,7 @@ for(i=0;i<K+1;i++)
 printf("%d,",s[i]);
 printf("\n");
 bms(s,K);
-//exit(1);
+exit(1);
 
 /*
 r=setpol(hi,3);
@@ -3966,7 +3966,6 @@ for(i=0;i<N;i++){
   for(j=0;j<K*2;j++)
     t2[j]^=gf[mlt(fg[s[j]],mat[i][j])];
 }
-
 for(i=1;i<K*2+1;i++)
 printf("%d,",t2[i]);
 */
@@ -4055,7 +4054,6 @@ for(i=0;i<N;i++){
 memset(zz,0,sizeof(zz));
 for(i=0;i<T;i++)
 zz[i]=1;
-
 //zz[3]=1;
 r1=synd(zz,K);
 r = decode(w, r1);
