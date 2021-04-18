@@ -1862,7 +1862,7 @@ int ben_or(OP f)
   OP s = {0}, u = {0}, r = {0};
   vec v = {0}, x = {0};
   //if GF(8192) is 2^m and m==13 or if GF(4096) and m==12 if GF(16384) is testing
-  int m = 13;
+  int m = E;
   // m=12 as a for GF(4096)=2^12 defined @ gloal.h or here,for example m=4 and GF(16)
 
   v.x[1] = 1;
@@ -3724,7 +3724,7 @@ aa:
 
   //既約性判定のためのBen-Orアルゴリズム。拡大体にも対応している。デフォルトでGF(8192)
   //既約多項式しか使わない。
-/*
+
   l = -1;
   ii = 0;
   while (l == -1)
@@ -3740,7 +3740,7 @@ aa:
     ii++;
     //
   }
-*/
+
  r=w;
 //  r=omul(w,w);
   memset(ta, 0, sizeof(ta));
@@ -3895,11 +3895,11 @@ unsigned short s[K+1]={0},s2[K*2+1]={0};
 j=0;
 memset(zz,0,sizeof(zz));
 //memset(s,0,sizeof(s));
-//mkerr(zz,T);
-zz[1]=1;
-zz[2]=1;
-zz[3]=1;
-zz[4]=1;
+mkerr(zz,T);
+//zz[1]=1;
+//zz[2]=1;
+//zz[3]=1;
+//zz[4]=1;
 
 for(i=0;i<N;i++){
   if(zz[i]>0){
