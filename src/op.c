@@ -3954,8 +3954,9 @@ int main(void)
     srand(seed);
 #endif
     unsigned short a, b;
-    unsigned short hi[5] = {1, 1, 1, 1, 3};
-    //{1,7,0,1,2,0,3};
+    unsigned short hi[7] = {1,7,0,1,2,0,3};
+    //{1, 1, 1, 1, 3};
+    //
     //{1,2,1};
     //
     //{1,2,3,4,1};
@@ -4001,7 +4002,7 @@ label:
             j++;
         }
     }
-    if (j < 2)
+    if (j < T)
     {
         printf("mkerr err??\n");
         exit(1);
@@ -4061,7 +4062,7 @@ bm:
     //zz[5] = 1;
     //exit(1);
     // sendrier's trick
-    r1 = sendrier(zz, K*2);
+    r1 = sendrier(zz, K);
     v = o2v(r1);
     for (i = 0; i < K*2; i++)
         printf("%d,", v.x[i]);
@@ -4074,6 +4075,9 @@ bm:
         printf("%d,", s[i]);
     printf("\n");
     bms(s, K);
+    for(i=0;i<N;i++)
+    printf("%d,",zz[i]);
+    printf("\n");
     exit(1);
 
     /*
