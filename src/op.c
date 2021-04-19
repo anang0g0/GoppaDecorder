@@ -7,10 +7,10 @@
 //code name :  一変数多項式演算ライブラリのつもり
 //status    : now in debugging (ver 0.8)
 // 0ベクトルが出ないように生成多項式のトレースチェックを入れた。
-//date      :  20160310
+//date      :  20160310,20210419
 //auther    : the queer who thinking about cryptographic future
 //code name : OVP - One Variable Polynomial library with OpenMP friendly
-//status    : now in debugging (ver 0.1)
+//status    : now in debugging (ver 0.9)
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -2749,7 +2749,6 @@ void decrypt(OP w)
     return;
 }
 
-
 OP synd(unsigned short zz[], int kk)
 {
     unsigned short syn[K] = {0}, s = 0;
@@ -3728,22 +3727,22 @@ aa:
 
     //既約性判定のためのBen-Orアルゴリズム。拡大体にも対応している。デフォルトでGF(8192)
     //既約多項式しか使わない。
-    
-  l = -1;
-  ii = 0;
-  while (l == -1)
-  {
-    w = mkpol();
-    l = ben_or(w);
-    printf("irr=%d\n", l);
-    if (ii > 300)
+
+    l = -1;
+    ii = 0;
+    while (l == -1)
     {
-      printf("too many error\n");
-      exit(1);
+        w = mkpol();
+        l = ben_or(w);
+        printf("irr=%d\n", l);
+        if (ii > 300)
+        {
+            printf("too many error\n");
+            exit(1);
+        }
+        ii++;
+        //
     }
-    ii++;
-    //
-  }
 
     r = w;
     //  r=omul(w,w);
@@ -3850,31 +3849,20 @@ void half(int kk)
     //exit(1);
 }
 
+
 vec newhalf(unsigned short e[])
 {
     int i, j, k;
     vec v = {0};
 
-/*
-    v.x[0] = gf[mlt(fg[e[4]], fg[e[4]])];
-    v.x[1] = gf[mlt(fg[e[4]], fg[e[3]])];
-    v.x[2] = gf[mlt(fg[e[3]], fg[e[3]])];
-    v.x[3] = gf[mlt(fg[e[4]], fg[e[2]])];
-    v.x[4] = gf[mlt(fg[e[3]], fg[e[2]])];
-    v.x[5] = gf[mlt(fg[e[4]], fg[e[1]])];
-    v.x[6] = gf[mlt(fg[e[2]], fg[e[2]])];
-    v.x[7] = gf[mlt(fg[e[4]], fg[e[0]])];
-    v.x[8] = gf[mlt(fg[e[2]], fg[e[1]])];
-*/
     v.x[0] = gf[mlt(fg[e[0]], fg[e[0]])];
     v.x[1] = gf[mlt(fg[e[0]], fg[e[1]])];
     v.x[2] = gf[mlt(fg[e[1]], fg[e[1]])];
-    v.x[3] = gf[mlt(fg[e[0]], fg[e[2]])];
-    v.x[4] = gf[mlt(fg[e[1]], fg[e[2]])];
-    v.x[5] = gf[mlt(fg[e[0]], fg[e[3]])];
-    v.x[6] = gf[mlt(fg[e[2]], fg[e[2]])];
-    v.x[7] = gf[mlt(fg[e[0]], fg[e[4]])];
-    v.x[8] = gf[mlt(fg[e[2]], fg[e[3]])];
+    for (i = 2; i < 129; i++)
+    {
+        v.x[i * 2 - 1] = gf[mlt(fg[e[0]], fg[e[i]])];
+        v.x[i * 2] = gf[mlt(fg[e[1]], fg[e[i]])];
+    }
 
     for (i = 0; i < 8; i++)
         printf("%d,", v.x[i]);
@@ -3888,10 +3876,10 @@ vec newhalf(unsigned short e[])
 
 OP sendrier(unsigned short zz[], int kk)
 {
-    unsigned short syn[K*2] = {0}, s = 0,rt[K*2]={0};
+    unsigned short syn[K * 2] = {0}, s = 0, rt[K * 2] = {0};
     int i, j, k;
     OP f = {0};
-    vec v={0};
+    vec v = {0};
 
     for (j = 0; j < N; j++)
     {
@@ -3904,14 +3892,15 @@ OP sendrier(unsigned short zz[], int kk)
             if (zz[j] > 0)
             {
                 s = gf[mlt(fg[zz[j]], fg[bm[j][i]])];
-                printf("s=%d\n",s);
+                printf("s=%d\n", s);
                 syn[i] = s;
             }
         }
-        if(zz[j]>0){
-        v=newhalf(syn);
-        for(k=0;k<kk;k++)
-        rt[k]^=v.x[k];
+        if (zz[j] > 0)
+        {
+            v = newhalf(syn);
+            for (k = 0; k < kk; k++)
+                rt[k] ^= v.x[k];
         }
         //printf ("syn%d,", syn[i]);
     }
@@ -3954,7 +3943,7 @@ int main(void)
     srand(seed);
 #endif
     unsigned short a, b;
-    unsigned short hi[7] = {1,7,0,1,2,0,3};
+    unsigned short hi[7] = {1, 7, 0, 1, 2, 0, 3};
     //{1, 1, 1, 1, 3};
     //
     //{1,2,1};
@@ -4049,13 +4038,13 @@ bm:
     //15,14,4,3,5,1,9,11
     //v'=1
     //6x^7+10x^6+7x^5+9x^4+2x^3+6x^2+10x^1+7 syn=============
-    
+
     //full rank matrix
-    mkc(r, K*2);
+    mkc(r, K * 2);
     //half size matrix of odd colomn
-    half(K+1);
+    half(K + 1);
     memset(zz, 0, sizeof(zz));
-    mkerr(zz,T);
+    mkerr(zz, T);
     //for(i=1;i<T+1;i++)
     //zz[13]=1;
     //zz[1] = 1;
@@ -4064,7 +4053,7 @@ bm:
     // sendrier's trick
     r1 = sendrier(zz, K);
     v = o2v(r1);
-    for (i = 0; i < K*2; i++)
+    for (i = 0; i < K * 2; i++)
         printf("%d,", v.x[i]);
     //printf("\n");
     //exit(1);
@@ -4075,8 +4064,8 @@ bm:
         printf("%d,", s[i]);
     printf("\n");
     bms(s, K);
-    for(i=0;i<N;i++)
-    printf("%d,",zz[i]);
+    for (i = 0; i < N; i++)
+        printf("%d,", zz[i]);
     printf("\n");
     exit(1);
 
