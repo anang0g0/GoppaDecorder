@@ -41,6 +41,9 @@ https://anang0g0.github.io/GoppaDecorder
 私が見たのはこれ。
 https://eprint.iacr.org/2017/1180.pdf
 
+今日になってこんなのも見つかった。
+https://www.iacr.org/archive/ches2017/10529219/10529219.pdf
+
 うまく行っているのはまぐれだった可能性が高い。
 
 論文にはちゃんとg(x)をg(x)^2するって書いてある。
