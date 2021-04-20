@@ -52,7 +52,7 @@ https://eprint.iacr.org/2017/1180.pdf
 https://www.iacr.org/archive/ches2017/10529219/10529219.pdf
 
 うまく行っているのはまぐれだった可能性が高い。
-というのも、複合する時２倍してしまったら、それはirreducible Goppaではなく、separable Goppaになってしまうのではないか？という不安だ。
+というのも、復号する時２倍してしまったら、それはirreducible Goppaではなく、separable Goppaになってしまうのではないか？という不安だ。
 論文にはちゃんとg(x)をg(x)^2するって書いてある。
 そしてそれでうまく訂正できているのだから一見して何も問題がないように見える。
 
