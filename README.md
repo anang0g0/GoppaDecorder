@@ -38,6 +38,9 @@ https://anang0g0.github.io/GoppaDecorder
 
 でも先生の言ってることじゃなくて、独自解釈して論文に書いてある通りHからH2を作ってそれで訂正している。
 
+私の解釈はこれ。
+https://qiita.com/fumumue/items/1da3219099c8d1679cce
+
 私が見たのはこれ。
 https://eprint.iacr.org/2017/1180.pdf
 
