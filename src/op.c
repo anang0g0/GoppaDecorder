@@ -3489,7 +3489,7 @@ void mkerr(unsigned short *z1, int num)
     {
         l = rand() % N;
         //printf ("l=%d\n", l);
-        if (0 == z1[l] && l > 0)
+        if (0 == z1[l])
         {
             z1[l] = 1;
             printf("l=%d\n", l);
@@ -3616,17 +3616,24 @@ OP bms(unsigned short s[], int kk)
             printf("v[%d]=%d\n", i, v.x[i]);
         }
         d[j] = s[j] ^ k;
-        printf("d[%d]=%d\n", j, d[j]);
+        if (d[j] == 0)
+            lo[j] = lo[j - 1];
+        printf("d[%d]=%d\n", j, d[j]);            
+        
+        if(d[j]>0){
         g = omul(kof(d[j], h), b[j - 1]);
         //  if(2*l>j-1)
         t[j] = oadd(lo[j - 1], g);
+        }
+        
         printpol(o2v(t[j]));
         printf("==t[%d]\n", j);
         if (odeg(t[j]) <= odeg(t[j - 1]))
         {
+            //lo[j] = omul(lo[j - 1],h);
             b[j] = omul(b[j - 1], h);
         }
-        else //(deg(o2v(t[j]))>odeg(t[j-1]))
+        if (deg(o2v(t[j]))>odeg(t[j-1]))
         {
             b[j] = kof(gf[oinv(d[j])], lo[j - 1]);
             l = j - l + 1;
@@ -3634,24 +3641,28 @@ OP bms(unsigned short s[], int kk)
         k = 0;
         if (d[j] > 0)
             lo[j] = t[j];
-        if (d[j] == 0)
-            lo[j] = lo[j - 1];
-
+        if (d[j]==0){
+            lo[j]=lo[j-1];
+        }
+            
         printpol(o2v(b[j]));
         printf(" ==b[%d]\n", j);
     }
-    printpol(o2v(lo[j - 1]));
+    
+    if(d[kk-1]==0)
+    lo[j-1]=omul(lo[j-2],h);
+    printpol(o2v(lo[j -1]));
     printf("\n");
 
     //hh=rev(lo[j-1]);
     //exit(1);
     //r=coeff(r,LT(r).a);
-    printpol(o2v(lo[j - 1]));
+    printpol(o2v(lo[j -1]));
     printf(" ==coef\n");
     x = chen(lo[j - 1]);
     for (i = 0; i < deg(x) + 1; i++)
     {
-        if (x.x[i] > 0)
+        if (x.x[i] >= 0)
             printf("x[%d]=1\n", (x.x[i]));
         //
 
