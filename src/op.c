@@ -3591,7 +3591,7 @@ unsigned short logx(unsigned short u)
 
 OP bms(unsigned short s[], int kk)
 {
-    int i, j, k, l, d[2 * K + 1] = {0};
+    int i, j, k, ll, l,d[2 * K + 1] = {0};
     OP lo[2 * K + 1] = {0}, b[2 * K + 1] = {0}, t[2 * K + 1] = {0}, a = {0}, f = {0}, h = {0}, g = {0}, hh = {0};
     vec v = {0}, x = {0}, w = {0};
 
@@ -3601,7 +3601,7 @@ OP bms(unsigned short s[], int kk)
     f = v2o(x);
     lo[0] = v2o(v);
     b[0] = lo[0];
-
+    ll=0;
     for (j = 1; j < kk + 1; j++)
     {
         v = o2v(lo[j - 1]);
@@ -3616,35 +3616,32 @@ OP bms(unsigned short s[], int kk)
             printf("v[%d]=%d\n", i, v.x[i]);
         }
         d[j] = s[j] ^ k;
-        if (d[j] == 0)
-            lo[j] = lo[j - 1];
-        printf("d[%d]=%d\n", j, d[j]);            
-        
+        printf("d[%d]=%d\n", j, d[j]);
+        if(d[j]==0){
+            lo[j]=lo[j-1];
+            b[j] = omul(b[j-1], h);
+            } 
         if(d[j]>0){
         g = omul(kof(d[j], h), b[j - 1]);
-        //  if(2*l>j-1)
         t[j] = oadd(lo[j - 1], g);
+        if(ll*2 > j-1)
+        {
+            lo[j]=t[j];
+            b[j] = omul(b[j-1], h);
         }
-        
+        else{ //if(2*ll <= (j)){
         printpol(o2v(t[j]));
         printf("==t[%d]\n", j);
-        if (odeg(t[j]) <= odeg(t[j - 1]))
-        {
-            //lo[j] = omul(lo[j - 1],h);
-            b[j] = omul(b[j - 1], h);
+        b[j] = kof(gf[oinv(d[j])], lo[j - 1]);
+        lo[j]=t[j];
+        ll =  j - ll ;
+        //wait();
+        //b[j] = omul(b[j-1], h);
         }
-        if (deg(o2v(t[j]))>odeg(t[j-1]))
-        {
-            b[j] = kof(gf[oinv(d[j])], lo[j - 1]);
-            l = j - l + 1;
+      
         }
+        printf("l=%d\n",ll);
         k = 0;
-        if (d[j] > 0)
-            lo[j] = t[j];
-        if (d[j]==0){
-            lo[j]=lo[j-1];
-        }
-            
         printpol(o2v(b[j]));
         printf(" ==b[%d]\n", j);
     }
@@ -3659,7 +3656,7 @@ OP bms(unsigned short s[], int kk)
     //r=coeff(r,LT(r).a);
     printpol(o2v(lo[j -1]));
     printf(" ==coef\n");
-    x = chen(lo[j - 1]);
+    x = chen(lo[j -1]);
     for (i = 0; i < deg(x) + 1; i++)
     {
         if (x.x[i] >= 0)
@@ -3681,6 +3678,9 @@ OP bms(unsigned short s[], int kk)
 
     //return lo[j-1];
 }
+
+
+
 
 vec rev(OP f)
 {
