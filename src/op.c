@@ -3589,7 +3589,7 @@ unsigned short logx(unsigned short u)
     printf("baka-von\n");
 }
 
-OP bms(unsigned short s[], int kk)
+int bms(unsigned short s[], int kk)
 {
     int i, j, k, ll=0, l,d[2 * K + 1] = {0};
     OP lo[2 * K + 1] = {0}, b[2 * K + 1] = {0}, t[2 * K + 1] = {0}, a = {0}, f = {0}, h = {0}, g = {0}, hh = {0};
@@ -3602,7 +3602,7 @@ OP bms(unsigned short s[], int kk)
     lo[0] = v2o(v);
     b[0] = lo[0];
     ll=0;
-    for (j = 1; j < kk + 1; j++)
+    for (j = 1; j < T*2+1; j++)
     {
         v = o2v(lo[j - 1]);
         k = 0;
@@ -3620,20 +3620,16 @@ OP bms(unsigned short s[], int kk)
         if(d[j]==0){
             lo[j]=lo[j-1];
             b[j] = omul(b[j-1], h);
-            if(j==9){
-                printf("flex=%d\n",j);
             }
-
-            } 
         if(d[j]>0){
         g = omul(kof(d[j], h), b[j - 1]);
         t[j] = oadd(lo[j - 1], g);
-        if(ll*2 > j-1)
+        lo[j]=t[j];
+        if(ll*2 > j)
         {
-            lo[j]=t[j];
             b[j] = omul(b[j-1], h);
         }
-        else //if(2*ll[j-1] <= (j-1))
+        else //if(2*ll <= j)
         {
         printpol(o2v(t[j]));
         printf("==t[%d]\n", j);
@@ -3653,18 +3649,26 @@ OP bms(unsigned short s[], int kk)
         printf(" ==b[%d]\n", j);
     }
     
-    if(d[kk-1]==0 && odeg(lo[j-2])<T){
-    lo[j-1]=omul(lo[j-2],h);
+    if(d[kk-1]==0 && odeg(lo[j-2])==T-1){
+        lo[j-1]=omul(lo[j-2],h);
     printpol(o2v(lo[j -1]));
     printf("\n");
     }
+    
     //hh=rev(lo[j-1]);
     //exit(1);
     //r=coeff(r,LT(r).a);
 int count=0;
     printpol(o2v(lo[j -1]));
     printf(" ==coef\n");
+    if(odeg(lo[j-1])==T){
     x = chen(lo[j -1]);
+    }
+    else
+    {
+        printf("baka\n");
+        exit(1);
+    }
     for (i = 0; i < deg(x) + 1; i++)
     {
         if (x.x[i] >= 0){
@@ -3687,8 +3691,10 @@ int count=0;
     }
     if(count<T){
     printf("vaka in bms\n");
-    exit(1);
+    //exit(1);
     }
+    
+    return count;
     //return lo[j-1];
 }
 
@@ -4090,13 +4096,14 @@ bm:
     for (i = 0; i < K; i++)
         printf("%d,", s[i]);
     printf("\n");
-    bms(s, K);
+    k=bms(s, K);
     for (i = 0; i < N; i++)
         printf("%d,", zz[i]);
     printf("\n");
+    if(k<T)
+    exit(1);
     }
     exit(1);
-
     /*
 r=setpol(hi,3);
 //printf("%d\n",ben_or(w));
