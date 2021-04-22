@@ -3591,7 +3591,7 @@ unsigned short logx(unsigned short u)
 
 OP bms(unsigned short s[], int kk)
 {
-    int i, j, k, ll, l,d[2 * K + 1] = {0};
+    int i, j, k, ll=0, l,d[2 * K + 1] = {0};
     OP lo[2 * K + 1] = {0}, b[2 * K + 1] = {0}, t[2 * K + 1] = {0}, a = {0}, f = {0}, h = {0}, g = {0}, hh = {0};
     vec v = {0}, x = {0}, w = {0};
 
@@ -3620,6 +3620,10 @@ OP bms(unsigned short s[], int kk)
         if(d[j]==0){
             lo[j]=lo[j-1];
             b[j] = omul(b[j-1], h);
+            if(j==9){
+                printf("flex=%d\n",j);
+            }
+
             } 
         if(d[j]>0){
         g = omul(kof(d[j], h), b[j - 1]);
@@ -3629,39 +3633,44 @@ OP bms(unsigned short s[], int kk)
             lo[j]=t[j];
             b[j] = omul(b[j-1], h);
         }
-        else //if(2*ll <= (j))
+        else //if(2*ll[j-1] <= (j-1))
         {
         printpol(o2v(t[j]));
         printf("==t[%d]\n", j);
         b[j] = kof(gf[oinv(d[j])], lo[j - 1]);
         lo[j]=t[j];
-        ll =  j - ll ;
+        ll=  j - ll ;
         //wait();
         //b[j] = omul(b[j-1], h);
+            if(ll==0 && j>1){
+              printf("vaka ll=%d\n",ll);
+              exit(1);
+            }
         }
-      
         }
-        printf("l=%d\n",ll);
         k = 0;
         printpol(o2v(b[j]));
         printf(" ==b[%d]\n", j);
     }
     
-    if(d[kk-1]==0)
+    if(d[kk-1]==0 && odeg(lo[j-2])<T){
     lo[j-1]=omul(lo[j-2],h);
     printpol(o2v(lo[j -1]));
     printf("\n");
-
+    }
     //hh=rev(lo[j-1]);
     //exit(1);
     //r=coeff(r,LT(r).a);
+int count=0;
     printpol(o2v(lo[j -1]));
     printf(" ==coef\n");
     x = chen(lo[j -1]);
     for (i = 0; i < deg(x) + 1; i++)
     {
-        if (x.x[i] >= 0)
+        if (x.x[i] >= 0){
             printf("x[%d]=1\n", (x.x[i]));
+            count++;
+        }
         //
 
         if (x.x[i] == 0)
@@ -3676,7 +3685,10 @@ OP bms(unsigned short s[], int kk)
             //return f;
         }
     }
-
+    if(count<T){
+    printf("vaka in bms\n");
+    exit(1);
+    }
     //return lo[j-1];
 }
 
@@ -3736,7 +3748,7 @@ OP mkc(OP w, int kk)
 aa:
 
     //printf("\n");
-
+memset(mat,0,sizeof(mat));
     //既約性判定のためのBen-Orアルゴリズム。拡大体にも対応している。デフォルトでGF(8192)
     //既約多項式しか使わない。
 
@@ -3904,7 +3916,7 @@ OP sendrier(unsigned short zz[], int kk)
             if (zz[j] > 0)
             {
                 s = gf[mlt(fg[zz[j]], fg[bm[j][i]])];
-                printf("s=%d\n", s);
+                //printf("s=%d\n", s);
                 syn[i] = s;
             }
         }
@@ -4051,10 +4063,13 @@ bm:
     //v'=1
     //6x^7+10x^6+7x^5+9x^4+2x^3+6x^2+10x^1+7 syn=============
 
+
     //full rank matrix
     mkc(r, K * 2);
     //half size matrix of odd colomn
     half(K + 1);
+
+    while(1){
     memset(zz, 0, sizeof(zz));
     mkerr(zz, T);
     //for(i=1;i<T+1;i++)
@@ -4068,7 +4083,7 @@ bm:
     for (i = 0; i < K * 2; i++)
         printf("%d,", v.x[i]);
     //printf("\n");
-    //exit(1);
+    //exit(1);mk
     //r2=synd(v.x,K);
     for (i = 0; i < K; i++)
         s[i + 1] = v.x[i];
@@ -4079,6 +4094,7 @@ bm:
     for (i = 0; i < N; i++)
         printf("%d,", zz[i]);
     printf("\n");
+    }
     exit(1);
 
     /*
