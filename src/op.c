@@ -3629,7 +3629,8 @@ OP bms(unsigned short s[], int kk)
             lo[j]=t[j];
             b[j] = omul(b[j-1], h);
         }
-        else{ //if(2*ll <= (j)){
+        else //if(2*ll <= (j))
+        {
         printpol(o2v(t[j]));
         printf("==t[%d]\n", j);
         b[j] = kof(gf[oinv(d[j])], lo[j - 1]);
