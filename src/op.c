@@ -1934,7 +1934,7 @@ OP decode(OP f, OP s)
 
     for (i = 0; i < T; i++)
     {
-        printf("x[%d]=1\n", x.x[i]);
+        printf("xx[%d]=1\n", x.x[i]);
         if (x.x[i] == 0)
             k++;
         if (k > 1)
@@ -3613,7 +3613,7 @@ int bms(unsigned short s[], int kk)
         for (i = 1; i < l+1 ; i++)
         {
             k ^= gf[mlt(fg[v.x[i]], fg[s[j - i]])];
-            printf("v[%d]=%d\n", i, v.x[i]);
+            //printf("v[%d]=%d\n", i, v.x[i]);
         }
         d[j] = s[j] ^ k;
         printf("d[%d]=%d\n", j, d[j]);
@@ -3636,8 +3636,8 @@ int bms(unsigned short s[], int kk)
             }
              else //if(2*ll <= j)
             {
-                printpol(o2v(t[j]));
-                printf("==t[%d]\n", j);
+                //printpol(o2v(t[j]));
+                //printf("==t[%d]\n", j);
                 b[j] = kof(gf[oinv(d[j])], lo[j - 1]);
                 //lo[j]=t[j];
                 ll = j - ll;
@@ -3647,8 +3647,8 @@ int bms(unsigned short s[], int kk)
         }
         printf("l=%d\n", ll);
         k = 0;
-        printpol(o2v(b[j]));
-        printf(" ==b[%d]\n", j);
+        //printpol(o2v(b[j]));
+        //printf(" ==b[%d]\n", j);
     }
   
     if((d[kk-1]==0 && d[kk-3]==0 && odeg(lo[j-1])==T) || odeg(lo[j-1])==T)
@@ -3681,7 +3681,7 @@ k=0;
     {
         if (x.x[i] >= 0)
         {
-            printf("x[%d]=1\n", (x.x[i]));
+            printf("xx[%d]=1\n", (x.x[i]));
             count++;
         }
         //
@@ -4127,7 +4127,7 @@ bm:
             exit(1);
         }
     }
-    exit(1);
+//    exit(1);
     /*
 r=setpol(hi,3);
 //printf("%d\n",ben_or(w));
