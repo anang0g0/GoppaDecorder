@@ -37,6 +37,9 @@ https://anang0g0.github.io/GoppaDecorder
 # 20210423
 
 バグにとどめを刺した。
+そして急にやることがなくなったｗ．
+本当はあるんだけど、暗号化は人任せって言うわけじゃだめですかね？
+https://www.ipa.go.jp/security/fy12/report/ninsyou.pdf
 
 # 20210420
 
