@@ -2952,9 +2952,9 @@ OP mkpol()
             exit(1);
         }
 
-        for (i = 0; i < K/2; i++)
+        for (i = 0; i < K; i++)
         {
-            if (g[K/2 - 1] > 0)
+            if (g[K - 1] > 0)
                 flg = 1;
             if (i % 2 == 1 && g[i] > 0 && i < K)
                 k++;
@@ -2964,7 +2964,7 @@ OP mkpol()
         if ((k > 0 && flg == 0) || (k > 1 && flg == 1))
         //if(k>0)
         {
-            w = setpol(g, K/2 + 1);
+            w = setpol(g, K + 1);
             j = 1;
             //if(isquad(w)==-1)
             //exit(1);
@@ -3589,7 +3589,7 @@ unsigned short logx(unsigned short u)
     printf("baka-von\n");
 }
 
-int bms(unsigned short s[], int kk)
+int bma(unsigned short s[], int kk)
 {
     int i, j, k, ll = 0, l, d[2 * K + 1] = {0};
     OP lo[2 * K + 1] = {0}, b[2 * K + 1] = {0}, t[2 * K + 1] = {0}, a = {0}, f = {0}, h = {0}, g = {0}, hh = {0};
@@ -3651,17 +3651,14 @@ int bms(unsigned short s[], int kk)
         //printf(" ==b[%d]\n", j);
     }
   
-    if((d[kk-1]==0 && d[kk-3]==0 && odeg(lo[j-1])==T) || odeg(lo[j-1])==T)
-    {
 
-    }
-    else
-
-     if ((d[kk - 1] == 0 && odeg(lo[j - 2]) == T - 1))
+     if (!(d[kk-1]==0 && d[kk-3]==0 && odeg(lo[j-1])==T) || !(odeg(lo[j-1])==T))
     {
+        if((d[kk - 1] == 0 && odeg(lo[j - 2]) == T - 1) ){
         lo[j - 1] = omul(lo[j - 2], h);
         printpol(o2v(lo[j - 1]));
         printf("\n");
+        }
     }
 k=0;
     int count = 0;
@@ -4116,7 +4113,7 @@ bm:
         for (i = 0; i < K; i++)
             printf("%d,", s[i]);
         printf("\n");
-        k = bms(s, K);
+        k = bma(s, K);
         for (i = 0; i < N; i++)
             printf("%d,", zz[i]);
         printf("\n");
@@ -4126,98 +4123,12 @@ bm:
          printf("==goppa\n");
             exit(1);
         }
+        //break;
     }
 //    exit(1);
-    /*
-r=setpol(hi,3);
-//printf("%d\n",ben_or(w));
-w=omul(r,r);
-printpol(o2v(w));
-printf("\n");
-memset(mat,0,sizeof(mat));
-mkc(w,K*2);
-for(i=0;i<N;i++){
-  for(j=0;j<K*2;j++)
-    t2[j]^=gf[mlt(fg[s[j]],mat[i][j])];
-}
-for(i=1;i<K*2+1;i++)
-printf("%d,",t2[i]);
-*/
-
-    /*
-w=setpol(hi,5);
-mkc(w);
-r1=synd(zz);
-v=o2v(r1);
-for(i=0;i<K+1;i++)
-s[i+1]=v.x[i];
-*/
-    bms(s, K);
-    for (i = 0; i < N; i++)
-    {
-        if (zz[i] > 0)
-            printf("e=%d %d\n", i, zz[i]);
-    }
-
-    //exit(1);
-    for (i = 1; i < T + 1; i++)
-        zz[i] = 1;
-    printpol(o2v(w));
-    printf(" ==w\n");
-    r1 = synd(zz, K);
-    memset(v.x, 0, sizeof(v.x));
-    memset(s, 0, sizeof(s));
-    v = o2v(r1);
-    for (i = 1; i < K + 1; i++)
-        s[i] = v.x[i - 1];
-    for (i = 1; i < K * 2 + 1; i++)
-        s2[i * 2] = gf[mlt(fg[s[i]], fg[s[i]])];
-    for (i = 0; i < K * 2 + 1; i++)
-        printf("%d,", s2[i]);
-    printf("\n");
-    //exit(1);
-    bms(s2, K * 2);
-    //exit(1);
-    for (i = 1; i < T * 2 + 1; i++)
-        zz[i] = 1;
-    r = omul(w, w);
-    printpol(o2v(r));
-    printf("\n");
-    memset(mat, 0, sizeof(mat));
-    mkc(r, K * 2);
-    f = synd(zz, K * 2);
-    v = o2v(f);
-    for (i = 1; i < K * 2 + 1; i++)
-        t2[i] = v.x[i - 1];
-    bms(t2, K * 2);
-    //exit(1);
 
     w = mkg(K);
-    /*
-memset(zz,0,sizeof(zz));
-//memset(s,0,sizeof(s));
-mkerr(zz,T);
-for(i=0;i<N;i++){
-  if(zz[i]>0){
-    printf("%d %d\n",i,zz[i]);
-  j++;
-  }
-}
-if(j<T){
-  printf("mkerr err??\n");
-  exit(1);
-}
-r1=synd(zz);
-v=o2v(r1);
-for(i=0;i<K+1;i++)
-s[i+1]=v.x[i];
-bms(s);
-for(i=0;i<N;i++){
-  if(zz[i]>0)
-  printf("e=%d %d\n",i,zz[i]);
-}
-exit(1);
-*/
+
     for (i = 0; i < N; i++)
     {
         for (j = 0; j < K; j++)
