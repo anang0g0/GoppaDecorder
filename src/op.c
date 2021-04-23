@@ -3650,20 +3650,20 @@ int bms(unsigned short s[], int kk)
         printpol(o2v(b[j]));
         printf(" ==b[%d]\n", j);
     }
-    
-    if(d[kk-1]==0 && d[kk-3]==0 && odeg(lo[j-1])==T)
+  
+    if((d[kk-1]==0 && d[kk-3]==0 && odeg(lo[j-1])==T) || odeg(lo[j-1])==T)
     {
 
     }
     else
-    
+
      if ((d[kk - 1] == 0 && odeg(lo[j - 2]) == T - 1))
     {
         lo[j - 1] = omul(lo[j - 2], h);
         printpol(o2v(lo[j - 1]));
         printf("\n");
     }
-    
+
     int count = 0;
     printpol(o2v(lo[j - 1]));
     printf(" ==coef\n");
@@ -3674,7 +3674,7 @@ int bms(unsigned short s[], int kk)
     else
     {
         printf("baka\n");
-        exit(1);
+        return -1;
     }
     for (i = 0; i < deg(x) + 1; i++)
     {
@@ -3978,9 +3978,10 @@ int main(void)
     srand(seed);
 #endif
     unsigned short a, b;
-    unsigned short hi[8] = {1,0,3,5,1,4,0,10}; //yabame
-    //{1,8,3,0,8,12,14,14}; // j-1
-    //{1,3,0,4,4,12,0,13}; // j
+    unsigned short hi[8] = {1,5,3,9,9,7,8,12}; // j
+    //{1,0,3,5,1,4,0,10}; //yabame
+    //
+    //
     //{1, 3, 0, 1, 2, 0, 3};
     //{1, 1, 1, 1, 3};
     //
@@ -4087,47 +4088,19 @@ bm:
         memset(zz, 0, sizeof(zz));
         mkerr(zz, T);
         //for(i=1;i<T+1;i++)
-// j
-/*
-    zz[1]=1;
-    zz[3] = 1;
-    zz[5] = 1;
-    zz[7] = 1;
-    zz[9] = 1;
-    zz[12] = 1;
-    zz[15] = 1;
-*/
+
 //yabame
 /*
     zz[0]=1;
     zz[2] = 1;
-    zz[6] = 1;
-    zz[10] = 1;
-    zz[11] = 1;
+    zz[3] = 1;
+    zz[7] = 1;
+    zz[12] = 1;
     zz[14] = 1;
     zz[15] = 1;
 */
 
-// zz[0]=1
-/*
-    zz[0]=1;
-    zz[1] = 1;
-    zz[2] = 1;
-    zz[3] = 1;
-    zz[9] = 1;
-    zz[10] = 1;
-    zz[14] = 1;
-*/
-     // j-1   
-   /*
-    zz[2]=1;
-    zz[3] = 1;
-    zz[6] = 1;
-    zz[10] = 1;
-    zz[13] = 1;
-    zz[14] = 1;
-    zz[15] = 1;
-    */
+    
         //exit(1);
         // sendrier's trick
         r1 = sendrier(zz, K);
