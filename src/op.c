@@ -3663,7 +3663,7 @@ int bms(unsigned short s[], int kk)
         printpol(o2v(lo[j - 1]));
         printf("\n");
     }
-
+k=0;
     int count = 0;
     printpol(o2v(lo[j - 1]));
     printf(" ==coef\n");
@@ -3674,7 +3674,8 @@ int bms(unsigned short s[], int kk)
     else
     {
         printf("baka\n");
-        return -1;
+        exit(1);
+        //return -1;
     }
     for (i = 0; i < deg(x) + 1; i++)
     {
@@ -3693,7 +3694,7 @@ int bms(unsigned short s[], int kk)
             //printvec((x));
             //for (i = 0; i < N; i++)
             //printf("%d,", zz[i]);
-            //exit(1);
+            exit(1);
             //return f;
         }
     }
