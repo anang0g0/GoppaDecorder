@@ -41,6 +41,8 @@ https://anang0g0.github.io/GoppaDecorder
 本当はあるんだけど、暗号化は人任せって言うわけじゃだめですかね？
 https://www.ipa.go.jp/security/fy12/report/ninsyou.pdf
 
+急にやることがなくなったので、数学と英語の勉強をします。
+
 # 20210420
 
 シンドローム２倍関数を一般化した。
