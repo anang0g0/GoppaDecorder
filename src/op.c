@@ -1297,11 +1297,12 @@ OP kof(unsigned short c, OP f)
     vec b = {0}, h = {0};
     OP g = {0};
 
+    c=fg[c];
     b = o2v(f);
     k = deg(b);
     for (i = 0; i < k + 1; i++)
     {
-        h.x[i] = gf[mlt(fg[c], fg[b.x[i]])];
+        h.x[i] = gf[mlt(c, fg[b.x[i]])];
     }
     g = v2o(h);
 
@@ -3491,7 +3492,7 @@ void mkerr(unsigned short *z1, int num)
         if (0 == z1[l])
         {
             z1[l] = 1;
-            printf("l=%d\n", l);
+            //printf("l=%d\n", l);
             j++;
         }
     }
@@ -3887,8 +3888,9 @@ vec newhalf(unsigned short e[])
     vec v = {0};
 
     v.x[0] = gf[mlt(fg[e[0]], fg[e[0]])];
-    for (i = 1; i < 129; i++)
+    for (i = 1; i < K/2+1; i++)
     {
+        //printf("i=%d\n",i);
         v.x[i * 2 - 1] = gf[mlt(fg[e[0]], fg[e[i]])];
         v.x[i * 2] = gf[mlt(fg[e[1]], fg[e[i]])];
     }
@@ -3896,26 +3898,31 @@ vec newhalf(unsigned short e[])
     return v;
 }
 
-OP sendrier(unsigned short zz[], int kk)
+OP sendrier(unsigned short zz[N], int kk)
 {
-    unsigned short syn[K * 2] = {0}, s = 0, rt[K * 2] = {0};
+    unsigned short syn[K * 2+1] = {0}, s = 0, rt[K * 3] = {0};
     int i, j, k;
     OP f = {0};
     vec v = {0}, x[K * 2] = {0};
 
+
     for (j = 0; j < N; j++)
     {
         if (zz[j] > 0)
-        {
+        {   
             memcpy(syn, bm[j], sizeof(syn));
-
+    
             v = newhalf(syn);
+            //printf("%d\n",j);
             for (k = 0; k < kk; k++)
                 rt[k] ^= v.x[k];
+         
         }
-        //printf ("syn%d,", syn[i]);
+        //exit(1);
+        //printf ("%d\n", j);
         //printf ("\n");
     }
+
     f = setpol(rt, kk);
     //printpol(o2v(f));
     //printf(" syn=============\n");
@@ -4051,6 +4058,9 @@ bm:
         {
             printpol(o2v(r));
             printf("==goppa\n");
+            for(i=0;i<N;i++)
+            printf("%d,",zz[i]);
+            printf("\n");
             exit(1);
         }
         //break;
