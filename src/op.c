@@ -3889,9 +3889,7 @@ vec newhalf(unsigned short e[])
     vec v = {0};
 
     v.x[0] = gf[mlt(fg[e[0]], fg[e[0]])];
-    v.x[1] = gf[mlt(fg[e[0]], fg[e[1]])];
-    v.x[2] = gf[mlt(fg[e[1]], fg[e[1]])];
-    for (i = 2; i < 129; i++)
+    for (i = 1; i < 129; i++)
     {
         v.x[i * 2 - 1] = gf[mlt(fg[e[0]], fg[e[i]])];
         v.x[i * 2] = gf[mlt(fg[e[1]], fg[e[i]])];
@@ -3913,7 +3911,7 @@ OP sendrier(unsigned short zz[], int kk)
     unsigned short syn[K * 2] = {0}, s = 0, rt[K * 2] = {0};
     int i, j, k;
     OP f = {0};
-    vec v = {0};
+    vec v = {0},x[K*2]={0};
 
 
     for (j = 0; j < N; j++)
@@ -3931,9 +3929,8 @@ OP sendrier(unsigned short zz[], int kk)
         
         }
         //printf ("syn%d,", syn[i]);
-    }
     //printf ("\n");
-
+    }
     f = setpol(rt, kk);
     //printpol(o2v(f));
     //printf(" syn=============\n");
