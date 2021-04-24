@@ -1831,8 +1831,8 @@ vec chen(OP f)
             printf("%d\n", x);
         }
     }
-    printpol(e);
-    printf(" ==eee!\n");
+    //printpol(e);
+    //printf(" ==eee!\n");
     //exit(1);
 
     return e;
@@ -3606,8 +3606,8 @@ int bma(unsigned short s[], int kk)
     {
         v = o2v(lo[j - 1]);
         k = 0;
-        printpol(v);
-        printf(" ==lo\n");
+        //printpol(v);
+        //printf(" ==lo\n");
 
         l = deg(o2v(lo[j - 1]));
         for (i = 1; i < l+1 ; i++)
@@ -3616,7 +3616,7 @@ int bma(unsigned short s[], int kk)
             //printf("v[%d]=%d\n", i, v.x[i]);
         }
         d[j] = s[j] ^ k;
-        printf("d[%d]=%d\n", j, d[j]);
+        //printf("d[%d]=%d\n", j, d[j]);
         if (d[j] == 0)
         {
             lo[j] = lo[j - 1];
@@ -3656,14 +3656,14 @@ int bma(unsigned short s[], int kk)
     {
         if((d[kk - 1] == 0 && odeg(lo[j - 2]) == T - 1) ){
         lo[j - 1] = omul(lo[j - 2], h);
-        printpol(o2v(lo[j - 1]));
-        printf("\n");
+        //printpol(o2v(lo[j - 1]));
+        //printf("\n");
         }
     }
 k=0;
     int count = 0;
-    printpol(o2v(lo[j - 1]));
-    printf(" ==coef\n");
+    //printpol(o2v(lo[j - 1]));
+    //printf(" ==coef\n");
     if (odeg(lo[j - 1]) == T)
     {
         x = chen(lo[j - 1]);
@@ -3896,13 +3896,14 @@ vec newhalf(unsigned short e[])
         v.x[i * 2 - 1] = gf[mlt(fg[e[0]], fg[e[i]])];
         v.x[i * 2] = gf[mlt(fg[e[1]], fg[e[i]])];
     }
-
+/*
     for (i = 0; i < 8; i++)
         printf("%d,", v.x[i]);
     printf("\n");
     for (i = 0; i < 5; i++)
         printf("%d,", e[i]);
     printf("\n");
+*/
 
     return v;
 }
@@ -3914,9 +3915,9 @@ OP sendrier(unsigned short zz[], int kk)
     OP f = {0};
     vec v = {0};
 
+//    #pragma omp parallel for num_threads(16)
     for (j = 0; j < N; j++)
-    {
-        //#pragma omp parallel num_threads(16)
+    {    
         for (i = 0; i < kk; i++)
         {
             syn[i] = 0;
@@ -3924,9 +3925,9 @@ OP sendrier(unsigned short zz[], int kk)
 
             if (zz[j] > 0)
             {
-                s = gf[mlt(fg[zz[j]], fg[bm[j][i]])];
+                syn[i] = gf[mlt(fg[zz[j]], fg[bm[j][i]])];
                 //printf("s=%d\n", s);
-                syn[i] = s;
+                //syn[i] = s;
             }
         }
         if (zz[j] > 0)
@@ -3940,8 +3941,8 @@ OP sendrier(unsigned short zz[], int kk)
     //printf ("\n");
 
     f = setpol(rt, kk);
-    printpol(o2v(f));
-    printf(" syn=============\n");
+    //printpol(o2v(f));
+    //printf(" syn=============\n");
 
     return f;
 }
@@ -4015,10 +4016,6 @@ label:
     memset(zz, 0, sizeof(zz));
     //memset(s,0,sizeof(s));
     mkerr(zz, T);
-    //zz[1]=1;
-    //zz[2]=1;
-    //zz[3]=1;
-    //zz[4]=1;
 
     for (i = 0; i < N; i++)
     {
@@ -4035,18 +4032,6 @@ label:
     }
     //exit(1);
 
-    /*
-  //r=rev(w);
-unsigned short c[K+1]={0};
-  v=o2v(w);
-  for(i=0;i<K+1;i++){
-    c[K-i]=v.x[i];
-}
-for(i=0;i<K+1;i++)
-printf("%d,",c[i]);
-  printf("\n");
-//r=rev(w);
-*/
 
     r = setpol(hi, 8);
     //printf("%d\n",ben_or(w));
@@ -4056,67 +4041,36 @@ printf("%d,",c[i]);
     memset(mat, 0, sizeof(mat));
 
     unsigned short t2[K * 2] = {0};
-bm:
-    //c=1
-    //13,3,6,12,1,2,4,8,
-    //c=2
-    //10x^4+1x^3+9x^2+4x^1+5 syn=============
-    //11,10,1,12,9,3,14,9,
-    //5,4,9,1,10,
-    //c'=1
-    //6,10,7,9,2,6,10,7,
-    //c'=2
-    //11x^7+9x^6+1x^5+5x^4+3x^3+4x^2+14x^1+15 syn=============
-    //15,14,4,3,5,1,9,11,
-    //v=1
-    //13x^7+3x^6+6x^5+12x^4+1x^3+2x^2+4x^1+8 syn=============
-    //v=2
-    //11x^7+9x^6+1x^5+5x^4+3x^3+4x^2+14x^1+15 syn=============
-    //15,14,4,3,5,1,9,11
-    //v'=1
-    //6x^7+10x^6+7x^5+9x^4+2x^3+6x^2+10x^1+7 syn=============
 
+bm:
+ 
     //full rank matrix
     r=mkc(r, K * 2);
     //half size matrix of odd colomn
     half(K + 1);
 
+j=0;
+
     while (1)
     {
         memset(zz, 0, sizeof(zz));
         mkerr(zz, T);
-        //for(i=1;i<T+1;i++)
-
-//yabame
-/*
-    zz[0]=1;
-    zz[2] = 1;
-    zz[3] = 1;
-    zz[7] = 1;
-    zz[12] = 1;
-    zz[14] = 1;
-    zz[15] = 1;
-*/
-
     
         //exit(1);
         // sendrier's trick
         r1 = sendrier(zz, K);
         v = o2v(r1);
-        for (i = 0; i < K * 2; i++)
-            printf("%d,", v.x[i]);
-        //printf("\n");
-        //exit(1);mk
-        //r2=synd(v.x,K);
+        //for (i = 0; i < K * 2; i++)
+        //    printf("%d,", v.x[i]);
         for (i = 0; i < K; i++)
             s[i + 1] = v.x[i];
-        for (i = 0; i < K; i++)
-            printf("%d,", s[i]);
-        printf("\n");
+        //for (i = 0; i < K; i++)
+        //    printf("%d,", s[i]);
+        //printf("\n");
         k = bma(s, K);
-        for (i = 0; i < N; i++)
-            printf("%d,", zz[i]);
-        printf("\n");
+        //for (i = 0; i < N; i++)
+        //    printf("%d,", zz[i]);
+        //printf("\n");
 
         if (k < T){
          printpol(o2v(r));
@@ -4124,55 +4078,36 @@ bm:
             exit(1);
         }
         //break;
+    j++;
+    if(j==100)
+    exit(1);
     }
+
 //    exit(1);
 
     w = mkg(K);
 
+/*
     for (i = 0; i < N; i++)
     {
         for (j = 0; j < K; j++)
             printf("%d,", mat[i][j]);
         printf("\n");
     }
-    /*
-memset(zz,0,sizeof(zz));
-for(i=0;i<T;i++)
-zz[i]=1;
-//zz[3]=1;
-r1=synd(zz,K);
-r = decode(w, r1);
-count = elo(r);
-if (count < 0)
-{
-  printf("baka-@\n");
-  exit(1);
-}
-printf("err=%dっ！！\n", count);
-//exit(1);
 */
-    //keygen(g);
-
     // 16次のバイナリ既約多項式の生成
     //fun();
     //exit(1);
 
 lab:
 
+
+j=0;
     //decode開始
     k = 0;
     while (1)
     {
 
-        //for(i=1;i<4;i++)
-        //zz[i]=i;
-
-        //zz[0] = 1;
-        //zz[2] = 2;
-        //zz[4] = 4;
-        //zz[8] = 8;
-        printf("@b\n");
-        //exit(1);
         memset(zz, 0, sizeof(zz));
         mkerr(zz, T);
 
@@ -4184,17 +4119,6 @@ lab:
         //exit(1);
         f = synd(zz, K);
         //exit(1);
-        /*      
-         f=conv(f);
-         ef=o2v(f);
-         for(j=0;j<K;j++){
-         for(i=0;i<K;i++)
-         gh.x[j]^=gf[mlt(fg[ef.x[i]],fg[invA0[i][j]])];
-         }
-         f=v2o(gh);
-         f=conv(f);
-         //exit(1);
-       */
 
         r = decode(w, f);
         count = elo(r);
@@ -4203,18 +4127,23 @@ lab:
             printf("baka-@\n");
             exit(1);
         }
-
+    j++;
         printf("err=%dっ！！\n", count);
-
+        if(j==10000)
+        exit(1);
+    }
         //wait();
         //exit(1);
         //goto lab;
 
     patta:
 
+        count = 0;
+  
+    while(1){
         //printf("パターソンアルゴリズムを実行します。何か数字を入れてください。\n");
         //wait();
-        count = 0;
+
         memset(z1, 0, sizeof(z1));
 
         j = 0;
@@ -4226,11 +4155,14 @@ lab:
 
         f = synd(z1, K);
 
-        count = 0;
         //復号化の本体
         v = pattarson(w, f);
         //エラー表示
         ero(v);
+        count++;
+        if(count==10000)
+        exit(1);
+}
 
         if (AA == 10)
         {
@@ -4256,8 +4188,8 @@ lab:
         //goto label;
         //wait();
 
-        break;
-    }
+    //    break;
+    //}
 
     return 0;
 }
