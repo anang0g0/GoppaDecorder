@@ -103,7 +103,6 @@ vec o2v(OP f)
     vec a = {0};
     int i;
 
-    //#pragma omp parallel for
     for (i = 0; i < DEG; i++)
     {
         if (f.t[i].a > 0 && f.t[i].n < DEG)
@@ -3489,7 +3488,7 @@ void mkerr(unsigned short *z1, int num)
     {
         l = rand() % N;
         //printf ("l=%d\n", l);
-        if (0 == z1[l] )
+        if (0 == z1[l])
         {
             z1[l] = 1;
             printf("l=%d\n", l);
@@ -3602,7 +3601,7 @@ int bma(unsigned short s[], int kk)
     lo[0] = v2o(v);
     b[0] = lo[0];
     ll = 0;
-    for (j = 1; j < T * 2+1; j++)
+    for (j = 1; j < T * 2 + 1; j++)
     {
         v = o2v(lo[j - 1]);
         k = 0;
@@ -3610,7 +3609,7 @@ int bma(unsigned short s[], int kk)
         //printf(" ==lo\n");
 
         l = deg(o2v(lo[j - 1]));
-        for (i = 1; i < l+1 ; i++)
+        for (i = 1; i < l + 1; i++)
         {
             k ^= gf[mlt(fg[v.x[i]], fg[s[j - i]])];
             //printf("v[%d]=%d\n", i, v.x[i]);
@@ -3628,21 +3627,20 @@ int bma(unsigned short s[], int kk)
             g = omul(kof(d[j], h), b[j - 1]);
             t[j] = oadd(lo[j - 1], g);
             lo[j] = t[j];
-            if (ll*2 > (j-1))
+            if (ll * 2 > (j - 1))
             {
                 //lo[j]=t[j];
                 b[j] = omul(b[j - 1], h);
-               
             }
-             else //if(2*ll <= j)
+            else //if(2*ll <= j)
             {
                 //printpol(o2v(t[j]));
                 //printf("==t[%d]\n", j);
                 b[j] = kof(gf[oinv(d[j])], lo[j - 1]);
                 //lo[j]=t[j];
                 ll = j - ll;
-                if(j==2*T)
-                break;
+                if (j == 2 * T)
+                    break;
             }
         }
         printf("l=%d\n", ll);
@@ -3650,17 +3648,17 @@ int bma(unsigned short s[], int kk)
         //printpol(o2v(b[j]));
         //printf(" ==b[%d]\n", j);
     }
-  
 
-     if (!(d[kk-1]==0 && d[kk-3]==0 && odeg(lo[j-1])==T) || !(odeg(lo[j-1])==T))
+    if (!(d[kk - 1] == 0 && d[kk - 3] == 0 && odeg(lo[j - 1]) == T) || !(odeg(lo[j - 1]) == T))
     {
-        if((d[kk - 1] == 0 && odeg(lo[j - 2]) == T - 1) ){
-        lo[j - 1] = omul(lo[j - 2], h);
-        //printpol(o2v(lo[j - 1]));
-        //printf("\n");
+        if ((d[kk - 1] == 0 && odeg(lo[j - 2]) == T - 1))
+        {
+            lo[j - 1] = omul(lo[j - 2], h);
+            //printpol(o2v(lo[j - 1]));
+            //printf("\n");
         }
     }
-k=0;
+    k = 0;
     int count = 0;
     //printpol(o2v(lo[j - 1]));
     //printf(" ==coef\n");
@@ -3697,7 +3695,7 @@ k=0;
     }
     if (count < T)
     {
-        printf("vaka in bms %d\n",count);
+        printf("vaka in bms %d\n", count);
         //exit(1);
     }
 
@@ -3761,7 +3759,7 @@ aa:
     memset(mat, 0, sizeof(mat));
     //既約性判定のためのBen-Orアルゴリズム。拡大体にも対応している。デフォルトでGF(8192)
     //既約多項式しか使わない。
-    
+
     l = -1;
     ii = 0;
     while (l == -1)
@@ -3777,7 +3775,7 @@ aa:
         ii++;
         //
     }
-    
+
     r = w;
     //  r=omul(w,w);
     memset(ta, 0, sizeof(ta));
@@ -3894,14 +3892,6 @@ vec newhalf(unsigned short e[])
         v.x[i * 2 - 1] = gf[mlt(fg[e[0]], fg[e[i]])];
         v.x[i * 2] = gf[mlt(fg[e[1]], fg[e[i]])];
     }
-/*
-    for (i = 0; i < 8; i++)
-        printf("%d,", v.x[i]);
-    printf("\n");
-    for (i = 0; i < 5; i++)
-        printf("%d,", e[i]);
-    printf("\n");
-*/
 
     return v;
 }
@@ -3911,25 +3901,20 @@ OP sendrier(unsigned short zz[], int kk)
     unsigned short syn[K * 2] = {0}, s = 0, rt[K * 2] = {0};
     int i, j, k;
     OP f = {0};
-    vec v = {0},x[K*2]={0};
-
+    vec v = {0}, x[K * 2] = {0};
 
     for (j = 0; j < N; j++)
-    {    
+    {
         if (zz[j] > 0)
         {
-        for (i = 0; i < kk; i++)
-        {
-            syn[i] = bm[j][i];
-        }
-    
-        v = newhalf(syn);
-        for (k = 0; k < kk; k++)
-            rt[k] ^= v.x[k];
-        
+            memcpy(syn, bm[j], sizeof(syn));
+
+            v = newhalf(syn);
+            for (k = 0; k < kk; k++)
+                rt[k] ^= v.x[k];
         }
         //printf ("syn%d,", syn[i]);
-    //printf ("\n");
+        //printf ("\n");
     }
     f = setpol(rt, kk);
     //printpol(o2v(f));
@@ -3968,7 +3953,7 @@ int main(void)
     srand(seed);
 #endif
     unsigned short a, b;
-    unsigned short hi[8] = {1,5,3,9,9,7,8,12}; // j
+    unsigned short hi[8] = {1, 5, 3, 9, 9, 7, 8, 12}; // j
     //{1,0,3,5,1,4,0,10}; //yabame
     //
     //
@@ -4023,7 +4008,6 @@ label:
     }
     //exit(1);
 
-
     r = setpol(hi, 8);
     //printf("%d\n",ben_or(w));
     w = omul(r, r);
@@ -4034,19 +4018,19 @@ label:
     unsigned short t2[K * 2] = {0};
 
 bm:
- 
+
     //full rank matrix
-    r=mkc(r, K * 2);
+    r = mkc(r, K * 2);
     //half size matrix of odd colomn
     half(K + 1);
 
-j=0;
+    j = 0;
 
     while (1)
     {
         memset(zz, 0, sizeof(zz));
         mkerr(zz, T);
-    
+
         //exit(1);
         // sendrier's trick
         r1 = sendrier(zz, K);
@@ -4063,22 +4047,23 @@ j=0;
         //    printf("%d,", zz[i]);
         //printf("\n");
 
-        if (k < T){
-         printpol(o2v(r));
-         printf("==goppa\n");
+        if (k < T)
+        {
+            printpol(o2v(r));
+            printf("==goppa\n");
             exit(1);
         }
         //break;
-    j++;
-    if(j==10000)
-    exit(1);
+        j++;
+        if (j == 10000)
+            exit(1);
     }
 
-//    exit(1);
+    //    exit(1);
 
     w = mkg(K);
 
-/*
+    /*
     for (i = 0; i < N; i++)
     {
         for (j = 0; j < K; j++)
@@ -4092,8 +4077,7 @@ j=0;
 
 lab:
 
-
-j=0;
+    j = 0;
     //decode開始
     k = 0;
     while (1)
@@ -4118,20 +4102,21 @@ j=0;
             printf("baka-@\n");
             exit(1);
         }
-    j++;
+        j++;
         printf("err=%dっ！！\n", count);
-        if(j==10000)
-        exit(1);
+        if (j == 10000)
+            exit(1);
     }
-        //wait();
-        //exit(1);
-        //goto lab;
+    //wait();
+    //exit(1);
+    //goto lab;
 
-    patta:
+patta:
 
-        count = 0;
-  
-    while(1){
+    count = 0;
+
+    while (1)
+    {
         //printf("パターソンアルゴリズムを実行します。何か数字を入れてください。\n");
         //wait();
 
@@ -4151,33 +4136,33 @@ j=0;
         //エラー表示
         ero(v);
         count++;
-        if(count==10000)
+        if (count == 10000)
+            exit(1);
+    }
+
+    if (AA == 10)
+    {
+        printf("B=%d", B);
         exit(1);
-}
+    }
 
-        if (AA == 10)
-        {
-            printf("B=%d", B);
-            exit(1);
-        }
+    //復号失敗率のカウント
+    if (B > 1000)
+    {
+        count = 0;
+        printf("error > 0 false=%d\n", AA);
+        printf("error 0 success=%d\n", B);
+        printpol(o2v(w));
+        printf(" =======goppa\n");
+        printsage(o2v(w));
+        printf(" =======sage\n");
+        exit(1);
+    }
 
-        //復号失敗率のカウント
-        if (B > 1000)
-        {
-            count = 0;
-            printf("error > 0 false=%d\n", AA);
-            printf("error 0 success=%d\n", B);
-            printpol(o2v(w));
-            printf(" =======goppa\n");
-            printsage(o2v(w));
-            printf(" =======sage\n");
-            exit(1);
-        }
-
-        //wait();
-        //exit(1);
-        //goto label;
-        //wait();
+    //wait();
+    //exit(1);
+    //goto label;
+    //wait();
 
     //    break;
     //}
