@@ -3602,7 +3602,7 @@ int bma(unsigned short s[], int kk)
     lo[0] = v2o(v);
     b[0] = lo[0];
     ll = 0;
-    for (j = 1; j < T * 2 + 1; j++)
+    for (j = 1; j < T*2+1; j++)
     {
         v = o2v(lo[j - 1]);
         k = 0;
@@ -3659,6 +3659,7 @@ int bma(unsigned short s[], int kk)
             //printf("\n");
         }
     }
+    
     k = 0;
     int count = 0;
     //printpol(o2v(lo[j - 1]));
@@ -3900,7 +3901,7 @@ vec newhalf(unsigned short e[])
 
 OP sendrier(unsigned short zz[N], int kk)
 {
-    unsigned short syn[K * 2+1] = {0}, s = 0, rt[K * 3] = {0};
+    unsigned short syn[K / 2+1] = {0}, s = 0, rt[K * 3] = {0};
     int i, j, k;
     OP f = {0};
     vec v = {0}, x[K * 2] = {0};
