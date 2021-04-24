@@ -3915,26 +3915,20 @@ OP sendrier(unsigned short zz[], int kk)
     OP f = {0};
     vec v = {0};
 
-//    #pragma omp parallel for num_threads(16)
+
     for (j = 0; j < N; j++)
     {    
-        for (i = 0; i < kk; i++)
-        {
-            syn[i] = 0;
-            s = 0;
-
-            if (zz[j] > 0)
-            {
-                syn[i] = gf[mlt(fg[zz[j]], fg[bm[j][i]])];
-                //printf("s=%d\n", s);
-                //syn[i] = s;
-            }
-        }
         if (zz[j] > 0)
         {
-            v = newhalf(syn);
-            for (k = 0; k < kk; k++)
-                rt[k] ^= v.x[k];
+        for (i = 0; i < kk; i++)
+        {
+            syn[i] = bm[j][i];
+        }
+    
+        v = newhalf(syn);
+        for (k = 0; k < kk; k++)
+            rt[k] ^= v.x[k];
+        
         }
         //printf ("syn%d,", syn[i]);
     }
@@ -4079,7 +4073,7 @@ j=0;
         }
         //break;
     j++;
-    if(j==100)
+    if(j==10000)
     exit(1);
     }
 
