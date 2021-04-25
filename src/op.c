@@ -3649,16 +3649,16 @@ int bma(unsigned short s[], int kk)
         //printpol(o2v(b[j]));
         //printf(" ==b[%d]\n", j);
     }
-
-    if (!(d[kk - 1] == 0 && d[kk - 3] == 0 && odeg(lo[j - 1]) == T) || !(odeg(lo[j - 1]) == T))
+    if (!(d[T*2 - 1] == 0 && d[T*2 - 3] == 0 && odeg(lo[j - 1]) == T) || !(odeg(lo[j - 1]) == T))
     {
-        if ((d[kk - 1] == 0 && odeg(lo[j - 2]) == T - 1))
+        if ((d[T*2 - 1] == 0 && odeg(lo[j - 2]) == T - 1))
         {
             lo[j - 1] = omul(lo[j - 2], h);
             //printpol(o2v(lo[j - 1]));
             //printf("\n");
         }
     }
+
     
     k = 0;
     int count = 0;
