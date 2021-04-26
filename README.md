@@ -56,7 +56,7 @@ vec v={0};
         v = sin2(z1);
         f=dec(v.x);
         r = decode(w, f);
-        count = elo(r);
+        count = elo2(r);
         if (count < 0)
         {
             printf("baka-@\n");
