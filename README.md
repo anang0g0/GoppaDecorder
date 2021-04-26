@@ -50,9 +50,8 @@ unsigned short z1[N];
             if (z1[i] > 0)
                 printf("la=%d %d\n", i, z1[i]);
         }
-        //exit(1);
-        f = synd(z1);
-        //exit(1);
+
+        f = sin2(z1);
 
         r = decode(w, f);
         count = elo(r);
