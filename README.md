@@ -31,15 +31,16 @@ OAEP実装など細かい修正点は残っていますが、取り敢えずバ�
 main(){
 OP w={0},f={0},r={0};
 unsigned short z1[N];
+vec v={0};
 
-  //公開鍵を生成する
+
+//公開鍵を生成する
  w = pubkeygen();
  
-
-
   int  j = 0,count=0;
-    //decode開始
   int  k = 0;
+
+//decode開始
     while (1)
     {
 
@@ -52,8 +53,8 @@ unsigned short z1[N];
                 printf("la=%d %d\n", i, z1[i]);
         }
 
-        f = sin2(z1);
-
+        v = sin2(z1);
+        f=dec(v.x);
         r = decode(w, f);
         count = elo(r);
         if (count < 0)
