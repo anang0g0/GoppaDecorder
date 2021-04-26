@@ -4088,7 +4088,7 @@ unsigned short s[K+1]={0,15,1,9,13,1,14};
             if (z1[i] > 0)
                 printf("la=%d %d\n", i, z1[i]);
         }
-        暗号化
+        //暗号化
         v = sin2(z1);
 
         //復号
