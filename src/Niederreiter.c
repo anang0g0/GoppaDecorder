@@ -4148,13 +4148,14 @@ unsigned short tarin[N]={0};
             if (z1[i] > 0)
                 printf("la=%d %d\n", i, z1[i]);
         }
-        //暗号化
+        //暗号化(v=eH')
         v = sin2(z1);
 
-        //復号
+        //復号(S^-1)
         f=dec(v.x);
         r = decode(w, f);
 
+        //m=m'P^-1
         count = elo2(r);
         if (count < 0)
         {
@@ -4163,6 +4164,11 @@ unsigned short tarin[N]={0};
         }
         j++;
         printf("err=%dっ！！\n", count);
+        for(int i=0;i<N;i++)
+        printf("%d,",z1[i]);
+        printf("\n");
+        exit(1);
+
         if (j == 10000)
             exit(1);
 
