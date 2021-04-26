@@ -4055,7 +4055,7 @@ int main(void)
   unsigned short z1[N] = {0}; //{1,0,1,1,1,0,0,0,0,0,1,1,1,0,0,1};
   OP f = {0}, r = {0}, w = {0};
   vec v={0};
-  unsigned short ss[K] = {0};
+  unsigned short ss[K] = {0},zz[N]={0};
 
 if (K > N){
   printf("configuration error! K is too big K\n");
@@ -4073,6 +4073,66 @@ unsigned short s[K+1]={0,15,1,9,13,1,14};
  w = pubkeygen();
  
 
+  mkd(w);
+
+  memset(zz, 0, sizeof(zz));
+  memset(ss, 0, sizeof(ss));
+
+ /* 
+  //mkerr(zz, T*2);
+  for(i=0;i<T*2;i++)
+  zz[i]=1;
+  //exit(1);
+unsigned short tarin[N]={0};
+  //sin(zz, ss);
+  //f = dec(ss);
+  //v.x[128]=1;
+  //f=synd(zz);
+  //r2=v2o(v);
+  //f=omul(r2,f);
+  printpol(o2v(f));
+  printf(" ==sin\n");
+  //exit(1);
+  v=o2v(f);
+  j=deg(v);
+  k=N-K;
+  for(i=0;i<j+1;i++)
+  tarin[i+k]=v.x[i];
+  for(i=0;i<N;i++){
+    for(j=0;j<K*2;j++)
+    printf("%d,",bm2[i][j]);
+    printf("\n");
+  }
+  printf("  ==bm2\n");
+  //exit(1);
+  f=cos(zz);
+  printpol(o2v(f));
+  printf(" ==s2\n");
+  printpol(o2v(r1));
+  printf(" =r1\n");
+  //exit(1);
+
+  r = sabun(r1, f);
+  //r=hh.d;
+  printpol(o2v(r));
+  printf(" =sabun\n");
+  v=chen(r);
+  for (i = 0; i < T*2; i++)
+  {
+    printf("x[%d]=1\n", v.x[i]);
+    if (v.x[i] == 0)
+      k++;
+    if (k > 1)
+    {
+      printf("baka0\n");
+      printvec(o2v(f));
+      //for (i = 0; i < N; i++)
+      //printf("%d,", zz[i]);
+      exit(1);
+      //return f;
+    }
+  }
+*/
 
   int  j = 0,count=0;
     //decode開始
@@ -4095,7 +4155,7 @@ unsigned short s[K+1]={0,15,1,9,13,1,14};
         f=dec(v.x);
         r = decode(w, f);
 
-        count = elo(r);
+        count = elo2(r);
         if (count < 0)
         {
             printf("baka-@\n");
@@ -4105,7 +4165,10 @@ unsigned short s[K+1]={0,15,1,9,13,1,14};
         printf("err=%dっ！！\n", count);
         if (j == 10000)
             exit(1);
+
     }
+    
+
 
 /*
 while(1){
@@ -4168,65 +4231,6 @@ while(1){
 
   //readkey();
   //w=setpol(g,K+1);
-  mkd(r1);
-
-  memset(zz, 0, sizeof(zz));
-  memset(ss, 0, sizeof(ss));
-
-  
-  //mkerr(zz, T*2);
-  for(i=0;i<T*2;i++)
-  zz[i]=1;
-  //exit(1);
-unsigned short tarin[N]={0};
-  //sin(zz, ss);
-  //f = dec(ss);
-  //v.x[128]=1;
-  f=synd(zz);
-  //r2=v2o(v);
-  //f=omul(r2,f);
-  printpol(o2v(f));
-  printf(" ==sin\n");
-  //exit(1);
-  v=o2v(f);
-  j=deg(v);
-  k=8192-128;
-  for(i=0;i<j+1;i++)
-  tarin[i+k]=v.x[i];
-  for(i=0;i<N;i++){
-    for(j=0;j<K*2;j++)
-    printf("%d,",bm2[i][j]);
-    printf("\n");
-  }
-  printf("  ==bm2\n");
-  //exit(1);
-  f=cos(zz);
-  printpol(o2v(f));
-  printf(" ==s2\n");
-  printpol(o2v(r1));
-  printf(" =r1\n");
-  //exit(1);
-
-  r = sabun(r1, f);
-  //r=hh.d;
-  printpol(o2v(r));
-  printf(" =sabun\n");
-  v=chen(r);
-  for (i = 0; i < T*2; i++)
-  {
-    printf("x[%d]=1\n", v.x[i]);
-    if (v.x[i] == 0)
-      k++;
-    if (k > 1)
-    {
-      printf("baka0\n");
-      printvec(o2v(f));
-      //for (i = 0; i < N; i++)
-      //printf("%d,", zz[i]);
-      exit(1);
-      //return f;
-    }
-  }
   //exit(1);
 
 //  elo2(r);
