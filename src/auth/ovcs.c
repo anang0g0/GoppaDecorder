@@ -1,3 +1,5 @@
+// cf.Oblibious Verification of Common String (Crepeau et.al)
+
 #include <stdio.h>
 #include <emmintrin.h>
 #include <time.h>
