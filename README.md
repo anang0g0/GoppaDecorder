@@ -19,7 +19,11 @@ https://anang0g0.github.io/GoppaDecorder
 
 コードのメンテナンス作業に移行します。（20210419）  
 
-コードサンプル(op.c)
+今の所、EEAで安全でないという証拠はないそうなので,取り敢えずEEAで暗号化できるようになっています。  
+OAEP実装など細かい修正点は残っていますが、取り敢えずバイナリ公開鍵から復号までワンセットで揃っているので、  
+以下のコードを参考に使ってみてください。  
+
+コードサンプル(Niederreiter.c)
 
 ```c
 
@@ -27,24 +31,42 @@ main(){
 OP w={0},f={0},r={0};
 unsigned short zz[N];
 
-memset(zz,0,sizeof(zz));
-//公開鍵の生成
-w=mkg()
+  //公開鍵を生成する
+ w = pubkeygen();
+ 
 
-//EEAの場合(T:エラーの重み、K:符号の次元,w:Goppa多項式,f:シンドローム多項式)
 
-//zzに平文を代入
-mkerr(zz,T);
+  int  j = 0,count=0;
+    //decode開始
+  int  k = 0;
+    while (1)
+    {
 
-//暗号化関数
-f=synd(zz,K);
+        memset(z1, 0, sizeof(z1));
+        mkerr(z1, T);
 
-//復号関数
-r=decode(w,f);
+        for (int i = 0; i < N; i++)
+        {
+            if (z1[i] > 0)
+                printf("la=%d %d\n", i, z1[i]);
+        }
+        //exit(1);
+        f = synd(z1);
+        //exit(1);
 
-//平分の表示
-elo(r);
-}
+        r = decode(w, f);
+        count = elo(r);
+        if (count < 0)
+        {
+            printf("baka-@\n");
+            exit(1);
+        }
+        j++;
+        printf("err=%dっ！！\n", count);
+        if (j == 10000)
+            exit(1);
+    }
+
 
 ```
 
