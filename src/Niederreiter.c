@@ -4078,6 +4078,89 @@ unsigned short s[K+1]={0,15,1,9,13,1,14};
   memset(zz, 0, sizeof(zz));
   memset(ss, 0, sizeof(ss));
 
+  int  j = 0,count=0;
+    //decode開始
+  int  k = 0;
+    while (1)
+    {
+
+        memset(z1, 0, sizeof(z1));
+        mkerr(z1, T);
+
+        for (int i = 0; i < N; i++)
+        {
+            if (z1[i] > 0)
+                printf("la=%d %d\n", i, z1[i]);
+        }
+        //暗号化(v=eH')
+        v = sin2(z1);
+
+        //復号(S^-1)
+        f=dec(v.x);
+        r = decode(w, f);
+
+        //m=m'P^-1
+        count = elo2(r);
+        if (count < 0)
+        {
+            printf("baka-@\n");
+            exit(1);
+        }
+        j++;
+        printf("err=%dっ！！\n", count);
+        for(int i=0;i<N;i++)
+        printf("%d,",z1[i]);
+        printf("\n");
+        exit(1);
+
+        if (j == 10000)
+            exit(1);
+
+    }
+
+  return 0;
+}
+
+
+// My debris
+/*
+#ifdef SRAND
+  srand(SRAND);
+#else
+  const unsigned int seed2 = clock() + time(&t);
+  printf("srand(%u)\n", seed2);
+  srand(seed2);
+#endif
+*/
+/*
+  a = 65535;
+  printf("b=%d\n", a);
+  v = i2v(a);
+  printvec(v);
+  b = v2i(v);
+  printf("b=%d\n", b);
+  //fun();
+  //exit(1);
+  */
+
+
+/*
+  w=mkg();
+  r1=omul(w,w);
+  printpol(o2v(r1));
+  printf(" =g^2\n");
+  v=o2v(r1);
+  printvec(v);
+//exit(1);
+
+  //readkey();
+  //w=setpol(g,K+1);
+  //exit(1);
+
+//  elo2(r);
+    exit(1);
+*/
+
  /* 
   //mkerr(zz, T*2);
   for(i=0;i<T*2;i++)
@@ -4134,48 +4217,6 @@ unsigned short tarin[N]={0};
   }
 */
 
-  int  j = 0,count=0;
-    //decode開始
-  int  k = 0;
-    while (1)
-    {
-
-        memset(z1, 0, sizeof(z1));
-        mkerr(z1, T);
-
-        for (int i = 0; i < N; i++)
-        {
-            if (z1[i] > 0)
-                printf("la=%d %d\n", i, z1[i]);
-        }
-        //暗号化(v=eH')
-        v = sin2(z1);
-
-        //復号(S^-1)
-        f=dec(v.x);
-        r = decode(w, f);
-
-        //m=m'P^-1
-        count = elo2(r);
-        if (count < 0)
-        {
-            printf("baka-@\n");
-            exit(1);
-        }
-        j++;
-        printf("err=%dっ！！\n", count);
-        for(int i=0;i<N;i++)
-        printf("%d,",z1[i]);
-        printf("\n");
-        exit(1);
-
-        if (j == 10000)
-            exit(1);
-
-    }
-    
-
-
 /*
 while(1){
 
@@ -4200,46 +4241,3 @@ while(1){
   break;
 }
 */
-  return 0;
-}
-
-
-// My debris
-/*
-#ifdef SRAND
-  srand(SRAND);
-#else
-  const unsigned int seed2 = clock() + time(&t);
-  printf("srand(%u)\n", seed2);
-  srand(seed2);
-#endif
-*/
-/*
-  a = 65535;
-  printf("b=%d\n", a);
-  v = i2v(a);
-  printvec(v);
-  b = v2i(v);
-  printf("b=%d\n", b);
-  //fun();
-  //exit(1);
-  */
-
-
-/*
-  w=mkg();
-  r1=omul(w,w);
-  printpol(o2v(r1));
-  printf(" =g^2\n");
-  v=o2v(r1);
-  printvec(v);
-//exit(1);
-
-  //readkey();
-  //w=setpol(g,K+1);
-  //exit(1);
-
-//  elo2(r);
-    exit(1);
-*/
-
