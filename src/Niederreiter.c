@@ -3836,7 +3836,7 @@ void fun()
   }
 }
 
-OP sin2(unsigned short zz[])
+vec sin2(unsigned short zz[])
 {
   int i, j;
   OP s = {0};
@@ -3850,21 +3850,15 @@ OP sin2(unsigned short zz[])
     {
       for (j = 0; j < K; j++)
       {
-        ss[j] ^= HH[i][j];
+        v.x[j] ^= HH[i][j];
         //printf("%d,", HH[i][j]);
       }
       //printf("\n");
     }
   }
   
-//暗号化されたシンドロームを復元する
-  s=dec(ss);
-  for (j = 0; j < K; j++)
-    printf("%d,", ss[j]);
-  printf(" ==ss\n");
-  //exit(1);
 
-  return s;
+  return v;
 }
 
 
@@ -4060,7 +4054,7 @@ int main(void)
 {
   unsigned short z1[N] = {0}; //{1,0,1,1,1,0,0,0,0,0,1,1,1,0,0,1};
   OP f = {0}, r = {0}, w = {0};
-  vec v;
+  vec v={0};
   unsigned short ss[K] = {0};
 
 if (K > N){
@@ -4078,6 +4072,42 @@ unsigned short s[K+1]={0,15,1,9,13,1,14};
   //公開鍵を生成する
  w = pubkeygen();
  
+
+
+  int  j = 0,count=0;
+    //decode開始
+  int  k = 0;
+    while (1)
+    {
+
+        memset(z1, 0, sizeof(z1));
+        mkerr(z1, T);
+
+        for (int i = 0; i < N; i++)
+        {
+            if (z1[i] > 0)
+                printf("la=%d %d\n", i, z1[i]);
+        }
+        暗号化
+        v = sin2(z1);
+
+        //復号
+        f=dec(v.x);
+        r = decode(w, f);
+
+        count = elo(r);
+        if (count < 0)
+        {
+            printf("baka-@\n");
+            exit(1);
+        }
+        j++;
+        printf("err=%dっ！！\n", count);
+        if (j == 10000)
+            exit(1);
+    }
+
+/*
 while(1){
 
 //エラーベクトルを生成する
@@ -4100,7 +4130,7 @@ while(1){
 
   break;
 }
-
+*/
   return 0;
 }
 
