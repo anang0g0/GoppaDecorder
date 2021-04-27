@@ -3836,7 +3836,7 @@ void fun()
   }
 }
 
-vec sin2(unsigned short zz[])
+OP sin2(unsigned short zz[])
 {
   int i, j;
   OP s = {0};
@@ -3850,15 +3850,21 @@ vec sin2(unsigned short zz[])
     {
       for (j = 0; j < K; j++)
       {
-        v.x[j] ^= HH[i][j];
+        ss[j] ^= HH[i][j];
         //printf("%d,", HH[i][j]);
       }
       //printf("\n");
     }
   }
   
+//暗号化されたシンドロームを復元する
+  s=dec(ss);
+  for (j = 0; j < K; j++)
+    printf("%d,", ss[j]);
+  printf(" ==ss\n");
+  //exit(1);
 
-  return v;
+  return s;
 }
 
 
@@ -4054,8 +4060,8 @@ int main(void)
 {
   unsigned short z1[N] = {0}; //{1,0,1,1,1,0,0,0,0,0,1,1,1,0,0,1};
   OP f = {0}, r = {0}, w = {0};
-  vec v={0};
-  unsigned short ss[K] = {0},zz[N]={0};
+  vec v;
+  unsigned short ss[K] = {0};
 
 if (K > N){
   printf("configuration error! K is too big K\n");
@@ -4072,51 +4078,28 @@ unsigned short s[K+1]={0,15,1,9,13,1,14};
   //公開鍵を生成する
  w = pubkeygen();
  
+while(1){
 
-  mkd(w);
+//エラーベクトルを生成する
+  memset(z1, 0, sizeof(z1));
+  mkerr(z1, T * 2);
+  //exit(1);
 
-  memset(zz, 0, sizeof(zz));
-  memset(ss, 0, sizeof(ss));
+  //encryotion
+  test (w, z1);
 
-  int  j = 0,count=0;
-    //decode開始
-  int  k = 0;
-    while (1)
-    {
+  //シンドロームを計算する
+  f=sin2(z1);
+  printpol(o2v(f));
+  printf(" ==syndrome\n");
 
-        memset(z1, 0, sizeof(z1));
-        mkerr(z1, T);
+  //復号化の本体
+  v=patterson(w, f);
+  //エラー表示
+  ero2(v);
 
-        for (int i = 0; i < N; i++)
-        {
-            if (z1[i] > 0)
-                printf("la=%d %d\n", i, z1[i]);
-        }
-        //暗号化(v=eH')
-        v = sin2(z1);
-
-        //復号(S^-1)
-        f=dec(v.x);
-        r = decode(w, f);
-
-        //m=m'P^-1
-        count = elo2(r);
-        if (count < 0)
-        {
-            printf("baka-@\n");
-            exit(1);
-        }
-        j++;
-        printf("err=%dっ！！\n", count);
-        for(int i=0;i<N;i++)
-        printf("%d,",z1[i]);
-        printf("\n");
-        exit(1);
-
-        if (j == 10000)
-            exit(1);
-
-    }
+  break;
+}
 
   return 0;
 }
@@ -4155,13 +4138,12 @@ unsigned short s[K+1]={0,15,1,9,13,1,14};
 
   //readkey();
   //w=setpol(g,K+1);
-  //exit(1);
+  mkd(r1);
 
-//  elo2(r);
-    exit(1);
-*/
+  memset(zz, 0, sizeof(zz));
+  memset(ss, 0, sizeof(ss));
 
- /* 
+  
   //mkerr(zz, T*2);
   for(i=0;i<T*2;i++)
   zz[i]=1;
@@ -4170,7 +4152,7 @@ unsigned short tarin[N]={0};
   //sin(zz, ss);
   //f = dec(ss);
   //v.x[128]=1;
-  //f=synd(zz);
+  f=synd(zz);
   //r2=v2o(v);
   //f=omul(r2,f);
   printpol(o2v(f));
@@ -4178,7 +4160,7 @@ unsigned short tarin[N]={0};
   //exit(1);
   v=o2v(f);
   j=deg(v);
-  k=N-K;
+  k=8192-128;
   for(i=0;i<j+1;i++)
   tarin[i+k]=v.x[i];
   for(i=0;i<N;i++){
@@ -4215,29 +4197,9 @@ unsigned short tarin[N]={0};
       //return f;
     }
   }
-*/
-
-/*
-while(1){
-
-//エラーベクトルを生成する
-  memset(z1, 0, sizeof(z1));
-  mkerr(z1, T * 2);
   //exit(1);
 
-  //encryotion
-  test (w, z1);
-
-  //シンドロームを計算する
-  f=sin2(z1);
-  printpol(o2v(f));
-  printf(" ==syndrome\n");
-
-  //復号化の本体
-  v=patterson(w, f);
-  //エラー表示
-  ero2(v);
-
-  break;
-}
+//  elo2(r);
+    exit(1);
 */
+
