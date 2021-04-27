@@ -4,7 +4,8 @@
 //code name :  一変数多項式演算ライブラリのつもり
 //code name : OVP - One Variable Polynomial library with OpenMP friendly
 //status    : majer release (ver 1.0)
-// Niederreiter Cryotosysytem by patterson's decoding
+// Niederreiter Cryotosysytem by EEA decoding
+
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -3325,13 +3326,13 @@ aa:
 
   unsigned short s;
 #pragma omp parallel for default(none) private(i, j, k, s) shared(bm2, gt, bm, gf, fg)
-  for (i = 0; i < K*2; i++)
+  for (i = 0; i < K; i++)
   {
     for (j = 0; j < N; j++)
     {
       s = 0;
 
-      for (k = 0; k < K*2; k++)
+      for (k = 0; k < K; k++)
         s ^= gf[mlt(fg[gt[k][i]], fg[bm[j][k]])];
       //printf("%d,",s);
       bm2[j][i] = s;
@@ -3837,7 +3838,7 @@ void fun()
   }
 }
 
-OP sin2(unsigned short zz[])
+vec sin2(unsigned short zz[])
 {
   int i, j;
   OP s = {0};
@@ -3851,21 +3852,15 @@ OP sin2(unsigned short zz[])
     {
       for (j = 0; j < K; j++)
       {
-        ss[j] ^= HH[i][j];
+        v.x[j] ^= HH[i][j];
         //printf("%d,", HH[i][j]);
       }
       //printf("\n");
     }
   }
   
-//暗号化されたシンドロームを復元する
-  s=dec(ss);
-  for (j = 0; j < K; j++)
-    printf("%d,", ss[j]);
-  printf(" ==ss\n");
-  //exit(1);
 
-  return s;
+  return v;
 }
 
 
@@ -3958,7 +3953,7 @@ return f;
 
 OP bms(unsigned short s[]){
 int i,j,k,l,d[6]={0};
-OP lo[6+1]={0},b[6+1]={0},t[6+1]={0},a={0},f={0},h={0},g={0},hh={0};
+OP lo[K+1]={0},b[K+1]={0},t[K+1]={0},a={0},f={0},h={0},g={0},hh={0};
 vec v={0},x={0},w={0};
 
 
@@ -4061,8 +4056,8 @@ int main(void)
 {
   unsigned short z1[N] = {0}; //{1,0,1,1,1,0,0,0,0,0,1,1,1,0,0,1};
   OP f = {0}, r = {0}, w = {0};
-  vec v;
-  unsigned short ss[K] = {0};
+  vec v={0};
+  unsigned short ss[K] = {0},zz[N]={0};
 
 if (K > N){
   printf("configuration error! K is too big K\n");
@@ -4079,28 +4074,51 @@ unsigned short s[K+1]={0,15,1,9,13,1,14};
   //公開鍵を生成する
  w = pubkeygen();
  
-while(1){
 
-//エラーベクトルを生成する
-  memset(z1, 0, sizeof(z1));
-  mkerr(z1, T * 2);
-  //exit(1);
+  mkd(w);
 
-  //encryotion
-  test (w, z1);
+  memset(zz, 0, sizeof(zz));
+  memset(ss, 0, sizeof(ss));
 
-  //シンドロームを計算する
-  f=sin2(z1);
-  printpol(o2v(f));
-  printf(" ==syndrome\n");
+  int  j = 0,count=0;
+    //decode開始
+  int  k = 0;
+    while (1)
+    {
 
-  //復号化の本体
-  v=patterson(w, f);
-  //エラー表示
-  ero2(v);
+        memset(z1, 0, sizeof(z1));
+        mkerr(z1, T);
 
-  break;
-}
+        for (int i = 0; i < N; i++)
+        {
+            if (z1[i] > 0)
+                printf("la=%d %d\n", i, z1[i]);
+        }
+        //暗号化(v=eH')
+        v = sin2(z1);
+
+        //復号(S^-1)
+        f=dec(v.x);
+        r = decode(w, f);
+
+        //m=m'P^-1
+        count = elo2(r);
+        if (count < 0)
+        {
+            printf("baka-@\n");
+            exit(1);
+        }
+        j++;
+        printf("err=%dっ！！\n", count);
+        for(int i=0;i<N;i++)
+        printf("%d,",z1[i]);
+        printf("\n");
+        exit(1);
+
+        if (j == 10000)
+            exit(1);
+
+    }
 
   return 0;
 }
@@ -4139,12 +4157,13 @@ while(1){
 
   //readkey();
   //w=setpol(g,K+1);
-  mkd(r1);
+  //exit(1);
 
-  memset(zz, 0, sizeof(zz));
-  memset(ss, 0, sizeof(ss));
+//  elo2(r);
+    exit(1);
+*/
 
-  
+ /* 
   //mkerr(zz, T*2);
   for(i=0;i<T*2;i++)
   zz[i]=1;
@@ -4153,7 +4172,7 @@ unsigned short tarin[N]={0};
   //sin(zz, ss);
   //f = dec(ss);
   //v.x[128]=1;
-  f=synd(zz);
+  //f=synd(zz);
   //r2=v2o(v);
   //f=omul(r2,f);
   printpol(o2v(f));
@@ -4161,7 +4180,7 @@ unsigned short tarin[N]={0};
   //exit(1);
   v=o2v(f);
   j=deg(v);
-  k=8192-128;
+  k=N-K;
   for(i=0;i<j+1;i++)
   tarin[i+k]=v.x[i];
   for(i=0;i<N;i++){
@@ -4198,9 +4217,29 @@ unsigned short tarin[N]={0};
       //return f;
     }
   }
-  //exit(1);
-
-//  elo2(r);
-    exit(1);
 */
 
+/*
+while(1){
+
+//エラーベクトルを生成する
+  memset(z1, 0, sizeof(z1));
+  mkerr(z1, T * 2);
+  //exit(1);
+
+  //encryotion
+  test (w, z1);
+
+  //シンドロームを計算する
+  f=sin2(z1);
+  printpol(o2v(f));
+  printf(" ==syndrome\n");
+
+  //復号化の本体
+  v=patterson(w, f);
+  //エラー表示
+  ero2(v);
+
+  break;
+}
+*/
