@@ -57,7 +57,7 @@ int  j = 0,count=0,k=0;
         if (count < 0)
         {
              printpol(o2v(w));
-             printf(" == Goppa polynomial\m");
+             printf(" == Goppa polynomial\n");
              exit(1);
         }
         j++;
