@@ -48,16 +48,15 @@ vec v={0};
         memset(z1, 0, sizeof(z1));
         mkerr(z1, T);
 
-        for (int i = 0; i < N; i++)
-        {
-            if (z1[i] > 0)
-                printf("la=%d %d\n", i, z1[i]);
-        }
-
         v = sin2(z1);
         f=dec(v.x);
         r = decode(w, f);
         count = elo2(r);
+        for (int i = 0; i < N; i++)
+        {
+            if (z1[i] > 0)
+            printf("error position= %d %d\n", i, z1[i]);
+        }
         if (count < 0)
         {
             printf("baka-@\n");
