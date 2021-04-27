@@ -56,8 +56,9 @@ int  j = 0,count=0,k=0;
         }
         if (count < 0)
         {
-            printf("baka-@\n");
-            exit(1);
+             printpol(o2v(w));
+             printf(" == Goppa polynomial\m");
+             exit(1);
         }
         j++;
         printf("err=%dっ！！\n", count);
