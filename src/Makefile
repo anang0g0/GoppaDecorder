@@ -19,8 +19,8 @@ nie:
 op:
 	gcc-10 -Wall -g -pg -O3  -mtune=znver2 -march=znver2 -ffast-math -funroll-loops  -fopenmp fangataufa.c
 
-eea:
-	gcc-10 -Wall -g -pg -O3  -mtune=znver2 -march=znver2 -ffast-math -funroll-loops  -fopenmp eea.c
+pat:
+	gcc-10 -Wall -g -pg -O3  -mtune=znver2 -march=znver2 -ffast-math -funroll-loops  -fopenmp Patterson.c
 
 clean:
 	rm -f a.out
