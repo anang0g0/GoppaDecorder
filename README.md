@@ -33,18 +33,15 @@ main(){
 OP w={0},f={0},r={0};
 unsigned short z1[N];
 vec v={0};
+int  j = 0,count=0,k=0;
 
 
 //公開鍵を生成する
  w = pubkeygen();
  
-  int  j = 0,count=0;
-  int  k = 0;
-
 //decode開始
     while (1)
     {
-
         memset(z1, 0, sizeof(z1));
         mkerr(z1, T);
 
