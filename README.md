@@ -44,11 +44,15 @@ int  j = 0,count=0,k=0;
     while (1)
     {
         memset(z1, 0, sizeof(z1));
+        //T重みエラーベクトルの生成
         mkerr(z1, T);
-
+        //公開鍵を使ったシンドロームの計算
         v = sin2(z1);
+        //シンドロームの復号
         f=dec(v.x);
+        //復号
         r = decode(w, f);
+        //エラー（平文）の表示
         count = elo2(r);
         for (int i = 0; i < N; i++)
         {
