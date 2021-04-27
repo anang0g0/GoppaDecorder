@@ -4,6 +4,8 @@
 //code name :  一変数多項式演算ライブラリのつもり
 //code name : OVP - One Variable Polynomial library with OpenMP friendly
 //status    : majer release (ver 1.0)
+// Niederreiter Cryotosysytem by EEA decoding
+
 
 #include <stdio.h>
 #include <stdlib.h>
