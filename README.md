@@ -37,7 +37,7 @@ vec v={0};
 int  j = 0,count=0,k=0;
 
 
-//公開鍵を生成する
+//公開鍵を生成する(G=SHP)
  w = pubkeygen();
  
 //decode開始
@@ -46,16 +46,17 @@ int  j = 0,count=0,k=0;
         memset(z1, 0, sizeof(z1));
         //T重みエラーベクトルの生成
         mkerr(z1, T);
-        //公開鍵を使ったシンドロームの計算
+        //公開鍵を使ったシンドロームの計算(s=eG)
         v = sin2(z1);
-        //シンドロームの復号
+        //シンドロームの復号(s'=sS^{-1})
         f=dec(v.x);
-        //復号
+        //復号(m'=D(s'))
         r = decode(w, f);
-        //エラー（平文）の表示
+        //エラー（平文）の表示(m=m'P^{-1})
         count = elo2(r);
         for (int i = 0; i < N; i++)
         {
+            //検算
             if (z1[i] > 0)
             printf("error position= %d %d\n", i, z1[i]);
         }
