@@ -4074,6 +4074,19 @@ unsigned short s[K+1]={0,15,1,9,13,1,14};
   //公開鍵を生成する
  w = pubkeygen();
  
+//while(1){
+
+//エラーベクトルを生成する
+  memset(z1, 0, sizeof(z1));
+  mkerr(z1, T * 2);
+  //exit(1);
+
+  //encryotion
+  test (w, z1);
+
+//  break;
+//}
+//exit(1);
 
   mkd(w);
 
