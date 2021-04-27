@@ -4118,6 +4118,12 @@ unsigned short s[K+1]={0,15,1,9,13,1,14};
 
         //m=m'P^-1
         count = elo2(r);
+        for (int i = 0; i < N; i++)
+        {
+            //検算
+            if (z1[i] > 0)
+            printf("error position= %d %d\n", i, z1[i]);
+        }
         if (count < 0)
         {
             printf("baka-@\n");
