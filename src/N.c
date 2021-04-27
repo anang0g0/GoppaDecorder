@@ -3324,13 +3324,13 @@ aa:
 
   unsigned short s;
 #pragma omp parallel for default(none) private(i, j, k, s) shared(bm2, gt, bm, gf, fg)
-  for (i = 0; i < K*2; i++)
+  for (i = 0; i < K; i++)
   {
     for (j = 0; j < N; j++)
     {
       s = 0;
 
-      for (k = 0; k < K*2; k++)
+      for (k = 0; k < K; k++)
         s ^= gf[mlt(fg[gt[k][i]], fg[bm[j][k]])];
       //printf("%d,",s);
       bm2[j][i] = s;
@@ -3951,7 +3951,7 @@ return f;
 
 OP bms(unsigned short s[]){
 int i,j,k,l,d[6]={0};
-OP lo[6+1]={0},b[6+1]={0},t[6+1]={0},a={0},f={0},h={0},g={0},hh={0};
+OP lo[K+1]={0},b[K+1]={0},t[K+1]={0},a={0},f={0},h={0},g={0},hh={0};
 vec v={0},x={0},w={0};
 
 
