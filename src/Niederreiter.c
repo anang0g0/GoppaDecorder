@@ -3413,13 +3413,15 @@ fclose(fp);
   }
 
 
-  //  exit(1);
+  // SH
   H = mulmat(S, BB, 1);
+  // SHP
   for (i = 0; i < K * E; i++)
   {
     for (j = 0; j < N; j++)
       S.z[j][i] = H.z[P[j]][i];
   }
+  //binary を unsigned short にパッキング
   toByte(S);
   fp = fopen("Pub.key", "w");
   for (i = 0; i < N; i++)
@@ -4088,7 +4090,7 @@ unsigned short s[K+1]={0,15,1,9,13,1,14};
 //}
 //exit(1);
 
-  mkd(w);
+//  mkd(w);
 
   memset(zz, 0, sizeof(zz));
   memset(ss, 0, sizeof(ss));
