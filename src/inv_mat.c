@@ -174,6 +174,7 @@ lab:
     }
   }
   //掃き出し法
+  #pragma omp parallel for num_threads(omp_get_max_threads()) //private(i,j,k)
   for (i = 0; i < n; i++)
   {
     buf = gf[Inv(fg[a.w[i][i]])];
@@ -196,6 +197,7 @@ lab:
     }
   }
 
+/*
   // printf("\n\n逆行列を出力\n");
   for (i = 0; i < n; i++)
   {
@@ -216,6 +218,7 @@ lab:
   }
 
   printf("行列を出力\n ={\n");
+#pragma omp parallel for num_threads(omp_get_max_threads()) //private(i,j,k)
   for (i = 0; i < n; i++)
   {
     printf("{");
@@ -248,7 +251,9 @@ lab:
   }
   printf("};\n");
   //exit(1);
+
   //検算
+  #pragma omp parallel for num_threads(omp_get_max_threads()) //private(i,j,k)
   for (i = 0; i < n; i++)
   {
     for (j = 0; j < n; j++)
@@ -263,7 +268,7 @@ lab:
     printf("\n");
   }
   //exit(1);
-
+*/
   return z;
 }
 
@@ -292,6 +297,7 @@ MAT mulmat(MAT A, MAT B, int flg)
   }
   if (flg == 3)
   {
+  #pragma omp parallel for num_threads(omp_get_max_threads()) //private(i,j,k)
     for (i = 0; i < K; i++)
     {
       for (j = 0; j < K; j++)
