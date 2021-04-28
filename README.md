@@ -1,6 +1,6 @@
 # GoppaDecorder(万年素人の労作ｗ)
 
-Sorry,Japanese only.
+Sorry,Japanese only. (https://translate.google.com/)
 
 １．プログラム実行に当たって(op.c)　20191218（開始），20200304,20200817,20210103,20210419（機能が揃う）
 
