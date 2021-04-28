@@ -912,7 +912,7 @@ v2a(oterm a)
     return 0;
 
   //printf("aa=%d\n",a.a);
-  for (j = 0; j < M; j++)
+  for (j = 0; j < N; j++)
   {
     if (gf[j] == a.a && a.a > 0)
     {
@@ -2846,7 +2846,7 @@ OP synd(unsigned short zz[])
     syn[i] = 0;
     s = 0;
     //#pragma omp parallel num_threads(16)
-    for (j = 0; j < M; j++)
+    for (j = 0; j < N; j++)
     {
       s ^= gf[mlt(fg[zz[j]], fg[mat[j][i]])];
     }
