@@ -163,6 +163,7 @@ void makeS()
       }
     }
 
+/*
     //逆行列を出力
     for (i = 0; i < F; i++)
     {
@@ -172,14 +173,14 @@ void makeS()
       }
       printf("\n");
     }
-
+*/
     // exit(1);
 
   //検算
-#pragma omp parallel for private(j, k)
+#pragma omp parallel for private(j, k) num_threads(16)
     for (i = 0; i < F; i++)
     {
-#pragma omp parallel num_threads(8) //private(j,k)
+//#pragma omp parallel num_threads(8) //private(j,k)
       {
         for (j = 0; j < F; j++)
         {
@@ -226,34 +227,34 @@ void makeS()
     {
       for (i = 0; i < F; i++)
       {
-        printf("{");
+        //printf("{");
         for (j = 0; j < F; j++)
         {
           //
           dd[j] = cl[i][j];
           S.w[i][j]=cl[i][j];
-          printf("%d,", S.w[i][j]);
+          //printf("%d,", S.w[i][j]);
         }
 
-        printf("},\n");
+        //printf("},\n");
       }
-      printf("};\n");
+      //printf("};\n");
 
       printf("inv_S[K][K]=\n{\n");
       for (i = 0; i < F; i++)
       {
-        printf("{");
+        //printf("{");
         for (j = 0; j < F; j++)
         {
           dd[j] = inv_a[i][j];
           inv_S.w[i][j]=inv_a[i][j];
-          printf("%d,", inv_S.w[i][j]);
+          //printf("%d,", inv_S.w[i][j]);
         }
-        printf("},\n");
+        //printf("},\n");
       }
-      printf("};\n");
+      //printf("};\n");
 
-
+/*
       for (i = 0; i < F; i++)
       {
         for (j = 0; j < F; j++)
@@ -261,6 +262,7 @@ void makeS()
         printf("\n");
       }
       //  exit(1);
+      */
     }
   }
 
