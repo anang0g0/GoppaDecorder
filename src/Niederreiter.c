@@ -790,7 +790,7 @@ OP inv(OP a, OP n)
   }
   if (LT(a).a == 0)
   {
-    printf(" a ga 0\n");
+    printf("in inv a ga 0\n");
     exit(1);
   }
 
@@ -2769,15 +2769,19 @@ void decrypt(OP w)
     buf[i] = tmp[K - i - 1];
 
   printf("in decrypt\n");
+  // reconstruct syndrome polynomial
   f = setpol(buf, K);
-  v = patterson(w, f);
-
+  // decode error from syndrome
+  r = decode(w, f);
+  elo2(r);
+  //exit(1);
+  
   // elo(r);
   //exit(1);
   //v=o2v(r);
 
   j = 0;
-  if (v.x[1] > 0 && v.x[0] == 0)
+  if (r.t[1].a > 0 && r.t[0].a == 0)
   {
     err[0] = 1;
     j++;
@@ -2785,18 +2789,18 @@ void decrypt(OP w)
 
   printf("j=%d\n", j);
   printf("after j\n");
-  for (i = j; i < 2 * T; i++)
+  for (i = j; i < T; i++)
   {
-    if (v.x[i] > 0 && v.x[i] < N)
+    if (r.t[i].a > 0 && r.t[i].n < N)
     {
-      err[v.x[i]] = 1;
+      err[r.t[i].n] = 1;
     }
   }
 
   char buf0[8192] = {0}, buf1[10] = {
                              0};
 
-  //#pragma omp parallel for
+  //make error pattarn e for Hash(e)
   for (i = 0; i < N; i++)
   {
     snprintf(buf1, 10, "%d", err[i]);
@@ -2822,6 +2826,7 @@ void decrypt(OP w)
     //char s[3];
     //byte_to_hex(hash[i],s);
 
+    // m=c^Hash(e)
     sk[i] ^= hash[i];
   }
   printf("\ndecript sk=");
@@ -2847,7 +2852,7 @@ OP synd(unsigned short zz[])
     syn[i] = 0;
     s = 0;
     //#pragma omp parallel num_threads(16)
-    for (j = 0; j < M; j++)
+    for (j = 0; j < N; j++)
     {
       s ^= gf[mlt(fg[zz[j]], fg[mat[j][i]])];
     }
@@ -2872,7 +2877,7 @@ void test(OP w, unsigned short zz[])
   const uint8_t *hash;
   sha3_context c;
   //int image_size=512;
-  OP f = {0};
+  OP f = {0},r={0};
   FILE *fp;
 
   fp = fopen("aes.key", "rb");
@@ -2912,15 +2917,21 @@ void test(OP w, unsigned short zz[])
   //exit(1);
 
   f = synd(zz);
+  //r=decode(w,f);
+  //elo2(r);
+  //exit(1);
+
   v = o2v(f);
   //printf("v=");
-  for (i = 0; i < K; i++)
+
+  for (i = 0; i < odeg(f)+1; i++)
   {
     sy[i] = v.x[i];
     printf("%d,", sy[i]);
   }
   printf("\n");
 
+  //buf=e, sk=m, Hash(e)^m
   encrypt(buf, sk);
   decrypt(w);
 
@@ -4073,24 +4084,21 @@ unsigned short s[K+1]={0,15,1,9,13,1,14};
 //exit(1);
 
 
-  //公開鍵を生成する
+  //公開鍵を生成する(H'=SHP)
  w = pubkeygen();
  
 //while(1){
 
 //エラーベクトルを生成する
   memset(z1, 0, sizeof(z1));
-  mkerr(z1, T * 2);
+  mkerr(z1, T );
   //exit(1);
 
-  //encryotion
+  //encryotion test
   test (w, z1);
+  exit(1);
 
-//  break;
-//}
-//exit(1);
-
-//  mkd(w);
+//  mkd(w); ??
 
   memset(zz, 0, sizeof(zz));
   memset(ss, 0, sizeof(ss));
