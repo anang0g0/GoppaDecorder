@@ -3155,6 +3155,8 @@ aa:
   //既約多項式しか使わない。
   l = -1;
   ii = 0;
+  // irreducible goppa code
+  /*
   while (l == -1)
   {
     w = mkpol();
@@ -3168,7 +3170,10 @@ aa:
     ii++;
     //
   }
+*/
 
+//separable goppa code
+  w=mkpol();
   //多項式の値が0でないことを確認
   for (i = 0; i < N; i++)
   {
@@ -3177,7 +3182,7 @@ aa:
     {
       printf("trace 0 @ %d\n", i);
       //fail = 1;
-      exit(1);
+      goto aa;
     }
   }
   for (i = 0; i < N; i++)
