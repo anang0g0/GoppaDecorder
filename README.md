@@ -8,11 +8,9 @@ ulimit -s unlimited
 
 を必ず実行してください。
 
-キーロガーが不安な方は、シングルタスクでネットに接続できないパソコンでビルドしてください。
-
 開発日記はこちらに移動しました。
 
-https://anang0g0.github.io/GoppaDecorder
+https://anang0g0.github.io/
 
 依存関係のあるライブラリとかは一切ありません。
 単体で動きます。
