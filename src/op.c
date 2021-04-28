@@ -1473,7 +1473,7 @@ ginit(void)
     printf("in ginit\n");
 
     g[K] = 1;          //xor128();
-    g[0] = rand() % N; //or N
+    g[0] = rand() % 2; //or N
     k = rand() % (K - 1);
     if (k > 0)
     {
@@ -1483,7 +1483,7 @@ ginit(void)
             j = rand() % (K);
             if (j < K && j > 0 && g[j] == 0)
             {
-                g[j] = rand() % N; //or N;
+                g[j] = rand() % 2; //or N;
                 count++;
             }
         }
@@ -1915,6 +1915,7 @@ OP decode(OP f, OP s)
     unsigned short d = 0;
     OP h = {0};
     EX hh = {0};
+   
 
     printf("in decode\n");
     printpol(o2v(s));
@@ -1948,7 +1949,6 @@ OP decode(OP f, OP s)
         }
     }
     //exit(1);
-
     //  printf("\n");
 
     printf("あっ、でる！\n");
@@ -3134,7 +3134,7 @@ aa:
 
     l = -1;
     ii = 0;
-    // irreducible goppa code
+    // irreducible goppa code (既役多項式が必要なら、ここのコメントを外すこと。)
     /*
     while (l == -1)
     {
@@ -3236,6 +3236,90 @@ aa:
     return w;
 }
 
+
+//Niederreiter暗号の公開鍵を作る
+OP pubkeygen()
+{
+  int i, j, k, l;
+  unsigned short n[K] = {0};
+  FILE *fp;
+  unsigned short dd[K] = {0};
+  OP w = {0};
+  vec v = {0};
+
+  w = mkc(w,K);
+ printpol(o2v(w));
+ printf(" ==goppa polynomial\n");
+
+  v = o2v(w);
+  fp = fopen("sk.key", "wb");
+  fwrite(g, 2, K + 1, fp);
+  fclose(fp);
+  oprintpol(w);
+  printf("\n");
+  printsage(o2v(w));
+  printf("\n");
+  printf("sagemath で既約性を検査してください！\n");
+
+  bdet();
+  //  toByte(BB);
+  //exit(1);
+
+  Pgen();
+  fp = fopen("P.key", "w");
+//  fwrite(P, 2, N, fp);
+  fclose(fp);
+  makeS();
+  fp = fopen("inv_S.key", "wb");
+
+  /*
+for(i=0;i<K*E;i++){
+  for(j=0;j<K*E;j++)
+    n[j]=inv_S.w[i][j];  
+    fwrite(n,1,K*E,fp);
+} 
+*/
+fclose(fp);
+
+
+  for (i = 0; i < K * E; i++)
+  {
+    for (j = 0; j < K; j++)
+    {
+      memset(v.x, 0, sizeof(v.x));
+      for (k = 0; k < E; k++)
+        v.x[k] = inv_S.w[i][j * E + k];
+      n[j] = v2i(v);
+      //printf("%d,", n[j]);
+    }
+    //printf("\n");
+  //  fwrite(n, 2, K, fp);
+  }
+
+
+  // SH
+  H = mulmat(S, BB, 1);
+  // SHP
+  for (i = 0; i < K * E; i++)
+  {
+    for (j = 0; j < N; j++)
+      S.z[j][i] = H.z[P[j]][i];
+  }
+  //binary を unsigned short にパッキング
+  toByte(S);
+  fp = fopen("Pub.key", "w");
+  for (i = 0; i < N; i++)
+  {
+    for (j = 0; j < K; j++)
+      dd[j] = HH[i][j];
+    //fwrite(dd, 2, K, fp);
+  }
+  fclose(fp);
+
+  return w;
+}
+
+/*
 //Niederreiter暗号の公開鍵を作る
 OP pubkeygen()
 {
@@ -3269,6 +3353,7 @@ OP pubkeygen()
 
     return w;
 }
+*/
 
 void enc()
 {
@@ -3277,9 +3362,52 @@ void enc()
     pubkeygen();
 }
 
-void dec()
+
+OP dec(unsigned short ss[])
 {
+  int i, j, k;
+  vec v = {0};
+  OP s = {0};
+  unsigned ch[K * E] = {0};
+  unsigned char h2o[K * E] = {0};
+
+  for (i = 0; i < K; i++)
+  {
+    v = i2v(ss[i]);
+    for (j = 0; j < E; j++)
+      ch[i * E + j] = v.x[j];
+  }
+  for (i = 0; i < K * E; i++)
+    printf("%d", ch[i]);
+  printf("\n");
+
+  unsigned short uk[K] = {0};
+
+  for (i = 0; i < K * E; i++)
+  {
+    for (j = 0; j < K * E; j++)
+      h2o[i] ^= (ch[j] & inv_S.w[i][j]);
+  }
+  //for (i = 0; i < K * E; i++)
+  //printf("%d,", h2o[i]);
+  //printf("\n");
+
+  for (i = 0; i < K; i++)
+  {
+    memset(v.x, 0, sizeof(v.x));
+    for (j = 0; j < E; j++)
+      v.x[j] = h2o[i * E + j];
+    uk[i] = v2i(v);
+  }
+  for (i = 0; i < K; i++)
+    printf("%d,", uk[i]);
+  printf("\n");
+  //    exit(1);
+  s = setpol(uk, K);
+
+  return s;
 }
+
 
 //鍵生成
 void key2(unsigned short g[])
@@ -3307,7 +3435,7 @@ void key2(unsigned short g[])
     fclose(fp);
 }
 
-int elo(OP r)
+int printerr(OP r)
 {
     int count, i, j, k;
 
@@ -3711,7 +3839,7 @@ unsigned short logx(unsigned short u)
     printf("baka-von\n");
 }
 
-int bma(unsigned short s[], int kk)
+OP bma(unsigned short s[], int kk)
 {
     int i, j, k, ll = 0, l, d[2 * K + 1] = {0};
     OP lo[2 * K + 1] = {0}, b[2 * K + 1] = {0}, t[2 * K + 1] = {0}, a = {0}, f = {0}, h = {0}, g = {0}, hh = {0};
@@ -3797,6 +3925,7 @@ int bma(unsigned short s[], int kk)
         exit(1);
         //return -1;
     }
+    //exit(1);
     for (i = 0; i < deg(x) + 1; i++)
     {
         if (x.x[i] >= 0)
@@ -3824,8 +3953,8 @@ int bma(unsigned short s[], int kk)
         //exit(1);
     }
 
-    return count;
-    //return lo[j-1];
+    //return count;
+    return lo[j-1];
 }
 
 vec rev(OP f)
@@ -4031,10 +4160,10 @@ label:
     unsigned short t2[K * 2] = {0};
 
 bm:
-
-    //w=pubkeygen();
+    //public-key generation (slow)
+    w=pubkeygen();
     //full rank matrix
-    r = mkc(r, K * 2);
+    //r = mkc(r, K * 2);
     //w=mkg(K);
     //half size matrix of odd colomn
     half(K + 1);
@@ -4064,7 +4193,10 @@ bm:
         //exit(1);
         // sendrier's trick
         r1 = sendrier(zz, K);
+        //r1=sin(zz);
         v = o2v(r1);
+        r2=dec(v.x);
+        x=o2v(r2);
         //for (i = 0; i < K * 2; i++)
         //    printf("%d,", v.x[i]);
         for (i = 0; i < K; i++)
@@ -4072,12 +4204,15 @@ bm:
         //for (i = 0; i < K; i++)
         //    printf("%d,", s[i]);
         //printf("\n");
-        k = bma(s, K);
-        //for (i = 0; i < N; i++)
-        //    printf("%d,", zz[i]);
-        //printf("\n");
+        f = bma(s, K);
+        
+        //exit(1);
+        for (i = 0; i < N; i++)
+        if(zz[i]>0)
+        printf("%d,", i);
+        printf("\n");
 
-        if (k < T)
+        if (odeg(f) < T)
         {
             printpol(o2v(r));
             printf("==goppa\n");
@@ -4131,7 +4266,7 @@ lab:
         //exit(1);
 
         r = decode(w, f);
-        count = elo(r);
+        count = printerr(r);
         if (count < 0)
         {
             printf("baka-@\n");
