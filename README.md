@@ -98,7 +98,7 @@ ecole.c ：定義体の中身を作ります。(ecole normal basis lol)
 
 # 20210428
 
-EEAとBMの両方でスピード比べ。  
+EEAとBMの両方でスピードを比較した。  
 
 EEA:1min23s  
 BM :1min35s  
