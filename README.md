@@ -107,7 +107,7 @@ c1=eH
 c2=Gen(Hash(e))⊕m  
 c3=Hash(c1‖c2‖e‖m)  
   
-c=(c1,c2,m,e)  
+c=(c1,c2,c3)  
   
 ここでGenは疑似乱数生成器、  
 Hashはハッシュ関数  
