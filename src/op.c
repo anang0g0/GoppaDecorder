@@ -4032,9 +4032,9 @@ label:
 
 bm:
 
-    w=pubkeygen();
+    //w=pubkeygen();
     //full rank matrix
-    //r = mkc(r, K * 2);
+    r = mkc(r, K * 2);
     //w=mkg(K);
     //half size matrix of odd colomn
     half(K + 1);
