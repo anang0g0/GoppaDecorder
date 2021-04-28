@@ -3114,6 +3114,128 @@ aa:
     return w;
 }
 
+OP mkc(OP w, int kk)
+{
+    int i, j, k, l, ii = 0;
+
+    unsigned short tr[N] = {0};
+    unsigned short ta[N] = {0};
+    vec v = {0};
+    unsigned short po[K + 1] = {1, 0, 1, 0, 5};
+    //OP w={0};
+    OP r = {0};
+
+aa:
+
+    //printf("\n");
+    memset(mat, 0, sizeof(mat));
+    //既約性判定のためのBen-Orアルゴリズム。拡大体にも対応している。デフォルトでGF(8192)
+    //既約多項式しか使わない。
+
+    l = -1;
+    ii = 0;
+    // irreducible goppa code
+    /*
+    while (l == -1)
+    {
+        w = mkpol();
+        l = ben_or(w);
+        printf("irr=%d\n", l);
+        if (ii > 300)
+        {
+            printf("too many error\n");
+            exit(1);
+        }
+        ii++;
+        //
+    }
+*/
+    // separable goppa code
+    w=mkpol();
+    r = w;
+    //  r=omul(w,w);
+    memset(ta, 0, sizeof(ta));
+    //w = setpol(g, K + 1);
+    printpol(o2v(r));
+    //printf(" =poly\n");
+
+    //多項式の値が0でないことを確認
+    for (i = 0; i < N; i++)
+    {
+        ta[i] = trace(r, i);
+        if (ta[i] == 0)
+        {
+            printf("trace 0 @ %d\n", i);
+            //fail = 1;
+            goto aa;
+        }
+    }
+    for (i = 0; i < N; i++)
+    {
+        tr[i] = oinv(ta[i]);
+        //printf("%d,", tr[i]);
+    }
+    memset(g, 0, sizeof(g));
+    g[0] = 1;
+
+    //多項式を固定したい場合コメントアウトする。
+    oprintpol(r);
+    printf("\n");
+    printsage(o2v(r));
+    printf("\n");
+    printf("sagemath で既約性を検査してください！\n");
+    memset(v.x, 0, sizeof(v.x));
+    //  v=rev(w);
+    van(kk);
+    //  v=o2v(w);
+    ogt(g, kk);
+
+    //wait();
+
+    //#pragma omp parallel for
+
+    printf("\nすげ、オレもうイキそ・・・\n");
+    //keygen(g);
+    //exit(1);
+
+    for (j = 0; j < N; j++)
+    {
+        for (i = 0; i < kk; i++)
+        {
+            ma[j][i] = gf[mlt(fg[vb[i][j]], tr[j])];
+        }
+        //printf("tr[%d]=%d\n",j,tr[j]);
+    }
+
+    unsigned short s;
+    //#pragma omp parallel for default(none) private(i, j, k, s) shared(mat, gt, ma, gf, fg)
+    for (i = 0; i < kk; i++)
+    {
+        for (j = 0; j < N; j++)
+        {
+            s = 0;
+
+            for (k = 0; k < kk; k++)
+                s ^= gf[mlt(fg[gt[k][i]], fg[ma[j][k]])];
+            //printf("%d,",s);
+            mat[j][i] = s;
+        }
+    }
+    //printf("\n");
+    //exit(1);
+
+    for (j = 0; j < N; j++)
+    {
+        for (i = 0; i < kk; i++)
+            printf("%d,", mat[j][i]);
+        printf("\n");
+    }
+    //exit(1);
+    //wait();
+
+    return w;
+}
+
 //Niederreiter暗号の公開鍵を作る
 OP pubkeygen()
 {
@@ -3122,7 +3244,7 @@ OP pubkeygen()
     unsigned char dd[E * K] = {0};
     OP w = {0};
 
-    w = mkg(K);
+    w = mkc(w,K*2);
 
     oprintpol(w);
     printf("\n");
@@ -3446,7 +3568,7 @@ int ero2(vec v)
 
     if (count == T * 2)
     {
-        printf("err=%dっ!! \n", count);
+        printf("err=%d���!! \n", count);
         B++;
     }
     if (count < T * 2)
@@ -3745,123 +3867,7 @@ vec rev(OP f)
     return x;
 }
 
-OP mkc(OP w, int kk)
-{
-    int i, j, k, l, ii = 0;
 
-    unsigned short tr[N] = {0};
-    unsigned short ta[N] = {0};
-    vec v = {0};
-    unsigned short po[K + 1] = {1, 0, 1, 0, 5};
-    //OP w={0};
-    OP r = {0};
-
-aa:
-
-    //printf("\n");
-    memset(mat, 0, sizeof(mat));
-    //既約性判定のためのBen-Orアルゴリズム。拡大体にも対応している。デフォルトでGF(8192)
-    //既約多項式しか使わない。
-
-    l = -1;
-    ii = 0;
-    while (l == -1)
-    {
-        w = mkpol();
-        l = ben_or(w);
-        printf("irr=%d\n", l);
-        if (ii > 300)
-        {
-            printf("too many error\n");
-            exit(1);
-        }
-        ii++;
-        //
-    }
-
-    r = w;
-    //  r=omul(w,w);
-    memset(ta, 0, sizeof(ta));
-    //w = setpol(g, K + 1);
-    printpol(o2v(r));
-    //printf(" =poly\n");
-
-    //多項式の値が0でないことを確認
-    for (i = 0; i < N; i++)
-    {
-        ta[i] = trace(r, i);
-        if (ta[i] == 0)
-        {
-            printf("trace 0 @ %d\n", i);
-            //fail = 1;
-            exit(1);
-        }
-    }
-    for (i = 0; i < N; i++)
-    {
-        tr[i] = oinv(ta[i]);
-        //printf("%d,", tr[i]);
-    }
-    memset(g, 0, sizeof(g));
-    g[0] = 1;
-
-    //多項式を固定したい場合コメントアウトする。
-    oprintpol(r);
-    printf("\n");
-    printsage(o2v(r));
-    printf("\n");
-    printf("sagemath で既約性を検査してください！\n");
-    memset(v.x, 0, sizeof(v.x));
-    //  v=rev(w);
-    van(kk);
-    //  v=o2v(w);
-    ogt(g, kk);
-
-    //wait();
-
-    //#pragma omp parallel for
-
-    printf("\nすげ、オレもうイキそ・・・\n");
-    //keygen(g);
-    //exit(1);
-
-    for (j = 0; j < N; j++)
-    {
-        for (i = 0; i < kk; i++)
-        {
-            ma[j][i] = gf[mlt(fg[vb[i][j]], tr[j])];
-        }
-        //printf("tr[%d]=%d\n",j,tr[j]);
-    }
-
-    unsigned short s;
-    //#pragma omp parallel for default(none) private(i, j, k, s) shared(mat, gt, ma, gf, fg)
-    for (i = 0; i < kk; i++)
-    {
-        for (j = 0; j < N; j++)
-        {
-            s = 0;
-
-            for (k = 0; k < kk; k++)
-                s ^= gf[mlt(fg[gt[k][i]], fg[ma[j][k]])];
-            //printf("%d,",s);
-            mat[j][i] = s;
-        }
-    }
-    //printf("\n");
-    //exit(1);
-
-    for (j = 0; j < N; j++)
-    {
-        for (i = 0; i < kk; i++)
-            printf("%d,", mat[j][i]);
-        printf("\n");
-    }
-    //exit(1);
-    //wait();
-
-    return w;
-}
 
 void half(int kk)
 {
@@ -4015,9 +4021,9 @@ label:
     }
     //exit(1);
 
-    r = setpol(hi, 8);
+    //r = setpol(hi, 8);
     //printf("%d\n",ben_or(w));
-    w = omul(r, r);
+    //w = omul(r, r);
     //printpol(o2v(w));
     printf("\n");
     memset(mat, 0, sizeof(mat));
@@ -4026,12 +4032,29 @@ label:
 
 bm:
 
+    w=pubkeygen();
     //full rank matrix
-    r = mkc(r, K * 2);
+    //r = mkc(r, K * 2);
+    //w=mkg(K);
     //half size matrix of odd colomn
     half(K + 1);
 
     j = 0;
+
+/*
+    memset(zz, 0, sizeof(zz));
+    mkerr(zz, T);
+    f=synd(zz,K);
+    w=decode(w,f);
+    elo(w);
+    exit(1);
+
+    v=o2v(f);
+    for (i = 0; i < K; i++)
+        s[i + 1] = v.x[i];
+        k = bma(s, K);
+        exit(1);
+*/
 
     while (1)
     {
@@ -4064,6 +4087,8 @@ bm:
             exit(1);
         }
         //break;
+        exit(1);
+
         j++;
         if (j == 10000)
             exit(1);
