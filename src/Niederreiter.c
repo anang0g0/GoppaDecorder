@@ -4100,8 +4100,8 @@ unsigned short s[K+1]={0,15,1,9,13,1,14};
   //exit(1);
 
   //encryotion test
-  test (w, z1);
-  exit(1);
+  //test (w, z1);
+  //exit(1);
 
 //  mkd(w); ??
 
@@ -4124,7 +4124,7 @@ unsigned short s[K+1]={0,15,1,9,13,1,14};
         }
         //暗号化(v=eH')
         v = sin2(z1);
-
+        //f=v2o(v);
         //復号(S^-1)
         f=dec(v.x);
         r = decode(w, f);
