@@ -96,6 +96,7 @@ ecole.c ：定義体の中身を作ります。(ecole normal basis lol)
 # 20210429
 
 Berlekamp-Masseyでも復号できるようになった。(op.c)
+sentrierを使っていないので、パリティ検査行列は通常サイズ。
 
 # 20210428
 
