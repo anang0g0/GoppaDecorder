@@ -4199,7 +4199,7 @@ bm:
         //exit(1);
         // sendrier's trick
         //r1 = sendrier(zz, K);
-        //x=o2v(r1);
+        //v=o2v(r1);
         
         v=sin(zz);
         f = v2o(v);
