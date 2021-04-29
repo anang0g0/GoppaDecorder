@@ -2073,6 +2073,44 @@ void bdet()
     //fclose(ff);
 }
 
+void bd2()
+{
+    int i, j, k, l;
+    unsigned char dd[E * K] = {0};
+    FILE *ff;
+
+    //ff = fopen("Hb.key", "wb");
+
+    for (i = 0; i < N; i++)
+    {
+        for (j = 0; j < K/2+1; j++)
+        {
+            l =mat[i][j];
+            //#pragma omp parallel for
+            for (k = 0; k < E; k++)
+            {
+                BB.z[i][j * E + k] = l % 2;
+                l = (l >> 1);
+            }
+        }
+    }
+
+    for (i = 0; i < N; i++)
+    {
+        //#pragma omp parallel for
+        for (j = 0; j < E * (K/2+1) ; j++)
+        {
+            printf("%d,", BB.z[i][j]);
+            //dd[j] = BH[j][i];
+        }
+        //fwrite(dd, 1, E * K, ff);
+        printf("\n");
+    }
+//exit(1);
+
+    //fclose(ff);
+}
+
 //バイナリ型パリティチェック行列を生成する
 void toBit(MAT L)
 {
@@ -2115,8 +2153,9 @@ void toBit(MAT L)
 }
 
 unsigned short HH[N][K];
+unsigned short TE[N][K/2+1];
 
-void toByte(MAT SH)
+void toByte(MAT SH,int kk)
 {
     vec v = {0};
     int i, j, k, cnt;
@@ -2124,7 +2163,7 @@ void toByte(MAT SH)
     for (i = 0; i < N; i++)
     {
         //#pragma omp parallel for
-        for (j = 0; j < K; j++)
+        for (j = 0; j < kk; j++)
         {
             cnt = 0;
             for (k = j * E; k < j * E + E; k++)
@@ -3240,6 +3279,27 @@ aa:
 }
 
 
+void half(int kk)
+{
+    int i, j, k;
+
+    for (i = 0; i < N; i++)
+        bm[i][0] = mat[i][0];
+    for (i = 1; i < kk; i++)
+    {
+        for (j = 0; j < N; j++)
+            bm[j][i] = mat[j][i * 2 - 1];
+    }
+    for (i = 0; i < N; i++)
+    {
+        for (j = 0; j < kk; j++)
+            printf("%d,", bm[i][j]);
+        printf("\n");
+    }
+
+    //exit(1);
+}
+
 //Niederreiter暗号の公開鍵を作る
 OP pubkeygen2()
 {
@@ -3251,8 +3311,8 @@ OP pubkeygen2()
   vec v = {0};
 
 
-  //w = mkc(w,K*2);
-  w = mkg(K);
+  w = mkc(w,K*2);
+  //w = mkg(K);
  printpol(o2v(w));
  printf(" ==goppa polynomial\n");
 
@@ -3266,7 +3326,9 @@ OP pubkeygen2()
   printf("\n");
   printf("sagemath で既約性を検査してください！\n");
 
-  bdet();
+  half(K/2+1);
+  bd2();
+
   //  toByte(BB);
   //exit(1);
 
@@ -3274,7 +3336,7 @@ OP pubkeygen2()
   fp = fopen("P.key", "w");
 //  fwrite(P, 2, N, fp);
   fclose(fp);
-  makeS();
+  mkS();
   fp = fopen("inv_S.key", "wb");
 
   /*
@@ -3286,10 +3348,10 @@ for(i=0;i<K*E;i++){
 */
 fclose(fp);
 
-
+/*
   for (i = 0; i < K * E; i++)
   {
-    for (j = 0; j < K; j++)
+    for (j = 0; j < K/2+1; j++)
     {
       memset(v.x, 0, sizeof(v.x));
       for (k = 0; k < E; k++)
@@ -3300,26 +3362,48 @@ fclose(fp);
     //printf("\n");
   //  fwrite(n, 2, K, fp);
   }
-
-
+*/
+printf("S=\n");
+for(i=0;i<(K/2+1)*E;i++){
+    for(j=0;j<(K/2+1)*E;j++)
+    printf("%d,",S.w[i][j]);
+    printf("\n");
+}
+printf("\n BB=\n");
+for(i=0;i<N;i++){
+    for(j=0;j<(K/2+1)*E;j++)
+    printf("%d,",BB.z[i][j]);
+    printf("\n");
+}
+printf("\n");
+//exit(1);
   // SH
-  H = mulmat(S, BB, 1);
+  H = mulmat(S, BB, 2);
+for(i=0;i<N;i++){
+    for(j=0;j<(K/2+1)*E;j++)
+    printf("%d,",H.w[i][j]);
+    printf("\n");
+}
+//exit(1);
+
   // SHP
-  for (i = 0; i < K * E; i++)
+  for (i = 0; i < (K/2+1) * E; i++)
   {
     for (j = 0; j < N; j++)
-      S.z[j][i] = H.z[P[j]][i];
+      S.z[j][i] = H.w[P[j]][i];
   }
   //binary を unsigned short にパッキング
-  toByte(S);
+  toByte(S,K/2+1);
+  /*
   fp = fopen("Pub.key", "w");
   for (i = 0; i < N; i++)
   {
-    for (j = 0; j < K; j++)
+    for (j = 0; j < K/2+1; j++)
       dd[j] = HH[i][j];
     //fwrite(dd, 2, K, fp);
   }
   fclose(fp);
+*/
 
   return w;
 }
@@ -3355,7 +3439,7 @@ OP pubkeygen()
         for (j = 0; j < N; j++)
             S.z[j][i] = H.z[P[j]][i];
     }
-    toByte(S);
+    toByte(S,K);
 
     return w;
 }
@@ -3621,7 +3705,7 @@ int ero2(vec v)
     int i, j, count = 0;
     unsigned short ya[N] = {0}, xa[N] = {0};
 
-    for (i = 0; i < T * 2; i++)
+    for (i = 0; i < T ; i++)
     {
         if (i == 0)
         {
@@ -3639,49 +3723,14 @@ int ero2(vec v)
         {
             printf("baka %d %d\n", i, v.x[i]);
             printf("v.x[K-1]=%d\n", v.x[K - 1]);
-            /*
-        printpol(o2v(w));
-        printf(" ============goppa\n");
-        printsage(o2v(w));
-        printf(" ============sage\n");
-        printsage(o2v(f));
-        printf(" ============syn\n");
-        printpol(o2v(f));
-        printf(" ==========synd\n");
-        printf("{");
-        for (k = 0; k < N; k++)
-        {
-          if (z1[k] > 0)
-            printf("%d,", z1[k]);
-        }
-        printf("};\n");
-        //AA++;
-        //wait();
-        */
             break;
             //
             //exit (1);
         }
-        int cnt = 0;
-        /*
-      for (k = 0; k < N; k++)
-      {
-        if (z1[k] > 0)
-        {
-          if (k != v.x[cnt])
-          {
-            printf("%d,%d\n", k, v.x[cnt]);
-            printsage(o2v(w));
-            printf(" ========w\n");
-            AA++;
-            break;
-            //exit(1);
-          }
-          cnt++;
-        }
-      }
-*/
+
     }
+    
+    int cnt = 0;
     for (i = 0; i < N; i++)
         ya[i] = xa[P[i]];
     for (i = 0; i < N; i++)
@@ -3689,17 +3738,23 @@ int ero2(vec v)
         if (ya[i] > 0 && i == 0)
         {
             printf("error position=%d う\n", i);
+            cnt=1;
         }
         else if (ya[i] > 0)
         {
+            if(cnt==0){
+            printf("error position=%d う\n", i);
+            cnt=1;
+            }else{
             printf("error position=%d お\n", i);
+            }
         }
     }
     //exit(1);
 
     if (count == T )
     {
-        printf("err=%d���!! \n", count);
+        printf("err=%dっ!! \n", count);
         B++;
     }
     if (count < T )
@@ -3768,12 +3823,62 @@ void fun()
     }
 }
 
+OP before(unsigned short ss[]){
+int i,j,k;
+vec v={0};
+OP s={0};
+unsigned short ch[K * E] = {0};
+
+
+    for (j = 0; j < K/2+1; j++)
+        printf("%d,", ss[j]);
+    printf("\n");
+    printf(" ==ss\n");
+    //exit(1);
+
+    unsigned char h2o[K * E] = {0};
+    for (i = 0; i < K/2+1; i++)
+    {
+        v = i2v(ss[i]);
+        for (j = 0; j < E; j++)
+            ch[i * E + j] = v.x[j];
+    }
+    //for (i = 0; i < K * E; i++)
+    //printf("%d", ch[i]);
+    //printf("\n");
+
+    unsigned short uk[K] = {0};
+
+    for (i = 0; i < (K/2+1) * E; i++)
+    {
+        for (j = 0; j < (K/2+1) * E; j++)
+            h2o[i] ^= (ch[j] & inv_S.w[i][j]);
+    }
+    //for (i = 0; i < K * E; i++)
+    //printf("%d,", h2o[i]);
+    //printf("\n");
+
+    for (i = 0; i < K/2+1; i++)
+    {
+        memset(v.x, 0, sizeof(v.x));
+        for (j = 0; j < E; j++)
+            v.x[j] = h2o[i * E + j];
+        uk[i] = v2i(v);
+    }
+    for (i = 0; i < K/2+1; i++)
+        printf("%d,", uk[i]);
+    printf("\n");
+    //    exit(1);
+    s = setpol(uk, K/2+1);
+
+return s;
+}
+
 vec sin(unsigned short zz[])
 {
     int i, j;
     OP s = {0};
     vec v = {0};
-    unsigned ch[K * E] = {0};
     unsigned short ss[K] = {0};
 
     for (i = 0; i < N; i++)
@@ -3789,48 +3894,7 @@ vec sin(unsigned short zz[])
         }
         printf("\n");
     }
-/*
-    for (j = 0; j < K; j++)
-        printf("%d,", ss[j]);
-    printf("\n");
-    printf(" ==ss\n");
-    //exit(1);
 
-    unsigned char h2o[K * E] = {0};
-    for (i = 0; i < K; i++)
-    {
-        v = i2v(ss[i]);
-        for (j = 0; j < E; j++)
-            ch[i * E + j] = v.x[j];
-    }
-    //for (i = 0; i < K * E; i++)
-    //printf("%d", ch[i]);
-    //printf("\n");
-
-    unsigned short uk[K] = {0};
-
-    for (i = 0; i < K * E; i++)
-    {
-        for (j = 0; j < K * E; j++)
-            h2o[i] ^= (ch[j] & inv_S.w[i][j]);
-    }
-    //for (i = 0; i < K * E; i++)
-    //printf("%d,", h2o[i]);
-    //printf("\n");
-
-    for (i = 0; i < K; i++)
-    {
-        memset(v.x, 0, sizeof(v.x));
-        for (j = 0; j < E; j++)
-            v.x[j] = h2o[i * E + j];
-        uk[i] = v2i(v);
-    }
-    for (i = 0; i < K; i++)
-        printf("%d,", uk[i]);
-    printf("\n");
-    //    exit(1);
-    s = setpol(uk, K);
-*/
     return v;
 }
 
@@ -4004,31 +4068,15 @@ vec rev(OP f)
 
 
 
-void half(int kk)
-{
-    int i, j, k;
-
-    for (i = 0; i < N; i++)
-        bm[i][0] = mat[i][0];
-    for (i = 1; i < kk; i++)
-    {
-        for (j = 0; j < N; j++)
-            bm[j][i] = mat[j][i * 2 - 1];
-    }
-    for (i = 0; i < N; i++)
-    {
-        for (j = 0; j < kk; j++)
-            printf("%d,", bm[i][j]);
-        printf("\n");
-    }
-
-    //exit(1);
-}
 
 vec newhalf(unsigned short e[])
 {
     int i, j, k;
     vec v = {0};
+
+for(i=0;i<K/2+1;i++)
+printf("e=%d\n",e[i]);
+//exit(1);
 
     v.x[0] = gf[mlt(fg[e[0]], fg[e[0]])];
     for (i = 1; i < K / 2 + 1; i++)
@@ -4040,6 +4088,7 @@ vec newhalf(unsigned short e[])
 
     return v;
 }
+
 
 OP sendrier(unsigned short zz[N], int kk)
 {
@@ -4070,6 +4119,49 @@ OP sendrier(unsigned short zz[N], int kk)
 
     return f;
 }
+
+
+OP sendrier2(unsigned short zz[N], int kk)
+{
+    unsigned short syn[K/2+1] = {0}, s = 0, rt[K * 3] = {0};
+    int i, j, k;
+    OP f = {0}, w={0};
+    vec v = {0}, x = {0};
+
+    for (j = 0; j < N; j++)
+    {
+        if (zz[j] > 0)
+        {
+            //for(i=0;i<K;i++){
+            memcpy(syn, HH[j], sizeof(syn));
+            w=before(syn);
+            v=o2v(w);
+            for (k = 0; k < kk; k++){
+                rt[k] ^= v.x[k]; 
+            }
+        }
+    }
+        //x = newhalf(v.x);
+        //f=v2o(x);
+        //f=dec(rt);
+        //v=o2v(w);
+        //printpol(v);
+        //printf(" ==v\n");
+        //exit(1);
+
+       
+        //printpol(x);
+        //printf("  =2b\n");
+        //exit(1);
+
+        //f=v2o(x);
+    f = setpol(rt, kk);
+    printpol(o2v(f));
+    printf(" syn=============\n");
+
+    return f;
+}
+
 
 //言わずもがな
 int main(void)
@@ -4169,38 +4261,33 @@ bm:
     //public-key generation (slow)
     w=pubkeygen();
     //full rank matrix
-    //r = mkc(r, K * 2);
+    //w = mkc(r, K * 2);
     //w=mkg(K);
     //half size matrix of odd colomn
-    half(K + 1);
+    half(K+1);
 
     j = 0;
 
-/*
-    memset(zz, 0, sizeof(zz));
-    mkerr(zz, T);
-    f=synd(zz,K);
-    w=decode(w,f);
-    elo(w);
-    exit(1);
 
-    v=o2v(f);
-    for (i = 0; i < K; i++)
-        s[i + 1] = v.x[i];
-        k = bma(s, K);
-        exit(1);
-*/
 
     while (1)
     {
         memset(zz, 0, sizeof(zz));
         mkerr(zz, T);
 
-        //exit(1);
         // sendrier's trick
-        //r1 = sendrier(zz, K);
-        //v=o2v(r1);
+        r1 = sendrier(zz, K);
+        v=o2v(r1);
+        for (i = 0; i < K; i++)
+            s[i + 1] = v.x[i];
+        //for (i = 0; i < K; i++)
+        //    printf("%d,", s[i]);
+        //printf("\n");
+        f = bma(s, K);
+        wait();
         
+        memset(s,0,sizeof(s));
+
         v=sin(zz);
         f = v2o(v);
         r2=dec(v.x);
@@ -4211,8 +4298,9 @@ bm:
         //for (i = 0; i < K; i++)
         //    printf("%d,", s[i]);
         //printf("\n");
-        f = bma(s, K+1);
+        f = bma(s, K);
         x=chen(f);
+        //r=v2o(x);
         ero2(x);
 
         for (i = 0; i < N; i++)
