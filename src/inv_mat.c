@@ -295,6 +295,20 @@ MAT mulmat(MAT A, MAT B, int flg)
     //printf(" =====tmp.z\n");
     //exit(1);
   }
+  if (flg == 2)
+  {
+  #pragma omp parallel for num_threads(omp_get_max_threads()) //private(i,j,k)
+    for (i = 0; i < E * (K/2+1); i++)
+    {
+      for (j = 0; j < N; j++)
+      {
+        for (k = 0; k < E * (K/2+1); k++)
+        {
+          tmp.w[j][i] ^= gf[mlt(fg[A.w[i][k]], fg[B.z[j][k]])];
+        }
+      }
+    }
+  }
   if (flg == 3)
   {
   #pragma omp parallel for num_threads(omp_get_max_threads()) //private(i,j,k)
