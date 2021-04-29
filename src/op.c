@@ -2999,6 +2999,7 @@ aa:
 
     l = -1;
     ii = 0;
+    /*
     while (l == -1)
     {
         w = mkpol();
@@ -3012,7 +3013,9 @@ aa:
         ii++;
         //
     }
-    //memset(g,0,K+1);
+    */
+   w=mkpol();
+    memset(ta,0,sizeof(ta));
     //g[0]=1;
 
     //多項式の値が0でないことを確認
@@ -3023,7 +3026,7 @@ aa:
         {
             printf("trace 0 @ %d\n", i);
             //fail = 1;
-            exit(1);
+            goto aa;
         }
     }
 
@@ -3238,7 +3241,7 @@ aa:
 
 
 //Niederreiter暗号の公開鍵を作る
-OP pubkeygen()
+OP pubkeygen2()
 {
   int i, j, k, l;
   unsigned short n[K] = {0};
@@ -3247,7 +3250,9 @@ OP pubkeygen()
   OP w = {0};
   vec v = {0};
 
-  w = mkc(w,K);
+
+  //w = mkc(w,K*2);
+  w = mkg(K);
  printpol(o2v(w));
  printf(" ==goppa polynomial\n");
 
@@ -3319,7 +3324,7 @@ fclose(fp);
   return w;
 }
 
-/*
+
 //Niederreiter暗号の公開鍵を作る
 OP pubkeygen()
 {
@@ -3329,6 +3334,7 @@ OP pubkeygen()
     OP w = {0};
 
     w = mkc(w,K*2);
+    //w = mkg(K);
 
     oprintpol(w);
     printf("\n");
@@ -3337,7 +3343,7 @@ OP pubkeygen()
     printf("sagemath で既約性を検査してください！\n");
 
     bdet();
-    toByte(BB);
+    //toByte(BB);
     //exit(1);
 
     Pgen();
@@ -3352,14 +3358,6 @@ OP pubkeygen()
     toByte(S);
 
     return w;
-}
-*/
-
-void enc()
-{
-    int i, j, k;
-
-    pubkeygen();
 }
 
 
@@ -3407,6 +3405,7 @@ OP dec(unsigned short ss[])
 
   return s;
 }
+
 
 
 //鍵生成
@@ -3486,8 +3485,9 @@ int elo2(OP r)
         if (i > 0 && r.t[i].n == 0)
         {
             printf("err baka-z\n");
+            count++;
             //return -1;
-            exit(1);
+            //exit(1);
         }
 
         if (r.t[i].a > 0 && i > 0) // == r.t[i].n)
@@ -3504,7 +3504,10 @@ int elo2(OP r)
         }
         //zz[r.t[i].n]=r.t[i].a;
     }
-
+    if(count<T){
+    printf("err is too few\n");
+    exit(1);
+    }
     for (i = 0; i < N; i++)
         yy[i] = x[P[i]];
     for (i = 0; i < N; i++)
@@ -3694,12 +3697,12 @@ int ero2(vec v)
     }
     //exit(1);
 
-    if (count == T * 2)
+    if (count == T )
     {
         printf("err=%d���!! \n", count);
         B++;
     }
-    if (count < T * 2)
+    if (count < T )
     {
         printf("error is too few\n");
 
@@ -3765,7 +3768,7 @@ void fun()
     }
 }
 
-OP sin(unsigned short zz[])
+vec sin(unsigned short zz[])
 {
     int i, j;
     OP s = {0};
@@ -3779,13 +3782,14 @@ OP sin(unsigned short zz[])
         {
             for (j = 0; j < K; j++)
             {
-                ss[j] ^= HH[i][j];
+                //ss[j]
+                v.x[j] ^= HH[i][j];
                 printf("%d,", HH[i][j]);
             }
         }
         printf("\n");
     }
-
+/*
     for (j = 0; j < K; j++)
         printf("%d,", ss[j]);
     printf("\n");
@@ -3826,8 +3830,8 @@ OP sin(unsigned short zz[])
     printf("\n");
     //    exit(1);
     s = setpol(uk, K);
-
-    return s;
+*/
+    return v;
 }
 
 unsigned short logx(unsigned short u)
@@ -3890,6 +3894,7 @@ OP bma(unsigned short s[], int kk)
                 b[j] = kof(gf[oinv(d[j])], lo[j - 1]);
                 //lo[j]=t[j];
                 ll = j - ll;
+                
                 if (j == 2 * T)
                 {
                     if (!(d[T * 2 - 1] == 0 && d[T * 2 - 3] == 0 && odeg(lo[j - 1]) == T) || !(odeg(lo[j - 1]) == T))
@@ -3903,6 +3908,7 @@ OP bma(unsigned short s[], int kk)
                     }
                     break;
                 }
+                
             }
         }
         printf("l=%d\n", ll);
@@ -4192,21 +4198,23 @@ bm:
 
         //exit(1);
         // sendrier's trick
-        r1 = sendrier(zz, K);
-        //r1=sin(zz);
-        v = o2v(r1);
+        //r1 = sendrier(zz, K);
+        //x=o2v(r1);
+        
+        v=sin(zz);
+        f = v2o(v);
         r2=dec(v.x);
         x=o2v(r2);
-        //for (i = 0; i < K * 2; i++)
-        //    printf("%d,", v.x[i]);
+
         for (i = 0; i < K; i++)
-            s[i + 1] = v.x[i];
+            s[i + 1] = x.x[i];
         //for (i = 0; i < K; i++)
         //    printf("%d,", s[i]);
         //printf("\n");
-        f = bma(s, K);
-        
-        //exit(1);
+        f = bma(s, K+1);
+        x=chen(f);
+        ero2(x);
+
         for (i = 0; i < N; i++)
         if(zz[i]>0)
         printf("%d,", i);
