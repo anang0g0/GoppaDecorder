@@ -2224,7 +2224,7 @@ MTX toByte(MTX SH, int kk)
             //= BH[j][i];
         }
         //fwrite(dd, 1, E * K, ff);
-        printf("\n");
+        //printf("\n");
     }
     printf("end of byte\n");
     //exit(1);
@@ -4446,7 +4446,7 @@ bm:
     //half(K+1);
 
     j = 0;
-    /*
+/*
 for(i=0;i<24;i++)
 a1[i]=1;
 for(i=0;i<24;i++){
@@ -4488,7 +4488,8 @@ printf("\n");
         */
 
         memset(s, 0, sizeof(s));
-        /*  
+      /*
+        mkerr(zz,T);
         xx=sin2(zz);
         //f = v2o(v);
         r2=dec(xx.x);
