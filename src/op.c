@@ -4323,13 +4323,13 @@ bma(s,K);
     return f;
 }
 
-MAT A2M(unsigned short A[N][K]){
+MTX A2M(unsigned short A[N][K]){
 int i,j;
-MAT J={0};
+MTX J={0};
 
     for(i=0;i<N;i++){
         for(j=0;j<K;j++)
-        J.z[i][j]=A[i][j];
+        J.x[i][j]=A[i][j];
 
     }
 
