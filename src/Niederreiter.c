@@ -49,8 +49,8 @@ unsigned short sy[K] = {0};
 //Goppa多項式
 static unsigned short g[K + 1] = {1, 0, 0, 0, 1, 0, 1};
 //{1,0,1,1};
-MAT BB = {0};
-MAT H = {0};
+MTX BB = {0};
+MTX H = {0};
 
 unsigned int AA = 0, B = 0; //, C = 0, A2 = 0;
 
@@ -1490,7 +1490,6 @@ void random_permutation(unsigned short *a)
 void P2Mat(unsigned short P[N])
 {
   int i;
-
   for (i = 0; i < N; i++)
     AH.x[i][P[i]] = 1;
 }
@@ -2134,7 +2133,7 @@ void bdet()
       //#pragma omp parallel for
       for (k = 0; k < E; k++)
       {
-        BB.z[i][j * E + k] = l % 2;
+        BB.x[i][j * E + k] = l % 2;
         l = (l >> 1);
       }
     }
@@ -2145,7 +2144,7 @@ void bdet()
     //#pragma omp parallel for
     for (j = 0; j < E * K; j++)
     {
-      printf("%d,", BB.z[i][j]);
+      printf("%d,", BB.x[i][j]);
       //dd[j] = BH[j][i];
     }
     //fwrite(dd, 1, E * K, ff);
@@ -2156,7 +2155,7 @@ void bdet()
 }
 
 //バイナリ型パリティチェック行列を生成する
-void toBit(MAT L)
+void toBit(MTX L)
 {
   int i, j, k, l;
   unsigned char dd[E * K] = {0};
@@ -2173,7 +2172,7 @@ void toBit(MAT L)
       //#pragma omp parallel for
       for (k = 0; k < E; k++)
       {
-        BB.z[i][j * E + k] = l % 2;
+        BB.x[i][j * E + k] = l % 2;
         l = (l >> 1);
       }
     }
@@ -2186,7 +2185,7 @@ void toBit(MAT L)
     //#pragma omp parallel for
     for (j = 0; j < E * K; j++)
     {
-      printf("%d,", BB.z[i][j]);
+      printf("%d,", BB.x[i][j]);
       //dd[j] = BH[j][i];
     }
     //fwrite(dd, 1, E * K, ff);
@@ -2198,7 +2197,7 @@ void toBit(MAT L)
 
 unsigned short HH[N][K];
 
-void toByte(MAT SH)
+void toByte(MTX SH)
 {
   vec v = {0};
   int i, j, k, cnt;
@@ -2210,7 +2209,7 @@ void toByte(MAT SH)
     {
       cnt = 0;
       for (k = j * E; k < j * E + E; k++)
-        v.x[cnt++] = SH.z[i][k];
+        v.x[cnt++] = SH.x[i][k];
 
       HH[i][j] = v2i(v);
       printf("%d,", HH[i][j]);
@@ -2980,11 +2979,11 @@ void readkey()
 for(i=0;i<K*E;i++){
   fread(r,1,K*E,fq);
   for(j=0;j<K*E;j++)
-  inv_S.w[i][j]=r[j];
+  inv_S.x[i][j]=r[j];
 }
   fclose(fq);
 */
-  memset(inv_S.w, 0, sizeof(inv_S.w));
+  memset(inv_S.x, 0, sizeof(inv_S.x));
   for (i = 0; i < K * E; i++)
   {
     fread(o, 2, K, fq);
@@ -2994,8 +2993,8 @@ for(i=0;i<K*E;i++){
       //printf("%d,", o[j]);
       for (int k = 0; k < E; k++)
       {
-        inv_S.w[i][j * E + k] = v.x[k];
-        //printf("%d,",inv_S.w[i][j]);
+        inv_S.x[i][j * E + k] = v.x[k];
+        //printf("%d,",inv_S.x[i][j]);
       }
     }
     //printf("\n");
@@ -3006,7 +3005,7 @@ for(i=0;i<K*E;i++){
   for (i = 0; i < K * E; i++)
   {
     for (j = 0; j < K * E; j++)
-      printf("%d,", inv_S.w[i][j]);
+      printf("%d,", inv_S.x[i][j]);
     printf("\n");
   }
   //exit(1);
@@ -3407,7 +3406,7 @@ OP pubkeygen()
   /*
 for(i=0;i<K*E;i++){
   for(j=0;j<K*E;j++)
-    n[j]=inv_S.w[i][j];  
+    n[j]=inv_S.x[i][j];  
     fwrite(n,1,K*E,fp);
 } 
 */
@@ -3420,7 +3419,7 @@ fclose(fp);
     {
       memset(v.x, 0, sizeof(v.x));
       for (k = 0; k < E; k++)
-        v.x[k] = inv_S.w[i][j * E + k];
+        v.x[k] = inv_S.x[i][j * E + k];
       n[j] = v2i(v);
       //printf("%d,", n[j]);
     }
@@ -3435,7 +3434,7 @@ fclose(fp);
   for (i = 0; i < K * E; i++)
   {
     for (j = 0; j < N; j++)
-      S.z[j][i] = H.z[P[j]][i];
+      S.x[j][i] = H.x[P[j]][i];
   }
   //binary を unsigned short にパッキング
   toByte(S);
@@ -3474,7 +3473,7 @@ OP dec(unsigned short ss[])
   for (i = 0; i < K * E; i++)
   {
     for (j = 0; j < K * E; j++)
-      h2o[i] ^= (ch[j] & inv_S.w[i][j]);
+      h2o[i] ^= (ch[j] & inv_S.x[i][j]);
   }
   //for (i = 0; i < K * E; i++)
   //printf("%d,", h2o[i]);
@@ -4188,11 +4187,9 @@ unsigned short s[K+1]={0,15,1,9,13,1,14};
   v=o2v(r1);
   printvec(v);
 //exit(1);
-
   //readkey();
   //w=setpol(g,K+1);
   //exit(1);
-
 //  elo2(r);
     exit(1);
 */
@@ -4230,7 +4227,6 @@ unsigned short tarin[N]={0};
   printpol(o2v(r1));
   printf(" =r1\n");
   //exit(1);
-
   r = sabun(r1, f);
   //r=hh.d;
   printpol(o2v(r));
@@ -4255,25 +4251,20 @@ unsigned short tarin[N]={0};
 
 /*
 while(1){
-
 //エラーベクトルを生成する
   memset(z1, 0, sizeof(z1));
   mkerr(z1, T * 2);
   //exit(1);
-
   //encryotion
   test (w, z1);
-
   //シンドロームを計算する
   f=sin2(z1);
   printpol(o2v(f));
   printf(" ==syndrome\n");
-
   //復号化の本体
   v=patterson(w, f);
   //エラー表示
   ero2(v);
-
   break;
 }
 */
