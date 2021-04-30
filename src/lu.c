@@ -7,7 +7,7 @@
 //#include "chash.c"
 
 //#define D 4096
-#define F N
+#define F K*E
 #define X (K/2+1)*E
 
 MTX inv_S = {0};
