@@ -12,7 +12,7 @@
 
 MAT inv_S = {0};
 MAT S={0};
-
+MAT SS={0};
 
 
 //unsigned char s[F] = {0};
