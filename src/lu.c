@@ -7,12 +7,12 @@
 //#include "chash.c"
 
 //#define D 4096
-#define F K*E
+#define F N
 #define X (K/2+1)*E
 
-MAT inv_S = {0};
-MAT S={0};
-MAT SS={0};
+MTX inv_S = {0};
+MTX S={0};
+MTX SS={0};
 
 
 //unsigned char s[F] = {0};
@@ -233,7 +233,7 @@ void makeS()
         {
           //
           dd[j] = cl[i][j];
-          S.w[i][j]=cl[i][j];
+          S.x[i][j]=cl[i][j];
           //printf("%d,", S.w[i][j]);
         }
 
@@ -248,7 +248,7 @@ void makeS()
         for (j = 0; j < F; j++)
         {
           dd[j] = inv_a[i][j];
-          inv_S.w[i][j]=inv_a[i][j];
+          inv_S.x[i][j]=inv_a[i][j];
           //printf("%d,", inv_S.w[i][j]);
         }
         //printf("},\n");
@@ -477,8 +477,8 @@ void mkS()
         {
           //
           dd[j] = cl[i][j];
-          S.w[i][j]=cl[i][j];
-          printf("%d,", S.w[i][j]);
+          S.x[i][j]=cl[i][j];
+          printf("%d,", S.x[i][j]);
         }
 
         printf("},\n");
@@ -492,12 +492,12 @@ void mkS()
         for (j = 0; j < X; j++)
         {
           dd[j] = inv_a[i][j];
-          inv_S.w[i][j]=inv_a[i][j];
-          printf("%d,", inv_S.w[i][j]);
+          inv_S.x[i][j]=inv_a[i][j];
+          //printf("%d,", inv_S.w[i][j]);
         }
-        printf("},\n");
+        //printf("},\n");
       }
-      printf("};\n");
+      //printf("};\n");
 
 /*
       for (i = 0; i < F; i++)
