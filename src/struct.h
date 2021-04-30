@@ -1,4 +1,4 @@
-#define DEG N+1
+#define DEG 512+1
 
 /* -*- mode: C; coding:utf-8 -*- */
 
@@ -12,12 +12,12 @@ typedef struct
 //polynomial
 typedef struct
 {
-  oterm t[DEG]; //単項式の配列として多項式を表現する
+  oterm t[N]; //単項式の配列として多項式を表現する
 } OP;
 
 typedef struct 
 {
-  unsigned short x[DEG]; //配列の添字を次数に、配列の値を係数に持つ多項式の表現
+  unsigned short x[N]; //配列の添字を次数に、配列の値を係数に持つ多項式の表現
 } vec;
 
 typedef struct {
@@ -79,16 +79,16 @@ typedef struct pub
 
 
 typedef struct {
-  unsigned short x[N][K*E];
-  unsigned char z[N][K*E];
-  unsigned char w[N][N];
+  unsigned short x[N][K*E*2];
+  unsigned short z[N][K*E*2];
+  unsigned short w[N][256];
   int i;
   int rank;
 } MAT;
 
 
 typedef struct {
-  unsigned short x[N][E*K];
+  unsigned short x[N][N];
   int row; //行
   int col; //列
 } MTX;
