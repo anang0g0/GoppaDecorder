@@ -4302,13 +4302,13 @@ for(i=0;i<K;i++)
 s[i+1]=syn[i];
 printf("rt_deco= ");
 bma(s,K);
-wait();
+//wait();
 memset(s,0,sizeof(s));
 for(i=0;i<K;i++)
 s[i+1]=m[i];
 printf("bm_deco= ");
 bma(s,K);
-wait();
+//wait();
 //exit(1);
 
     for(j=0;j<(K/2+1);j++)
