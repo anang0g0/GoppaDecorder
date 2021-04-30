@@ -9,7 +9,7 @@
 
 #define MAXN 4
 //#define N 256 //order of GF(q)
-#define F K //dimension of matrix
+#define F K*E //dimension of matrix
 
 //elements of GF16
 //static const unsigned char gf[N]={0,1,2,4,8,9,11,15,7,14,5,10,13,3,6,12};
@@ -286,7 +286,8 @@ MAT mulmat(MAT A, MAT B, int flg)
       {
         for (k = 0; k < K * E; k++)
         {
-          tmp.z[j][i] ^= gf[mlt(fg[A.w[i][k]], fg[B.z[j][k]])];
+          //tmp.z[j][i] ^= gf[mlt(fg[A.w[i][k]], fg[B.z[j][k]])];
+          tmp.z[j][i] ^= A.w[i][k]&B.z[j][k];
         }
         //printf("%d,",tmp.z[j][i]);
       }
@@ -304,7 +305,8 @@ MAT mulmat(MAT A, MAT B, int flg)
       {
         for (k = 0; k < E * (K/2+1); k++)
         {
-          tmp.w[j][i] ^= gf[mlt(fg[A.w[i][k]], fg[B.z[j][k]])];
+          //tmp.w[j][i] ^= gf[mlt(fg[A.w[i][k]], fg[B.z[j][k]])];
+          tmp.w[j][i] ^= A.w[i][k]&B.z[j][k];
         }
       }
     }
