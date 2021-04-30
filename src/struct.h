@@ -79,15 +79,6 @@ typedef struct pub
 
 
 typedef struct {
-  unsigned short x[N][K*E*2];
-  unsigned short z[N][K*E*2];
-  unsigned short w[N][256];
-  int i;
-  int rank;
-} MAT;
-
-
-typedef struct {
   unsigned short x[N][N];
   int row; //行
   int col; //列
