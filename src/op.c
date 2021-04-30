@@ -2102,7 +2102,7 @@ MAT bd2()
             }
         }
     }
-
+/*
     for (i = 0; i < N; i++)
     {
         //#pragma omp parallel for
@@ -2116,6 +2116,7 @@ MAT bd2()
     }
 //exit(1);
 //fclose(ff);
+*/
 
 return R;
 }
@@ -2179,7 +2180,7 @@ void toBit(MAT L)
         printf("\n");
     }
     //exit(1);
-
+/*
     for (i = 0; i < N; i++)
     {
         //#pragma omp parallel for
@@ -2191,7 +2192,7 @@ void toBit(MAT L)
         //fwrite(dd, 1, E * K, ff);
         printf("\n");
     }
-
+*/
     //fclose(ff);
 }
 
@@ -2216,7 +2217,7 @@ MAT toByte(MAT SH,int kk)
                 v.x[cnt++] = SH.z[i][k];
 
             HH[i][j] = v2i(v);
-            R.w[i][j]=v2i(v);
+            R.w[i][j] = v2i(v);
             printf("%d,", HH[i][j]);
             //= BH[j][i];
         }
@@ -3319,7 +3320,7 @@ aa:
     }
     //printf("\n");
     //exit(1);
-
+/*
     for (j = 0; j < N; j++)
     {
         for (i = 0; i < kk; i++)
@@ -3328,6 +3329,7 @@ aa:
     }
     //exit(1);
     //wait();
+*/
 
     return w;
 }
@@ -3344,13 +3346,14 @@ void half(int kk)
         for (j = 0; j < N; j++)
             bm[j][i] = mat[j][i * 2 - 1];
     }
+    /*
     for (i = 0; i < N; i++)
     {
         for (j = 0; j < kk+1; j++)
             printf("%d,", bm[i][j]);
         printf("  ==bm\n");
     }
-
+*/
     //exit(1);
 }
 
@@ -3391,7 +3394,7 @@ MAT mk_pub()
             //G.z[j][i] = Z.w[P[j]][i];
             G.z[j][i] = Z.w[j][i];
             Z.z[j][i]=Z.w[j][i];
-            printf("%d.",inv_S.w[j][i]);
+            //printf("%d.",inv_S.w[j][i]);
         }
         printf("\n");
     }
@@ -3410,6 +3413,7 @@ MAT mk_pub()
         for(j=0;j<K/2+1;j++)
         G.w[i][j]=FX.w[i][j];
     }
+    /*
     printf("G=\n");
     for(i=0;i<N;i++){
         for(j=0;j<K/2+1;j++)
@@ -3440,6 +3444,7 @@ MAT mk_pub()
         printf("\n");
   //  
 //exit(1);
+*/
 
     return G;
 }
@@ -4404,10 +4409,8 @@ label:
     j = 0;
     memset(zz, 0, sizeof(zz));
     //memset(s,0,sizeof(s));
-    //mkerr(zz, T);
-    zz[1]=1;
-    zz[2]=1;
-    zz[3]=1;
+    mkerr(zz, T);
+    
     for (i = 0; i < N; i++)
     {
         if (zz[i] > 0)
@@ -4467,8 +4470,8 @@ vec xx={0},vv={0};
 
     while (1)
     {
-        //memset(zz, 0, sizeof(zz));
-        //mkerr(zz, T);
+        memset(zz, 0, sizeof(zz));
+        mkerr(zz, T);
 
         // sendrier's trick
         /*
@@ -4507,9 +4510,7 @@ vec xx={0},vv={0};
 
         O=mk_pub();
         memset(zz,0,sizeof(zz));
-        zz[1]=1;
-        zz[2]=1;
-        zz[3]=1;
+        mkerr(zz,T);
         r1=sendrier2(zz,K,O);
         x=o2v(r1);
         for (i = 0; i < K; i++)
