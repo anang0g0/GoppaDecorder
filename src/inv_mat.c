@@ -134,17 +134,17 @@ printf("%f\n",det); // -> 120.000000
 
 
 //inverse matrix
-MAT matinv(MAT a, int n)
+MTX matinv(MTX a, int n)
 {
 
   //unsigned short a[F][F];     //={{1,2,0,1},{1,1,2,0},{2,0,1,1},{1,2,1,1}}; //入力用の配列
-  unsigned short inv_a[F][F]; //ここに逆行列が入る
+  unsigned short inv_a[N][N]; //ここに逆行列が入る
   unsigned short buf;         //一時的なデータを蓄える
   unsigned short b[N][N] = {0}, dd[N][N] = {0};
   int i, j, k, count; //カウンタ
 
   unsigned short c[N][N] = {0};
-  MAT z = {0};
+  MTX z = {0};
   unsigned short cc[N][N] = {0};
 
 lab:
@@ -163,7 +163,7 @@ lab:
   for (i = 0; i < n; i++)
   {
     for (j = 0; j < F; j++)
-      c[i][j] = a.w[i][j];
+      c[i][j] = a.x[i][j];
   }
   //単位行列を作る
   for (i = 0; i < n; i++)
@@ -177,20 +177,20 @@ lab:
   #pragma omp parallel for num_threads(omp_get_max_threads()) //private(i,j,k)
   for (i = 0; i < n; i++)
   {
-    buf = gf[Inv(fg[a.w[i][i]])];
+    buf = gf[Inv(fg[a.x[i][i]])];
     for (j = 0; j < n; j++)
     {
-      a.w[i][j] = gf[mlt(fg[buf], fg[a.w[i][j]])];
+      a.x[i][j] = gf[mlt(fg[buf], fg[a.x[i][j]])];
       inv_a[i][j] = gf[mlt(fg[buf], fg[inv_a[i][j]])];
     }
     for (j = 0; j < n; j++)
     {
       if (i != j)
       {
-        buf = a.w[j][i];
+        buf = a.x[j][i];
         for (k = 0; k < n; k++)
         {
-          a.w[j][k] ^= gf[mlt(fg[a.w[i][k]], fg[buf])];
+          a.x[j][k] ^= gf[mlt(fg[a.x[i][k]], fg[buf])];
           inv_a[j][k] ^= gf[mlt(fg[inv_a[i][k]], fg[buf])];
         }
       }
@@ -272,10 +272,10 @@ lab:
   return z;
 }
 
-MAT mulmat(MAT A, MAT B, int flg)
+MTX mulmat(MTX A, MTX B, int flg)
 {
   int i, j, k;
-  MAT tmp = {0};
+  MTX tmp = {0};
 
   if (flg == 1)
   {
@@ -287,7 +287,7 @@ MAT mulmat(MAT A, MAT B, int flg)
         for (k = 0; k < K * E; k++)
         {
           //tmp.z[j][i] ^= gf[mlt(fg[A.w[i][k]], fg[B.z[j][k]])];
-          tmp.z[j][i] ^= A.w[i][k]&B.z[j][k];
+          tmp.x[j][i] ^= A.x[i][k]&B.x[j][k];
         }
         //printf("%d,",tmp.z[j][i]);
       }
@@ -306,7 +306,7 @@ MAT mulmat(MAT A, MAT B, int flg)
         for (k = 0; k < E * (K/2+1); k++)
         {
           //tmp.w[j][i] ^= gf[mlt(fg[A.w[i][k]], fg[B.z[j][k]])];
-          tmp.w[j][i] ^= A.w[i][k]&B.z[j][k];
+          tmp.x[j][i] ^= A.x[i][k]&B.x[j][k];
         }
       }
     }
@@ -320,7 +320,7 @@ MAT mulmat(MAT A, MAT B, int flg)
       {
         for (k = 0; k < K; k++)
         {
-          tmp.w[i][j] ^= gf[mlt(fg[A.w[i][k]], fg[B.z[k][j]])];
+          tmp.x[i][j] ^= gf[mlt(fg[A.x[i][k]], fg[B.x[k][j]])];
         }
       }
     }
