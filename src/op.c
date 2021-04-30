@@ -4280,7 +4280,7 @@ OP sendrier2(unsigned short zz[N], int kk ,MAT L)
             //wait();
             t=newhalf(tmp);
             for(i=0;i<K;i++)
-            m[i+1]^=t.x[i];
+            m[i]^=t.x[i];
             v=newhalf(u.x);
             for(i=0;i<K;i++)
             syn[i]^=v.x[i];
@@ -4293,11 +4293,17 @@ for(i=0;i<N;i++)
 printf("%d,",P[i]);
 printf("\n");
 
+for(i=0;i<K;i++)
+s[i+1]=syn[i];
 printf("rt_deco= ");
-bma(syn,K);
-
+bma(s,K);
+wait();
+memset(s,0,sizeof(s));
+for(i=0;i<K;i++)
+s[i+1]=m[i];
 printf("bm_deco= ");
-bma(m,K);
+bma(s,K);
+wait();
 //exit(1);
 
     for(j=0;j<(K/2+1);j++)
