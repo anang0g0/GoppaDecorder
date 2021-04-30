@@ -25,10 +25,10 @@ typedef struct {
   OP r;
 } rem;
 
-typedef union
+typedef struct
 {
   unsigned short v[N];
-  unsigned long long int u[N / 4];
+  int f;
 } MT;
 
 //extra gcd
