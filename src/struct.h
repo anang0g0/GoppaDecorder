@@ -1,4 +1,4 @@
-#define DEG 512 + 1
+#define DEG N+1
 
 /* -*- mode: C; coding:utf-8 -*- */
 
@@ -68,27 +68,27 @@ typedef struct
 
 typedef struct aN
 {
-  unsigned char ar[8192];
+  unsigned char ar[N];
 } arrayn;
 
 typedef struct pub
 {
-  unsigned char a[8192];
-  unsigned char b[8192];
+  unsigned char a[N];
+  unsigned char b[N];
 } set;
 
 
 typedef struct {
-  unsigned short x[N][K];
+  unsigned short x[N][K*E];
   unsigned char z[N][K*E];
-  unsigned char w[K*E][K*E];
+  unsigned char w[N][N];
   int i;
   int rank;
 } MAT;
 
 
 typedef struct {
-  unsigned short x[E*K][N];
+  unsigned short x[N][E*K];
   int row; //行
   int col; //列
 } MTX;
