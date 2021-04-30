@@ -3438,7 +3438,6 @@ MTX mk_pub()
     printf("%d,",bm[1][i]^bm[2][i]^bm[3][i]);
     printf("\n");
     //exit(1);
-
     printf("mk_bin=\n");
         for(j=0;j<(K/2+1)*E;j++)
         printf("%d,",G.z[1][j]^G.z[2][j]^G.z[3][j]);
@@ -3447,7 +3446,7 @@ MTX mk_pub()
 //exit(1);
 */
 
-    return G_int;
+    return G_bin;
 }
 
 //Niederreiter暗号の公開鍵を作る
@@ -3967,15 +3966,11 @@ int i,j,k;
 vec v={0},x={0};
 OP s={0},r={0};
 unsigned short ch[(K/2+1) * E] = {0};
-
-
     for (j = 0; j < K/2+1; j++)
         printf("%d,", ss[j]);
     printf(" ==ss\n");
     //exit(1);
-
     unsigned char h2o[(K/2+1) * E] = {0};
-
     for (i = 0; i < K/2+1; i++)
     {
         v = i2v(ss[i]);
@@ -3985,9 +3980,7 @@ unsigned short ch[(K/2+1) * E] = {0};
     for (i = 0; i < (K/2+1) * E; i++)
     printf("%d", ch[i]);
     printf("  ==ch\n");
-
     unsigned short uk[K/2+1] = {0};
-
     for (i = 0; i < (K/2+1) * E; i++)
     {
         //h2o[i]=0;
@@ -3997,7 +3990,6 @@ unsigned short ch[(K/2+1) * E] = {0};
     for (i = 0; i < (K/2+1) * E; i++)
     printf("%d,", h2o[i]);
     printf("  ==h2o\n");
-
     for (i = 0; i < K/2+1; i++)
     {
         memset(v.x, 0, sizeof(v.x));
@@ -4012,12 +4004,11 @@ unsigned short ch[(K/2+1) * E] = {0};
     s = setpol(uk, K/2+1);
     x=newhalf(uk);
     r=v2o(x);
-
 return r;
 }
 */
 
-vec sin2(unsigned short zz[])
+vec sin2(unsigned short zz[],MTX R)
 {
     int i, j;
     OP s = {0};
@@ -4031,8 +4022,8 @@ vec sin2(unsigned short zz[])
             for (j = 0; j < K; j++)
             {
                 //ss[j]
-                v.x[j] ^= HH[i][j];
-                printf("%d,", HH[i][j]);
+                v.x[j] ^= R.x[i][j];
+                printf("%d,", R.x[i][j]);
             }
         }
         printf("\n");
@@ -4321,6 +4312,84 @@ OP sendrier2(unsigned short zz[N], int kk, MTX L)
     return f;
 }
 
+
+OP sendril(unsigned short zz[N], int kk, MTX L)
+{
+    unsigned short syn[K + 1] = {0}, s[K + 1] = {0}, rt[K / 2 + 1] = {0}, uu[(K / 2 + 1) * E] = {0}, es[(K / 2 + 1) * E] = {0};
+    int i, j, k, count = 0;
+    OP f = {0}, w = {0};
+    vec v = {0}, x = {0}, u = {0}, t = {0};
+    unsigned short tmp[(K / 2 + 1) * E] = {0}, m[K + 1] = {0};
+
+    for (j = 0; j < N; j++)
+    {
+        if (zz[j] > 0)
+        {
+            //for(i=0;i<(K/2)+1;i++){
+
+            //memcpy(syn, L.w[j], sizeof(syn));
+
+            for (k = 0; k < K / 2 + 1; k++)
+            {
+                rt[k] = L.x[j][k];
+                //rt[k] = bm[j][k];
+            }
+
+            x = bfd(rt);
+            for (i = 0; i < K / 2 + 1; i++)
+                u.x[K / 2 - i] = x.x[i];
+
+            printf("rt=\n");
+            for (i = 0; i < K / 2 + 1; i++)
+                printf("%d,", u.x[i]);
+            printf("\n");
+            printf("bm_in se2 == %d || ", j);
+            for (i = 0; i < K / 2 + 1; i++)
+            {
+                printf("%d,", bm[j][i]);
+                tmp[i] = bm[j][i];
+            }
+            printf("\n");
+            //wait();
+            t = newhalf(tmp);
+            for (i = 0; i < K; i++)
+                m[i] ^= t.x[i];
+            v = newhalf(u.x);
+            for (i = 0; i < K; i++)
+                syn[i] ^= v.x[i];
+        }
+    }
+
+    printf("P= ");
+    for (i = 0; i < N; i++)
+        printf("%d,", P[i]);
+    printf("\n");
+
+    for (i = 0; i < K; i++)
+        s[i + 1] = syn[i];
+    printf("rt_deco= ");
+    bma(s, K);
+    //wait();
+    memset(s, 0, sizeof(s));
+    for (i = 0; i < K; i++)
+        s[i + 1] = m[i];
+    printf("bm_deco= ");
+    bma(s, K);
+    //wait();
+    //exit(1);
+
+    for (j = 0; j < (K / 2 + 1); j++)
+        printf("%d,", L.x[1][j] ^ L.x[2][j] ^ L.x[3][j]);
+    printf("\n");
+    for (j = 0; j < K / 2 + 1; j++)
+        printf("%d,", rt[j]);
+    printf("\n");
+    //    exit(1);
+    f = setpol(syn, K);
+
+    return f;
+}
+
 MTX A2M(unsigned short A[N][K])
 {
     int i, j;
@@ -4390,14 +4459,18 @@ bm:
 
     j = 0;
     vec xx = {0}, vv = {0};
+    unsigned short s[K]={0};
 
+      
+    
+    
     while (1)
     {
         memset(s, 0, sizeof(s));
 
         memset(zz, 0, sizeof(zz));
         mkerr(zz, T);
-        r1 = sendrier2(zz, K, O);
+        r1 = sendril(zz, K, O);
         x = o2v(r1);
         for (i = 0; i < K; i++)
             s[i + 1] = x.x[i];
@@ -4406,7 +4479,7 @@ bm:
 
         for (i = 0; i < N; i++)
             if (zz[i] > 0)
-                printf("%d,", i);
+                printf("%d %d\n", i,zz[i]);
         printf("\n");
 
         if (odeg(f) < T)
@@ -4441,24 +4514,5 @@ bm:
         //printf("\n");
         f = bma(s, K);
         //exit(1);
-        wait();
-        */
-      /*
-        mkerr(zz,T);
-        xx=sin2(zz);
-        //f = v2o(v);
-        r2=dec(xx.x);
-        vv=o2v(r2);
-
-        for (i = 0; i < K; i++)
-            s[i + 1] = vv.x[i];
-        
-        //for (i = 0; i < K; i++)
-        //    printf("%d,", s[i]);
-        //printf("\n");
-        f = bma(s, K);
-        x=chen(f);
-        //r=v2o(x);
-        ero2(x);
         wait();
         */
