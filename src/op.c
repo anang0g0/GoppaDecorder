@@ -59,8 +59,8 @@ static unsigned short g[K + 1] = {0};
 //{1, 0, 0, 0, 1, 0, 1};
 //
 
-MAT BB = {0};
-MAT H = {0};
+MTX BB = {0};
+MTX H = {0};
 
 unsigned int AA = 0, B = 0; //, C = 0, A2 = 0;
 
@@ -103,9 +103,9 @@ vec o2v(OP f)
     vec a = {0};
     int i;
 
-    for (i = 0; i < DEG; i++)
+    for (i = 0; i < K*E; i++)
     {
-        if (f.t[i].a > 0 && f.t[i].n < DEG)
+        if (f.t[i].a > 0 && f.t[i].n < K*E)
             a.x[f.t[i].n] = f.t[i].a;
     }
 
@@ -119,7 +119,7 @@ OP v2o(vec a)
     OP f = {0};
 
     //#pragma omp parallel for
-    for (i = 0; i < DEG; i++)
+    for (i = 0; i < K*E; i++)
     {
         if (a.x[i] > 0)
         {
@@ -2036,12 +2036,12 @@ OP setpol(unsigned short f[], int n)
 }
 
 //バイナリ型パリティチェック行列を生成する
-MAT bdet()
+MTX bdet()
 {
     int i, j, k, l;
     unsigned char dd[E * K] = {0};
     FILE *ff;
-    MAT R={0};
+    MTX R={0};
 
     //ff = fopen("Hb.key", "wb");
 
@@ -2053,7 +2053,7 @@ MAT bdet()
             //#pragma omp parallel for
             for (k = 0; k < E; k++)
             {
-                R.z[i][j * E + k] = l % 2;
+                R.x[i][j * E + k] = l % 2;
                 l = (l >> 1);
             }
         }
@@ -2064,7 +2064,7 @@ MAT bdet()
         //#pragma omp parallel for
         for (j = 0; j < E * K; j++)
         {
-            printf("%d,", R.z[i][j]);
+            printf("%d,", R.x[i][j]);
             //dd[j] = BH[j][i];
         }
         //fwrite(dd, 1, E * K, ff);
@@ -2075,13 +2075,13 @@ MAT bdet()
     return R;
 }
 
-MAT bd2()
+MTX bd2()
 {
     int i, j, k, l;
     unsigned char dd[E * K] = {0};
     FILE *ff;
     vec v={0};
-    MAT R={0};
+    MTX R={0};
 
     //ff = fopen("Hb.key", "wb");
     
@@ -2097,7 +2097,7 @@ MAT bd2()
             //#pragma omp parallel for
             for (k = 0; k < E; k++)
             {
-                R.z[i][j * E + k] = v.x[k];
+                R.x[i][j * E + k] = v.x[k];
                 //l = (l >> 1);
             }
         }
@@ -2156,7 +2156,7 @@ return n;
 
 
 //バイナリ型パリティチェック行列を生成する
-void toBit(MAT L)
+void toBit(MTX L)
 {
     int i, j, k, l;
     unsigned char dd[E * K] = {0};
@@ -2173,7 +2173,7 @@ void toBit(MAT L)
             //#pragma omp parallel for
             for (k = 0; k < E; k++)
             {
-                BB.z[i][j * E + k] = l % 2;
+                BB.x[i][j * E + k] = l % 2;
                 l = (l >> 1);
             }
         }
@@ -2199,11 +2199,11 @@ void toBit(MAT L)
 unsigned short HH[N][K];
 unsigned short TE[N][K/2+1];
 
-MAT toByte(MAT SH,int kk)
+MTX toByte(MTX SH,int kk)
 {
     vec v = {0};
     int i, j, k, cnt;
-    MAT R={0};
+    MTX R={0};
     
     memset(HH,0,sizeof(HH));
     printf("HH=");
@@ -2214,11 +2214,11 @@ MAT toByte(MAT SH,int kk)
         {
             cnt = 0;
             for (k = j * E; k < j * E + E; k++)
-                v.x[cnt++] = SH.z[i][k];
+                v.x[cnt++] = SH.x[i][k];
 
             HH[i][j] = v2i(v);
-            R.w[i][j] = v2i(v);
-            printf("%d,", HH[i][j]);
+            R.x[i][j] = v2i(v);
+            //printf("%d,", HH[i][j]);
             //= BH[j][i];
         }
         //fwrite(dd, 1, E * K, ff);
@@ -3359,17 +3359,17 @@ void half(int kk)
 
 
 //Niederreiter暗号の公開鍵を作る
-MAT mk_pub()
+MTX mk_pub()
 {
     int i, j, k, l;
     FILE *fp;
     unsigned char dd[E * K] = {0};
     OP w = {0};
-    MAT Z={0},FX={0},G={0},R={0},O={0};
+    MTX Z={0},FX={0},G_bin={0},G_int={0},R={0},O={0};
 
-    //w = mkc(w,K*2);
+    w = mkc(w,K*2);
     //w = mkg(K);
-    //half(K/2+1);
+    half(K/2+1);
 
     oprintpol(w);
     printf("\n");
@@ -3380,7 +3380,7 @@ MAT mk_pub()
     R=bd2();
     printf("deco_rev= ");
     for(i=0;i<(K/2+1)*E;i++)
-    printf("%d,",R.z[1][i]^R.z[2][i]^R.z[3][i]);
+    printf("%d,",R.x[1][i]^R.x[2][i]^R.x[3][i]);
     printf("\n");
     //Pgen();
     mkS();
@@ -3392,13 +3392,13 @@ MAT mk_pub()
     {
         for (i = 0; i < (K/2+1) * E; i++){
             //G.z[j][i] = Z.w[P[j]][i];
-            G.z[j][i] = Z.w[j][i];
-            Z.z[j][i]=Z.w[j][i];
+            G_bin.x[j][i] = Z.x[j][i];
+            //Z.x[j][i]=Z.x[j][i];
             //printf("%d.",inv_S.w[j][i]);
         }
-        printf("\n");
+        //printf("\n");
     }
-    printf("\n");
+    //printf("\n");
     
     /*
     G=mulmat(inv_S,Z,2);
@@ -3408,10 +3408,10 @@ MAT mk_pub()
     }
     */
 
-    FX=toByte(G,K/2+1);
+    FX=toByte(G_bin,K/2+1);
     for(i=0;i<N;i++){
         for(j=0;j<K/2+1;j++)
-        G.w[i][j]=FX.w[i][j];
+        G_int.x[i][j]=FX.x[i][j];
     }
     /*
     printf("G=\n");
@@ -3446,18 +3446,18 @@ MAT mk_pub()
 //exit(1);
 */
 
-    return G;
+    return G_int;
 }
 
 
 //Niederreiter暗号の公開鍵を作る
-MAT pubkeygen()
+MTX pubkeygen()
 {
     int i, j, k, l;
     FILE *fp;
     unsigned char dd[E * K] = {0};
     OP w = {0};
-    MAT R={0},O={0},Q={0};
+    MTX R={0},R_bin={0},O={0},Q={0},O_bin={0};
 
     w = mkc(w,K*2);
     //w = mkg(K);
@@ -3479,13 +3479,13 @@ MAT pubkeygen()
     {
         for (j = 0; j < N; j++){
             //O.z[j][i] = H.z[P[j]][i];
-            O.z[j][i] = H.z[j][i];
+            O_bin.x[j][i] = H.x[j][i];
         }
     }
     R=toByte(O,K);
     for(i=0;i<N;i++){
         for(j=0;j<K*E;j++)
-        R.z[i][j]=O.z[i][j];
+        R_bin.x[i][j]=O_bin.x[i][j];
     }
 
     return R;
@@ -3497,8 +3497,8 @@ OP dec(unsigned short ss[])
   int i, j, k;
   vec v = {0};
   OP s = {0};
-  unsigned ch[K * E] = {0};
-  unsigned char h2o[K * E] = {0};
+  unsigned ch[K*E] = {0};
+  unsigned char h2o[K*E] = {0};
 
   for (i = 0; i < K; i++)
   {
@@ -3515,7 +3515,7 @@ OP dec(unsigned short ss[])
   for (i = 0; i < K * E; i++)
   {
     for (j = 0; j < K * E; j++)
-      h2o[i] ^= (ch[j] & inv_S.w[i][j]);
+      h2o[i] ^= (ch[j] & inv_S.x[i][j]);
   }
   //for (i = 0; i < K * E; i++)
   //printf("%d,", h2o[i]);
@@ -3898,8 +3898,8 @@ vec bfd(unsigned short ss[])
   int i, j, k,count=0;
   vec v = {0};
   OP s = {0};
-  unsigned ch[(K/2+1) * E] = {0};
-  unsigned char h2o[(K/2+1) * E] = {0};
+  unsigned ch[K * E*2] = {0};
+  unsigned char h2o[K * E*2] = {0};
 
 //count=(K/2+1)*E-1;
   for (i = 0; i < (K/2)+1; i++)
@@ -3921,7 +3921,7 @@ vec bfd(unsigned short ss[])
   for (i = 0; i < (K/2+1) * E; i++)
   {
     for (j = 0; j < (K/2+1) * E; j++)
-      h2o[i] ^= (ch[j] & inv_S.w[i][j]);
+      h2o[i] ^= (ch[j] & inv_S.x[i][j]);
   }
 
 printf("deco_bin=\n");
@@ -4245,7 +4245,7 @@ OP sendrier(unsigned short zz[N], int kk)
 
 
 
-OP sendrier2(unsigned short zz[N], int kk ,MAT L)
+OP sendrier2(unsigned short zz[N], int kk ,MTX L)
 {
     unsigned short syn[K+1] = {0}, s[K+1] = {0}, rt[K/2+1] = {0},uu[(K/2+1)*E]={0},es[(K/2+1)*E]={0};
     int i, j, k,count=0;
@@ -4263,7 +4263,7 @@ OP sendrier2(unsigned short zz[N], int kk ,MAT L)
             //memcpy(syn, L.w[j], sizeof(syn));
         
             for (k = 0; k < K/2+1; k++){
-                rt[k] = L.w[j][k]; 
+                rt[k] = L.x[j][k]; 
                 //rt[k] = bm[j][k]; 
             }
             
@@ -4312,7 +4312,7 @@ wait();
 //exit(1);
 
     for(j=0;j<(K/2+1);j++)
-    printf("%d,",L.w[1][j]^L.w[2][j]^L.w[3][j]);
+    printf("%d,",L.x[1][j]^L.x[2][j]^L.x[3][j]);
     printf("\n");
     for(j=0;j<K/2+1;j++)
     printf("%d,",rt[j]);
@@ -4354,7 +4354,7 @@ int main(void)
     OP g1 = {0}, tmp = {
                      0};
     int fail = 0;
-    MAT R={0},O={0};
+    MTX R={0},O={0};
 
 
     if (K > N)
@@ -4439,7 +4439,7 @@ bm:
     //public-key generation (slow)
 
     //exit(1);
-    R=pubkeygen();
+    //R=pubkeygen();
     //full rank matrix
     //w = mkc(r, K * 2);
     //w=mkg(K);
@@ -4489,7 +4489,7 @@ vec xx={0},vv={0};
         */
         
         memset(s,0,sizeof(s));
-        
+      /*  
         xx=sin2(zz);
         //f = v2o(v);
         r2=dec(xx.x);
@@ -4506,7 +4506,7 @@ vec xx={0},vv={0};
         //r=v2o(x);
         ero2(x);
         wait();
-        
+        */
 
         O=mk_pub();
         memset(zz,0,sizeof(zz));
