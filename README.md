@@ -61,14 +61,16 @@ int  j = 0,count=0,k=0;
             if (z1[i] > 0)
             printf("error position= %d %d\n", i, z1[i]);
         }
-        if (count < 0)
+        if (count < T)
         {
              printpol(o2v(w));
              printf(" == Goppa polynomial\n");
              exit(1);
         }
         j++;
+        if(count == T)
         printf("err=%dっ！！\n", count);
+
         if (j == 10000)
             exit(1);
     }
