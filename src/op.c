@@ -4353,7 +4353,7 @@ int main(void)
     //{1,2,3,4,1};
     //memset(g,0,K+1);
     //g[0]=1;
-
+/*
     a = 12345;
     printf("b=%d\n", a);
     v = i2v(a);
@@ -4364,6 +4364,7 @@ int main(void)
     printf("b=%d\n", b);
     //exit(1);
     fun();
+    */
     //exit(1);
     unsigned char ch[E * K] = {0};
 //  unsigned short s[K+1]={0};
