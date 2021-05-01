@@ -4352,13 +4352,12 @@ vec sendrier2(unsigned short zz[N], int kk, MTX L)
 
 vec ink(vec f)
 {
-    int i,j;
-    vec v={0},x={0},u={0};
-    unsigned short syn[K]={0};
-
+    int i, j;
+    vec v = {0}, x = {0}, u = {0};
+    unsigned short syn[K] = {0};
 
     //v=o2v(f);
-    x = bfd(f.x);  //rt
+    x = bfd(f.x); //rt
     for (i = 0; i < K / 2 + 1; i++)
         u.x[K / 2 - i] = x.x[i];
 
@@ -4414,7 +4413,7 @@ vec ink(vec f)
     //    exit(1);
     */
 
-return v;
+    return v;
 }
 
 MTX A2M(unsigned short A[N][K])
@@ -4443,7 +4442,7 @@ int main(void)
     int flg, o1 = 0;
     OP f = {0}, r = {0}, w = {0}, ff = {0}, tt = {0};
     EX hh = {0};
-    vec v, x = {0},u={0};
+    vec v, x = {0}, u = {0};
     time_t t;
     OP r1 = {0}, r2 = {0}, r3 = {0}, r4 = {0};
     OP g1 = {0}, tmp = {
@@ -4601,20 +4600,19 @@ printf("\n");
         ero2(x);
         //exit(1);
         wait();
-
+        
+        //公開鍵を生成
         O = mk_pub();
         memset(zz, 0, sizeof(zz));
         mkerr(zz, T);
 
-        // sendrier2ではnewhalfを使う。(鍵サイズは K/2)
+        // 暗号化関数：sendrier2では鍵サイズ、暗号文サイズは K/2。
         x = sendrier2(zz, K, O);
-        u=ink(x);
-        //x = o2v(r1);
+
+        // 復号関数(newhalfで2倍サイズのシンドロームを生成して復号)
+        u = ink(x);
         for (i = 0; i < K; i++)
             s[i + 1] = u.x[i];
-        //for (i = 0; i < K; i++)
-        //    printf("%d,", s[i]);
-        //printf("\n");
 
         f = bma(s, K);
 
