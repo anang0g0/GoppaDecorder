@@ -12,12 +12,12 @@ typedef struct
 //polynomial
 typedef struct
 {
-  oterm t[512]; //単項式の配列として多項式を表現する
+  oterm t[DEG]; //単項式の配列として多項式を表現する
 } OP;
 
 typedef struct 
 {
-  unsigned short x[512]; //配列の添字を次数に、配列の値を係数に持つ多項式の表現
+  unsigned short x[DEG]; //配列の添字を次数に、配列の値を係数に持つ多項式の表現
 } vec;
 
 typedef struct {
@@ -27,7 +27,7 @@ typedef struct {
 
 typedef struct
 {
-  unsigned short v[512];
+  unsigned short v[N];
   int f;
 } MT;
 
