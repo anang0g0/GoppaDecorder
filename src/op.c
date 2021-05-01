@@ -3296,36 +3296,125 @@ aa:
     printf("\nすげ、オレもうイキそ・・・\n");
     //keygen(g);
     //exit(1);
-/*
+
     for (j = 0; j < N; j++)
     {
         for (i = 0; i < kk; i++)
         {
-            ma[j][i] = gf[mlt(fg[vb[i][j]], tr[j])];
+            mat[j][i] = gf[mlt(fg[vb[i][j]], tr[j])];
         }
         //printf("tr[%d]=%d\n",j,tr[j]);
     }
-
-    unsigned short s;
-    //#pragma omp parallel for default(none) private(i, j, k, s) shared(mat, gt, ma, gf, fg)
-    for (i = 0; i < kk; i++)
+    
+    
+   
+    //printf("\n");
+    //exit(1);
+    /*
+    for (j = 0; j < N; j++)
     {
-        for (j = 0; j < N; j++)
-        {
-            s = 0;
+        for (i = 0; i < kk; i++)
+            printf("%d,", mat[j][i]);
+        printf("\n");
+    }
+    //exit(1);
+    //wait();
+*/
 
-            for (k = 0; k < kk; k++)
-                s ^= gf[mlt(fg[gt[k][i]], fg[ma[j][k]])];
-            //printf("%d,",s);
-            mat[j][i] = s;
+    return w;
+}
+
+
+OP mkd(OP w, int kk)
+{
+    int i, j, k, l, ii = 0;
+
+    unsigned short tr[N] = {0};
+    unsigned short ta[N] = {0};
+    vec v = {0};
+    unsigned short po[K + 1] = {1, 0, 1, 0, 5};
+    //OP w={0};
+    OP r = {0};
+
+aa:
+
+    //printf("\n");
+    memset(mat, 0, sizeof(mat));
+    //既約性判定のためのBen-Orアルゴリズム。拡大体にも対応している。デフォルトでGF(8192)
+    //既約多項式しか使わない。
+
+    l = -1;
+    ii = 0;
+    // irreducible goppa code (既役多項式が必要なら、ここのコメントを外すこと。)
+    /*
+    while (l == -1)
+    {
+        w = mkpol();
+        l = ben_or(w);
+        printf("irr=%d\n", l);
+        if (ii > 300)
+        {
+            printf("too many error\n");
+            exit(1);
+        }
+        ii++;
+        //
+    }
+*/
+    // separable goppa code
+    w = mkpol();
+    r = w;
+    //  r=omul(w,w);
+    memset(ta, 0, sizeof(ta));
+    //w = setpol(g, K + 1);
+    printpol(o2v(r));
+    //printf(" =poly\n");
+
+    //多項式の値が0でないことを確認
+    for (i = 0; i < N; i++)
+    {
+        ta[i] = trace(r, i);
+        if (ta[i] == 0)
+        {
+            printf("trace 0 @ %d\n", i);
+            //fail = 1;
+            goto aa;
         }
     }
-    */
+    for (i = 0; i < N; i++)
+    {
+        tr[i] = oinv(ta[i]);
+        //printf("%d,", tr[i]);
+    }
+    memset(g, 0, sizeof(g));
+    g[0] = 1;
+
+    //多項式を固定したい場合コメントアウトする。
+    oprintpol(r);
+    printf("\n");
+    printsage(o2v(r));
+    printf("\n");
+    printf("sagemath で既約性を検査してください！\n");
+    memset(v.x, 0, sizeof(v.x));
+    //  v=rev(w);
+    van(kk);
+    //  v=o2v(w);
+    ogt(g, kk);
+
+    //wait();
+
+    //#pragma omp parallel for
+
+    printf("\nすげ、オレもうイキそ・・・\n");
+    //keygen(g);
+    //exit(1);
+    
    for(i=0;i<N;i++){
        for(j=0;j<kk;j++){
            mat[i][j]=vb[j][i];
        }
    }
+   
     //printf("\n");
     //exit(1);
     /*
@@ -3373,7 +3462,7 @@ MTX mk_pub()
     OP w = {0};
     MTX Z = {0}, FX = {0}, G_bin = {0}, G_int = {0}, R = {0}, O = {0};
 
-    w = mkc(w, K * 2);
+    w = mkd(w, K * 2);
     //w = mkg(K);
     half(K / 2 + 1);
 
@@ -3465,7 +3554,7 @@ MTX pubkeygen()
     OP w = {0};
     MTX R = {0}, R_bin = {0}, O = {0}, Q = {0}, O_bin = {0};
 
-    w = mkc(w, K * 2);
+    w = mkd(w, K * 2);
     //w = mkg(K);
     half(K / 2 + 1);
 
@@ -3892,7 +3981,7 @@ vec newhalf(unsigned short e[])
     //exit(1);
 
 
-    
+
     v.x[0]=e[0];
     v.x[1]=e[1];
     k=2;
@@ -3906,7 +3995,7 @@ for(i=2;i<K;i++){
 }
 
 /*
-    //v.x[0] = gf[mlt(fg[e[0]], fg[e[0]])];
+    v.x[0] = gf[mlt(fg[e[0]], fg[e[0]])];
     for (i = 1; i < K / 2 + 1; i++)
     {
         //printf("i=%d\n",i);
