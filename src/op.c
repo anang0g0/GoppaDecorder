@@ -3297,17 +3297,29 @@ aa:
     //keygen(g);
     //exit(1);
 
-    for (j = 0; j < N; j++)
+    
+       for (j = 0; j < N; j++)
     {
         for (i = 0; i < kk; i++)
         {
-            mat[j][i] = gf[mlt(fg[vb[i][j]], tr[j])];
+            ma[j][i] = gf[mlt(fg[vb[i][j]], tr[j])];
         }
         //printf("tr[%d]=%d\n",j,tr[j]);
     }
+    unsigned short s;
+    //#pragma omp parallel for default(none) private(i, j, k, s) shared(mat, gt, ma, gf, fg)
+    for (i = 0; i < kk; i++)
+    {
+        for (j = 0; j < N; j++)
+        {
+            s = 0;
+            for (k = 0; k < kk; k++)
+                s ^= gf[mlt(fg[gt[k][i]], fg[ma[j][k]])];
+            //printf("%d,",s);
+            mat[j][i] = s;
+        }
+    }
     
-    
-   
     //printf("\n");
     //exit(1);
     /*
@@ -3554,7 +3566,7 @@ MTX pubkeygen()
     OP w = {0};
     MTX R = {0}, R_bin = {0}, O = {0}, Q = {0}, O_bin = {0};
 
-    w = mkd(w, K * 2);
+    w = mkc(w, K * 2);
     //w = mkg(K);
     half(K / 2 + 1);
 
@@ -3971,7 +3983,7 @@ void fun()
     }
 }
 
-vec newhalf(unsigned short e[])
+vec newhalf(unsigned short e[],int a)
 {
     int i, j, k;
     vec v = {0};
@@ -3980,8 +3992,8 @@ vec newhalf(unsigned short e[])
         printf("e=%d\n", e[i]);
     //exit(1);
 
-
-
+// when use mkd
+if(a==0){
     v.x[0]=e[0];
     v.x[1]=e[1];
     k=2;
@@ -3993,8 +4005,11 @@ for(i=2;i<K;i++){
     if(i%2==0)
     v.x[i]=gf[mlt(fg[v.x[i/2]],fg[v.x[i/2]])];
 }
+}
+else
+{
+// when use mkc
 
-/*
     v.x[0] = gf[mlt(fg[e[0]], fg[e[0]])];
     for (i = 1; i < K / 2 + 1; i++)
     {
@@ -4004,7 +4019,8 @@ for(i=2;i<K;i++){
             v.x[i * 2] = gf[mlt(fg[e[1]], fg[e[i]])];
         
     }
-*/
+}
+
     return v;
 }
 
@@ -4289,7 +4305,7 @@ OP sendrier(unsigned short zz[N], int kk)
         }
     }
             printf("\n");
-            v = newhalf(syn);
+            v = newhalf(syn,0);
             //printf("%d\n",j);
             for (k = 0; k < kk; k++)
                 rt[k] = v.x[k];
@@ -4345,15 +4361,16 @@ OP sendrier2(unsigned short zz[N], int kk, MTX L)
             }
             printf("\n");
             //wait();
-            t = newhalf(tmp);
+            t = newhalf(tmp,0);
             for (i = 0; i < K; i++)
                 m[i] ^= t.x[i];
-            v = newhalf(u.x);
+            v = newhalf(u.x,0);
             for (i = 0; i < K; i++)
                 syn[i] ^= v.x[i];
         //}
     //}
 
+/*
     printf("P= ");
     for (i = 0; i < N; i++)
         printf("%d,", P[i]);
@@ -4363,7 +4380,7 @@ OP sendrier2(unsigned short zz[N], int kk, MTX L)
         s[i + 1] = syn[i];
     printf("rt_deco= ");
     bma(s, K);
-    exit(1);
+    //exit(1);
     //wait();
     memset(s, 0, sizeof(s));
     for (i = 0; i < K; i++)
@@ -4380,6 +4397,7 @@ OP sendrier2(unsigned short zz[N], int kk, MTX L)
         printf("%d,", rt[j]);
     printf("\n");
     //    exit(1);
+    */
     f = setpol(syn, K);
 
     return f;
@@ -4535,6 +4553,7 @@ printf("\n");
         memset(zz, 0, sizeof(zz));
         mkerr(zz, T);
 
+/*
         // sendrier's trick
         
         r2 = sendrier(zz, K);
@@ -4548,10 +4567,10 @@ printf("\n");
         f = bma(s, K);
         //exit(1);
         wait();
+  */      
         
-
         memset(s, 0, sizeof(s));
-        
+        //full rank code when use mkc
         xx=sin2(zz,R);
         //f = v2o(v);
         r2=dec(xx.x);
@@ -4566,7 +4585,8 @@ printf("\n");
         x=chen(f);
         //r=v2o(x);
         ero2(x);
-        //wait();
+        //exit(1);
+        wait();
         
         
         O = mk_pub();
@@ -4579,6 +4599,7 @@ printf("\n");
         //for (i = 0; i < K; i++)
         //    printf("%d,", s[i]);
         //printf("\n");
+
         f = bma(s, K);
 
         for (i = 0; i < N; i++)
