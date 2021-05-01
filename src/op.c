@@ -3297,8 +3297,7 @@ aa:
     //keygen(g);
     //exit(1);
 
-    
-       for (j = 0; j < N; j++)
+    for (j = 0; j < N; j++)
     {
         for (i = 0; i < kk; i++)
         {
@@ -3319,7 +3318,7 @@ aa:
             mat[j][i] = s;
         }
     }
-    
+
     //printf("\n");
     //exit(1);
     /*
@@ -3335,7 +3334,6 @@ aa:
 
     return w;
 }
-
 
 OP mkd(OP w, int kk)
 {
@@ -3420,13 +3418,15 @@ aa:
     printf("\nすげ、オレもうイキそ・・・\n");
     //keygen(g);
     //exit(1);
-    
-   for(i=0;i<N;i++){
-       for(j=0;j<kk;j++){
-           mat[i][j]=vb[j][i];
-       }
-   }
-   
+
+    for (i = 0; i < N; i++)
+    {
+        for (j = 0; j < kk; j++)
+        {
+            mat[i][j] = vb[j][i];
+        }
+    }
+
     //printf("\n");
     //exit(1);
     /*
@@ -3491,7 +3491,7 @@ MTX mk_pub()
     printf("\n");
     //Pgen();
     mkS();
-    O = toByte(R, K / 2 + 1);
+    //O = toByte(R, K / 2 + 1);
     //  exit(1);
     Z = mulmat(S, R, 2);
     printf("Zz=\n");
@@ -3499,7 +3499,7 @@ MTX mk_pub()
     {
         for (i = 0; i < (K / 2 + 1) * E; i++)
         {
-            //G.z[j][i] = Z.w[P[j]][i];
+            //G.bin.x[j][i] = Z.x[P[j]][i];
             G_bin.x[j][i] = Z.x[j][i];
             //Z.x[j][i]=Z.x[j][i];
             //printf("%d.",inv_S.w[j][i]);
@@ -3593,13 +3593,14 @@ MTX pubkeygen()
     R = toByte(O_bin, K);
     for (i = 0; i < N; i++)
     {
-        for (j = 0; j < K * E; j++){
+        for (j = 0; j < K * E; j++)
+        {
             R_bin.x[i][j] = O_bin.x[i][j];
             //printf("%d,",R_bin.x[i][j]);
         }
     }
- 
-//exit(1);
+
+    //exit(1);
 
     return R;
 }
@@ -3992,20 +3993,22 @@ vec newhalf(unsigned short e[])
         printf("e=%d\n", e[i]);
     //exit(1);
 
-// when use mkd
+    // when use mkd
 
-    v.x[0]=e[0];
-    v.x[1]=e[1];
-    k=2;
-for(i=2;i<K;i++){
-    if(i%2==1){
-    v.x[i]=e[k];
-    k++;
+    v.x[0] = e[0];
+    v.x[1] = e[1];
+    k = 2;
+    for (i = 2; i < K; i++)
+    {
+        if (i % 2 == 1)
+        {
+            v.x[i] = e[k];
+            k++;
+        }
+        if (i % 2 == 0)
+            v.x[i] = gf[mlt(fg[v.x[i / 2]], fg[v.x[i / 2]])];
     }
-    if(i%2==0)
-    v.x[i]=gf[mlt(fg[v.x[i/2]],fg[v.x[i/2]])];
-}
-/*
+    /*
 // when use mkc
     v.x[0] = gf[mlt(fg[e[0]], fg[e[0]])];
     for (i = 1; i < K / 2 + 1; i++)
@@ -4090,8 +4093,7 @@ vec bfd(unsigned short ss[])
     return v;
 }
 
-
-vec sin2(unsigned short zz[],MTX R)
+vec sin2(unsigned short zz[], MTX R)
 {
     int i, j;
     OP s = {0};
@@ -4302,15 +4304,15 @@ OP sendrier(unsigned short zz[N], int kk)
             }
         }
     }
-            printf("\n");
-            v = newhalf(syn);
-            //printf("%d\n",j);
-            for (k = 0; k < kk; k++)
-                rt[k] = v.x[k];
-        //}
-        //exit(1);
-        //printf ("%d\n", j);
-        //printf ("\n");
+    printf("\n");
+    v = newhalf(syn);
+    //printf("%d\n",j);
+    for (k = 0; k < kk; k++)
+        rt[k] = v.x[k];
+    //}
+    //exit(1);
+    //printf ("%d\n", j);
+    //printf ("\n");
     //}
 
     f = setpol(rt, kk);
@@ -4320,7 +4322,7 @@ OP sendrier(unsigned short zz[N], int kk)
     return f;
 }
 
-OP sendrier2(unsigned short zz[N], int kk, MTX L)
+vec sendrier2(unsigned short zz[N], int kk, MTX L)
 {
     unsigned short syn[K + 1] = {0}, s[K + 1] = {0}, rt[K / 2 + 1] = {0}, uu[(K / 2 + 1) * E] = {0}, es[(K / 2 + 1) * E] = {0};
     int i, j, k, count = 0;
@@ -4338,37 +4340,52 @@ OP sendrier2(unsigned short zz[N], int kk, MTX L)
 
             for (k = 0; k < K / 2 + 1; k++)
             {
-                rt[k] ^= L.x[j][k];
+                t.x[k] ^= L.x[j][k];
                 //rt[k] = bm[j][k];
             }
         }
     }
-            x = bfd(rt);
-            for (i = 0; i < K / 2 + 1; i++)
-                u.x[K / 2 - i] = x.x[i];
+    //f = setpol(rt, K / 2 + 1);
 
-            printf("rt=\n");
-            for (i = 0; i < K / 2 + 1; i++)
-                printf("%d,", u.x[i]);
-            printf("\n");
-            printf("bm_in se2 == %d || ", j);
-            for (i = 0; i < K / 2 + 1; i++)
-            {
-                printf("%d,", bm[j][i]);
-                tmp[i] = bm[j][i];
-            }
-            printf("\n");
-            //wait();
-            t = newhalf(tmp);
-            for (i = 0; i < K; i++)
-                m[i] ^= t.x[i];
-            v = newhalf(u.x);
-            for (i = 0; i < K; i++)
-                syn[i] ^= v.x[i];
-        //}
+    return t;
+}
+
+vec ink(vec f)
+{
+    int i,j;
+    vec v={0},x={0},u={0};
+    unsigned short syn[K]={0};
+
+
+    //v=o2v(f);
+    x = bfd(f.x);  //rt
+    for (i = 0; i < K / 2 + 1; i++)
+        u.x[K / 2 - i] = x.x[i];
+
+    printf("rt=\n");
+    for (i = 0; i < K / 2 + 1; i++)
+        printf("%d,", u.x[i]);
+    printf("\n");
+    /*
+    printf("bm_in se2 == %d || ", j);
+    for (i = 0; i < K / 2 + 1; i++)
+    {
+        printf("%d,", bm[j][i]);
+        tmp[i] = bm[j][i];
+    }
+    printf("\n");
+    //wait();
+    t = newhalf(tmp);
+    for (i = 0; i < K; i++)
+        m[i] = t.x[i];
+    */
+    v = newhalf(u.x);
+    for (i = 0; i < K; i++)
+        syn[i] = v.x[i];
+    //}
     //}
 
-/*
+    /*
     printf("P= ");
     for (i = 0; i < N; i++)
         printf("%d,", P[i]);
@@ -4396,9 +4413,8 @@ OP sendrier2(unsigned short zz[N], int kk, MTX L)
     printf("\n");
     //    exit(1);
     */
-    f = setpol(syn, K);
 
-    return f;
+return v;
 }
 
 MTX A2M(unsigned short A[N][K])
@@ -4427,7 +4443,7 @@ int main(void)
     int flg, o1 = 0;
     OP f = {0}, r = {0}, w = {0}, ff = {0}, tt = {0};
     EX hh = {0};
-    vec v, x = {0};
+    vec v, x = {0},u={0};
     time_t t;
     OP r1 = {0}, r2 = {0}, r3 = {0}, r4 = {0};
     OP g1 = {0}, tmp = {
@@ -4458,7 +4474,7 @@ int main(void)
     //{1,2,3,4,1};
     //memset(g,0,K+1);
     //g[0]=1;
-/*
+    /*
     a = 12345;
     printf("b=%d\n", a);
     v = i2v(a);
@@ -4518,7 +4534,7 @@ bm:
     //public-key generation (slow)
 
     //exit(1);
-    R=pubkeygen();
+    R = pubkeygen();
     //full rank matrix
     //w = mkc(r, K * 2);
     //w=mkg(K);
@@ -4551,7 +4567,7 @@ printf("\n");
         memset(zz, 0, sizeof(zz));
         mkerr(zz, T);
 
-/*
+        /*
         // sendrier's trick
         
         r2 = sendrier(zz, K);
@@ -4565,37 +4581,37 @@ printf("\n");
         f = bma(s, K);
         //exit(1);
         wait();
-  */      
-        
+  */
+
         memset(s, 0, sizeof(s));
         // newhalfは使わない。（鍵サイズは K）
-        xx=sin2(zz,R);
+        xx = sin2(zz, R);
         //f = v2o(v);
-        r2=dec(xx.x);
-        vv=o2v(r2);
+        r2 = dec(xx.x);
+        vv = o2v(r2);
         for (i = 0; i < K; i++)
             s[i + 1] = vv.x[i];
-        
+
         //for (i = 0; i < K; i++)
         //    printf("%d,", s[i]);
         //printf("\n");
         f = bma(s, K);
-        x=chen(f);
+        x = chen(f);
         //r=v2o(x);
         ero2(x);
         //exit(1);
         wait();
-        
-        
+
         O = mk_pub();
         memset(zz, 0, sizeof(zz));
         mkerr(zz, T);
 
         // sendrier2ではnewhalfを使う。(鍵サイズは K/2)
-        r1 = sendrier2(zz, K, O);
-        x = o2v(r1);
+        x = sendrier2(zz, K, O);
+        u=ink(x);
+        //x = o2v(r1);
         for (i = 0; i < K; i++)
-            s[i + 1] = x.x[i];
+            s[i + 1] = u.x[i];
         //for (i = 0; i < K; i++)
         //    printf("%d,", s[i]);
         //printf("\n");
@@ -4616,7 +4632,7 @@ printf("\n");
             printf("\n");
             exit(1);
         }
-        
+
         break;
 
         j++;
