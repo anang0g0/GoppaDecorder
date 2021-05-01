@@ -4235,10 +4235,11 @@ OP sendrier2(unsigned short zz[N], int kk, MTX L)
 
             for (k = 0; k < K / 2 + 1; k++)
             {
-                rt[k] = L.x[j][k];
+                rt[k] ^= L.x[j][k];
                 //rt[k] = bm[j][k];
             }
-
+        }
+    }
             x = bfd(rt);
             for (i = 0; i < K / 2 + 1; i++)
                 u.x[K / 2 - i] = x.x[i];
@@ -4261,8 +4262,8 @@ OP sendrier2(unsigned short zz[N], int kk, MTX L)
             v = newhalf(u.x);
             for (i = 0; i < K; i++)
                 syn[i] ^= v.x[i];
-        }
-    }
+        //}
+    //}
 
     printf("P= ");
     for (i = 0; i < N; i++)
@@ -4273,6 +4274,7 @@ OP sendrier2(unsigned short zz[N], int kk, MTX L)
         s[i + 1] = syn[i];
     printf("rt_deco= ");
     bma(s, K);
+    exit(1);
     //wait();
     memset(s, 0, sizeof(s));
     for (i = 0; i < K; i++)
@@ -4476,7 +4478,7 @@ printf("\n");
         ero2(x);
         //wait();
         
-        /*
+        
         O = mk_pub();
         memset(zz, 0, sizeof(zz));
         mkerr(zz, T);
@@ -4503,7 +4505,7 @@ printf("\n");
             printf("\n");
             exit(1);
         }
-        */
+        
         break;
 
         j++;
