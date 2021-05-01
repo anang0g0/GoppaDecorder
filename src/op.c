@@ -3891,22 +3891,22 @@ vec newhalf(unsigned short e[])
         printf("e=%d\n", e[i]);
     //exit(1);
 
-    //v.x[0] = gf[mlt(fg[e[0]], fg[e[0]])];
+
+    
     v.x[0]=e[0];
     v.x[1]=e[1];
-    v.x[2] = gf[mlt(fg[e[1]], fg[e[1]])];
-    v.x[3] = e[2]; //gf[mlt(fg[e[2]], fg[e[2]])];
-    v.x[4] = gf[mlt(fg[v.x[2]], fg[v.x[2]])];
-    v.x[5] = e[3]; //gf[mlt(fg[e[3]], fg[e[3]])];
-    v.x[6] = gf[mlt(fg[v.x[3]], fg[v.x[3]])];
-    v.x[7] = e[4]; //gf[mlt(fg[e[7]], fg[e[7]])];
-    v.x[8] = gf[mlt(fg[v.x[4]], fg[v.x[4]])];
-    v.x[9] = e[5]; //gf[mlt(fg[e[9]], fg[e[9]])];
+    k=2;
+for(i=2;i<K;i++){
+    if(i%2==1){
+    v.x[i]=e[k];
+    k++;
+    }
+    if(i%2==0)
+    v.x[i]=gf[mlt(fg[v.x[i/2]],fg[v.x[i/2]])];
+}
 
-
-                //for(i=2;i<K;i++)
-    //v.x[i]=gf[mltn(fg[e[1]],i)];
 /*
+    //v.x[0] = gf[mlt(fg[e[0]], fg[e[0]])];
     for (i = 1; i < K / 2 + 1; i++)
     {
         //printf("i=%d\n",i);
