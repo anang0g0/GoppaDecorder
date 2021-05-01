@@ -5,11 +5,12 @@
 //date      :  20160310,20191218,20191220,20191221,20191223,20191224,20191225,20191229,20191230
 //auther    : the queer who thinking about cryptographic future
 //code name :  一変数多項式演算ライブラリのつもり
+//status    : now in debugging (ver 0.8)
 // 0ベクトルが出ないように生成多項式のトレースチェックを入れた。
 //date      :  20160310,20210419
 //auther    : the queer who thinking about cryptographic future
 //code name : OVP - One Variable Polynomial library with OpenMP friendly
-//status    : hi-speed bma  (ver 0.9): 20210501
+//status    : now in debugging (ver 0.9)
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -2223,7 +2224,7 @@ MTX toByte(MTX SH, int kk)
             //= BH[j][i];
         }
         //fwrite(dd, 1, E * K, ff);
-        //printf("\n");
+        printf("\n");
     }
     printf("end of byte\n");
     //exit(1);
@@ -3446,7 +3447,7 @@ MTX mk_pub()
 //exit(1);
 */
 
-    return G_bin;
+    return G_int;
 }
 
 //Niederreiter暗号の公開鍵を作る
@@ -3482,12 +3483,16 @@ MTX pubkeygen()
             O_bin.x[j][i] = H.x[j][i];
         }
     }
-    R = toByte(O, K);
+    R = toByte(O_bin, K);
     for (i = 0; i < N; i++)
     {
-        for (j = 0; j < K * E; j++)
+        for (j = 0; j < K * E; j++){
             R_bin.x[i][j] = O_bin.x[i][j];
+            //printf("%d,",R_bin.x[i][j]);
+        }
     }
+ 
+//exit(1);
 
     return R;
 }
@@ -4312,84 +4317,6 @@ OP sendrier2(unsigned short zz[N], int kk, MTX L)
     return f;
 }
 
-
-OP sendril(unsigned short zz[N], int kk, MTX L)
-{
-    unsigned short syn[K + 1] = {0}, s[K + 1] = {0}, rt[K / 2 + 1] = {0}, uu[(K / 2 + 1) * E] = {0}, es[(K / 2 + 1) * E] = {0};
-    int i, j, k, count = 0;
-    OP f = {0}, w = {0};
-    vec v = {0}, x = {0}, u = {0}, t = {0};
-    unsigned short tmp[(K / 2 + 1) * E] = {0}, m[K + 1] = {0};
-
-    for (j = 0; j < N; j++)
-    {
-        if (zz[j] > 0)
-        {
-            //for(i=0;i<(K/2)+1;i++){
-
-            //memcpy(syn, L.w[j], sizeof(syn));
-
-            for (k = 0; k < K / 2 + 1; k++)
-            {
-                rt[k] = L.x[j][k];
-                //rt[k] = bm[j][k];
-            }
-
-            x = bfd(rt);
-            for (i = 0; i < K / 2 + 1; i++)
-                u.x[K / 2 - i] = x.x[i];
-
-            printf("rt=\n");
-            for (i = 0; i < K / 2 + 1; i++)
-                printf("%d,", u.x[i]);
-            printf("\n");
-            printf("bm_in se2 == %d || ", j);
-            for (i = 0; i < K / 2 + 1; i++)
-            {
-                printf("%d,", bm[j][i]);
-                tmp[i] = bm[j][i];
-            }
-            printf("\n");
-            //wait();
-            t = newhalf(tmp);
-            for (i = 0; i < K; i++)
-                m[i] ^= t.x[i];
-            v = newhalf(u.x);
-            for (i = 0; i < K; i++)
-                syn[i] ^= v.x[i];
-        }
-    }
-
-    printf("P= ");
-    for (i = 0; i < N; i++)
-        printf("%d,", P[i]);
-    printf("\n");
-
-    for (i = 0; i < K; i++)
-        s[i + 1] = syn[i];
-    printf("rt_deco= ");
-    bma(s, K);
-    //wait();
-    memset(s, 0, sizeof(s));
-    for (i = 0; i < K; i++)
-        s[i + 1] = m[i];
-    printf("bm_deco= ");
-    bma(s, K);
-    //wait();
-    //exit(1);
-
-    for (j = 0; j < (K / 2 + 1); j++)
-        printf("%d,", L.x[1][j] ^ L.x[2][j] ^ L.x[3][j]);
-    printf("\n");
-    for (j = 0; j < K / 2 + 1; j++)
-        printf("%d,", rt[j]);
-    printf("\n");
-    //    exit(1);
-    f = setpol(syn, K);
-
-    return f;
-}
-
 MTX A2M(unsigned short A[N][K])
 {
     int i, j;
@@ -4424,7 +4351,7 @@ int main(void)
     int fail = 0;
     MTX R = {0}, O = {0};
 
-    if (K*E > N)
+    if (K > N)
         printf("configuration error! K is too big K\n");
 
 #ifdef SRAND
@@ -4435,22 +4362,78 @@ int main(void)
     srand(seed);
 #endif
     unsigned short a, b;
+    unsigned short hi[8] = {1, 5, 3, 9, 9, 7, 8, 12}; // j
+    //{1,0,3,5,1,4,0,10}; //yabame
+    //
+    //
+    //{1, 3, 0, 1, 2, 0, 3};
+    //{1, 1, 1, 1, 3};
+    //
+    //{1,2,1};
+    //
+    //{1,2,3,4,1};
+    //memset(g,0,K+1);
+    //g[0]=1;
+
+    a = 12345;
+    printf("b=%d\n", a);
+    v = i2v(a);
+    for (i = 0; i < N; i++)
+        x.x[i] = v.x[i];
+    printvec(v);
+    b = v2i(x);
+    printf("b=%d\n", b);
+    //exit(1);
+    fun();
+    //exit(1);
+    unsigned char ch[E * K] = {0};
 //  unsigned short s[K+1]={0};
 label:
 
     //パリティチェックを生成する。
     //w=mkg();
     printf("\nすげ、オレもうイキそ・・・\n");
+
+    //w=mkg();
+    //unsigned short s[K+1]={0,13,3,5,4,8,5};
+    //unsigned short s[K+1]={0,15,10,8,8,0,12};
+    unsigned short s[K + 1] = {0}, s2[K * 2 + 1] = {0};
+    //{0,15,1,9,13,1,14};
+
     j = 0;
     memset(zz, 0, sizeof(zz));
+    //memset(s,0,sizeof(s));
+    mkerr(zz, T);
+
+    for (i = 0; i < N; i++)
+    {
+        if (zz[i] > 0)
+        {
+            printf("%d %d\n", i, zz[i]);
+            j++;
+        }
+    }
+    if (j < T)
+    {
+        printf("mkerr err??\n");
+        exit(1);
+    }
+    //exit(1);
+
+    //r = setpol(hi, 8);
+    //printf("%d\n",ben_or(w));
+    //w = omul(r, r);
+    //printpol(o2v(w));
+    printf("\n");
     memset(mat, 0, sizeof(mat));
 
+    unsigned short t2[K * 2] = {0};
 
 bm:
-    //public-key generation (using sendrier's trick)
-    O=mk_pub();
+    //public-key generation (slow)
+
     //exit(1);
-    //R=pubkeygen();
+    R=pubkeygen();
     //full rank matrix
     //w = mkc(r, K * 2);
     //w=mkg(K);
@@ -4458,49 +4441,30 @@ bm:
     //half(K+1);
 
     j = 0;
+    /*
+for(i=0;i<24;i++)
+a1[i]=1;
+for(i=0;i<24;i++){
+    for(j=0;j<24;j++)
+    a2[i]^=SS.z[i][j]&a1[j];
+    printf("%d,",a2[i]);
+}
+printf("\n");
+unsigned short a3[24]={0};
+for(i=0;i<24;i++){
+    for(j=0;j<24;j++)
+    a3[i]^=inv_S.w[i][j]&a2[j];
+    printf("%d,",a3[i]);
+}
+printf("\n");
+//exit(1);
+*/
     vec xx = {0}, vv = {0};
-    unsigned short s[K]={0};
 
-      
-    
-    
     while (1)
     {
-        memset(s, 0, sizeof(s));
-
         memset(zz, 0, sizeof(zz));
         mkerr(zz, T);
-        r1 = sendril(zz, K, O);
-        x = o2v(r1);
-        for (i = 0; i < K; i++)
-            s[i + 1] = x.x[i];
-
-        f = bma(s, K);
-
-        for (i = 0; i < N; i++)
-            if (zz[i] > 0)
-                printf("%d %d\n", i,zz[i]);
-        printf("\n");
-
-        if (odeg(f) < T)
-        {
-            printpol(o2v(r));
-            printf("==goppa\n");
-            for (i = 0; i < N; i++)
-                printf("%d,", zz[i]);
-            printf("\n");
-            exit(1);
-        }
-        break;
-        
-        j++;
-        if (j == 10000)
-            exit(1);
-    }
-
-    return 0;
-}
-
 
         // sendrier's trick
         /*
@@ -4516,3 +4480,61 @@ bm:
         //exit(1);
         wait();
         */
+
+        memset(s, 0, sizeof(s));
+        
+        xx=sin2(zz,R);
+        //f = v2o(v);
+        r2=dec(xx.x);
+        vv=o2v(r2);
+        for (i = 0; i < K; i++)
+            s[i + 1] = vv.x[i];
+        
+        //for (i = 0; i < K; i++)
+        //    printf("%d,", s[i]);
+        //printf("\n");
+        f = bma(s, K);
+        x=chen(f);
+        //r=v2o(x);
+        ero2(x);
+        //wait();
+        
+/*
+        O = mk_pub();
+        memset(zz, 0, sizeof(zz));
+        mkerr(zz, T);
+        r1 = sendrier2(zz, K, O);
+        x = o2v(r1);
+        for (i = 0; i < K; i++)
+            s[i + 1] = x.x[i];
+        //for (i = 0; i < K; i++)
+        //    printf("%d,", s[i]);
+        //printf("\n");
+        f = bma(s, K);
+
+        for (i = 0; i < N; i++)
+            if (zz[i] > 0)
+                printf("%d,", i);
+        printf("\n");
+
+        if (odeg(f) < T)
+        {
+            printpol(o2v(r));
+            printf("==goppa\n");
+            for (i = 0; i < N; i++)
+                printf("%d,", zz[i]);
+            printf("\n");
+            exit(1);
+        }
+        */
+        break;
+
+        j++;
+        if (j == 10000)
+            exit(1);
+    }
+
+    //    exit(1);
+
+    return 0;
+}
