@@ -3465,7 +3465,7 @@ void half(int kk)
     //exit(1);
 }
 
-//Niederreiter暗号の公開鍵を作る
+//Niederreiter暗号の公開鍵を作る(size K/2)
 MTX mk_pub()
 {
     int i, j, k, l;
@@ -3557,7 +3557,7 @@ MTX mk_pub()
     return G_int;
 }
 
-//Niederreiter暗号の公開鍵を作る
+//Niederreiter暗号の公開鍵を作る(size K)
 MTX pubkeygen()
 {
     int i, j, k, l;
@@ -3983,7 +3983,7 @@ void fun()
     }
 }
 
-vec newhalf(unsigned short e[],int a)
+vec newhalf(unsigned short e[])
 {
     int i, j, k;
     vec v = {0};
@@ -3993,7 +3993,7 @@ vec newhalf(unsigned short e[],int a)
     //exit(1);
 
 // when use mkd
-if(a==0){
+
     v.x[0]=e[0];
     v.x[1]=e[1];
     k=2;
@@ -4005,11 +4005,8 @@ for(i=2;i<K;i++){
     if(i%2==0)
     v.x[i]=gf[mlt(fg[v.x[i/2]],fg[v.x[i/2]])];
 }
-}
-else
-{
+/*
 // when use mkc
-
     v.x[0] = gf[mlt(fg[e[0]], fg[e[0]])];
     for (i = 1; i < K / 2 + 1; i++)
     {
@@ -4020,6 +4017,7 @@ else
         
     }
 }
+*/
 
     return v;
 }
@@ -4305,7 +4303,7 @@ OP sendrier(unsigned short zz[N], int kk)
         }
     }
             printf("\n");
-            v = newhalf(syn,0);
+            v = newhalf(syn);
             //printf("%d\n",j);
             for (k = 0; k < kk; k++)
                 rt[k] = v.x[k];
@@ -4361,10 +4359,10 @@ OP sendrier2(unsigned short zz[N], int kk, MTX L)
             }
             printf("\n");
             //wait();
-            t = newhalf(tmp,0);
+            t = newhalf(tmp);
             for (i = 0; i < K; i++)
                 m[i] ^= t.x[i];
-            v = newhalf(u.x,0);
+            v = newhalf(u.x);
             for (i = 0; i < K; i++)
                 syn[i] ^= v.x[i];
         //}
@@ -4570,7 +4568,7 @@ printf("\n");
   */      
         
         memset(s, 0, sizeof(s));
-        //full rank code when use mkc
+        // newhalfは使わない。（鍵サイズは K）
         xx=sin2(zz,R);
         //f = v2o(v);
         r2=dec(xx.x);
@@ -4592,6 +4590,8 @@ printf("\n");
         O = mk_pub();
         memset(zz, 0, sizeof(zz));
         mkerr(zz, T);
+
+        // sendrier2ではnewhalfを使う。(鍵サイズは K/2)
         r1 = sendrier2(zz, K, O);
         x = o2v(r1);
         for (i = 0; i < K; i++)
