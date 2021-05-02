@@ -3892,6 +3892,17 @@ vec newhalf(unsigned short e[])
     return v;
 }
 
+vec aurelia(vec coset){
+int i,j;
+vec v={0},x;
+
+for(i=0;i<K;i++)
+v.x[i*2]=gf[mlt(fg[coset.x[i]],fg[coset.x[i]])];
+
+return v;
+}
+
+
 vec bfd(unsigned short ss[])
 {
     int i, j, k, count = 0;
