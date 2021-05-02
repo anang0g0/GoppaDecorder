@@ -3603,6 +3603,7 @@ OP dec(unsigned short ss[])
     unsigned ch[K * E] = {0};
     unsigned char h2o[K * E] = {0};
 
+printf("!1\n");
     for (i = 0; i < K; i++)
     {
         v = i2v(ss[i]);
@@ -4553,8 +4554,6 @@ printf("\n");
         wait();
         
 
-        memset(s, 0, sizeof(s));
-        
         xx=sin2(zz,R);
         //f = v2o(v);
         r2=dec(xx.x);
@@ -4570,7 +4569,7 @@ printf("\n");
         //r=v2o(x);
         ero2(x);
         wait();
-        
+  
         
         O = mk_pub();
         memset(zz, 0, sizeof(zz));
