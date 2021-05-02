@@ -4393,21 +4393,15 @@ bm:
     //exit(1);
     R = pubkeygen();
         mkerr(zz, T);
-    /*
+    
     f = sendrier(zz, K);
     v = o2v(f);
     for (i = 0; i < K; i++)
         t1[i + 1] = v.x[i];
     bma(t1, K);
-*/
+    wait();
+    
     memset(s, 0, sizeof(s));
-    //memset(zz, 0, sizeof(zz));
-    //mkerr(zz, T);
-    for(i=0;i<N;i++){
-        for(j=0;j<K;j++)
-        printf("%d,",R.x[i][j]);
-        printf("\n");
-    }
     x = sin2(zz,R);
     //f = v2o(v);
     r2 = dec(x.x);
