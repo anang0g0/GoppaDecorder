@@ -100,6 +100,8 @@ ecole.c ：定義体の中身を作ります。(ecole normal basis lol)
 
 # 20210502
 
+https://www.cayrel.net/?Implementation-of-Goppa-codes&fbclid=IwAR2XMRqZwjkULDQNH9Ij6pZP64lWI_rdgduiaP63u8M_O9rCuDlIC-I9ncU
+
 RS符号以外にも偶数列を削除できるとのことなので、頑張ってその方法を考えています。  
 先に暗号化を実装したほうがいい感じがするので、2倍サイズのシンドロームは当面凍結。  
 あと、暗号化してコードが複雑になったので、暗号化する前の普通のデコーダを偲ぶためにop_old.cを追加しました。  
