@@ -40,30 +40,33 @@ int main(void)
     OP f = {0}, r = {0}, w = {0};
     vec v, x = {0};
     MTX R = {0};
+    unsigned short s[K + 1] = {0};
 
     if (K > N)
         printf("configuration error! K is too big K\n");
 
-    unsigned char ch[E * K] = {0};
-    unsigned short s[K + 1] = {0}, s2[K * 2 + 1] = {0};
-
+    // （謎）
     memset(mat, 0, sizeof(mat));
 
-   // 公開鍵を生成する
-    R=pubkeygen();
-
-    memset(zz, 0, sizeof(zz));
-    mkerr(zz, T);        
-
+    // 公開鍵を生成する
+      R=pubkeygen();
+    // エラーベクトルの初期化
+      memset(zz, 0, sizeof(zz));
+    //重みTのエラーベクトルを生成する
+      mkerr(zz, T);
+    // 暗号文の生成
     x=sin2(zz,R);
+    // 復号化１
     r=dec(x.x);
     v=o2v(r);
     for (i = 0; i < K; i++)
       s[i + 1] = v.x[i];
-        
-    f = bma(s, K);
+
+    // 復号化２
+      f = bma(s, K);
     x=chen(f);
-    ero2(x);
+    // 平文の表示
+      ero2(x);
 
 retuen 0;
 }
