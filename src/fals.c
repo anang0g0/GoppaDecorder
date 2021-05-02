@@ -3273,8 +3273,6 @@ aa:
         tr[i] = oinv(ta[i]);
         //printf("%d,", tr[i]);
     }
-    memset(g, 0, sizeof(g));
-    g[0] = 1;
 
     //多項式を固定したい場合コメントアウトする。
     oprintpol(r);
@@ -3300,40 +3298,15 @@ aa:
     {
         for (i = 0; i < kk; i++)
         {
-            ma[j][i] = gf[mlt(fg[vb[i][j]], tr[j])];
+            mat[j][i] = gf[mlt(fg[vb[i][j]], tr[j])];
         }
         //printf("tr[%d]=%d\n",j,tr[j]);
     }
 
-    unsigned short s;
-    //#pragma omp parallel for default(none) private(i, j, k, s) shared(mat, gt, ma, gf, fg)
-    for (i = 0; i < kk; i++)
-    {
-        for (j = 0; j < N; j++)
-        {
-            s = 0;
-
-            for (k = 0; k < kk; k++)
-                s ^= gf[mlt(fg[gt[k][i]], fg[ma[j][k]])];
-            //printf("%d,",s);
-            mat[j][i] = s;
-        }
-    }
-    //printf("\n");
-    //exit(1);
-    /*
-    for (j = 0; j < N; j++)
-    {
-        for (i = 0; i < kk; i++)
-            printf("%d,", mat[j][i]);
-        printf("\n");
-    }
-    //exit(1);
-    //wait();
-*/
 
     return w;
 }
+
 
 void half(int kk)
 {
@@ -4435,8 +4408,9 @@ bm:
 
     while (1)
     {
-        memset(s, 0, sizeof(s));
         O = mk_pub();
+        
+        memset(s, 0, sizeof(s));
         memset(zz, 0, sizeof(zz));
         mkerr(zz, T);
         r1 = reed_solomon(zz, K, O);
