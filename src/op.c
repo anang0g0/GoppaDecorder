@@ -4566,7 +4566,7 @@ printf("\n");
         memset(zz, 0, sizeof(zz));
         mkerr(zz, T);
 
-        /*
+        
         // sendrier's trick
         
         r2 = sendrier(zz, K);
@@ -4580,7 +4580,7 @@ printf("\n");
         f = bma(s, K);
         //exit(1);
         wait();
-  */
+  
 
         memset(s, 0, sizeof(s));
         // newhalfは使わない。（鍵サイズは K）
