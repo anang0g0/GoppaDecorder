@@ -48,8 +48,8 @@ int main(void)
     // （謎）
     memset(mat, 0, sizeof(mat));
 
-    // 公開鍵を生成する
-      R=pubkeygen();
+    // 公開鍵を生成する(Niederreiterとは異なる)
+      R=pk_gen();
     // エラーベクトルの初期化
       memset(zz, 0, sizeof(zz));
     //重みTのエラーベクトルを生成する
