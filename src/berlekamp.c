@@ -3456,7 +3456,7 @@ void half(int kk)
     //exit(1);
 }
 
-//Niederreiter暗号の公開鍵を作る
+//Niederreiter暗号の公開鍵を作る(RS)
 MTX mk_pub()
 {
     int i, j, k, l;
@@ -3548,7 +3548,7 @@ MTX mk_pub()
     return G_int;
 }
 
-//Niederreiter暗号の公開鍵を作る
+//Niederreiter暗号の公開鍵を作る(Goppa)
 MTX pk_gen()
 {
     int i, j, k, l;
@@ -3557,7 +3557,7 @@ MTX pk_gen()
     OP w = {0};
     MTX R = {0}, R_bin = {0}, O = {0}, Q = {0}, O_bin = {0};
 
-    w = mkd(w, K * 2);
+    w = mkc(w, K * 2);
     //w = mkg(K);
     half(K / 2 + 1);
 
@@ -4342,16 +4342,7 @@ OP sendrier2(unsigned short zz[N], int kk, MTX L)
         printf("%d,", u.x[i]);
     printf("\n");
     printf("bm_in se2 == %d || ", j);
-    for (i = 0; i < K / 2 + 1; i++)
-    {
-        printf("%d,", bm[j][i]);
-        tmp[i] = bm[j][i];
-    }
-    printf("\n");
-    //wait();
-    t = newhalf(tmp);
-    for (i = 0; i < K; i++)
-        m[i] ^= t.x[i];
+
     v = newhalf(u.x);
     for (i = 0; i < K; i++)
         syn[i] ^= v.x[i];
@@ -4367,23 +4358,8 @@ OP sendrier2(unsigned short zz[N], int kk, MTX L)
         s[i + 1] = syn[i];
     printf("rt_deco= ");
     bma(s, K);
-    exit(1);
     //wait();
-    memset(s, 0, sizeof(s));
-    for (i = 0; i < K; i++)
-        s[i + 1] = m[i];
-    printf("bm_deco= ");
-    bma(s, K);
-    //wait();
-    //exit(1);
 
-    for (j = 0; j < (K / 2 + 1); j++)
-        printf("%d,", L.x[1][j] ^ L.x[2][j] ^ L.x[3][j]);
-    printf("\n");
-    for (j = 0; j < K / 2 + 1; j++)
-        printf("%d,", rt[j]);
-    printf("\n");
-    //    exit(1);
     f = setpol(syn, K);
 
     return f;
@@ -4409,9 +4385,9 @@ int main(void)
 {
     int i;
     unsigned short zz[N] = {0};
-    OP f = {0}, r = {0}, w = {0};
+    OP f = {0}, r = {0}, w = {0}, r1 = {0};
     vec v, x = {0};
-    MTX R = {0};
+    MTX R = {0}, O = {0};
     unsigned short s[K + 1] = {0};
 
     if (K > N)
@@ -4439,196 +4415,34 @@ int main(void)
     x = chen(f);
     // 平文の表示(m=m'P^{-1})
     ero2(x);
+    wait();
 
-    return 0;
-}
-
-/*
-int main(void)
-{
-    int i, j, k, l;
-    int count = 0;
-    FILE *fp, *fq;
-    unsigned short z1[N] = {0}; //{1,0,1,1,1,0,0,0,0,0,1,1,1,0,0,1};
-    unsigned short zz[N] = {0};
-    unsigned short a1[K * E] = {0}, a2[K * E] = {0};
-    int flg, o1 = 0;
-    OP f = {0}, r = {0}, w = {0}, ff = {0}, tt = {0};
-    EX hh = {0};
-    vec v, x = {0};
-    time_t t;
-    OP r1 = {0}, r2 = {0}, r3 = {0}, r4 = {0};
-    OP g1 = {0}, tmp = {
-                     0};
-    int fail = 0;
-    MTX R = {0}, O = {0};
-
-    if (K > N)
-        printf("configuration error! K is too big K\n");
-
-#ifdef SRAND
-    srand(SRAND);
-#else
-    const unsigned int seed = clock() + time(&t);
-    printf("srand(%u)\n", seed);
-    srand(seed);
-#endif
-    unsigned short a, b;
-    unsigned short hi[8] = {1, 5, 3, 9, 9, 7, 8, 12}; // j
-    //{1,0,3,5,1,4,0,10}; //yabame
-    //
-    //
-    //{1, 3, 0, 1, 2, 0, 3};
-    //{1, 1, 1, 1, 3};
-    //
-    //{1,2,1};
-    //
-    //{1,2,3,4,1};
-    //memset(g,0,K+1);
-    //g[0]=1;
-
-    a = 12345;
-    printf("b=%d\n", a);
-    v = i2v(a);
-    for (i = 0; i < N; i++)
-        x.x[i] = v.x[i];
-    printvec(v);
-    b = v2i(x);
-    printf("b=%d\n", b);
-    //exit(1);
-    fun();
-    
-    //exit(1);
-    unsigned char ch[E * K] = {0};
-//  unsigned short s[K+1]={0};
-label:
-
-    //パリティチェックを生成する。
-    //w=mkg();
-    printf("\nすげ、オレもうイキそ・・・\n");
-
-    //w=mkg();
-    //unsigned short s[K+1]={0,13,3,5,4,8,5};
-    //unsigned short s[K+1]={0,15,10,8,8,0,12};
-    unsigned short s[K + 1] = {0}, s2[K * 2 + 1] = {0};
-    //{0,15,1,9,13,1,14};
-
-    j = 0;
+    O = mk_pub();
     memset(zz, 0, sizeof(zz));
-    //memset(s,0,sizeof(s));
     mkerr(zz, T);
+    r1 = sendrier2(zz, K, O);
+    x = o2v(r1);
+    for (i = 0; i < K; i++)
+        s[i + 1] = x.x[i];
+    //for (i = 0; i < K; i++)
+    //    printf("%d,", s[i]);
+    //printf("\n");
+    f = bma(s, K);
 
     for (i = 0; i < N; i++)
-    {
         if (zz[i] > 0)
-        {
-            printf("%d %d\n", i, zz[i]);
-            j++;
-        }
-    }
-    if (j < T)
+            printf("%d,", i);
+    printf("\n");
+
+    if (odeg(f) < T)
     {
-        printf("mkerr err??\n");
+        printpol(o2v(r));
+        printf("==goppa\n");
+        for (i = 0; i < N; i++)
+            printf("%d,", zz[i]);
+        printf("\n");
         exit(1);
     }
-    //exit(1);
-
-    //r = setpol(hi, 8);
-    //printf("%d\n",ben_or(w));
-    //w = omul(r, r);
-    //printpol(o2v(w));
-    printf("\n");
-    memset(mat, 0, sizeof(mat));
-
-    unsigned short t2[K * 2] = {0};
-
-bm:
-    //public-key generation (slow)
-
-    //exit(1);
-    R=pk_gen();
-    //full rank matrix
-    //w = mkc(r, K * 2);
-    //w=mkg(K);
-    //half size matrix of odd colomn
-    //half(K+1);
-
-    j = 0;
-    vec xx = {0}, vv = {0};
-
-    while (1)
-    {
-        memset(zz, 0, sizeof(zz));
-        mkerr(zz, T);
-
-        // sendrier's trick
-        
-        r2 = sendrier(zz, K);
-        v=o2v(r2);
-        for (i = 0; i < K; i++)
-            s[i + 1] =v.x[i];
-        
-        //for (i = 0; i < K; i++)
-        //    printf("%d,", s[i]);
-        //printf("\n");
-        f = bma(s, K);
-        //exit(1);
-        wait();
-        
-
-        xx=sin2(zz,R);
-        //f = v2o(v);
-        r2=dec(xx.x);
-        vv=o2v(r2);
-        for (i = 0; i < K; i++)
-            s[i + 1] = vv.x[i];
-        
-        //for (i = 0; i < K; i++)
-        //    printf("%d,", s[i]);
-        //printf("\n");
-        f = bma(s, K);
-        x=chen(f);
-        //r=v2o(x);
-        ero2(x);
-        wait();
-  
-        
-        O = mk_pub();
-        memset(zz, 0, sizeof(zz));
-        mkerr(zz, T);
-        r1 = sendrier2(zz, K, O);
-        x = o2v(r1);
-        for (i = 0; i < K; i++)
-            s[i + 1] = x.x[i];
-        //for (i = 0; i < K; i++)
-        //    printf("%d,", s[i]);
-        //printf("\n");
-        f = bma(s, K);
-
-        for (i = 0; i < N; i++)
-            if (zz[i] > 0)
-                printf("%d,", i);
-        printf("\n");
-
-        if (odeg(f) < T)
-        {
-            printpol(o2v(r));
-            printf("==goppa\n");
-            for (i = 0; i < N; i++)
-                printf("%d,", zz[i]);
-            printf("\n");
-            exit(1);
-        }
-        
-        break;
-
-        j++;
-        if (j == 10000)
-            exit(1);
-    }
-
-    //    exit(1);
 
     return 0;
 }
-*/
