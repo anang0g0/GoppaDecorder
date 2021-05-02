@@ -3482,7 +3482,7 @@ MTX pubkeygen()
             O_bin.x[j][i] = H.x[j][i];
         }
     }
-    R = toByte(O, K);
+    R = toByte(O_bin, K);
     for (i = 0; i < N; i++)
     {
         for (j = 0; j < K * E; j++)
@@ -4008,7 +4008,7 @@ return r;
 }
 */
 
-vec sin2(unsigned short zz[])
+vec sin2(unsigned short zz[],MTX R)
 {
     int i, j;
     OP s = {0};
@@ -4022,8 +4022,8 @@ vec sin2(unsigned short zz[])
             for (j = 0; j < K; j++)
             {
                 //ss[j]
-                v.x[j] ^= HH[i][j];
-                printf("%d,", HH[i][j]);
+                v.x[j] ^= R.x[i][j];
+                printf("%d,", R.x[i][j]);
             }
         }
         printf("\n");
@@ -4235,7 +4235,7 @@ OP sendrier(unsigned short zz[N], int kk)
     return f;
 }
 
-OP sendrier2(unsigned short zz[N], int kk, MTX L)
+OP reed_solomon(unsigned short zz[N], int kk, MTX L)
 {
     unsigned short syn[K + 1] = {0}, s[K + 1] = {0}, rt[K / 2 + 1] = {0}, uu[(K / 2 + 1) * E] = {0}, es[(K / 2 + 1) * E] = {0};
     int i, j, k, count = 0;
@@ -4247,9 +4247,6 @@ OP sendrier2(unsigned short zz[N], int kk, MTX L)
     {
         if (zz[j] > 0)
         {
-            //for(i=0;i<(K/2)+1;i++){
-
-            //memcpy(syn, L.w[j], sizeof(syn));
 
             for (k = 0; k < K / 2 + 1; k++)
             {
@@ -4326,6 +4323,26 @@ MTX A2M(unsigned short A[N][K])
     return J;
 }
 
+vec net(unsigned short ss[])
+{
+    int i, j;
+    vec v = {0}, x, u;
+
+    v.x[0] = ss[0];
+    v.x[1] = ss[1];
+    v.x[3] = ss[2];
+    v.x[5] = ss[3];
+    //v.x[7]=ss[4];
+    //v.x[9]=ss[5];
+
+    v.x[2] = gf[mlt(mlt(fg[ss[1]], fg[ss[1]]), oinv(ss[0]))];
+    v.x[4] = gf[mlt(mlt(fg[ss[1]], fg[ss[3]]), oinv(ss[0]))];
+    //v.x[6]=gf[mlt(mlt(fg[ss[2]],fg[ss[2]]),oinv(fg[ss[0]]))];
+    //v.x[8]=gf[mlt(mlt(fg[ss[1]],fg[ss[5]]),oinv(fg[ss[0]]))];
+
+    return v;
+}
+
 //言わずもがな
 int main(void)
 {
@@ -4346,7 +4363,7 @@ int main(void)
     int fail = 0;
     MTX R = {0}, O = {0};
 
-    if (K*E > N)
+    if (K * E > N)
         printf("configuration error! K is too big K\n");
 
 #ifdef SRAND
@@ -4357,7 +4374,9 @@ int main(void)
     srand(seed);
 #endif
     unsigned short a, b;
-  unsigned short s[K+1]={0};
+    unsigned short s[K + 1] = {0};
+    unsigned short t1[K + 1] = {0};
+
 label:
 
     //パリティチェックを生成する。
@@ -4370,14 +4389,41 @@ label:
 
 bm:
     //public-key generation (using sendrier's trick)
-    O=mk_pub();
+
     //exit(1);
-    //R=pubkeygen();
-    //full rank matrix
-    //w = mkc(r, K * 2);
-    //w=mkg(K);
-    //half size matrix of odd colomn
-    //half(K+1);
+    R = pubkeygen();
+        mkerr(zz, T);
+    /*
+    f = sendrier(zz, K);
+    v = o2v(f);
+    for (i = 0; i < K; i++)
+        t1[i + 1] = v.x[i];
+    bma(t1, K);
+*/
+    memset(s, 0, sizeof(s));
+    //memset(zz, 0, sizeof(zz));
+    //mkerr(zz, T);
+    for(i=0;i<N;i++){
+        for(j=0;j<K;j++)
+        printf("%d,",R.x[i][j]);
+        printf("\n");
+    }
+    x = sin2(zz,R);
+    //f = v2o(v);
+    r2 = dec(x.x);
+    v = o2v(r2);
+    for (i = 0; i < K; i++)
+        s[i + 1] = v.x[i];
+
+    for (i = 0; i < K; i++)
+        printf("%d,", s[i]);
+    printf("\n");
+    //exit(1);
+    f = bma(s, K);
+    x = chen(f);
+    //r=v2o(x);
+    ero2(x);
+    wait();
 
     j = 0;
     vec xx = {0}, vv = {0};
@@ -4385,10 +4431,10 @@ bm:
     while (1)
     {
         memset(s, 0, sizeof(s));
-
+        O = mk_pub();
         memset(zz, 0, sizeof(zz));
         mkerr(zz, T);
-        r1 = sendrier2(zz, K, O);
+        r1 = reed_solomon(zz, K, O);
         x = o2v(r1);
         for (i = 0; i < K; i++)
             s[i + 1] = x.x[i];
@@ -4410,7 +4456,7 @@ bm:
             exit(1);
         }
         break;
-        
+
         j++;
         if (j == 10000)
             exit(1);
@@ -4419,9 +4465,8 @@ bm:
     return 0;
 }
 
-
-        // sendrier's trick
-        /*
+// sendrier's trick
+/*
         r2 = sendrier(zz, K);
         v=o2v(r2);
         for (i = 0; i < K; i++)
@@ -4434,21 +4479,5 @@ bm:
         //exit(1);
         wait();
         */
-      /*
-        mkerr(zz,T);
-        xx=sin2(zz);
-        //f = v2o(v);
-        r2=dec(xx.x);
-        vv=o2v(r2);
-        for (i = 0; i < K; i++)
-            s[i + 1] = vv.x[i];
-        
-        //for (i = 0; i < K; i++)
-        //    printf("%d,", s[i]);
-        //printf("\n");
-        f = bma(s, K);
-        x=chen(f);
-        //r=v2o(x);
-        ero2(x);
-        wait();
+/*
         */
