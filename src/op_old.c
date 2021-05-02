@@ -4042,7 +4042,7 @@ label:
     for (i = 0; i < K*2 ; i++)
         s2[i + 1] = v.x[i];
     bma(s2, K*2);
-    exit(1);
+    //exit(1);
     
 
     while (1)
@@ -4066,7 +4066,7 @@ label:
         //for (i = 0; i < N; i++)
         //    printf("%d,", zz[i]);
         //printf("\n");
-        exit(1);
+        //exit(1);
 
         if (k < T)
         {
@@ -4080,7 +4080,7 @@ label:
         //break;
         j++;
         if (j == 10000)
-            exit(1);
+            break;
     }
     
     //    exit(1);
@@ -4129,7 +4129,7 @@ lab:
         j++;
         printf("err=%dっ！！\n", count);
         if (j == 10000)
-            exit(1);
+            break;
     }
     //wait();
     //exit(1);
@@ -4161,7 +4161,7 @@ patta:
         ero(v);
         count++;
         if (count == 10000)
-            exit(1);
+            break;
     }
 
     if (AA == 10)
