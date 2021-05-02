@@ -4541,24 +4541,7 @@ bm:
     //half(K+1);
 
     j = 0;
-    /*
-for(i=0;i<24;i++)
-a1[i]=1;
-for(i=0;i<24;i++){
-    for(j=0;j<24;j++)
-    a2[i]^=SS.z[i][j]&a1[j];
-    printf("%d,",a2[i]);
-}
-printf("\n");
-unsigned short a3[24]={0};
-for(i=0;i<24;i++){
-    for(j=0;j<24;j++)
-    a3[i]^=inv_S.w[i][j]&a2[j];
-    printf("%d,",a3[i]);
-}
-printf("\n");
-//exit(1);
-*/
+
     vec xx = {0}, vv = {0};
 
     while (1)
