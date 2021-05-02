@@ -6,7 +6,6 @@
 //status    : majer release (ver 1.0)
 // Niederreiter Cryotosysytem by EEA decoding
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -53,8 +52,6 @@ MTX BB = {0};
 MTX H = {0};
 
 unsigned int AA = 0, B = 0; //, C = 0, A2 = 0;
-
-
 
 //有限体の元の逆数
 unsigned short
@@ -1177,13 +1174,12 @@ OP vx(OP f, OP g)
   return vv;
 }
 
-
 OP sabun(OP f, OP g)
 {
   OP h = {0}, ww = {
                   0};
-  OP v[K*2] = {0}, vv = {
-                     0};
+  OP v[K * 2] = {0}, vv = {
+                         0};
   oterm a, b;
   int i, j;
 
@@ -1196,13 +1192,15 @@ OP sabun(OP f, OP g)
 
   while (1)
   {
-    if (odeg((g)) == 0){
+    if (odeg((g)) == 0)
+    {
       printf("is a\n");
       break;
     }
     h = omod(f, g);
-    if (LT(g).a == 0){
-            printf("is b\n");
+    if (LT(g).a == 0)
+    {
+      printf("is b\n");
       break;
     }
     ww = odiv(f, g);
@@ -1211,17 +1209,18 @@ OP sabun(OP f, OP g)
     g = h;
 
     vv = v[i + 2];
-printpol(o2v(vv));
-printf(" deg%d\n",odeg(vv));
-    if (odeg((vv)) == T*2){
+    printpol(o2v(vv));
+    printf(" deg%d\n", odeg(vv));
+    if (odeg((vv)) == T * 2)
+    {
       //printpol(o2v(vv));
       break;
       //exit(1);
     }
     i++;
   }
-//printf("baka\n");
-//exit(1);
+  //printf("baka\n");
+  //exit(1);
   return vv;
 }
 
@@ -1531,7 +1530,7 @@ int deg(vec a)
 vec i2v(unsigned int n)
 {
   vec v = {0};
-  int i=0;
+  int i = 0;
 
   while (n > 0)
   {
@@ -1785,7 +1784,7 @@ vec chen(OP f)
   {
     z = 0;
     //#pragma omp parallel for reduction (^:z)
-    for (i = 0; i < n+1; i++)
+    for (i = 0; i < n + 1; i++)
     {
       if (f.t[i].a > 0)
         z ^= gf[mlt(mltn(f.t[i].n, fg[x]), fg[f.t[i].a])];
@@ -1985,7 +1984,6 @@ OP decode(OP f, OP s)
   return e;
 }
 
-
 //ユークリッドアルゴリズムによる復号関数
 OP sendrier(OP f, OP s)
 {
@@ -2013,7 +2011,7 @@ OP sendrier(OP f, OP s)
   x = chen(r);
   // exit(1);
 
-  for (i = 0; i < T*2; i++)
+  for (i = 0; i < T * 2; i++)
   {
     printf("x[%d]=1\n", x.x[i]);
     if (x.x[i] == 0)
@@ -2035,7 +2033,7 @@ OP sendrier(OP f, OP s)
   printf("あっ、でる！\n");
   //  exit(1);
 
-  if (odeg((r)) < T*2)
+  if (odeg((r)) < T * 2)
   {
     printpol(o2v(r));
     printf("baka5 deg(r)<T\n");
@@ -2774,7 +2772,7 @@ void decrypt(OP w)
   r = decode(w, f);
   elo2(r);
   //exit(1);
-  
+
   // elo(r);
   //exit(1);
   //v=o2v(r);
@@ -2876,7 +2874,7 @@ void test(OP w, unsigned short zz[])
   const uint8_t *hash;
   sha3_context c;
   //int image_size=512;
-  OP f = {0},r={0};
+  OP f = {0}, r = {0};
   FILE *fp;
 
   fp = fopen("aes.key", "rb");
@@ -2923,7 +2921,7 @@ void test(OP w, unsigned short zz[])
   v = o2v(f);
   //printf("v=");
 
-  for (i = 0; i < odeg(f)+1; i++)
+  for (i = 0; i < odeg(f) + 1; i++)
   {
     sy[i] = v.x[i];
     printf("%d,", sy[i]);
@@ -3013,8 +3011,8 @@ for(i=0;i<K*E;i++){
 
 //OP sx={0},ty={0};
 
-unsigned short vb[K*2][N] = {0};
-unsigned short gt[K*2][K*2] = {0};
+unsigned short vb[K * 2][N] = {0};
+unsigned short gt[K * 2][K * 2] = {0};
 
 void van()
 {
@@ -3054,7 +3052,7 @@ void van2()
   for (i = 0; i < N; i++)
     vb[0][i] = 1;
   //#pragma omp parallel for private(i, j)
-  for (i = 1; i < K*2; i++)
+  for (i = 1; i < K * 2; i++)
   {
     for (j = 0; j < N; j++)
       vb[i][j] = gf[mltn(i, fg[j])];
@@ -3068,9 +3066,9 @@ void ogt2()
   unsigned short abc[N][K] = {0};
 
 #pragma omp parallel for private(i, j)
-  for (i = 0; i < K*2; i++)
+  for (i = 0; i < K * 2; i++)
   {
-    for (j = 0; j < K*2 - i; j++)
+    for (j = 0; j < K * 2 - i; j++)
       gt[i][j + i] = g[j];
   }
 }
@@ -3171,8 +3169,8 @@ aa:
   }
 */
 
-//separable goppa code
-  w=mkpol();
+  //separable goppa code
+  w = mkpol();
   //多項式の値が0でないことを確認
   for (i = 0; i < N; i++)
   {
@@ -3268,15 +3266,13 @@ aa:
   return w;
 }
 
-
 OP mkd(OP w)
 {
   int i, j, k, l, ii = 0;
-  
+
   unsigned short tr[N] = {0};
   unsigned short ta[N] = {0};
-vec v={0};
-
+  vec v = {0};
 
 aa:
 
@@ -3309,14 +3305,12 @@ aa:
     //printf("%d,", tr[i]);
   }
 
-
-  //多項式を固定したい場合コメントアウトする。  
+  //多項式を固定したい場合コメントアウトする。
   oprintpol(w);
   printf("\n");
   printsage(o2v(w));
   printf("\n");
   printf("sagemath で既約性を検査してください！\n");
-  
 
   van2();
   ogt2();
@@ -3332,7 +3326,7 @@ aa:
 
   for (j = 0; j < N; j++)
   {
-    for (i = 0; i < K*2; i++)
+    for (i = 0; i < K * 2; i++)
     {
       bm[j][i] = gf[mlt(fg[vb[i][j]], tr[j])];
     }
@@ -3358,11 +3352,11 @@ aa:
 
   for (j = 0; j < N; j++)
   {
-    for (i = 0; i < K*2; i++)
+    for (i = 0; i < K * 2; i++)
       printf("%d,", bm2[j][i]);
     printf("\n");
   }
-//exit(1);
+  //exit(1);
   //wait();
 
   return w;
@@ -3379,8 +3373,8 @@ OP pubkeygen()
   vec v = {0};
 
   w = mkg();
- printpol(o2v(w));
- printf(" ==goppa polynomial\n");
+  printpol(o2v(w));
+  printf(" ==goppa polynomial\n");
 
   v = o2v(w);
   fp = fopen("sk.key", "wb");
@@ -3398,7 +3392,7 @@ OP pubkeygen()
 
   Pgen();
   fp = fopen("P.key", "w");
-//  fwrite(P, 2, N, fp);
+  //  fwrite(P, 2, N, fp);
   fclose(fp);
   makeS();
   fp = fopen("inv_S.key", "wb");
@@ -3410,8 +3404,7 @@ for(i=0;i<K*E;i++){
     fwrite(n,1,K*E,fp);
 } 
 */
-fclose(fp);
-
+  fclose(fp);
 
   for (i = 0; i < K * E; i++)
   {
@@ -3424,9 +3417,8 @@ fclose(fp);
       //printf("%d,", n[j]);
     }
     //printf("\n");
-  //  fwrite(n, 2, K, fp);
+    //  fwrite(n, 2, K, fp);
   }
-
 
   // SH
   H = mulmat(S, BB, 1);
@@ -3815,7 +3807,7 @@ int ero2(vec v)
 
 void mkerr(unsigned short *z1, int num)
 {
-  int i,j, l;
+  int i, j, l;
   j = 0;
 
   while (j < num)
@@ -3835,7 +3827,6 @@ void mkerr(unsigned short *z1, int num)
     if (z1[i] > 0)
       printf("%d=%d\n", i, z1[i]);
   }
-
 }
 
 void fun()
@@ -3862,7 +3853,6 @@ vec sin2(unsigned short zz[])
   vec v = {0};
   unsigned short ss[K] = {0};
 
-
   for (i = 0; i < N; i++)
   {
     if (zz[i] > 0)
@@ -3875,16 +3865,13 @@ vec sin2(unsigned short zz[])
       //printf("\n");
     }
   }
-  
 
   return v;
 }
 
-
-
 OP cos2(unsigned short zz[])
 {
-  unsigned short ss[K*2]={0};
+  unsigned short ss[K * 2] = {0};
   int i, j;
   OP s = {0};
   vec v = {0};
@@ -3895,13 +3882,12 @@ OP cos2(unsigned short zz[])
   {
     if (zz[i] > 0)
     {
-      for (j = 0; j < K*2; j++)
+      for (j = 0; j < K * 2; j++)
       {
-        ss[j] ^= gf[mlt(fg[zz[i]],fg[bm2[i][j]])];
+        ss[j] ^= gf[mlt(fg[zz[i]], fg[bm2[i][j]])];
         //printf("%d,", HH[i][j]);
       }
       //printf("\n");
-      
     }
     printf("ss==%d\n", ss[i]);
   }
@@ -3910,77 +3896,80 @@ OP cos2(unsigned short zz[])
     printf("%d,", ss[j]);
   printf(" ==ss\n");
   //exit(1);
-  s=setpol(ss,K*2);
-  
-  
+  s = setpol(ss, K * 2);
+
   return s;
 }
 
-OP kof(unsigned short c,OP f){
-int i,j,k;
-vec b={0},h={0};
-OP g={0};
+OP kof(unsigned short c, OP f)
+{
+  int i, j, k;
+  vec b = {0}, h = {0};
+  OP g = {0};
 
-b=o2v(f);
-k=deg(b);
-for(i=0;i<k+1;i++){
-h.x[i]=gf[mlt(fg[c],fg[b.x[i]])];
-}
-g=v2o(h);
+  b = o2v(f);
+  k = deg(b);
+  for (i = 0; i < k + 1; i++)
+  {
+    h.x[i] = gf[mlt(fg[c], fg[b.x[i]])];
+  }
+  g = v2o(h);
 
-return g;
-}
-
-unsigned short logx(unsigned short u){
-  unsigned  short i;
-
-return oinv(u);
-
-printf("baka-von\n");
+  return g;
 }
 
-OP rev(OP f){
-int i,tmp,j=0,c[512]={0},d[512]={0},count=0;
-vec v={0};
+unsigned short logx(unsigned short u)
+{
+  unsigned short i;
 
-j=odeg(f)+1;
-printf("d=");
-for(i=0;i<j;i++){
-d[count]=f.t[i].n;
-c[count]=f.t[i].a;
-printf("%d,",d[count]);
-count++;
-}
-printf("\n");
-printf("c=");
-for(i=0;i<count;i++)
-printf("%d,",c[i]);
-printf("\n");
-for(i=0;i<count;i++)
-v.x[d[count-i-1]]=c[i];
+  return oinv(u);
 
-printpol(v);
-printf(" ==rev?\n");
-//exit(1);
-f=v2o(v);
-
-return f;
+  printf("baka-von\n");
 }
 
+OP rev(OP f)
+{
+  int i, tmp, j = 0, c[512] = {0}, d[512] = {0}, count = 0;
+  vec v = {0};
 
-OP bms(unsigned short s[]){
-int i,j,k,l,d[6]={0};
-OP lo[K+1]={0},b[K+1]={0},t[K+1]={0},a={0},f={0},h={0},g={0},hh={0};
-vec v={0},x={0},w={0};
+  j = odeg(f) + 1;
+  printf("d=");
+  for (i = 0; i < j; i++)
+  {
+    d[count] = f.t[i].n;
+    c[count] = f.t[i].a;
+    printf("%d,", d[count]);
+    count++;
+  }
+  printf("\n");
+  printf("c=");
+  for (i = 0; i < count; i++)
+    printf("%d,", c[i]);
+  printf("\n");
+  for (i = 0; i < count; i++)
+    v.x[d[count - i - 1]] = c[i];
 
+  printpol(v);
+  printf(" ==rev?\n");
+  //exit(1);
+  f = v2o(v);
 
-//https://www.cayrel.net/?Implementation-of-Goppa-codes 
-//unsigned short s[4+1]={0,4,6,3,5};
+  return f;
+}
 
-//unsigned short s[K+1]={0,13,3,5,4,8,5};
-//unsigned short s[K+1]={0,15,10,8,8,0,12};
+OP bms(unsigned short s[])
+{
+  int i, j, k, l, d[6] = {0};
+  OP lo[K + 1] = {0}, b[K + 1] = {0}, t[K + 1] = {0}, a = {0}, f = {0}, h = {0}, g = {0}, hh = {0};
+  vec v = {0}, x = {0}, w = {0};
 
-/*
+  //https://www.cayrel.net/?Implementation-of-Goppa-codes
+  //unsigned short s[4+1]={0,4,6,3,5};
+
+  //unsigned short s[K+1]={0,13,3,5,4,8,5};
+  //unsigned short s[K+1]={0,15,10,8,8,0,12};
+
+  /*
 //memset(zz,0,sizeof(zz));
 //mkerr(zz,2);
 zz[0]=1;
@@ -3996,57 +3985,61 @@ printf("%d,",s[i]);
 printf("\n");
 */
 
-x.x[1]=1;
-h=v2o(x);
-v.x[0]=1;
-f=v2o(x);
-lo[0]=v2o(v);
-b[0]=lo[0];
+  x.x[1] = 1;
+  h = v2o(x);
+  v.x[0] = 1;
+  f = v2o(x);
+  lo[0] = v2o(v);
+  b[0] = lo[0];
 
-for(j=1;j<K+1;j++){
-  v=o2v(lo[j-1]);
-  k=0;
-  printpol(v);
-  printf(" ==lo\n");
+  for (j = 1; j < K + 1; j++)
+  {
+    v = o2v(lo[j - 1]);
+    k = 0;
+    printpol(v);
+    printf(" ==lo\n");
 
- l=deg(o2v(lo[j-1]));
-  for(i=1;i<l+1;i++){
-    k^=gf[mlt(fg[v.x[i]],fg[s[j-i]])];
-    printf("v[%d]=%d\n",i,v.x[i]);
+    l = deg(o2v(lo[j - 1]));
+    for (i = 1; i < l + 1; i++)
+    {
+      k ^= gf[mlt(fg[v.x[i]], fg[s[j - i]])];
+      printf("v[%d]=%d\n", i, v.x[i]);
+    }
+    d[j] = s[j] ^ k;
+    printf("d[%d]=%d\n", j, d[j]);
+    g = omul(kof(d[j], h), b[j - 1]);
+    //  if(2*l>j-1)
+    t[j] = oadd(lo[j - 1], g);
+    printpol(o2v(t[j]));
+    printf("==t[%d]\n", j);
+    if (odeg(t[j]) <= odeg(t[j - 1]))
+    {
+      b[j] = omul(b[j - 1], h);
+    }
+    else //(deg(o2v(t[j]))>odeg(t[j-1]))
+    {
+      b[j] = kof(gf[oinv(d[j])], lo[j - 1]);
+      l = j - l + 1;
+    }
+    k = 0;
+    if (d[j] > 0)
+      lo[j] = t[j];
+    if (d[j] == 0)
+      lo[j] = lo[j - 1];
+
+    printpol(o2v(b[j]));
+    printf(" ==b[%d]\n", j);
   }
-  d[j]=s[j]^k;
-  printf("d[%d]=%d\n",j,d[j]);
-  g=omul(kof(d[j],h),b[j-1]);
-//  if(2*l>j-1)
-  t[j]=oadd(lo[j-1],g);
-  printpol(o2v(t[j]));
-  printf("==t[%d]\n",j);
-if(odeg(t[j])<=odeg(t[j-1])){
-  b[j]=omul(b[j-1],h);
-}else//(deg(o2v(t[j]))>odeg(t[j-1]))
-{
-   b[j]=kof(gf[oinv(d[j])],lo[j-1]);
-   l=j-l+1;
-}
-k=0;
-if(d[j]>0)
-  lo[j]=t[j];
-if(d[j]==0) 
-lo[j]=lo[j-1];
+  printpol(o2v(lo[j - 1]));
+  printf("\n");
 
-  printpol(o2v(b[j]));
-  printf(" ==b[%d]\n",j);
-}
-printpol(o2v(lo[j-1]));
-printf("\n");
-
-//hh=rev(lo[j-1]);
-//exit(1);
-//r=coeff(r,LT(r).a);
-printpol(o2v(lo[j-1]));
-printf(" ==coef\n");
-x=chen(lo[j-1]);
-  for (i = 0; i < deg(x)+1; i++)
+  //hh=rev(lo[j-1]);
+  //exit(1);
+  //r=coeff(r,LT(r).a);
+  printpol(o2v(lo[j - 1]));
+  printf(" ==coef\n");
+  x = chen(lo[j - 1]);
+  for (i = 0; i < deg(x) + 1; i++)
   {
     printf("x[%d]=1\n", logx(x.x[i]));
 
@@ -4061,101 +4054,97 @@ x=chen(lo[j-1]);
       exit(1);
       //return f;
     }
-    
   }
 
-//return lo[j-1];
+  //return lo[j-1];
 }
-
 
 //言わずもがな
 int main(void)
 {
   unsigned short z1[N] = {0}; //{1,0,1,1,1,0,0,0,0,0,1,1,1,0,0,1};
   OP f = {0}, r = {0}, w = {0};
-  vec v={0};
-  unsigned short ss[K] = {0},zz[N]={0};
+  vec v = {0};
+  unsigned short ss[K] = {0}, zz[N] = {0};
 
-if (K > N){
-  printf("configuration error! K is too big K\n");
-  exit(1);
-}
+  if (K > N)
+  {
+    printf("configuration error! K is too big K\n");
+    exit(1);
+  }
 
-//kabatiansky example
-unsigned short s[K+1]={0,15,1,9,13,1,14};
-//Berlekamp-Massey法（UnderConstruction）
-//bms(s);
-//exit(1);
-
+  //kabatiansky example
+  unsigned short s[K + 1] = {0, 15, 1, 9, 13, 1, 14};
+  //Berlekamp-Massey法（UnderConstruction）
+  //bms(s);
+  //exit(1);
 
   //公開鍵を生成する(H'=SHP)
- w = pubkeygen();
- 
-//while(1){
+  w = pubkeygen();
 
-//エラーベクトルを生成する
+  //while(1){
+
+  //エラーベクトルを生成する
   memset(z1, 0, sizeof(z1));
-  mkerr(z1, T );
+  mkerr(z1, T);
   //exit(1);
 
   //encryotion test
   //test (w, z1);
   //exit(1);
 
-//  mkd(w); ??
+  //  mkd(w); ??
 
   memset(zz, 0, sizeof(zz));
   memset(ss, 0, sizeof(ss));
 
-  int  j = 0,count=0;
-    //decode開始
-  int  k = 0;
-    while (1)
+  int j = 0, count = 0;
+  //decode開始
+  int k = 0;
+  while (1)
+  {
+
+    memset(z1, 0, sizeof(z1));
+    mkerr(z1, T);
+
+    for (int i = 0; i < N; i++)
     {
-
-        memset(z1, 0, sizeof(z1));
-        mkerr(z1, T);
-
-        for (int i = 0; i < N; i++)
-        {
-            if (z1[i] > 0)
-                printf("la=%d %d\n", i, z1[i]);
-        }
-        //暗号化(v=eH')
-        v = sin2(z1);
-        //f=v2o(v);
-        //復号(S^-1)
-        f=dec(v.x);
-        r = decode(w, f);
-
-        //m=m'P^-1
-        count = elo2(r);
-        for (int i = 0; i < N; i++)
-        {
-            //検算
-            if (z1[i] > 0)
-            printf("error position= %d %d\n", i, z1[i]);
-        }
-        if (count < 0)
-        {
-            printf("baka-@\n");
-            exit(1);
-        }
-        j++;
-        printf("err=%dっ！！\n", count);
-        for(int i=0;i<N;i++)
-        printf("%d,",z1[i]);
-        printf("\n");
-        exit(1);
-
-        if (j == 10000)
-            exit(1);
-
+      if (z1[i] > 0)
+        printf("la=%d %d\n", i, z1[i]);
     }
+    //暗号化(v=eH')
+    v = sin2(z1);
+    //f=v2o(v);
+    //復号(S^-1)
+    f = dec(v.x);
+    r = decode(w, f);
+
+    //m=m'P^-1
+    count = elo2(r);
+    for (int i = 0; i < N; i++)
+    {
+      //検算
+      if (z1[i] > 0)
+        printf("error position= %d %d\n", i, z1[i]);
+    }
+    if (count < 0)
+    {
+      printf("baka-@\n");
+      exit(1);
+    }
+    j++;
+    printf("err=%dっ！！\n", count);
+    for (int i = 0; i < N; i++)
+      printf("%d,", z1[i]);
+    printf("\n");
+    exit(1);
+
+    if (j == 10000)
+      exit(1);
+  }
 
   return 0;
 }
-
 
 // My debris
 /*
@@ -4178,7 +4167,6 @@ unsigned short s[K+1]={0,15,1,9,13,1,14};
   //exit(1);
   */
 
-
 /*
   w=mkg();
   r1=omul(w,w);
@@ -4194,7 +4182,7 @@ unsigned short s[K+1]={0,15,1,9,13,1,14};
     exit(1);
 */
 
- /* 
+/* 
   //mkerr(zz, T*2);
   for(i=0;i<T*2;i++)
   zz[i]=1;
