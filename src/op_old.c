@@ -1297,7 +1297,7 @@ OP kof(unsigned short c, OP f)
     vec b = {0}, h = {0};
     OP g = {0};
 
-    c=fg[c];
+    c = fg[c];
     b = o2v(f);
     k = deg(b);
     for (i = 0; i < k + 1; i++)
@@ -2118,7 +2118,7 @@ unsigned short HH[N][K];
 
 void toByte(MAT SH)
 {
-    MAT V={0};
+    MAT V = {0};
     vec v = {0};
     int i, j, k, cnt;
 
@@ -3122,8 +3122,7 @@ OP pubkeygen()
     FILE *fp;
     unsigned char dd[E * K] = {0};
     OP w = {0};
-    MTX A={0};
-
+    MTX A = {0};
 
     w = mkg(K);
 
@@ -3132,7 +3131,7 @@ OP pubkeygen()
     printsage(o2v(w));
     printf("\n");
     printf("sagemath で既約性を検査してください！\n");
-/*
+    /*
     bdet();
     for(i=0;i<N;i++){
         for(j=0;j<K;j++)
@@ -3161,7 +3160,6 @@ void enc()
 
     pubkeygen();
 }
-
 
 //鍵生成
 void key2(unsigned short g[])
@@ -3558,7 +3556,7 @@ OP sin(unsigned short zz[])
     //printf("\n");
 
     unsigned short uk[K] = {0};
-/*
+    /*
     for (i = 0; i < K * E; i++)
     {
         for (j = 0; j < K * E; j++)
@@ -3595,8 +3593,8 @@ unsigned short logx(unsigned short u)
 
 int bma(unsigned short s[], int kk)
 {
-    int i, j, k, ll = 0, l, d[2 * K + 1] = {0};
-    OP lo[2 * K + 1] = {0}, b[2 * K + 1] = {0}, t[2 * K + 1] = {0}, a = {0}, f = {0}, h = {0}, g = {0}, hh = {0};
+    int i, j, k, ll = 0, l, d[K * K + 1] = {0};
+    OP lo[K * K + 1] = {0}, b[K * K + 1] = {0}, t[K * K + 1] = {0}, a = {0}, f = {0}, h = {0}, g = {0}, hh = {0};
     vec v = {0}, x = {0}, w = {0};
 
     x.x[1] = 1;
@@ -3606,7 +3604,7 @@ int bma(unsigned short s[], int kk)
     lo[0] = v2o(v);
     b[0] = lo[0];
     ll = 0;
-    for (j = 1; j < T * 2 + 1; j++)
+    for (j = 1; j < kk + 1; j++)
     {
         v = o2v(lo[j - 1]);
         k = 0;
@@ -3644,7 +3642,7 @@ int bma(unsigned short s[], int kk)
                 b[j] = kof(gf[oinv(d[j])], lo[j - 1]);
                 //lo[j]=t[j];
                 ll = j - ll;
-                if (j == 2 * T)
+                if (j == kk)
                     break;
             }
         }
@@ -3654,9 +3652,9 @@ int bma(unsigned short s[], int kk)
         //printf(" ==b[%d]\n", j);
     }
 
-    if (!(d[kk - 1] == 0 && d[kk - 3] == 0 && odeg(lo[j - 1]) == T) || !(odeg(lo[j - 1]) == T))
+    if (!(d[kk - 1] == 0 && d[kk - 3] == 0 && odeg(lo[j - 1]) == kk / 2) || !(odeg(lo[j - 1]) == kk / 2))
     {
-        if ((d[kk - 1] == 0 && odeg(lo[j - 2]) == T - 1))
+        if ((d[kk - 1] == 0 && odeg(lo[j - 2]) == kk / 2 - 1))
         {
             lo[j - 1] = omul(lo[j - 2], h);
             //printpol(o2v(lo[j - 1]));
@@ -3667,7 +3665,7 @@ int bma(unsigned short s[], int kk)
     int count = 0;
     //printpol(o2v(lo[j - 1]));
     //printf(" ==coef\n");
-    if (odeg(lo[j - 1]) == T)
+    if (odeg(lo[j - 1]) == kk / 2)
     {
         x = chen(lo[j - 1]);
     }
@@ -3698,7 +3696,7 @@ int bma(unsigned short s[], int kk)
             //return f;
         }
     }
-    if (count < T)
+    if (count < kk / 2)
     {
         printf("vaka in bms %d\n", count);
         //exit(1);
@@ -3747,7 +3745,8 @@ vec rev(OP f)
     return x;
 }
 
-OP mkc(OP w, int kk)
+//BMA 専用符号生成（サイズ指定）
+int mkc(OP w, int kk)
 {
     int i, j, k, l, ii = 0;
 
@@ -3762,11 +3761,12 @@ aa:
 
     //printf("\n");
     memset(mat, 0, sizeof(mat));
-    //既約性判定のためのBen-Orアルゴリズム。拡大体にも対応している。デフォルトでGF(8192)
-    //既約多項式しか使わない。
 
     l = -1;
     ii = 0;
+    //既約性判定のためのBen-Orアルゴリズム。拡大体にも対応している。デフォルトでGF(8192)
+    //既約多項式しか使わない場合はここをコメントアウト。
+    /*
     while (l == -1)
     {
         w = mkpol();
@@ -3780,7 +3780,7 @@ aa:
         ii++;
         //
     }
-
+*/
     r = w;
     //  r=omul(w,w);
     memset(ta, 0, sizeof(ta));
@@ -3796,7 +3796,7 @@ aa:
         {
             printf("trace 0 @ %d\n", i);
             //fail = 1;
-            exit(1);
+            return -1;
         }
     }
     for (i = 0; i < N; i++)
@@ -3831,38 +3831,13 @@ aa:
     {
         for (i = 0; i < kk; i++)
         {
-            ma[j][i] = gf[mlt(fg[vb[i][j]], tr[j])];
+            mat[j][i] = gf[mlt(fg[vb[i][j]], tr[j])];
         }
         //printf("tr[%d]=%d\n",j,tr[j]);
     }
 
-    unsigned short s;
-    //#pragma omp parallel for default(none) private(i, j, k, s) shared(mat, gt, ma, gf, fg)
-    for (i = 0; i < kk; i++)
-    {
-        for (j = 0; j < N; j++)
-        {
-            s = 0;
 
-            for (k = 0; k < kk; k++)
-                s ^= gf[mlt(fg[gt[k][i]], fg[ma[j][k]])];
-            //printf("%d,",s);
-            mat[j][i] = s;
-        }
-    }
-    //printf("\n");
-    //exit(1);
-
-    for (j = 0; j < N; j++)
-    {
-        for (i = 0; i < kk; i++)
-            printf("%d,", mat[j][i]);
-        printf("\n");
-    }
-    //exit(1);
-    //wait();
-
-    return w;
+    return 0;
 }
 
 void half(int kk)
@@ -3892,7 +3867,7 @@ vec newhalf(unsigned short e[])
     vec v = {0};
 
     v.x[0] = gf[mlt(fg[e[0]], fg[e[0]])];
-    for (i = 1; i < K/2+1; i++)
+    for (i = 1; i < K / 2 + 1; i++)
     {
         //printf("i=%d\n",i);
         v.x[i * 2 - 1] = gf[mlt(fg[e[0]], fg[e[i]])];
@@ -3902,25 +3877,62 @@ vec newhalf(unsigned short e[])
     return v;
 }
 
+vec daniera(vec e)
+{
+    int i, j, k;
+    vec v = {0};
+
+    for (i = 0; i < K / 2 + 1; i++)
+        printf("e=%d\n", e.x[i]);
+    //exit(1);
+
+    v.x[0] = e.x[0];
+    v.x[1] = e.x[1];
+    k = 2;
+    for (i = 2; i < K; i++)
+    {
+        if (i % 2 == 1)
+        {
+            v.x[i] = e.x[k];
+            k++;
+        }
+        if (i % 2 == 0)
+            v.x[i] = gf[mlt(fg[v.x[i / 2]], fg[v.x[i / 2]])];
+    }
+
+    return v;
+}
+
+vec aurelia(vec coset)
+{
+    int i, j;
+    vec v = {0}, x;
+
+    for (i = 0; i < K; i++)
+        v.x[i * 2] = gf[mlt(fg[coset.x[i]], fg[coset.x[i]])];
+
+    return v;
+}
+
 OP sendrier(unsigned short zz[N], int kk)
 {
-    unsigned short syn[K * 2+1] = {0}, s = 0, rt[K * 3] = {0};
+    unsigned short syn[K * 2 + 1] = {0}, s = 0, rt[K * 3] = {0};
     int i, j, k;
     OP f = {0};
     vec v = {0}, x[K * 2] = {0};
 
-
     for (j = 0; j < N; j++)
     {
         if (zz[j] > 0)
-        {   
+        {
             memcpy(syn, bm[j], sizeof(syn));
-    
+            //for(k=0;k<K/2+1;k++)
+            //syn[i]=bm[j][k];
+
             v = newhalf(syn);
             //printf("%d\n",j);
             for (k = 0; k < kk; k++)
                 rt[k] ^= v.x[k];
-         
         }
         //exit(1);
         //printf ("%d\n", j);
@@ -3986,7 +3998,7 @@ int main(void)
     fun();
     //exit(1);
     unsigned char ch[E * K] = {0};
-//  unsigned short s[K+1]={0};
+
 label:
 
     //パリティチェックを生成する。
@@ -4000,26 +4012,11 @@ label:
     //{0,15,1,9,13,1,14};
 
     j = 0;
-    memset(zz, 0, sizeof(zz));
-    //memset(s,0,sizeof(s));
-    mkerr(zz, T);
-
-    for (i = 0; i < N; i++)
-    {
-        if (zz[i] > 0)
-        {
-            printf("%d %d\n", i, zz[i]);
-            j++;
-        }
-    }
-    if (j < T)
-    {
-        printf("mkerr err??\n");
-        exit(1);
-    }
     //exit(1);
 
-    r = setpol(hi, 8);
+    //r = setpol(hi, 8);
+    while(1){
+    r=mkpol();
     //printf("%d\n",ben_or(w));
     w = omul(r, r);
     //printpol(o2v(w));
@@ -4028,14 +4025,25 @@ label:
 
     unsigned short t2[K * 2] = {0};
 
-bm:
-
     //full rank matrix
-    r = mkc(r, K * 2);
+     if(mkc(w, K * 2)==0)
+     break;
+    }
     //half size matrix of odd colomn
     half(K + 1);
 
     j = 0;
+
+    memset(zz, 0, sizeof(zz));
+    mkerr(zz, T*2);
+    f = synd(zz, K*2);
+    v = o2v(f);
+    //x = aurelia(v);
+    for (i = 0; i < K*2 ; i++)
+        s2[i + 1] = v.x[i];
+    bma(s2, K*2);
+    exit(1);
+    
 
     while (1)
     {
@@ -4046,6 +4054,7 @@ bm:
         // sendrier's trick
         r1 = sendrier(zz, K);
         v = o2v(r1);
+        //x=aurelia(v);
         //for (i = 0; i < K * 2; i++)
         //    printf("%d,", v.x[i]);
         for (i = 0; i < K; i++)
@@ -4057,13 +4066,14 @@ bm:
         //for (i = 0; i < N; i++)
         //    printf("%d,", zz[i]);
         //printf("\n");
+        exit(1);
 
         if (k < T)
         {
             printpol(o2v(r));
             printf("==goppa\n");
-            for(i=0;i<N;i++)
-            printf("%d,",zz[i]);
+            for (i = 0; i < N; i++)
+                printf("%d,", zz[i]);
             printf("\n");
             exit(1);
         }
@@ -4072,7 +4082,7 @@ bm:
         if (j == 10000)
             exit(1);
     }
-
+    
     //    exit(1);
 
     w = mkg(K);
@@ -4098,7 +4108,7 @@ lab:
     {
 
         memset(zz, 0, sizeof(zz));
-        mkerr(zz, T);
+        mkerr(zz, T );
 
         for (i = 0; i < N; i++)
         {
