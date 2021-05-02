@@ -3079,6 +3079,7 @@ OP mkpol()
 
 unsigned short dd[N][N] = {0};
 
+// Patterson & EEA 用（ランダム多項式、次元指定）
 OP mkg(int kk)
 {
     int i, j, k, l, ii = 0;
@@ -3214,6 +3215,7 @@ aa:
     return w;
 }
 
+// BMA 専用（多項式と次元指定）
 OP mkc(OP w, int kk)
 {
     int i, j, k, l, ii = 0;
@@ -3325,7 +3327,7 @@ aa:
     return w;
 }
 
-
+// 
 OP mkd(OP w, int kk)
 {
     int i, j, k, l, ii = 0;
