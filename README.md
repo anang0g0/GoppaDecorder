@@ -62,9 +62,9 @@ int main(void)
     for (i = 0; i < K; i++)
       s[i + 1] = v.x[i];
 
-    // 復号化２
+    // Berlekamp-Massey Algorithm
       f = bma(s, K);
-    x=chen(f);
+      x=chen(f);
     // 平文の表示
       ero2(x);
 
