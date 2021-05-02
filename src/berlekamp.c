@@ -2242,19 +2242,20 @@ void Pgen()
 
     //fp = fopen("P.key", "wb");
 
-    //random_permutation(P);
+    random_permutation(P);
 
-    for (i = 0; i < N; i++)
-        P[i] = i;
+    //for (i = 0; i < N; i++)
+    //    P[i] = i;
     for (i = 0; i < N; i++)
         inv_P[P[i]] = i;
     //fwrite(P, 2, N, fp);
     //fclose(fp);
-
-    //for (i = 0; i < N; i++)
-    //printf ("%d,", inv_P[i]);
-    //printf ("\n");
-
+    /*
+    for (i = 0; i < N; i++)
+    printf ("%d,", P[i]);
+    printf ("\n");
+    exit(1);
+    */
     //fp = fopen("inv_P.key", "wb");
     //fwrite(inv_P, 2, N, fp);
     //fclose(fp);
@@ -3480,7 +3481,7 @@ MTX mk_pub()
     for (i = 0; i < (K / 2 + 1) * E; i++)
         printf("%d,", R.x[1][i] ^ R.x[2][i] ^ R.x[3][i]);
     printf("\n");
-    //Pgen();
+    Pgen();
     mkS();
     O = toByte(R, K / 2 + 1);
     //  exit(1);
@@ -3491,7 +3492,7 @@ MTX mk_pub()
         for (i = 0; i < (K / 2 + 1) * E; i++)
         {
             //G.z[j][i] = Z.w[P[j]][i];
-            G_bin.x[j][i] = Z.x[j][i];
+            G_bin.x[j][i] = Z.x[P[j]][i];
             //Z.x[j][i]=Z.x[j][i];
             //printf("%d.",inv_S.w[j][i]);
         }
@@ -3569,7 +3570,7 @@ MTX pk_gen()
 
     Q = bdet();
 
-    //Pgen();
+    Pgen();
     makeS();
     //  exit(1);
     H = mulmat(S, Q, 1);
@@ -3578,7 +3579,7 @@ MTX pk_gen()
         for (j = 0; j < N; j++)
         {
             //O.z[j][i] = H.z[P[j]][i];
-            O_bin.x[j][i] = H.x[j][i];
+            O_bin.x[j][i] = H.x[P[j]][i];
         }
     }
     R = toByte(O_bin, K);
