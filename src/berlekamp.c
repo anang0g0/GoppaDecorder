@@ -3254,7 +3254,7 @@ aa:
 */
     // separable goppa code
     w = mkpol();
-    r = omul(w,w);
+    r = omul(w, w);
     //  r=omul(w,w);
     memset(ta, 0, sizeof(ta));
     //w = setpol(g, K + 1);
@@ -3308,9 +3308,7 @@ aa:
         }
         //printf("tr[%d]=%d\n",j,tr[j]);
     }
-    
-    
-   
+
     //printf("\n");
     //exit(1);
     /*
@@ -3327,7 +3325,7 @@ aa:
     return w;
 }
 
-// 
+//
 OP mkd(OP w, int kk)
 {
     int i, j, k, l, ii = 0;
@@ -3411,13 +3409,15 @@ aa:
     printf("\nすげ、オレもうイキそ・・・\n");
     //keygen(g);
     //exit(1);
-    
-   for(i=0;i<N;i++){
-       for(j=0;j<kk;j++){
-           mat[i][j]=vb[j][i];
-       }
-   }
-   
+
+    for (i = 0; i < N; i++)
+    {
+        for (j = 0; j < kk; j++)
+        {
+            mat[i][j] = vb[j][i];
+        }
+    }
+
     //printf("\n");
     //exit(1);
     /*
@@ -3584,13 +3584,14 @@ MTX pk_gen()
     R = toByte(O_bin, K);
     for (i = 0; i < N; i++)
     {
-        for (j = 0; j < K * E; j++){
+        for (j = 0; j < K * E; j++)
+        {
             R_bin.x[i][j] = O_bin.x[i][j];
             //printf("%d,",R_bin.x[i][j]);
         }
     }
- 
-//exit(1);
+
+    //exit(1);
 
     return R;
 }
@@ -3603,7 +3604,7 @@ OP dec(unsigned short ss[])
     unsigned ch[K * E] = {0};
     unsigned char h2o[K * E] = {0};
 
-printf("!1\n");
+    printf("!1\n");
     for (i = 0; i < K; i++)
     {
         v = i2v(ss[i]);
@@ -3984,21 +3985,21 @@ vec newhalf(unsigned short e[])
         printf("e=%d\n", e[i]);
     //exit(1);
 
-
-
-    v.x[0]=e[0];
-    v.x[1]=e[1];
-    k=2;
-    for(i=2;i<K;i++){
-    if(i%2==1){
-        v.x[i]=e[k];
-        k++;
+    v.x[0] = e[0];
+    v.x[1] = e[1];
+    k = 2;
+    for (i = 2; i < K; i++)
+    {
+        if (i % 2 == 1)
+        {
+            v.x[i] = e[k];
+            k++;
+        }
+        if (i % 2 == 0)
+            v.x[i] = gf[mlt(fg[v.x[i / 2]], fg[v.x[i / 2]])];
     }
-    if(i%2==0)
-    v.x[i]=gf[mlt(fg[v.x[i/2]],fg[v.x[i/2]])];
-}
 
-/*
+    /*
     v.x[0] = gf[mlt(fg[e[0]], fg[e[0]])];
     for (i = 1; i < K / 2 + 1; i++)
     {
@@ -4080,8 +4081,7 @@ vec bfd(unsigned short ss[])
     return v;
 }
 
-
-vec sin2(unsigned short zz[],MTX R)
+vec sin2(unsigned short zz[], MTX R)
 {
     int i, j;
     OP s = {0};
@@ -4292,15 +4292,15 @@ OP sendrier(unsigned short zz[N], int kk)
             }
         }
     }
-            printf("\n");
-            v = newhalf(syn);
-            //printf("%d\n",j);
-            for (k = 0; k < kk; k++)
-                rt[k] = v.x[k];
-        //}
-        //exit(1);
-        //printf ("%d\n", j);
-        //printf ("\n");
+    printf("\n");
+    v = newhalf(syn);
+    //printf("%d\n",j);
+    for (k = 0; k < kk; k++)
+        rt[k] = v.x[k];
+    //}
+    //exit(1);
+    //printf ("%d\n", j);
+    //printf ("\n");
     //}
 
     f = setpol(rt, kk);
@@ -4333,29 +4333,29 @@ OP sendrier2(unsigned short zz[N], int kk, MTX L)
             }
         }
     }
-            x = bfd(rt);
-            for (i = 0; i < K / 2 + 1; i++)
-                u.x[K / 2 - i] = x.x[i];
+    x = bfd(rt);
+    for (i = 0; i < K / 2 + 1; i++)
+        u.x[K / 2 - i] = x.x[i];
 
-            printf("rt=\n");
-            for (i = 0; i < K / 2 + 1; i++)
-                printf("%d,", u.x[i]);
-            printf("\n");
-            printf("bm_in se2 == %d || ", j);
-            for (i = 0; i < K / 2 + 1; i++)
-            {
-                printf("%d,", bm[j][i]);
-                tmp[i] = bm[j][i];
-            }
-            printf("\n");
-            //wait();
-            t = newhalf(tmp);
-            for (i = 0; i < K; i++)
-                m[i] ^= t.x[i];
-            v = newhalf(u.x);
-            for (i = 0; i < K; i++)
-                syn[i] ^= v.x[i];
-        //}
+    printf("rt=\n");
+    for (i = 0; i < K / 2 + 1; i++)
+        printf("%d,", u.x[i]);
+    printf("\n");
+    printf("bm_in se2 == %d || ", j);
+    for (i = 0; i < K / 2 + 1; i++)
+    {
+        printf("%d,", bm[j][i]);
+        tmp[i] = bm[j][i];
+    }
+    printf("\n");
+    //wait();
+    t = newhalf(tmp);
+    for (i = 0; i < K; i++)
+        m[i] ^= t.x[i];
+    v = newhalf(u.x);
+    for (i = 0; i < K; i++)
+        syn[i] ^= v.x[i];
+    //}
     //}
 
     printf("P= ");
@@ -4421,26 +4421,26 @@ int main(void)
     memset(mat, 0, sizeof(mat));
 
     // 公開鍵を生成する(Niederreiterとは異なる)
-      R=pk_gen();
+    R = pk_gen();
     // エラーベクトルの初期化
-      memset(zz, 0, sizeof(zz));
+    memset(zz, 0, sizeof(zz));
     //重みTのエラーベクトルを生成する
-      mkerr(zz, T);
+    mkerr(zz, T);
     // 暗号文の生成(s=eH)
-      x=sin2(zz,R);
+    x = sin2(zz, R);
     // 復号化１(m'=sS^{-1})
-      r=dec(x.x);
-      v=o2v(r);
+    r = dec(x.x);
+    v = o2v(r);
     for (i = 0; i < K; i++)
-      s[i + 1] = v.x[i];
+        s[i + 1] = v.x[i];
 
     // Berlekamp-Massey Algorithm
-      f = bma(s, K);
-      x=chen(f);
+    f = bma(s, K);
+    x = chen(f);
     // 平文の表示(m=m'P^{-1})
-      ero2(x);
+    ero2(x);
 
-return 0;
+    return 0;
 }
 
 /*
