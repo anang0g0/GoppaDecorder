@@ -29,6 +29,47 @@ EEAにもXGCDを計算するときの電力解析があるようなので、BM�
 一応BMAなんかも実装中なのですが、多項式ライブラリの出来が悪くてシンドロームだけで計算できるBMAのほうがEEAに比べて２倍くらい早いです。  
 このような利点があるものの、まだバグが取りきれてないのでまずこちらのバージョンをどうぞ。  
 
+サンプルコード（berlekamp.c）
+
+```c
+
+int main(void)
+{
+    int i;
+    unsigned short zz[N] = {0};
+    OP f = {0}, r = {0}, w = {0};
+    vec v, x = {0};
+    MTX R = {0};
+
+    if (K > N)
+        printf("configuration error! K is too big K\n");
+
+    unsigned char ch[E * K] = {0};
+    unsigned short s[K + 1] = {0}, s2[K * 2 + 1] = {0};
+
+    memset(mat, 0, sizeof(mat));
+
+   // 公開鍵を生成する
+    R=pubkeygen();
+
+    memset(zz, 0, sizeof(zz));
+    mkerr(zz, T);        
+
+    x=sin2(zz,R);
+    r=dec(x.x);
+    v=o2v(r);
+    for (i = 0; i < K; i++)
+      s[i + 1] = v.x[i];
+        
+    f = bma(s, K);
+    x=chen(f);
+    ero2(x);
+
+retuen 0;
+}
+
+```
+
 コードサンプル(Niederreiter.c)
 
 ```c
