@@ -3252,7 +3252,7 @@ aa:
 */
     // separable goppa code
     w = mkpol();
-    r = w;
+    r = omul(w,w);
     //  r=omul(w,w);
     memset(ta, 0, sizeof(ta));
     //w = setpol(g, K + 1);
@@ -3986,10 +3986,10 @@ vec newhalf(unsigned short e[])
     v.x[0]=e[0];
     v.x[1]=e[1];
     k=2;
-for(i=2;i<K;i++){
+    for(i=2;i<K;i++){
     if(i%2==1){
-    v.x[i]=e[k];
-    k++;
+        v.x[i]=e[k];
+        k++;
     }
     if(i%2==0)
     v.x[i]=gf[mlt(fg[v.x[i/2]],fg[v.x[i/2]])];
