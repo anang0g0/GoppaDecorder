@@ -54,18 +54,18 @@ int main(void)
       memset(zz, 0, sizeof(zz));
     //重みTのエラーベクトルを生成する
       mkerr(zz, T);
-    // 暗号文の生成
+    // 暗号文の生成(s=eH)
       x=sin2(zz,R);
-    // 復号化１
+    // 復号化１(m'=sS^{-1})
       r=dec(x.x);
-    v=o2v(r);
+      v=o2v(r);
     for (i = 0; i < K; i++)
       s[i + 1] = v.x[i];
 
     // Berlekamp-Massey Algorithm
       f = bma(s, K);
       x=chen(f);
-    // 平文の表示
+    // 平文の表示(m=m'P^{-1})
       ero2(x);
 
 retuen 0;
