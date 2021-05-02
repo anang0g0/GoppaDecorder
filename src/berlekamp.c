@@ -4404,6 +4404,46 @@ MTX A2M(unsigned short A[N][K])
 }
 
 //言わずもがな
+
+int main(void)
+{
+    int i;
+    unsigned short zz[N] = {0};
+    OP f = {0}, r = {0}, w = {0};
+    vec v, x = {0};
+    MTX R = {0};
+    unsigned short s[K + 1] = {0};
+
+    if (K > N)
+        printf("configuration error! K is bigger than N\n");
+
+    // （謎）
+    memset(mat, 0, sizeof(mat));
+
+    // 公開鍵を生成する(Niederreiterとは異なる)
+      R=pk_gen();
+    // エラーベクトルの初期化
+      memset(zz, 0, sizeof(zz));
+    //重みTのエラーベクトルを生成する
+      mkerr(zz, T);
+    // 暗号文の生成(s=eH)
+      x=sin2(zz,R);
+    // 復号化１(m'=sS^{-1})
+      r=dec(x.x);
+      v=o2v(r);
+    for (i = 0; i < K; i++)
+      s[i + 1] = v.x[i];
+
+    // Berlekamp-Massey Algorithm
+      f = bma(s, K);
+      x=chen(f);
+    // 平文の表示(m=m'P^{-1})
+      ero2(x);
+
+return 0;
+}
+
+/*
 int main(void)
 {
     int i, j, k, l;
@@ -4446,7 +4486,7 @@ int main(void)
     //{1,2,3,4,1};
     //memset(g,0,K+1);
     //g[0]=1;
-/*
+
     a = 12345;
     printf("b=%d\n", a);
     v = i2v(a);
@@ -4457,7 +4497,7 @@ int main(void)
     printf("b=%d\n", b);
     //exit(1);
     fun();
-    */
+    
     //exit(1);
     unsigned char ch[E * K] = {0};
 //  unsigned short s[K+1]={0};
@@ -4514,24 +4554,6 @@ bm:
     //half(K+1);
 
     j = 0;
-    /*
-for(i=0;i<24;i++)
-a1[i]=1;
-for(i=0;i<24;i++){
-    for(j=0;j<24;j++)
-    a2[i]^=SS.z[i][j]&a1[j];
-    printf("%d,",a2[i]);
-}
-printf("\n");
-unsigned short a3[24]={0};
-for(i=0;i<24;i++){
-    for(j=0;j<24;j++)
-    a3[i]^=inv_S.w[i][j]&a2[j];
-    printf("%d,",a3[i]);
-}
-printf("\n");
-//exit(1);
-*/
     vec xx = {0}, vv = {0};
 
     while (1)
@@ -4609,3 +4631,4 @@ printf("\n");
 
     return 0;
 }
+*/
