@@ -133,6 +133,9 @@ global.h：符号のパラメータを決めます。
 chash.c ：定義体を指定します。  
 ecole.c ：定義体の中身を作ります。(ecole normal basis lol)  
 
+[参考サイト] (https://www.cayrel.net/?Implementation-of-Goppa-codes&fbclid=IwAR2XMRqZwjkULDQNH9Ij6pZP64lWI_rdgduiaP63u8M_O9rCuDlIC-I9ncU
+)
+
 今のままだとまだ暗号とは言えなくて、単に暗号に使える機能が全部揃ったという段階なので、まだまだ手を加えることがある。
 それ以前にプログラムとしてダメ。
 グローバル変数を公衆便所のように使っているｗ．
@@ -150,7 +153,6 @@ ecole.c ：定義体の中身を作ります。(ecole normal basis lol)
 
 # 20210502
 
-https://www.cayrel.net/?Implementation-of-Goppa-codes&fbclid=IwAR2XMRqZwjkULDQNH9Ij6pZP64lWI_rdgduiaP63u8M_O9rCuDlIC-I9ncU
 
 RS符号以外にも偶数列を削除できるとのことなので、頑張ってその方法を考えています。  
 先に暗号化を実装したほうがいい感じがするので、2倍サイズのシンドロームは当面凍結。  
