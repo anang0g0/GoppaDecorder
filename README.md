@@ -43,7 +43,7 @@ int main(void)
     unsigned short s[K + 1] = {0};
 
     if (K > N)
-        printf("configuration error! K is too big K\n");
+        printf("configuration error! K is bigger than N\n");
 
     // （謎）
     memset(mat, 0, sizeof(mat));
@@ -55,9 +55,9 @@ int main(void)
     //重みTのエラーベクトルを生成する
       mkerr(zz, T);
     // 暗号文の生成
-    x=sin2(zz,R);
+      x=sin2(zz,R);
     // 復号化１
-    r=dec(x.x);
+      r=dec(x.x);
     v=o2v(r);
     for (i = 0; i < K; i++)
       s[i + 1] = v.x[i];
