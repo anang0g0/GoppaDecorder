@@ -3549,7 +3549,7 @@ MTX mk_pub()
 }
 
 //Niederreiter暗号の公開鍵を作る
-MTX pubkeygen()
+MTX pk_gen()
 {
     int i, j, k, l;
     FILE *fp;
@@ -4506,7 +4506,7 @@ bm:
     //public-key generation (slow)
 
     //exit(1);
-    R=pubkeygen();
+    R=pk_gen();
     //full rank matrix
     //w = mkc(r, K * 2);
     //w=mkg(K);
