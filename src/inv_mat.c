@@ -273,6 +273,17 @@ lab:
   return z;
 }
 
+
+MTX mk2(MTX A){
+int i,j,k;
+MTX C={0};
+
+
+C=matinv(A,K*E);
+
+return C;
+}
+
 MTX mulmat(MTX A, MTX B, int flg)
 {
   int i, j, k;
