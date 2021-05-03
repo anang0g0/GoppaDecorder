@@ -212,7 +212,7 @@ lab:
         goto lab;
       }
       //printf(" %d",inv_a[i][j]);
-      z.w[i][j] = inv_a[i][j];
+      z.x[i][j] = inv_a[i][j];
     }
     //printf("\n");
   }
