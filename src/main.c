@@ -97,7 +97,7 @@ int main(void)
     //復号化の本体
     v = patterson(O.f, f);
     //エラー表示
-    ero2(v);
+    ero(v);
 
     break;
   }
