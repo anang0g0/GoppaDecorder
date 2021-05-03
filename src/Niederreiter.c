@@ -3959,7 +3959,7 @@ OP rev(OP f)
 
 OP bms(unsigned short s[])
 {
-  int i, j, k, l, d[6] = {0};
+  int i, j, k, l, d[K*E] = {0};
   OP lo[K + 1] = {0}, b[K + 1] = {0}, t[K + 1] = {0}, a = {0}, f = {0}, h = {0}, g = {0}, hh = {0};
   vec v = {0}, x = {0}, w = {0};
 
