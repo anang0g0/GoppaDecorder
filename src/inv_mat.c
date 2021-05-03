@@ -148,17 +148,18 @@ MTX matinv(MTX a, int n)
   unsigned short cc[N][N] = {0};
 
 lab:
-  /*
+  memset(b,0,sizeof(b));
+  memset(a.x,0,sizeof(a.x));
   for (i = 0; i < F; i++)
   {
     for (j = 0; j < F; j++)
     {
-      a[i][j] = rand() % N;
+      a.x[i][j] = rand() % N;
       //printf("%d,",a[i][j]);
     }
     //printf("\n");
   }
-*/
+
   // printf("\n");
   for (i = 0; i < n; i++)
   {
@@ -174,7 +175,7 @@ lab:
     }
   }
   //掃き出し法
-  #pragma omp parallel for num_threads(omp_get_max_threads()) //private(i,j,k)
+  //#pragma omp parallel for num_threads(omp_get_max_threads()) //private(i,j,k)
   for (i = 0; i < n; i++)
   {
     buf = gf[Inv(fg[a.x[i][i]])];
@@ -217,16 +218,16 @@ lab:
     //printf("\n");
   }
 
-/*
+
   printf("行列を出力\n ={\n");
-#pragma omp parallel for num_threads(omp_get_max_threads()) //private(i,j,k)
+//#pragma omp parallel for num_threads(omp_get_max_threads()) //private(i,j,k)
   for (i = 0; i < n; i++)
   {
     printf("{");
     for (j = 0; j < n; j++)
     {
       //a[i][j]=rand()%N;
-      printf("%3d,", a.w[i][j]);
+      printf("%3d,", a.x[i][j]);
     }
     printf("},\n");
   }
@@ -251,10 +252,10 @@ lab:
     printf("},\n");
   }
   printf("};\n");
-  //exit(1);
+//  exit(1);
 
   //検算
-  #pragma omp parallel for num_threads(omp_get_max_threads()) //private(i,j,k)
+//  #pragma omp parallel for num_threads(omp_get_max_threads()) //private(i,j,k)
   for (i = 0; i < n; i++)
   {
     for (j = 0; j < n; j++)
@@ -262,26 +263,72 @@ lab:
       for (k = 0; k < n; k++)
         b[i][j] ^= gf[mlt(fg[c[i][k]], fg[inv_a[k][j]])];
 
-      printf("%d,", b[i][j]);
-      // if(j==i && b[i][j]!=1 && j!=i && b[i][j]>0)
-      //goto lab;
     }
     printf("\n");
   }
-  //exit(1);
-*/
+
+  int flg=0;
+    for (i = 0; i < F; i++)
+    {
+      //   printf("%d",b[i][i]);
+      //printf("==\n");
+      if (b[i][i] == 1)
+      {
+        //printf("baka");
+        //   exit(1);
+        flg++;
+      }
+    }
+    count = 0;
+
+    for (i = 0; i < F; i++)
+    {
+      for (j = 0; j < F; j++)
+      {
+        if (b[i][j] == 0 && i != j)
+          count++;
+      }
+    }
+
+    //if(cl[0][0]>0)
+    //  goto labo;
+    //
+    printf("S[K][K]=\n{\n");
+    if (flg == F && count == (F * F - F))
+    //if(flg==F)
+    {
+      for (i = 0; i < F; i++)
+      {
+        //printf("{");
+        for (j = 0; j < F; j++)
+        {
+          //
+          printf("good!\n");
+        }
+
+        //printf("},\n");
+      }
+      //printf("};\n");
+
+      printf("inv_S[K][K]=\n{\n");
+      for (i = 0; i < F; i++)
+      {
+        //printf("{");
+        for (j = 0; j < F; j++)
+        {
+          z.x[i][j] = inv_a[i][j];
+          inv_S.x[i][j]=inv_a[i][j];
+          //printf("%d,", inv_S.w[i][j]);
+        }
+        //printf("},\n");
+      }
+      //printf("};\n");
+    }else{
+      goto lab;
+    }
+  exit(1);
+
   return z;
-}
-
-
-MTX mk2(MTX A){
-int i,j,k;
-MTX C={0};
-
-
-C=matinv(A,K*E);
-
-return C;
 }
 
 MTX mulmat(MTX A, MTX B, int flg)
