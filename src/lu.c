@@ -21,11 +21,12 @@ MTX SS={0};
 //{{0,1,1,1},{1,0,1,1},{0,0,1,1},{1,0,0,1}}; //{{1,2,0,-1},{-1,1,2,0},{2,0,1,1},{1,-2,-1,1}}; //入力用の配列
 
 //extern unsigned long xor128();
-//extern void makeS();
+extern void makeS();
 
 
 MTX is_reg(MTX cc)
 {
+  
   int i, j, k, l;
   unsigned char b[F][F] = {0};
   unsigned char dd[F] = {0};
@@ -83,12 +84,6 @@ MTX is_reg(MTX cc)
       if (cc.x[i][i] == 0)
       {
         j = i;
-        /*
-  cc[i][i]=1;
-  for(k=i+1;k<F;k++)
-    cc[i][k]^=rand()%2;
-  //printf("i=%d\n",i);
-  */
 
         while (cc.x[j][i] == 0 && j < F)
         {
@@ -152,18 +147,6 @@ MTX is_reg(MTX cc)
       }
     }
 
-/*
-    //逆行列を出力
-    for (i = 0; i < F; i++)
-    {
-      for (j = 0; j < F; j++)
-      {
-        printf("a %d,", inv_a[i][j]);
-      }
-      printf("\n");
-    }
-*/
-    // exit(1);
 
   //検算
 #pragma omp parallel for private(j, k) num_threads(16)
@@ -234,8 +217,9 @@ MTX is_reg(MTX cc)
     return O;
   }
 
-return;
+return cc;
 }
+
 
 void makeS()
 {
@@ -267,7 +251,7 @@ void makeS()
     for (i = 0; i < F; i++)
     {
       for (j = 0; j < F; j++)
-        cc[i][j] = rand()%2; //xor128() % 2;
+        cc[i][j] = xor128() % 2;
     }
     printf("end of g2\n");
     //exit(1);
