@@ -6,19 +6,25 @@ int main(void)
   unsigned short zz[N] = {0},z1[N]={0};
   OP f = {0}, r = {0}, w = {0};
   vec v, x = {0};
-  MTX R = {0},O={0};
+  MTX R = {0},O={0} ,Q={0};
   unsigned short s[K + 1] = {0};
 
 //srand(clock());
 
 do{
+  memset(Q.x,0,sizeof(Q.x));
   memset(O.x,0,sizeof(O.x));
 for(i=0;i<K*E;i++){
   for(j=0;j<K*E;j++)
   O.x[i][j]=xor128()%2;
 }
-}while(is_reg(O).reg == -1);
-
+}while(is_reg(O,Q.x) == -1);
+R=mulmat(O,Q,3);
+for(i=0;i<K*E;i++){
+  for(j=0;j<K*E;j++)
+  printf("%d,",R.x[i][j]);
+  printf("\n");
+}
 //exit(1);
   if (K > N)
     printf("configuration error! K is bigger than N\n");
