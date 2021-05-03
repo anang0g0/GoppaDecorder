@@ -36,9 +36,9 @@
 #include "struct.h"
 #include "debug.c"
 #include "chash.c"
-#include "lu.c"
 #include "sha3.c"
 #include "inv_mat.c"
+#include "lu.c"
 //#include "golay.c"
 
 #define TH omp_get_max_threads()
@@ -1520,15 +1520,6 @@ void random_permutation(unsigned short *a)
     }
 }
 
-/*
-//配列から置換行列への変換
-void P2Mat(unsigned short P[N])
-{
-  int i;
-  for (i = 0; i < N; i++)
-    AH.x[i][P[i]] = 1;
-}
-*/
 
 unsigned short
 b2B(unsigned short b[E])
@@ -2242,10 +2233,10 @@ void Pgen()
 
     //fp = fopen("P.key", "wb");
 
-    //random_permutation(P);
+    random_permutation(P);
 
-    for (i = 0; i < N; i++)
-        P[i] = i;
+    //for (i = 0; i < N; i++)
+    //    P[i] = i;
     for (i = 0; i < N; i++)
         inv_P[P[i]] = i;
     //fwrite(P, 2, N, fp);
@@ -3555,7 +3546,7 @@ MTX pubkeygen()
     FILE *fp;
     unsigned char dd[E * K] = {0};
     OP w = {0};
-    MTX R = {0}, R_bin = {0}, O = {0}, Q = {0}, O_bin = {0};
+    MTX R = {0}, R_bin = {0}, O = {0}, Q = {0}, O_bin = {0},O={0}, O_inv={0};
 
     w = mkd(w, K * 2);
     //w = mkg(K);
@@ -3568,17 +3559,24 @@ MTX pubkeygen()
     printf("sagemath で既約性を検査してください！\n");
 
     Q = bdet();
+    for (i = 0; i < K*E; i++)
+    {
+      for (j = 0; j < K*E; j++)
+        S.x[i][j] = xor128() % 2;
+    }
+    printf("end of g2\n");
+    inv_S=mk2(S);
 
-    //Pgen();
-    makeS();
+    Pgen();
+    //makeS();
     //  exit(1);
-    H = mulmat(S, Q, 1);
+    H = mulmat(O, Q, 1);
     for (i = 0; i < K * E; i++)
     {
         for (j = 0; j < N; j++)
         {
-            //O.z[j][i] = H.z[P[j]][i];
-            O_bin.x[j][i] = H.x[j][i];
+            O.z[j][i] = H.z[P[j]][i];
+            //O_bin.x[j][i] = H.x[j][i];
         }
     }
     R = toByte(O_bin, K);
