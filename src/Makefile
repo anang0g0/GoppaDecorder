@@ -2,13 +2,13 @@ all:
 	gcc-10 -Wall -g -pg -O3  -mtune=native -march=native -ffast-math -funroll-loops  -fopenmp main.c
 
 amd:
-	gcc-10 -Wall -g -pg -O3  -mtune=znver2 -march=znver2 -ffast-math -funroll-loops  -fopenmp berlekamp.c
+	gcc-10 -Wall -g -pg -O3  -mtune=znver2 -march=znver2 -ffast-math -funroll-loops  -fopenmp maim.c
 
 clang:
-	clang-11 -Wall -g -pg -O3 -mtune=znver2 -march=znver2 -ffast-math -funroll-loops  -fopenmp berlekamp.c
+	clang -Wall -g -pg -O3 -mtune=znver2 -march=znver2 -ffast-math -funroll-loops  -fopenmp main.c
 
 old:
-	clang-11 -Wall -g -pg -O3 -mtune=native -march=native -ffast-math -funroll-loops  -fopenmp op_old.c
+	clang -Wall -g -pg -O3 -mtune=znver2 -march=znver2 -ffast-math -funroll-loops  -fopenmp op_old.c
 
 nie:
 	gcc-10 -Wall -g -pg -O3 -mtune=native -march=native -ffast-math -funroll-loops  -fopenmp Niederreiter.c
