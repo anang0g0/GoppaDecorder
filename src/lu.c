@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-//#include "global.h"
+
 //#include "chash.c"
 
 //#define D 4096
