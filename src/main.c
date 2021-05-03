@@ -9,15 +9,16 @@ int main(void)
   MTX R = {0},O={0};
   unsigned short s[K + 1] = {0};
 
-srand(clock());
+//srand(clock());
 
 do{
   memset(O.x,0,sizeof(O.x));
 for(i=0;i<K*E;i++){
   for(j=0;j<K*E;j++)
-  O.x[i][j]=rand()%2;
+  O.x[i][j]=xor128()%2;
 }
 }while(is_reg(O).reg == -1);
+
 //exit(1);
   if (K > N)
     printf("configuration error! K is bigger than N\n");
@@ -78,7 +79,7 @@ for(i=0;i<K*E;i++){
       exit(1);
     }
     j++;
-    if (j == T)
+    if (count == T)
       printf("err=%dっ！！\n", count);
 
     //if (j == 10000)
