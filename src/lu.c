@@ -24,7 +24,7 @@ MTX SS={0};
 extern void makeS();
 
 
-MTX is_reg(MTX cc)
+int is_reg(MTX cc,MTX *R)
 {
   
   int i, j, k, l;
@@ -95,8 +95,8 @@ MTX is_reg(MTX cc)
         {
           printf("baka %d\n", j);
           //exit(1);
-          cc.reg=-1;
-          return cc;
+          //cc.reg=-1;
+          return -1;
         }
         for (k = 0; k < F; k++)
         {
@@ -204,20 +204,20 @@ MTX is_reg(MTX cc)
         //printf("{");
         for (j = 0; j < F; j++)
         {
-         O.x[i][j]=inv_a[i][j];
-         O.reg=0;
+         R->x[i][j]=inv_a[i][j];
+         //O.reg=0;
           //printf("%d,", inv_S.w[i][j]);
         }
         //printf("},\n");
       }
       //printf("};\n");
-    return O;
+    return 0;
     }
-    O.reg= -1;
-    return O;
+    //O.reg= -1;
+    return -1;
   }
 
-return cc;
+return -1;
 }
 
 
