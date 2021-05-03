@@ -340,11 +340,11 @@ MTX mulmat(MTX A, MTX B, int flg)
   if (flg == 3)
   {
   #pragma omp parallel for num_threads(omp_get_max_threads()) //private(i,j,k)
-    for (i = 0; i < K; i++)
+    for (i = 0; i < K*E; i++)
     {
-      for (j = 0; j < K; j++)
+      for (j = 0; j < K*E; j++)
       {
-        for (k = 0; k < K; k++)
+        for (k = 0; k < K*E; k++)
         {
           tmp.x[i][j] ^= gf[mlt(fg[A.x[i][k]], fg[B.x[k][j]])];
         }
