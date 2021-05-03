@@ -197,7 +197,7 @@ lab:
     }
   }
 
-/*
+
   // printf("\n\n逆行列を出力\n");
   for (i = 0; i < n; i++)
   {
@@ -217,6 +217,7 @@ lab:
     //printf("\n");
   }
 
+/*
   printf("行列を出力\n ={\n");
 #pragma omp parallel for num_threads(omp_get_max_threads()) //private(i,j,k)
   for (i = 0; i < n; i++)
