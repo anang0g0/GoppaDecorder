@@ -134,6 +134,7 @@ printf("%f\n",det); // -> 120.000000
 
 
 //inverse matrix
+
 MTX matinv(MTX a, int n)
 {
 
@@ -290,46 +291,12 @@ lab:
       }
     }
 
-    //if(cl[0][0]>0)
-    //  goto labo;
-    //
-    printf("S[K][K]=\n{\n");
-    if (flg == F && count == (F * F - F))
-    //if(flg==F)
-    {
-      for (i = 0; i < F; i++)
-      {
-        //printf("{");
-        for (j = 0; j < F; j++)
-        {
-          //
-          printf("good!\n");
-        }
-
-        //printf("},\n");
-      }
-      //printf("};\n");
-
-      printf("inv_S[K][K]=\n{\n");
-      for (i = 0; i < F; i++)
-      {
-        //printf("{");
-        for (j = 0; j < F; j++)
-        {
-          z.x[i][j] = inv_a[i][j];
-          inv_S.x[i][j]=inv_a[i][j];
-          //printf("%d,", inv_S.w[i][j]);
-        }
-        //printf("},\n");
-      }
-      //printf("};\n");
-    }else{
-      goto lab;
-    }
   exit(1);
 
   return z;
 }
+
+
 
 MTX mulmat(MTX A, MTX B, int flg)
 {
