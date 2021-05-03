@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-
+//#include "global.h"
 //#include "chash.c"
 
 //#define D 4096
@@ -23,6 +23,219 @@ MTX SS={0};
 //extern unsigned long xor128();
 //extern void makeS();
 
+
+MTX is_reg(MTX cc)
+{
+  int i, j, k, l;
+  unsigned char b[F][F] = {0};
+  unsigned char dd[F] = {0};
+  unsigned int flg = 0, count = 0;
+//  unsigned char cc[F][F] = {0};
+  unsigned char cl[F][F];
+  time_t t;
+  FILE *fq;
+  unsigned char inv_a[F][F] = {0}; //ここに逆行列が入る
+  unsigned char buf;               //一時的なデータを蓄える
+  int n = K*E;                       //配列の次数
+  MTX O={0};
+
+  //while(flg!=F || count!=F*F-F)
+  //while(count!=F*F-F)
+  while (flg != F)
+  {
+  labo:
+    //memset(cc,0,sizeof(cc));
+    flg = 0;
+    count = 0;
+    srand(clock() + time(&t));
+
+    //g2();
+
+#pragma omp parallel for private(j)
+    for (i = 0; i < F; i++)
+    {
+
+      for (j = 0; j < F; j++)
+      {
+        //printf("%d,",cc[i][j]);
+        cl[i][j] = cc.x[i][j];
+        dd[j] = cc.x[i][j];
+      }
+      //printf("\n");
+    }
+
+//memset(inv_a,0,sizeof(inv_a));
+
+//単位行列を作る
+#pragma omp parallel for private(j)
+    for (i = 0; i < F; i++)
+    {
+      for (j = 0; j < F; j++)
+      {
+        inv_a[i][j] = (i == j) ? 1.0 : 0.0;
+      }
+    }
+
+    //掃き出し法
+
+    for (i = 0; i < F; i++)
+    {
+      if (cc.x[i][i] == 0)
+      {
+        j = i;
+        /*
+  cc[i][i]=1;
+  for(k=i+1;k<F;k++)
+    cc[i][k]^=rand()%2;
+  //printf("i=%d\n",i);
+  */
+
+        while (cc.x[j][i] == 0 && j < F)
+        {
+          j++;
+        }
+
+        //#pragma omp parallel for
+        if (j >= F)
+        {
+          printf("baka %d\n", j);
+          //exit(1);
+          cc.reg=-1;
+          return cc;
+        }
+        for (k = 0; k < F; k++)
+        {
+          cc.x[i][k] ^= cc.x[j][k] % 2;
+          inv_a[i][k] ^= inv_a[j][k];
+        }
+
+        cc.x[i][i] = 1;
+      }
+      //  exit(1);
+
+      if (cc.x[i][i] == 1)
+      {
+        for (l = i + 1; l < F; l++)
+        {
+          if (cc.x[l][i] == 1)
+          {
+            //#pragma omp parallel for
+            for (k = 0; k < F; k++)
+            {
+              cc.x[l][k] ^= cc.x[i][k] % 2;
+              inv_a[l][k] ^= inv_a[i][k];
+            }
+          }
+        }
+
+        // printf("@%d\n",i);
+      }
+      // printf("@i=%d\n",i);
+    }
+
+    //  exit(1);
+    //#pragma omp parallel for private(j,k)
+    for (i = 1; i < F; i++)
+    {
+      for (k = 0; k < i; k++)
+      {
+        if (cc.x[k][i] == 1)
+        {
+          for (j = 0; j < F; j++)
+          {
+            // if(a[k][i]==1){
+            cc.x[k][j] ^= cc.x[i][j] % 2;
+            inv_a[k][j] ^= inv_a[i][j];
+            //}
+          }
+        }
+      }
+    }
+
+/*
+    //逆行列を出力
+    for (i = 0; i < F; i++)
+    {
+      for (j = 0; j < F; j++)
+      {
+        printf("a %d,", inv_a[i][j]);
+      }
+      printf("\n");
+    }
+*/
+    // exit(1);
+
+  //検算
+#pragma omp parallel for private(j, k) num_threads(16)
+    for (i = 0; i < F; i++)
+    {
+//#pragma omp parallel num_threads(8) //private(j,k)
+      {
+        for (j = 0; j < F; j++)
+        {
+          l = 0;
+          //#pragma omp parallel for reduction(^:l)
+          for (k = 0; k < F; k++)
+          {
+            b[i][j] ^= (cl[i][k] & inv_a[k][j]);
+            //l^=(cl[i][k]&inv_a[k][j]);
+          }
+          //b[i][j]=l;
+        }
+      }
+    }
+
+    for (i = 0; i < F; i++)
+    {
+      //   printf("%d",b[i][i]);
+      //printf("==\n");
+      if (b[i][i] == 1)
+      {
+        //printf("baka");
+        //   exit(1);
+        flg++;
+      }
+    }
+    count = 0;
+
+    for (i = 0; i < F; i++)
+    {
+      for (j = 0; j < F; j++)
+      {
+        if (b[i][j] == 0 && i != j)
+          count++;
+      }
+    }
+
+    //if(cl[0][0]>0)
+    //  goto labo;
+    //
+    printf("S[K][K]=\n{\n");
+    if (flg == F && count == (F * F - F))
+    //if(flg==F)
+    {
+
+      printf("inv_S[K][K]=\n{\n");
+      for (i = 0; i < F; i++)
+      {
+        //printf("{");
+        for (j = 0; j < F; j++)
+        {
+         O.x[i][j]=inv_a[i][j];
+         O.reg=0;
+          //printf("%d,", inv_S.w[i][j]);
+        }
+        //printf("},\n");
+      }
+      //printf("};\n");
+    return O;
+    }
+    O.reg= -1;
+    return O;
+  }
+
+return;
+}
 
 void makeS()
 {
@@ -54,7 +267,7 @@ void makeS()
     for (i = 0; i < F; i++)
     {
       for (j = 0; j < F; j++)
-        cc[i][j] = xor128() % 2;
+        cc[i][j] = rand()%2; //xor128() % 2;
     }
     printf("end of g2\n");
     //exit(1);
