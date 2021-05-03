@@ -3512,7 +3512,7 @@ MTX pubkeygen(OP f)
 
     Q = bdet();
 
-    //Pgen();
+    Pgen();
     makeS();
     //  exit(1);
     H = mulmat(S, Q, 1);
@@ -3521,7 +3521,7 @@ MTX pubkeygen(OP f)
         for (j = 0; j < N; j++)
         {
             //O.z[j][i] = H.z[P[j]][i];
-            O_bin.x[j][i] = H.x[j][i];
+            O_bin.x[j][i] = H.x[P[j]][i];
         }
     }
     R = toByte(O_bin, K);
