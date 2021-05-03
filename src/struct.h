@@ -81,7 +81,6 @@ typedef struct pub
 typedef struct {
   unsigned short x[N][N];
   OP f;
-  int reg;
   int row; //行
   int col; //列
 } MTX;
