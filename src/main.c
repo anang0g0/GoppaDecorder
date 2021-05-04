@@ -159,6 +159,8 @@ int main(void)
   //exit(1);
 while(1){
   memset(O.x,0,sizeof(O.x));
+  O.row=64;
+  O.col=64;
   for(i=0;i<64;i++){
     for(j=0;j<64;j++)
     O.x[i][j]=rand()%2;
@@ -166,6 +168,8 @@ while(1){
   if(binv(O,Q.x,64)==0)
   break;
 }
+Q.col=64;
+Q.row=64;
 printf("aaaaaaa\n");
 //exit(1);
 mmul(O,Q,64);
