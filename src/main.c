@@ -172,7 +172,7 @@ Q.col=64;
 Q.row=64;
 printf("aaaaaaa\n");
 //exit(1);
-mmul(O,Q,64);
+mmul(O,Q);
 //matinv(K);
 
   return 0;
