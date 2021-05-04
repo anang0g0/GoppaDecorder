@@ -3571,7 +3571,16 @@ MTX pk_gen()
     Q = bdet();
 
     Pgen();
-    makeS();
+        do{
+  memset(inv_S.x,0,sizeof(inv_S.x));
+  memset(S.x,0,sizeof(S.x));
+for(i=0;i<K*E;i++){
+  for(j=0;j<K*E;j++)
+  S.x[i][j]=xor128()%2;
+}
+}while(is_reg(S,inv_S.x) == -1);
+
+    //makeS();
     //  exit(1);
     H = mulmat(S, Q, 1);
     for (i = 0; i < K * E; i++)
@@ -4397,7 +4406,7 @@ int main(void)
     // （謎）
     memset(mat, 0, sizeof(mat));
 
-    // 公開鍵を生成する(Niederreiterとは異なる)
+    // 公開鍵を生成する(Niederreiterとは異なる) // 鍵サイズK : Goppa Code
     R = pk_gen();
     // エラーベクトルの初期化
     memset(zz, 0, sizeof(zz));
@@ -4418,7 +4427,7 @@ int main(void)
     ero2(x);
     wait();
 
-    O = mk_pub();
+    O = mk_pub(); // 鍵サイズ(K/2 Reed-Solomon)
     memset(zz, 0, sizeof(zz));
     mkerr(zz, T);
     r1 = sendrier2(zz, K, O);
@@ -4429,7 +4438,8 @@ int main(void)
     //    printf("%d,", s[i]);
     //printf("\n");
     f = bma(s, K);
-
+    x=chen(f);
+    ero2(x);
     for (i = 0; i < N; i++)
         if (zz[i] > 0)
             printf("%d,", i);

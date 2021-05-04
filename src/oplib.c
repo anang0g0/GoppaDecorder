@@ -3255,6 +3255,116 @@ aa:
 }
 
 
+
+OP mkd(OP w, int kk)
+{
+    int i, j, k, l, ii = 0;
+
+    unsigned short tr[N] = {0};
+    unsigned short ta[N] = {0};
+    vec v = {0};
+    unsigned short po[K + 1] = {1, 0, 1, 0, 5};
+    //OP w={0};
+    OP r = {0};
+
+aa:
+
+    //printf("\n");
+    memset(mat, 0, sizeof(mat));
+    //既約性判定のためのBen-Orアルゴリズム。拡大体にも対応している。デフォルトでGF(8192)
+    //既約多項式しか使わない。
+
+    l = -1;
+    ii = 0;
+    // irreducible goppa code (既役多項式が必要なら、ここのコメントを外すこと。)
+    /*
+    while (l == -1)
+    {
+        w = mkpol();
+        l = ben_or(w);
+        printf("irr=%d\n", l);
+        if (ii > 300)
+        {
+            printf("too many error\n");
+            exit(1);
+        }
+        ii++;
+        //
+    }
+*/
+    // separable goppa code
+    w = mkpol();
+    r = w;
+    //  r=omul(w,w);
+    memset(ta, 0, sizeof(ta));
+    //w = setpol(g, K + 1);
+    printpol(o2v(r));
+    //printf(" =poly\n");
+
+    //多項式の値が0でないことを確認
+    for (i = 0; i < N; i++)
+    {
+        ta[i] = trace(r, i);
+        if (ta[i] == 0)
+        {
+            printf("trace 0 @ %d\n", i);
+            //fail = 1;
+            goto aa;
+        }
+    }
+    for (i = 0; i < N; i++)
+    {
+        tr[i] = oinv(ta[i]);
+        //printf("%d,", tr[i]);
+    }
+    memset(g, 0, sizeof(g));
+    g[0] = 1;
+
+    //多項式を固定したい場合コメントアウトする。
+    oprintpol(r);
+    printf("\n");
+    printsage(o2v(r));
+    printf("\n");
+    printf("sagemath で既約性を検査してください！\n");
+    memset(v.x, 0, sizeof(v.x));
+    //  v=rev(w);
+    van(kk);
+    //  v=o2v(w);
+    ogt(g, kk);
+
+    //wait();
+
+    //#pragma omp parallel for
+
+    printf("\nすげ、オレもうイキそ・・・\n");
+    //keygen(g);
+    //exit(1);
+
+    for (i = 0; i < N; i++)
+    {
+        for (j = 0; j < kk; j++)
+        {
+            mat[i][j] = vb[j][i];
+        }
+    }
+
+    //printf("\n");
+    //exit(1);
+    /*
+    for (j = 0; j < N; j++)
+    {
+        for (i = 0; i < kk; i++)
+            printf("%d,", mat[j][i]);
+        printf("\n");
+    }
+    //exit(1);
+    //wait();
+*/
+
+    return w;
+}
+
+
 // BMA 専用（多項式と次元指定）
 OP mkc(OP w, int kk)
 {
@@ -3369,102 +3479,6 @@ aa:
 
 
 
-OP mkd(OP w,int kk)
-{
-  int i, j, k, l, ii = 0;
-
-  unsigned short tr[N] = {0};
-  unsigned short ta[N] = {0};
-  vec v = {0};
-
-aa:
-
-  //printf("\n");
-
-  //既約性判定のためのBen-Orアルゴリズム。拡大体にも対応している。デフォルトでGF(8192)
-  //既約多項式しか使わない。
-  l = -1;
-  ii = 0;
-
-  memset(ta, 0, sizeof(ta));
-  //w = setpol(g, K + 1);
-  printpol(o2v(w));
-  //printf(" =poly\n");
-
-  //多項式の値が0でないことを確認
-  for (i = 0; i < N; i++)
-  {
-    ta[i] = trace(w, i);
-    if (ta[i] == 0)
-    {
-      printf("trace 0 @ %d\n", i);
-      //fail = 1;
-      exit(1);
-    }
-  }
-  for (i = 0; i < N; i++)
-  {
-    tr[i] = oinv(ta[i]);
-    //printf("%d,", tr[i]);
-  }
-
-  //多項式を固定したい場合コメントアウトする。
-  oprintpol(w);
-  printf("\n");
-  printsage(o2v(w));
-  printf("\n");
-  printf("sagemath で既約性を検査してください！\n");
-
-  van2();
-  ogt2();
-  memset(bm, 0, sizeof(bm));
-
-  //wait();
-
-  //#pragma omp parallel for
-
-  printf("\nすげ、オレもうイキそ・・・\n");
-  //keygen(g);
-  //exit(1);
-
-  for (j = 0; j < N; j++)
-  {
-    for (i = 0; i < K * 2; i++)
-    {
-      bm[j][i] = gf[mlt(fg[vb[i][j]], tr[j])];
-    }
-    //printf("tr[%d]=%d\n",j,tr[j]);
-  }
-
-  unsigned short s;
-#pragma omp parallel for default(none) private(i, j, k, s) shared(bm2, gt, bm, gf, fg)
-  for (i = 0; i < K; i++)
-  {
-    for (j = 0; j < N; j++)
-    {
-      s = 0;
-
-      for (k = 0; k < K; k++)
-        s ^= gf[mlt(fg[gt[k][i]], fg[bm[j][k]])];
-      //printf("%d,",s);
-      bm2[j][i] = s;
-    }
-  }
-  //printf("\n");
-  //exit(1);
-
-  for (j = 0; j < N; j++)
-  {
-    for (i = 0; i < K * 2; i++)
-      printf("%d,", bm2[j][i]);
-    printf("\n");
-  }
-  //exit(1);
-  //wait();
-
-  return w;
-}
-
 
 void half(int kk)
 {
@@ -3512,8 +3526,18 @@ MTX pubkeygen(OP f)
 
     Q = bdet();
 
-    Pgen();
-    makeS();
+    //Pgen();
+    /*
+    do{
+  memset(inv_S.x,0,sizeof(inv_S.x));
+  memset(S.x,0,sizeof(S.x));
+for(i=0;i<K*E;i++){
+  for(j=0;j<K*E;j++)
+  S.x[i][j]=xor128()%2;
+}
+}while(is_reg(S,inv_S.x) == -1);
+*/
+//   makeS();
     //  exit(1);
     H = mulmat(S, Q, 1);
     for (i = 0; i < K * E; i++)
@@ -3547,7 +3571,7 @@ MTX mk_pub()
     FILE *fp;
     unsigned char dd[E * K] = {0};
     OP w = {0};
-    MTX Z = {0}, FX = {0}, G_bin = {0}, G_int = {0}, R = {0}, O = {0};
+    MTX Z = {0}, FX = {0}, G_bin = {0}, G_int = {0}, R = {0}, O = {0},Q={0};
 
     w = mkd(w, K * 2);
     //w = mkg(K);
@@ -3564,8 +3588,19 @@ MTX mk_pub()
     for (i = 0; i < (K / 2 + 1) * E; i++)
         printf("%d,", R.x[1][i] ^ R.x[2][i] ^ R.x[3][i]);
     printf("\n");
-    Pgen();
-    mkS();
+    //Pgen();
+    //mkS();
+    /*
+do{
+  memset(Q.x,0,sizeof(Q.x));
+  memset(O.x,0,sizeof(O.x));
+  memset(S.x,0,sizeof(S.x));
+for(i=0;i<(K/2+1)*E;i++){
+  for(j=0;j<(K/2+1)*E;j++)
+  S.x[i][j]=xor128()%2;
+}
+}while(mkS(S,inv_S.x) == -1);
+*/
     O = toByte(R, K / 2 + 1);
     //  exit(1);
     Z = mulmat(S, R, 2);
@@ -3653,8 +3688,9 @@ MTX pk_gen()
 
     Q = bdet();
 
-    Pgen();
-    makeS();
+    //Pgen();
+
+//    makeS();
     //  exit(1);
     H = mulmat(S, Q, 1);
     for (i = 0; i < K * E; i++)

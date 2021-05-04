@@ -2,30 +2,28 @@
 
 int main(void)
 {
-  int i,j=0,count=0;
-  unsigned short zz[N] = {0},z1[N]={0};
+  int i, j = 0, count = 0;
+  unsigned short zz[N] = {0}, z1[N] = {0};
   OP f = {0}, r = {0}, w = {0};
   vec v, x = {0};
-  MTX R = {0},O={0} ,Q={0};
+  MTX R = {0}, O = {0}, Q = {0};
   unsigned short s[K + 1] = {0};
 
-//srand(clock());
+  //srand(clock());
 
-do{
-  memset(Q.x,0,sizeof(Q.x));
-  memset(O.x,0,sizeof(O.x));
-for(i=0;i<K*E;i++){
-  for(j=0;j<K*E;j++)
-  O.x[i][j]=xor128()%2;
-}
-}while(is_reg(O,Q.x) == -1);
-R=mulmat(O,Q,3);
-for(i=0;i<K*E;i++){
-  for(j=0;j<K*E;j++)
-  printf("%d,",R.x[i][j]);
-  printf("\n");
-}
-//exit(1);
+  Pgen();
+  do
+  {
+    memset(S.x, 0, sizeof(S.x));
+    memset(inv_S.x, 0, sizeof(inv_S.x));
+    for (i = 0; i < K * E; i++)
+    {
+      for (j = 0; j < K * E; j++)
+        S.x[i][j] = xor128() % 2;
+    }
+  } while (is_reg(S, inv_S.x) == -1);
+
+  //exit(1);
   if (K > N)
     printf("configuration error! K is bigger than N\n");
 
@@ -53,10 +51,8 @@ for(i=0;i<K*E;i++){
   ero2(x);
   wait();
 
-
   //公開鍵を生成する(G=SHP : Niederreiter , Patterson共用)
   O = pubkeygen(w);
-
 
   //decode開始
   while (1)
@@ -65,7 +61,7 @@ for(i=0;i<K*E;i++){
     //T重みエラーベクトルの生成
     mkerr(z1, T);
     //公開鍵を使ったシンドロームの計算(s=eG)
-    v = sin2(z1,O);
+    v = sin2(z1, O);
     //シンドロームの復号(s'=sS^{-1})
     f = dec(v.x);
     //復号(m'=D(s'))
@@ -89,11 +85,11 @@ for(i=0;i<K*E;i++){
       printf("err=%dっ！！\n", count);
 
     //if (j == 10000)
-      break;
+    break;
   }
   wait();
-  
-  O = pubkeygen(w);
+
+  //  O = pubkeygen(w);
   while (1)
   {
 
@@ -106,9 +102,10 @@ for(i=0;i<K*E;i++){
     test(O.f, z1);
 
     //シンドロームを計算する
-    f = synd(z1,K);
-    //f=v2o(x);
-    printpol(o2v(f));
+    x = sin2(z1, O);
+    f = dec(x.x);
+        //f=v2o(x);
+        printpol(o2v(f));
     printf(" ==syndrome\n");
 
     //復号化の本体
@@ -117,6 +114,45 @@ for(i=0;i<K*E;i++){
     ero(v);
 
     break;
+  }
+  wait();
+
+ do
+  {
+    memset(Q.x, 0, sizeof(Q.x));
+    memset(O.x, 0, sizeof(O.x));
+    for (i = 0; i < (K/2+1) * E; i++)
+    {
+      for (j = 0; j < (K/2+1) * E; j++)
+        S.x[i][j] = xor128() % 2;
+    }
+  } while (mkS(S, inv_S.x) == -1);
+ 
+  O = mk_pub();
+  memset(zz, 0, sizeof(zz));
+  mkerr(zz, T);
+  r = sendrier2(zz, K, O);
+  x = o2v(r);
+  for (i = 0; i < K; i++)
+    s[i + 1] = x.x[i];
+  //for (i = 0; i < K; i++)
+  //    printf("%d,", s[i]);
+  //printf("\n");
+  f = bma(s, K);
+
+  for (i = 0; i < N; i++)
+    if (zz[i] > 0)
+      printf("%d,", i);
+  printf("\n");
+
+  if (odeg(f) < T)
+  {
+    printpol(o2v(r));
+    printf("==goppa\n");
+    for (i = 0; i < N; i++)
+      printf("%d,", zz[i]);
+    printf("\n");
+    exit(1);
   }
 
   return 0;

@@ -2240,10 +2240,10 @@ void Pgen()
 
     //fp = fopen("P.key", "wb");
 
-    //random_permutation(P);
+    random_permutation(P);
 
-    for (i = 0; i < N; i++)
-        P[i] = i;
+    //for (i = 0; i < N; i++)
+    //    P[i] = i;
     for (i = 0; i < N; i++)
         inv_P[P[i]] = i;
     //fwrite(P, 2, N, fp);
@@ -3303,10 +3303,8 @@ aa:
         //printf("tr[%d]=%d\n",j,tr[j]);
     }
 
-
     return w;
 }
-
 
 void half(int kk)
 {
@@ -3337,7 +3335,7 @@ MTX mk_pub()
     FILE *fp;
     unsigned char dd[E * K] = {0};
     OP w = {0};
-    MTX Z = {0}, FX = {0}, G_bin = {0}, G_int = {0}, R = {0}, O = {0};
+    MTX Z = {0}, FX = {0}, G_bin = {0}, G_int = {0}, R = {0}, O = {0},Q={0};
 
     w = mkc(w, K * 2);
     //w = mkg(K);
@@ -3354,8 +3352,18 @@ MTX mk_pub()
     for (i = 0; i < (K / 2 + 1) * E; i++)
         printf("%d,", R.x[1][i] ^ R.x[2][i] ^ R.x[3][i]);
     printf("\n");
-    //Pgen();
-    mkS();
+    Pgen();
+    do{
+  memset(Q.x,0,sizeof(Q.x));
+  memset(O.x,0,sizeof(O.x));
+  memset(S.x,0,sizeof(S.x));
+for(i=0;i<(K/2+1)*E;i++){
+  for(j=0;j<(K/2+1)*E;j++)
+  S.x[i][j]=xor128()%2;
+}
+}while(mkS(S,inv_S.x) == -1);
+
+    //mkS();
     O = toByte(R, K / 2 + 1);
     //  exit(1);
     Z = mulmat(S, R, 2);
@@ -3443,8 +3451,19 @@ MTX pubkeygen()
 
     Q = bdet();
 
-    //Pgen();
-    makeS();
+    Pgen();
+    do
+    {
+        memset(inv_S.x, 0, sizeof(inv_S.x));
+        memset(S.x, 0, sizeof(S.x));
+        for (i = 0; i < K * E; i++)
+        {
+            for (j = 0; j < K * E; j++)
+                S.x[i][j] = xor128() % 2;
+        }
+    } while (is_reg(S, inv_S.x, K * E) == -1);
+
+    //makeS();
     //  exit(1);
     H = mulmat(S, Q, 1);
     for (i = 0; i < K * E; i++)
@@ -3452,7 +3471,7 @@ MTX pubkeygen()
         for (j = 0; j < N; j++)
         {
             //O.z[j][i] = H.z[P[j]][i];
-            O_bin.x[j][i] = H.x[j][i];
+            O_bin.x[j][i] = H.x[P[j]][i];
         }
     }
     R = toByte(O_bin, K);
@@ -3865,16 +3884,16 @@ vec newhalf(unsigned short e[])
     return v;
 }
 
-vec aurelia(vec coset){
-int i,j;
-vec v={0},x;
+vec aurelia(vec coset)
+{
+    int i, j;
+    vec v = {0}, x;
 
-for(i=0;i<K;i++)
-v.x[i*2]=gf[mlt(fg[coset.x[i]],fg[coset.x[i]])];
+    for (i = 0; i < K; i++)
+        v.x[i * 2] = gf[mlt(fg[coset.x[i]], fg[coset.x[i]])];
 
-return v;
+    return v;
 }
-
 
 vec bfd(unsigned short ss[])
 {
@@ -3992,7 +4011,7 @@ return r;
 }
 */
 
-vec sin2(unsigned short zz[],MTX R)
+vec sin2(unsigned short zz[], MTX R)
 {
     int i, j;
     OP s = {0};
@@ -4370,23 +4389,22 @@ label:
     memset(zz, 0, sizeof(zz));
     memset(mat, 0, sizeof(mat));
 
-
 bm:
     //public-key generation (using sendrier's trick)
 
     //exit(1);
     R = pubkeygen();
-        mkerr(zz, T);
-    
+    mkerr(zz, T);
+
     f = sendrier(zz, K);
     v = o2v(f);
     for (i = 0; i < K; i++)
         t1[i + 1] = v.x[i];
     bma(t1, K);
     wait();
-    
+
     memset(s, 0, sizeof(s));
-    x = sin2(zz,R);
+    x = sin2(zz, R);
     //f = v2o(v);
     r2 = dec(x.x);
     v = o2v(r2);
@@ -4409,7 +4427,7 @@ bm:
     while (1)
     {
         O = mk_pub();
-        
+
         memset(s, 0, sizeof(s));
         memset(zz, 0, sizeof(zz));
         mkerr(zz, T);

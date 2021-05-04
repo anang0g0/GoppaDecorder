@@ -3361,6 +3361,7 @@ OP pubkeygen()
   unsigned short dd[K] = {0};
   OP w = {0};
   vec v = {0};
+  MTX O,Q;
 
   w = mkg();
  printpol(o2v(w));
@@ -3384,18 +3385,26 @@ OP pubkeygen()
   fp = fopen("P.key", "w");
 //  fwrite(P, 2, N, fp);
   fclose(fp);
-  makeS();
-  fp = fopen("inv_S.key", "wb");
+  //makeS();
+  do{
+  memset(Q.x,0,sizeof(Q.x));
+  memset(O.x,0,sizeof(O.x));
+  memset(S.x,0,sizeof(S.x));
+for(i=0;i<(K)*E;i++){
+  for(j=0;j<(K)*E;j++)
+  S.x[i][j]=xor128()%2;
+}
+}while(is_reg(S,inv_S.x) == -1);
 
-  /*
+/*
+  fp = fopen("inv_S.key", "wb");
 for(i=0;i<K*E;i++){
   for(j=0;j<K*E;j++)
     n[j]=inv_S.x[i][j];  
     fwrite(n,1,K*E,fp);
 } 
-*/
 fclose(fp);
-
+*/
 
   for (i = 0; i < K * E; i++)
   {
@@ -3417,17 +3426,9 @@ fclose(fp);
   for (i = 0; i < K * E; i++)
   {
     for (j = 0; j < N; j++)
-      S.x[j][i] = H.x[P[j]][i];
+      O.x[j][i] = H.x[P[j]][i];
   }
-  toByte(S);
-  fp = fopen("Pub.key", "w");
-  for (i = 0; i < N; i++)
-  {
-    for (j = 0; j < K; j++)
-      dd[j] = HH[i][j];
-    //fwrite(dd, 2, K, fp);
-  }
-  fclose(fp);
+  toByte(O);
 
   return w;
 }

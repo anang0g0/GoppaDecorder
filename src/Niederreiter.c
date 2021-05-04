@@ -3371,6 +3371,7 @@ OP pubkeygen()
   unsigned short dd[K] = {0};
   OP w = {0};
   vec v = {0};
+  MTX Q={0},O;
 
   w = mkg();
   printpol(o2v(w));
@@ -3394,7 +3395,17 @@ OP pubkeygen()
   fp = fopen("P.key", "w");
   //  fwrite(P, 2, N, fp);
   fclose(fp);
-  makeS();
+  //makeS();
+  do{
+  memset(Q.x,0,sizeof(Q.x));
+  memset(O.x,0,sizeof(O.x));
+  memset(S.x,0,sizeof(S.x));
+for(i=0;i<(K)*E;i++){
+  for(j=0;j<(K)*E;j++)
+  S.x[i][j]=xor128()%2;
+}
+}while(is_reg(S,inv_S.x) == -1);
+
   fp = fopen("inv_S.key", "wb");
 
   /*

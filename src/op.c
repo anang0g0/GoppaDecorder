@@ -2241,10 +2241,10 @@ void Pgen()
 
     //fp = fopen("P.key", "wb");
 
-    //random_permutation(P);
+    random_permutation(P);
 
-    for (i = 0; i < N; i++)
-        P[i] = i;
+    //for (i = 0; i < N; i++)
+    //    P[i] = i;
     for (i = 0; i < N; i++)
         inv_P[P[i]] = i;
     //fwrite(P, 2, N, fp);
@@ -3462,7 +3462,7 @@ MTX mk_pub()
     FILE *fp;
     unsigned char dd[E * K] = {0};
     OP w = {0};
-    MTX Z = {0}, FX = {0}, G_bin = {0}, G_int = {0}, R = {0}, O = {0};
+    MTX Z = {0}, FX = {0}, G_bin = {0}, G_int = {0}, R = {0}, O = {0},Q={0};
 
     w = mkd(w, K * 2);
     //w = mkg(K);
@@ -3480,7 +3480,17 @@ MTX mk_pub()
         printf("%d,", R.x[1][i] ^ R.x[2][i] ^ R.x[3][i]);
     printf("\n");
     //Pgen();
-    mkS();
+    //mkS();
+do{
+  memset(Q.x,0,sizeof(Q.x));
+  memset(O.x,0,sizeof(O.x));
+  memset(S.x,0,sizeof(S.x));
+for(i=0;i<(K/2+1)*E;i++){
+  for(j=0;j<(K/2+1)*E;j++)
+  S.x[i][j]=xor128()%2;
+}
+}while(mkS(S,inv_S.x) == -1);
+
     O = toByte(R, K / 2 + 1);
     //  exit(1);
     Z = mulmat(S, R, 2);
@@ -3490,7 +3500,7 @@ MTX mk_pub()
         for (i = 0; i < (K / 2 + 1) * E; i++)
         {
             //G.z[j][i] = Z.w[P[j]][i];
-            G_bin.x[j][i] = Z.x[j][i];
+            G_bin.x[j][i] = Z.x[P[j]][i];
             //Z.x[j][i]=Z.x[j][i];
             //printf("%d.",inv_S.w[j][i]);
         }
@@ -3568,8 +3578,17 @@ MTX pubkeygen()
 
     Q = bdet();
 
-    //Pgen();
-    makeS();
+    Pgen();
+        do{
+  memset(inv_S.x,0,sizeof(inv_S.x));
+  memset(S.x,0,sizeof(S.x));
+for(i=0;i<K*E;i++){
+  for(j=0;j<K*E;j++)
+  S.x[i][j]=xor128()%2;
+}
+}while(is_reg(S,inv_S.x) == -1);
+
+    //makeS();
     //  exit(1);
     H = mulmat(S, Q, 1);
     for (i = 0; i < K * E; i++)
@@ -3577,7 +3596,7 @@ MTX pubkeygen()
         for (j = 0; j < N; j++)
         {
             //O.z[j][i] = H.z[P[j]][i];
-            O_bin.x[j][i] = H.x[j][i];
+            O_bin.x[j][i] = H.x[P[j]][i];
         }
     }
     R = toByte(O_bin, K);
