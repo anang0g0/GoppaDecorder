@@ -317,7 +317,7 @@ MTX mulmat(MTX A, MTX B, int flg)
 }
 
 
-void mmul(MTX A,MTX B,int Y){
+void mmul(MTX A,MTX B){
 int i,j,k;
 MTX tmp={0};
 
