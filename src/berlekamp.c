@@ -3482,7 +3482,17 @@ MTX mk_pub()
         printf("%d,", R.x[1][i] ^ R.x[2][i] ^ R.x[3][i]);
     printf("\n");
     Pgen();
-    mkS();
+    do
+    {
+        memset(inv_S.x, 0, sizeof(inv_S.x));
+        memset(S.x, 0, sizeof(S.x));
+        for (i = 0; i < (K/2+1) * E; i++)
+        {
+            for (j = 0; j < (K/2+1) * E; j++)
+                S.x[i][j] = xor128() % 2;
+        }
+    } while (mkS(S, inv_S.x) == -1);
+    //mkS();
     O = toByte(R, K / 2 + 1);
     //  exit(1);
     Z = mulmat(S, R, 2);
@@ -3571,14 +3581,16 @@ MTX pk_gen()
     Q = bdet();
 
     Pgen();
-        do{
-  memset(inv_S.x,0,sizeof(inv_S.x));
-  memset(S.x,0,sizeof(S.x));
-for(i=0;i<K*E;i++){
-  for(j=0;j<K*E;j++)
-  S.x[i][j]=xor128()%2;
-}
-}while(is_reg(S,inv_S.x) == -1);
+    do
+    {
+        memset(inv_S.x, 0, sizeof(inv_S.x));
+        memset(S.x, 0, sizeof(S.x));
+        for (i = 0; i < K * E; i++)
+        {
+            for (j = 0; j < K * E; j++)
+                S.x[i][j] = xor128() % 2;
+        }
+    } while (is_reg(S, inv_S.x) == -1);
 
     //makeS();
     //  exit(1);
@@ -4425,6 +4437,9 @@ int main(void)
     x = chen(f);
     // 平文の表示(m=m'P^{-1})
     ero2(x);
+    for(i=0;i<N;i++)
+    if(zz[i]>0)
+    printf("err=%d\n",i);
     wait();
 
     O = mk_pub(); // 鍵サイズ(K/2 Reed-Solomon)
@@ -4438,7 +4453,7 @@ int main(void)
     //    printf("%d,", s[i]);
     //printf("\n");
     f = bma(s, K);
-    x=chen(f);
+    x = chen(f);
     ero2(x);
     for (i = 0; i < N; i++)
         if (zz[i] > 0)
