@@ -77,57 +77,6 @@ retuen 0;
 
 ```
 
-コードサンプル(Niederreiter.c)
-
-```c
-
-main(){
-OP w={0},f={0},r={0};
-unsigned short z1[N];
-vec v={0};
-int  j = 0,count=0,k=0;
-
-
-//公開鍵を生成する(G=SHP)
- w = pubkeygen();
- 
-//decode開始
-    while (1)
-    {
-        memset(z1, 0, sizeof(z1));
-        //T重みエラーベクトルの生成
-        mkerr(z1, T);
-        //公開鍵を使ったシンドロームの計算(s=eG)
-        v = sin2(z1);
-        //シンドロームの復号(s'=sS^{-1})
-        f=dec(v.x);
-        //復号(m'=D(s'))
-        r = decode(w, f);
-        //エラー（平文）の表示(m=m'P^{-1})
-        count = elo2(r);
-        for (int i = 0; i < N; i++)
-        {
-            //検算
-            if (z1[i] > 0)
-            printf("error position= %d %d\n", i, z1[i]);
-        }
-        if (count < T)
-        {
-             printpol(o2v(w));
-             printf(" == Goppa polynomial\n");
-             exit(1);
-        }
-        j++;
-        if(count == T)
-        printf("err=%dっ！！\n", count);
-
-        if (j == 10000)
-            exit(1);
-    }
-
-
-```
-
 # 設定ファイルと定義体の設定  
 global.h：符号のパラメータを決めます。  
 chash.c ：定義体を指定します。  
