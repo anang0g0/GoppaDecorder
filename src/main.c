@@ -139,7 +139,8 @@ int main(void)
   //    printf("%d,", s[i]);
   //printf("\n");
   f = bma(s, K);
-
+  x=chen(f);
+  ero2(x);
   for (i = 0; i < N; i++)
     if (zz[i] > 0)
       printf("%d,", i);
