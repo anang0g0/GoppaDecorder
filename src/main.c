@@ -127,7 +127,7 @@ int main(void)
         S.x[i][j] = xor128() % 2;
     }
   } while (mkS(S, inv_S.x) == -1);
- 
+// exit(1);
   O = mk_pub();
   memset(zz, 0, sizeof(zz));
   mkerr(zz, T);
@@ -155,6 +155,21 @@ int main(void)
     printf("\n");
     exit(1);
   }
+
+  //exit(1);
+while(1){
+  memset(O.x,0,sizeof(O.x));
+  for(i=0;i<64;i++){
+    for(j=0;j<64;j++)
+    O.x[i][j]=rand()%2;
+  }
+  if(binv(O,Q.x,64)==0)
+  break;
+}
+printf("aaaaaaa\n");
+//exit(1);
+mmul(O,Q,64);
+//matinv(K);
 
   return 0;
 }
