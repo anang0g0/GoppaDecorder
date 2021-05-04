@@ -3584,6 +3584,7 @@ MTX mk_pub()
     printf("sagemath で既約性を検査してください！\n");
 
     R = bd2();
+
     printf("deco_rev= ");
     for (i = 0; i < (K / 2 + 1) * E; i++)
         printf("%d,", R.x[1][i] ^ R.x[2][i] ^ R.x[3][i]);
