@@ -77,65 +77,20 @@ int Inv(unsigned short b)
 {
   int i;
 
+  if(b==0)
+  return 0;
+  
   for (i = 0; i < N; i++)
   {
     if (gf[mlt(i, b)] == 1)
       return i;
   }
 }
-/*
-//detarminant
-int det(){
-  //double a[N][N]={{2,-2,4,2},{2,-1,6,3},{3,-2,12,12},{-1,3,-4,4}};
-double det=1.0,buf;
-
-int n=N;  //配列の次数
-int i,j,k;
-unsigned short c[N][N]={0};
-
-unsigned short a[N][N]={0};//{{0,3,0,0,},{0,0,4,0},{0,0,0,5},{6,0,0,0}};
-//{{0,1,0,0},{0,0,1,0},{0,0,0,1},{1,0,0,0}};
-unsigned short inv_a[N][N]={0};
-  //{{0,0,0,1},{1,0,0,0},{0,1,0,0},{0,0,1,0}};
-//={{1,2,0,1},{1,1,2,0},{2,0,1,1},{1,2,1,1}}; //入力用の配列
-unsigned short cc[N][N]={0};
-
-// lab:
-//三角行列を作成
-for(i=0;i<n;i++){
- for(j=0;j<n;j++){
-  if(i<j){
-    //    if(a[i][i]==0)
-    //   goto lab;
-   buf=a[j][i]/a[i][i];
-   for(k=0;k<n;k++){
-   a[j][k]-=a[i][k]*buf;
-   }
-  }
- }
-}
- 
-//対角部分の積
-for(i=0;i<n;i++){
- det*=a[i][i];
-}
- 
-printf("%f\n",det); // -> 120.000000
- if(det==0.0){
-   printf("baka\n");
-   exit(1);
- }
- if(det==1.0)
- return 0;
- if(det!=1.0)
-   return -1;
-}
-*/
 
 
 //inverse matrix
 
-MTX matinv(MTX a, int n)
+MTX matinv(int n)
 {
 
   //unsigned short a[F][F];     //={{1,2,0,1},{1,1,2,0},{2,0,1,1},{1,2,1,1}}; //入力用の配列
@@ -143,7 +98,7 @@ MTX matinv(MTX a, int n)
   unsigned short buf;         //一時的なデータを蓄える
   unsigned short b[N][N] = {0}, dd[N][N] = {0};
   int i, j, k, count; //カウンタ
-
+  MTX a={0};
   unsigned short c[N][N] = {0};
   MTX z = {0};
   unsigned short cc[N][N] = {0};
@@ -151,20 +106,20 @@ MTX matinv(MTX a, int n)
 lab:
   memset(b,0,sizeof(b));
   memset(a.x,0,sizeof(a.x));
-  for (i = 0; i < F; i++)
+  for (i = 0; i < n; i++)
   {
-    for (j = 0; j < F; j++)
+    for (j = 0; j < n; j++)
     {
-      a.x[i][j] = rand() % N;
-      //printf("%d,",a[i][j]);
+      a.x[i][j] = rand() % 256;
+      printf("%d,",a.x[i][j]);
     }
-    //printf("\n");
+    printf("\n");
   }
-
+//exit(1);
   // printf("\n");
   for (i = 0; i < n; i++)
   {
-    for (j = 0; j < F; j++)
+    for (j = 0; j < n; j++)
       c[i][j] = a.x[i][j];
   }
   //単位行列を作る
@@ -213,12 +168,12 @@ lab:
         printf("\nbaka\n\n");
         goto lab;
       }
-      //printf(" %d",inv_a[i][j]);
+      printf(" %d",inv_a[i][j]);
       z.x[i][j] = inv_a[i][j];
     }
     //printf("\n");
   }
-
+//exit(1);
 
   printf("行列を出力\n ={\n");
 //#pragma omp parallel for num_threads(omp_get_max_threads()) //private(i,j,k)
@@ -233,6 +188,8 @@ lab:
     printf("},\n");
   }
   printf("};");
+
+
 
   printf("\n逆行列を出力\n ={\n");
   for (i = 0; i < n; i++)
@@ -255,6 +212,7 @@ lab:
   printf("};\n");
 //  exit(1);
 
+memset(b,0,sizeof(b));
   //検算
 //  #pragma omp parallel for num_threads(omp_get_max_threads()) //private(i,j,k)
   for (i = 0; i < n; i++)
@@ -264,12 +222,13 @@ lab:
       for (k = 0; k < n; k++)
         b[i][j] ^= gf[mlt(fg[c[i][k]], fg[inv_a[k][j]])];
 
+      printf("%d,",b[i][j]);
     }
     printf("\n");
   }
 
   int flg=0;
-    for (i = 0; i < F; i++)
+    for (i = 0; i < n; i++)
     {
       //   printf("%d",b[i][i]);
       //printf("==\n");
@@ -282,18 +241,20 @@ lab:
     }
     count = 0;
 
-    for (i = 0; i < F; i++)
+    for (i = 0; i < n; i++)
     {
-      for (j = 0; j < F; j++)
+      for (j = 0; j < n; j++)
       {
         if (b[i][j] == 0 && i != j)
           count++;
       }
     }
-
-  exit(1);
-
+if(flg==n && n*n-n==count)
   return z;
+  
+  goto lab;
+
+
 }
 
 
@@ -354,6 +315,28 @@ MTX mulmat(MTX A, MTX B, int flg)
 
   return tmp;
 }
+
+
+void mmul(MTX A,MTX B,int Y){
+int i,j,k;
+MTX tmp={0};
+
+    for (i = 0; i < Y; i++)
+    {
+      for (j = 0; j < Y; j++)
+      {
+        for (k = 0; k < Y; k++)
+        {
+          tmp.x[i][j] ^= gf[mlt(fg[A.x[i][k]], fg[B.x[k][j]])];
+        }
+        printf("%d,",tmp.x[i][j]);
+      }
+      printf("\n");
+    }
+printf("\n");
+
+}
+
 
 //Q-matrix
 void matmul()
