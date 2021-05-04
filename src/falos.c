@@ -3461,7 +3461,7 @@ MTX pubkeygen()
             for (j = 0; j < K * E; j++)
                 S.x[i][j] = xor128() % 2;
         }
-    } while (is_reg(S, inv_S.x, K * E) == -1);
+    } while (is_reg(S, inv_S.x) == -1);
 
     //makeS();
     //  exit(1);
