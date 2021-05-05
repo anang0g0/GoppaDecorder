@@ -177,12 +177,12 @@ static const unsigned char inv_s_box[256] = {
     0x17, 0x2b, 0x04, 0x7e, 0xba, 0x77, 0xd6, 0x26, 0xe1, 0x69, 0x14, 0x63, 0x55, 0x21, 0x0c, 0x7d}; // f
 
 //ハッシュ関数本体
-arrayul
-chash(unsigned char b[256])
+void
+chash(arrayul *vw)
 {
   int i; //, j = 0;
   arrayn n = {0};
-  arrayul vw = {0};
+ // arrayul vw = {0};
   unsigned char key[NN] = {148, 246, 52, 251, 16, 194, 72, 150, 249, 23, 90, 107, 151, 42, 154, 124}; //, 48, 58, 30, 24, 42, 33, 38, 10, 115, 41, 164, 16, 33, 32, 252, 143, 86, 175, 8, 132, 103, 231, 95, 190, 61, 29, 215, 75, 251, 248, 72, 48, 224, 200, 147, 93, 112, 25, 227, 223, 206, 137, 51, 88, 109, 214, 17, 172};
  unsigned char z[NN];
   unsigned char x0[NN] = {0};
@@ -202,7 +202,7 @@ chash(unsigned char b[256])
   int count = 0;
 
   //memset(f, 0, sizeof(f));
- while (count < 16)
+ while (count < 8)
   {
     //バッファを埋める回数だけ回す
       for (i = 0; i < NN; i++)
@@ -224,23 +224,11 @@ chash(unsigned char b[256])
     for (i = 0; i < NN; i++){
       //vw.x[0] ^= key[i];
       //vw.x[0]=(vw.x[0]<<1);
-      vw.d[i]=key[i];
+      vw->d[i]=key[i];
     }
     //vw.x[0]=(vw.x[0]>>1);
-//    u=uu;
-    //printf("%u",u);
-    //printf("\n");
-    /*
-    for (i = 0; i < 8; i++)
-      v.u[i] ^= xorshift64(v.u[i]);
-    for (i = 0; i < NN; i++)
-      v.d[i] |= inv_s_box[v.d[i]];
-    */
 
-  //memcpy(n.ar, v.d, sizeof(v.d));
-
-//u=vw.x[0];
-return vw;
+//return vw;
 }
 
 //ファイル操作
@@ -342,7 +330,7 @@ crand(unsigned char u[NN])
  // arrayn a = {0};
   arrayul b = {0};
 unsigned short o=0;
-   b=chash(b.d);
+   chash(b.d);
 
   //memset(b.u, 0, sizeof(b.u));
   //memcpy(b.d, a.ar, sizeof(unsigned char) * NN);
