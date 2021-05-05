@@ -39,6 +39,7 @@
 #include "lu.c"
 #include "sha3.c"
 #include "inv_mat.c"
+#include "chaos.c"
 //#include "golay.c"
 
 #define TH omp_get_max_threads()
@@ -1683,7 +1684,7 @@ OP bib(int i, OP d)
 
     OP t[T] = {0};
     //omp_set_num_threads(omp_get_max_threads());
-    id = omp_get_thread_num();
+    id = 1; //omp_get_thread_num();
     t[id] = d;
 
     //#pragma omp parallel for
