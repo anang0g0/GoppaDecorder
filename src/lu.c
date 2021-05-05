@@ -260,7 +260,7 @@ int mkS(MTX cc,MTX *L)
     printf("end of g2\n");
     //exit(1);
 
-#pragma omp parallel for private(j)
+//#pragma omp parallel for private(j)
     for (i = 0; i < X; i++)
     {
 
@@ -276,7 +276,7 @@ int mkS(MTX cc,MTX *L)
 //memset(inv_a,0,sizeof(inv_a));
 
 //単位行列を作る
-#pragma omp parallel for private(j)
+//#pragma omp parallel for private(j)
     for (i = 0; i < X; i++)
     {
       for (j = 0; j < X; j++)
@@ -380,7 +380,7 @@ int mkS(MTX cc,MTX *L)
     // exit(1);
 
   //検算
-#pragma omp parallel for private(j, k) num_threads(16)
+//#pragma omp parallel for private(j, k) num_threads(16)
     for (i = 0; i < X; i++)
     {
 //#pragma omp parallel num_threads(8) //private(j,k)
