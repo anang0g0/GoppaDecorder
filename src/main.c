@@ -23,7 +23,7 @@ int main(void)
     for (i = 0; i < K * E; i++)
     {
       for (j = 0; j < K * E; j++){
-        t=   chash(t.d);
+         chash(t.d);
         S.x[i][j] =t.d[1]%2;
       }
     }
@@ -125,6 +125,7 @@ int main(void)
   wait();
 //exit(1);
 
+memset(inv_S.x,0,sizeof(inv_S.x));
  do
   {
     memset(S.x, 0, sizeof(Q.x));
@@ -132,7 +133,7 @@ int main(void)
     for (i = 0; i < (K/2+1) * E; i++)
     {
       for (j = 0; j < (K/2+1) * E; j++){
-        t=chash(t.d);
+        chash(t.d);
         S.x[i][j] = t.d[1]%2;
       }
     }
@@ -175,7 +176,7 @@ while(1){
   O.col=64;
   for(i=0;i<64;i++){
     for(j=0;j<64;j++){
-      t=chash(t.d);
+      chash(t.d);
     O.x[i][j]=t.d[0]%2;
     }
   }
