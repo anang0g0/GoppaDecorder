@@ -2,24 +2,30 @@
 
 int main(void)
 {
+  
   int i, j = 0, count = 0;
   unsigned short zz[N] = {0}, z1[N] = {0};
   OP f = {0}, r = {0}, w = {0};
   vec v, x = {0};
   MTX R = {0}, O = {0}, Q = {0};
-  unsigned short s[K + 1] = {0};
-
+  unsigned short s[K + 1] = {0},us=0;
+  
+  arrayul t={0},aw={0};
   //srand(clock());
 
   Pgen();
+  memset(mat, 0, sizeof(mat));
+  
   do
   {
     memset(S.x, 0, sizeof(S.x));
     memset(inv_S.x, 0, sizeof(inv_S.x));
     for (i = 0; i < K * E; i++)
     {
-      for (j = 0; j < K * E; j++)
-        S.x[i][j] = xor128() % 2;
+      for (j = 0; j < K * E; j++){
+        t=   chash(t.d);
+        S.x[i][j] =t.d[1]%2;
+      }
     }
   } while (is_reg(S, inv_S.x) == -1);
 
@@ -28,7 +34,7 @@ int main(void)
     printf("configuration error! K is bigger than N\n");
 
   // （謎）
-  memset(mat, 0, sizeof(mat));
+
 
   // 公開鍵を生成する(Berlekamp-Massey用)
   R = pk_gen();
@@ -50,6 +56,7 @@ int main(void)
   // 平文の表示(m=m'P^{-1})
   ero2(x);
   wait();
+
 
   //公開鍵を生成する(G=SHP : Niederreiter , Patterson共用)
   O = pubkeygen(w);
@@ -116,15 +123,18 @@ int main(void)
     break;
   }
   wait();
+//exit(1);
 
  do
   {
-    memset(Q.x, 0, sizeof(Q.x));
+    memset(S.x, 0, sizeof(Q.x));
     memset(O.x, 0, sizeof(O.x));
     for (i = 0; i < (K/2+1) * E; i++)
     {
-      for (j = 0; j < (K/2+1) * E; j++)
-        S.x[i][j] = xor128() % 2;
+      for (j = 0; j < (K/2+1) * E; j++){
+        t=chash(t.d);
+        S.x[i][j] = t.d[1]%2;
+      }
     }
   } while (mkS(S, inv_S.x) == -1);
 // exit(1);
@@ -155,15 +165,19 @@ int main(void)
     printf("\n");
     exit(1);
   }
+  wait();
+ // exit(1);
 
-  //exit(1);
+
 while(1){
   memset(O.x,0,sizeof(O.x));
   O.row=64;
   O.col=64;
   for(i=0;i<64;i++){
-    for(j=0;j<64;j++)
-    O.x[i][j]=rand()%2;
+    for(j=0;j<64;j++){
+      t=chash(t.d);
+    O.x[i][j]=t.d[0]%2;
+    }
   }
   if(binv(O,Q.x,64)==0)
   break;
@@ -175,5 +189,12 @@ printf("aaaaaaa\n");
 mmul(O,Q);
 //matinv(K);
 
+/*
+while(1){
+  t=chash(t.d);
+  printf("%d\n",t.x[0]);
+
+}
+*/
   return 0;
 }
