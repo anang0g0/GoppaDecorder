@@ -45,6 +45,7 @@ typedef union
   unsigned short s[16];
 } SU;
 
+/*
 typedef union
 {
   unsigned long long int u[8];
@@ -76,7 +77,7 @@ typedef struct pub
   unsigned char a[N];
   unsigned char b[N];
 } set;
-
+*/
 
 typedef struct {
   unsigned short x[N][N];
