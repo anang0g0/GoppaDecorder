@@ -266,7 +266,7 @@ MTX mulmat(MTX A, MTX B, int flg)
 
   if (flg == 1)
   {
-#pragma omp parallel for num_threads(omp_get_max_threads()) //private(i,j,k)
+//#pragma omp parallel for num_threads(omp_get_max_threads()) //private(i,j,k)
     for (i = 0; i < K * E; i++)
     {
       for (j = 0; j < N; j++)
