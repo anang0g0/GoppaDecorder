@@ -224,7 +224,7 @@ return -1;
 }
 
 
-int mkS(MTX cc,MTX *L)
+int mkS(MTX cc,MTX *R)
 {
   int i, j, k, l;
   unsigned char b[X][X] = {0};
@@ -450,7 +450,7 @@ int mkS(MTX cc,MTX *L)
         for (j = 0; j < X; j++)
         {
           dd[j] = inv_a[i][j];
-          L->x[i][j]=inv_a[i][j];
+          R->x[i][j]=inv_a[i][j];
           //printf("%d,", inv_S.w[i][j]);
         }
         //printf("},\n");
