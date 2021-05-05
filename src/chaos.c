@@ -14,6 +14,7 @@
 typedef union
 {
   unsigned long long int u[NN/8];
+  unsigned int t[NN/4];
   unsigned short x[NN/2];
   unsigned char d[NN];
 } arrayul;
@@ -130,6 +131,7 @@ void rp(unsigned char *a)
   }
 }
 */
+
 /*
  * S-box transformation table
  */
@@ -181,21 +183,20 @@ chash(unsigned char b[256])
   int i; //, j = 0;
   arrayn n = {0};
   arrayul vw = {0};
-  static const unsigned char salt[NN] = {0}; //{148, 246, 52, 251, 16, 194, 72, 150, 249, 23, 90, 107, 151, 42, 154, 124, 48, 58, 30, 24, 42, 33, 38, 10, 115, 41, 164, 16, 33, 32, 252, 143, 86, 175, 8, 132, 103, 231, 95, 190, 61, 29, 215, 75, 251, 248, 72, 48, 224, 200, 147, 93, 112, 25, 227, 223, 206, 137, 51, 88, 109, 214, 17, 172};
-  unsigned char key[NN] = {0};
+  unsigned char key[NN] = {148, 246, 52, 251, 16, 194, 72, 150, 249, 23, 90, 107, 151, 42, 154, 124}; //, 48, 58, 30, 24, 42, 33, 38, 10, 115, 41, 164, 16, 33, 32, 252, 143, 86, 175, 8, 132, 103, 231, 95, 190, 61, 29, 215, 75, 251, 248, 72, 48, 224, 200, 147, 93, 112, 25, 227, 223, 206, 137, 51, 88, 109, 214, 17, 172};
  unsigned char z[NN];
   unsigned char x0[NN] = {0};
   unsigned char inv_x[NN] = {0};
   unsigned char x1[NN] = {0};
-//unsigned char tmp[NN]={0};
-//unsigned short u=0;
+  unsigned char tmp[NN]={0};
+  unsigned short u=0;
   rp(x0);
   rp(x1);
 
   for (i = 0; i < NN; i++)
   inv_x[x0[i]] = i;
  //key[i]=rand()%2;//salt[i];
-  key[0]=1;
+  //key[0]=1;
 
   
   int count = 0;
@@ -208,39 +209,24 @@ chash(unsigned char b[256])
         z[i] = x0[x1[inv_x[i]]];
 
         for(i=0;i<NN;i++)
-        key[i]^=key[z[i]];
-        //for(i=0;i<NN;i++){
-        //key[i]^=tmp[i];
+        tmp[i]=s_box[key[z[i]]];
+        for(i=0;i<NN;i++){
+        key[i]^=ROTL8(tmp[i],3);
         //printf("%d,",key[i]);
-        //}
+        }
         //printf("\n");
         memcpy(x1,z,sizeof(x1));
-/*
-//#pragma omp parallel for private(f)
-    for(j = 0; j < 2048; j++) //(j = 0; j < 2048 / (NN); j++)
-    {
-
-      //for (i = 0; i < NN; i++)
-      {
-        //mode 2(自己書き換え系)
-        f[z[j%(NN)]] ^= b[j]; //(b[j] ^ key[j%NN]) | ROTL8(f[(j + 1) % NN] & salt[j%NN],3); 
-
-      }
-      //memcpy(x1, z, sizeof(z));
-      // printf("%d,",f[i]);
-    }
-*/
 
     count++;
   }
   
   int uu=0;
     for (i = 0; i < NN; i++){
-      vw.x[0] ^= key[i];
-      vw.x[0]=(vw.x[0]<<1);
-      
+      //vw.x[0] ^= key[i];
+      //vw.x[0]=(vw.x[0]<<1);
+      vw.d[i]=key[i];
     }
-    vw.x[0]=(vw.x[0]>>1);
+    //vw.x[0]=(vw.x[0]>>1);
 //    u=uu;
     //printf("%u",u);
     //printf("\n");
@@ -353,7 +339,7 @@ for(i=0;i<NN;i++)
 arrayul
 crand(unsigned char u[NN])
 {
-  arrayn a = {0};
+ // arrayn a = {0};
   arrayul b = {0};
 unsigned short o=0;
    b=chash(b.d);
@@ -375,7 +361,7 @@ int main(int argc, char *argv[])
 
 while(1){
 t=chash(t.d);
-printf("%d\n",t.x[0]);
+printf("%u\n",t.t[0]);
   //慎ましくここは256ビットだけ
   //for (i = 0; i < NN; i++)
     //printf("%02x", t.d[i]);
