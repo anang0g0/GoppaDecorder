@@ -39,7 +39,7 @@
 #include "lu.c"
 #include "sha3.c"
 #include "inv_mat.c"
-#include "chaos.c"
+
 //#include "golay.c"
 
 #define TH omp_get_max_threads()
