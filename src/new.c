@@ -11,7 +11,8 @@ void main(){
 
     while(1){
         aa=chash();
-        printf("%llu\n",aa.z);
+        print_uint128(aa.z);
+        //printf("%llu %llu\n",aa.u[0],aa.u[1]);
         count++;
         if(count==10000)
         break;
