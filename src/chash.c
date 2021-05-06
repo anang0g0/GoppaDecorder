@@ -233,7 +233,7 @@ key[i]=n.d[i];
         z[i] = x0[x1[inv_x[i]]];
 
         for(i=0;i<NN;i++)
-        tmp[i]=s_box[key[z[i]]];
+        tmp[i]+=s_box[key[z[i]]];
         for(i=0;i<NN;i++){
         key[i]^=inv_s_box[ROTL8(tmp[i],3)];
         //printf("%d,",key[i]);
