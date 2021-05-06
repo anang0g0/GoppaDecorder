@@ -4,6 +4,8 @@
 #include <string.h>
 #include <assert.h>
 #include <stdint.h>
+#include "global.h"
+#include "struct.h"
 
 #define N 256
 #define NN 16
@@ -11,6 +13,7 @@
 #define NBb 16
 #define SEED 12345678901234567899ULL
 
+/*
 typedef union
 {
   unsigned long long int u[NN/8];
@@ -72,7 +75,7 @@ unsigned int rotate_left(unsigned int x, int n)
   assert(0 < n && n < 32);
   return (x << n) | (x >> (32 - n));
 }
-
+*/
 //言わずと知れたxorshift
 unsigned int
 xorshift()
@@ -106,7 +109,7 @@ array half2(unsigned char a)
   return b;
 }
 
-/*
+
 void rp(unsigned char *a)
 {
   unsigned int i, j, x;
@@ -130,7 +133,7 @@ void rp(unsigned char *a)
     a[NN - 2] = NN - 1;
   }
 }
-*/
+
 
 /*
  * S-box transformation table
@@ -338,7 +341,7 @@ unsigned short o=0;
   return b;
 }
 
-/*
+
 int main(int argc, char *argv[])
 {
   int i;
@@ -348,7 +351,7 @@ int main(int argc, char *argv[])
   //  time_t o;
 
 while(1){
-t=chash(t.d);
+chash(t.d);
 printf("%u\n",t.t[0]);
   //慎ましくここは256ビットだけ
   //for (i = 0; i < NN; i++)
@@ -367,4 +370,3 @@ printf("%u\n",t.t[0]);
 
   return 0;
 }
-*/
