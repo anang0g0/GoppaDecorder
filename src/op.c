@@ -38,6 +38,7 @@
 #include "lu.c"
 #include "sha3.c"
 #include "inv_mat.c"
+//#include "chaos.c"
 //#include "golay.c"
 
 #define TH omp_get_max_threads()
@@ -4478,6 +4479,14 @@ int main(void)
     //exit(1);
     unsigned char ch[E * K] = {0};
 //  unsigned short s[K+1]={0};
+
+arrayul ww={0};
+
+while(1){
+chash(ww.d);
+printf("%d\n",ww.t);
+}
+
 label:
 
     //パリティチェックを生成する。
