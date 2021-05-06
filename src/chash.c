@@ -190,7 +190,7 @@ int print_uint128(__uint128_t n) {
     *--s = "0123456789"[n % 10]; // save last digit
     n /= 10;                     // drop it
   }
-  return printf("%s\n", s);
+  return printf("%s", s);
 }
 
 //ハッシュ関数本体
@@ -212,8 +212,8 @@ chash()
   rp2(x0);
   rp2(x1);
 
-  n.t[0]=(unsigned int)time(&t);
-  n.t[1]=(unsigned long)clock();
+  n.x[0]=65535; //(unsigned int)time(&t);
+  n.x[1]=65535; //(unsigned long)clock();
 for(i=0;i<NN;i++)
 key[i]=n.d[i];
 
@@ -235,7 +235,7 @@ key[i]=n.d[i];
         for(i=0;i<NN;i++)
         tmp[i]=s_box[key[z[i]]];
         for(i=0;i<NN;i++){
-        key[i]^=ROTL8(tmp[i],3);
+        key[i]^=inv_s_box[ROTL8(tmp[i],3)];
         //printf("%d,",key[i]);
         }
         //printf("\n");
