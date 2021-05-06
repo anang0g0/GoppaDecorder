@@ -172,7 +172,7 @@ void rp2(unsigned char *a)
     a[j] = a[i];
     a[i] = x;
   }
-  if (a[N - 1] == NN - 1)
+  if (a[NN - 1] == NN - 1)
   {
     a[NN - 1] = a[NN - 2];
     a[NN - 2] = NN - 1;
