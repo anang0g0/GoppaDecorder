@@ -1,4 +1,4 @@
-#define DEG K*E
+
 
 /* -*- mode: C; coding:utf-8 -*- */
 
@@ -45,6 +45,68 @@ typedef union
   unsigned short s[16];
 } SU;
 
+typedef union
+{
+  unsigned long long int u[NN/8];
+  unsigned int t[NN/4];
+  unsigned short x[NN/2];
+  unsigned char d[NN];
+} arrayul;
+
+typedef union
+{
+  unsigned long long int u[N];
+  unsigned char d[N * 8];
+} arrayull;
+
+typedef union a4
+{
+  unsigned char ar[4];
+  unsigned int n;
+} array;
+
+typedef struct a8
+{
+  unsigned char ar[8];
+} array8;
+
+typedef union
+{
+  unsigned int h[16];
+  unsigned char c[64];
+} array16;
+
+typedef union aN
+{
+  unsigned int d[64];
+  unsigned long long int u[32];
+  unsigned char ar[256];
+  //
+} arrayn;
+
+typedef struct pub
+{
+  unsigned char a[NN];
+  unsigned char b[NN];
+} set;
+
+
+#define I8T char
+#define U8C(v) (v##U)
+
+#define U8V(v) ((unsigned char)(v)&U8C(0xFF))
+#define ROTL8(v, n) \
+  (U8V((v) << (n)) | ((v) >> (8 - (n))))
+
+#define R(x, n) (((x) << (n)) | ((x) >> (32 - (n))))
+
+/*
+unsigned int rotate_left(unsigned int x, int n)
+{
+  assert(0 < n && n < 32);
+  return (x << n) | (x >> (32 - n));
+}
+*/
 /*
 typedef union
 {
