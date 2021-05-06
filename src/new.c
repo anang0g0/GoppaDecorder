@@ -10,15 +10,16 @@ int main(){
     int count=0,i;
 
     while(1){
+        //i=rand();
         aa=chash();
         for(i=0;i<NN/16;i++){
         print_uint128(aa.z[i]);
         printf(" ");
-    }
+        }
         printf("\n");
         //printf("%llu %llu\n",aa.u[0],aa.u[1]);
         count++;
-        if(count==10000)
+        if(count==10000000)
         break;
     }
 
