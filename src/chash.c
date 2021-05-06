@@ -151,7 +151,7 @@ static const unsigned char inv_s_box[256] = {
     0x17, 0x2b, 0x04, 0x7e, 0xba, 0x77, 0xd6, 0x26, 0xe1, 0x69, 0x14, 0x63, 0x55, 0x21, 0x0c, 0x7d}; // f
 
 
-void rp(unsigned char *a)
+void rp2(unsigned char *a)
 {
   int i, j, x;
   time_t t;
@@ -194,8 +194,8 @@ chash()
   unsigned char x1[NN] = {0};
   unsigned char tmp[NN]={0};
   unsigned short u=0;
-  rp(x0);
-  rp(x1);
+  rp2(x0);
+  rp2(x1);
 
   for (i = 0; i < NN; i++)
   inv_x[x0[i]] = i;
