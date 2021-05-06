@@ -47,7 +47,7 @@ typedef union
 
 typedef union
 {
-  __uint128_t z;
+  __uint128_t z[NN/16];
   unsigned long long int u[NN/8];
   unsigned int t[NN/4];
   unsigned short x[NN/2];
