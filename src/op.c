@@ -4479,14 +4479,14 @@ int main(void)
     //exit(1);
     unsigned char ch[E * K] = {0};
 //  unsigned short s[K+1]={0};
-
-arrayul ww={0};
+/*
+arrayul ab={0};
 
 while(1){
-chash(ww.d);
-printf("%d\n",ww.t);
+ab=chash();
+printf("%d\n",ab.t[0]);
 }
-
+*/
 label:
 
     //パリティチェックを生成する。
