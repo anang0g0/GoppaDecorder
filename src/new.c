@@ -5,7 +5,7 @@
 
 
 
-void main(){
+int main(){
     arrayul aa={0};
     int count=0,i;
 
@@ -22,4 +22,5 @@ void main(){
         break;
     }
 
+return 0;
 }
