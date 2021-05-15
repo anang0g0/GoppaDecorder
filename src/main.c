@@ -38,6 +38,7 @@ exit(1);
 
   // 公開鍵を生成する(Berlekamp-Massey用)
   R = pk_gen();
+  while(1){
   // エラーベクトルの初期化
   memset(zz, 0, sizeof(zz));
   //重みTのエラーベクトルを生成する
@@ -55,8 +56,10 @@ exit(1);
   x = chen(f);
   // 平文の表示(m=m'P^{-1})
   ero2(x);
-  wait();
+  //wait();
+  }
 
+  
   //公開鍵を生成する(G=SHP : Niederreiter , Patterson共用)
   O = pubkeygen(w);
 
