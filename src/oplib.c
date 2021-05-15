@@ -3997,9 +3997,9 @@ int ero2(vec v)
         {
             printf("baka %d %d\n", i, v.x[i]);
             printf("v.x[K-1]=%d\n", v.x[K - 1]);
-            break;
+            //break;
             //
-            //exit (1);
+            exit (1);
         }
     }
 
