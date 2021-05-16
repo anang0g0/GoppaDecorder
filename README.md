@@ -35,6 +35,8 @@ EEAにもXGCDを計算するときの電力解析があるようなので、BM�
 パソコンのCPUにも電力モニターの機能がついているので、電力解析に無関係だと言えない状態にある。
 「EEAでも安全だ」ではなく大事を取ってBMAを使うほうが安全だと考えます。
 
+https://forest.watch.impress.co.jp/docs/news/1288355.html
+
 サンプルコード（berlekamp.c）
 
 ```c
