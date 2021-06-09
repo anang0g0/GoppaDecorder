@@ -26,6 +26,9 @@ unsigned short ma[N][K*E] = {0};
 unsigned short bm[N][K*E]={0};
 unsigned short bm2[N][K*E]={0};
 
+unsigned char x0[NN]={0};
+unsigned char x1[NN]={0};
+
 //unsigned short syn[K]={0};
 unsigned short P[N] = {0};
 unsigned short inv_P[N] = {0};

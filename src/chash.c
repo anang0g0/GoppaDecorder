@@ -172,13 +172,26 @@ void rp2(unsigned char *a)
     a[j] = a[i];
     a[i] = x;
   }
-  if (a[N - 1] == NN - 1)
+  if (a[NN - 1] == NN - 1)
   {
     a[NN - 1] = a[NN - 2];
     a[NN - 2] = NN - 1;
   }
 }
 
+int print_uint128(__uint128_t n) {
+  if (n == 0)  return printf("0\n");
+
+  char str[40] = {0}; // log10(1 << 128) + '\0'
+  char *s = str + sizeof(str) - 1; // start at the end
+  while (n != 0) {
+    if (s == str) return -1; // never happens
+
+    *--s = "0123456789"[n % 10]; // save last digit
+    n /= 10;                     // drop it
+  }
+  return printf("%s", s);
+}
 
 //ハッシュ関数本体
 arrayul
@@ -199,8 +212,8 @@ chash()
   rp2(x0);
   rp2(x1);
 
-  n.u[0]=time(&t);
-  n.u[1]=clock();
+  n.x[0]=65535; //(unsigned int)time(&t);
+  n.x[1]=65535; //(unsigned long)clock();
 for(i=0;i<NN;i++)
 key[i]=n.d[i];
 
@@ -220,9 +233,9 @@ key[i]=n.d[i];
         z[i] = x0[x1[inv_x[i]]];
 
         for(i=0;i<NN;i++)
-        tmp[i]=s_box[key[z[i]]];
+        tmp[i]+=s_box[key[z[i]]];
         for(i=0;i<NN;i++){
-        key[i]^=ROTL8(tmp[i],3);
+        key[i]^=inv_s_box[ROTL8(tmp[i],3)];
         //printf("%d,",key[i]);
         }
         //printf("\n");
